@@ -1,0 +1,57 @@
+出库遗物
+
+古纪 G2
+[x] 玻之武杖Prime蓝图
+[x] 拉特昂Prime枪托
+[x] 蛟龙Prime头部
+[x] Frost Prime系统蓝图
+[x] Loki Prime机体蓝图
+[ ] 战刃Prime蓝图
+
+前纪 E1	
+[ ] 玻之武杖Prime饰物
+[x] Frost Prime机体蓝图
+[x] 拉特昂Prime枪管
+[x] Forma蓝图
+[x] 蛟龙Prime系统
+[x] Ember Prime蓝图
+
+前纪 F3	
+[x] Ember Prime头部神经光元蓝图
+[x] Loki Prime蓝图
+[x] 收割者Prime握柄
+[x] Forma蓝图
+[x] 战刃Prime圆盘
+[x] Frost Prime蓝图
+
+中纪 E1	
+[x] Frost Prime头部神经光元蓝图
+[x] Loki Prime头部神经光元蓝图
+[x] 蛟龙Prime蓝图
+[x] Forma蓝图
+[x] 收割者Prime刀刃
+[x] Ember Prime蓝图
+
+中纪 F1	
+[x] Ember Prime机体蓝图
+[x] 暗杀者Prime枪管
+[x] 暗杀者Prime蓝图
+[x] 玻之武杖Prime握柄
+[x] Forma蓝图
+[x] Frost Prime蓝图
+
+后纪 L1	
+[ ] 拉特昂Prime蓝图
+[ ] 收割者Prime蓝图
+[x] 蛟龙Prime外壳
+[x] Forma蓝图
+[x] 战刃Prime刀刃
+[x] Loki Prime系统蓝图
+
+后纪 S2	
+[x] 拉特昂Prime枪机
+[x] Loki Prime蓝图
+[x] 蛟龙Prime蓝图
+[x] Ember Prime系统蓝图
+[x] Forma蓝图
+[x] 暗杀者Prime枪机

@@ -1,0 +1,507 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Date A Live Twin Edition白金攻略</title>
+    <style>
+        body {
+            background-color: black;
+            color: wheat;
+        }
+
+        .Place.ExtraCharacter {
+            color: green;
+        }
+
+        .Choose {
+            color: blue;
+        }
+
+        .BadEnd {
+            color: darkred;
+        }
+
+        .FlagEnd {
+            color: red;
+        }
+    </style>
+    <style id="sep"></style>
+    <script src="../js/jquery.js"></script>
+    <script>
+        var target = {
+            name: localStorage.getItem('targetName') || '十香',
+            date: null
+        };
+        function setDate(date, fromJS) {
+            target.date = new Date('2017/' + date);
+            $("select#DateSelect").val(date);
+            console.log("setDate", date, target.date, fromJS);
+            if (!fromJS) {
+                localStorage.setItem('targetDate', date);
+                refresh();
+            }
+        }
+        function refresh() {
+            $('style#sep').html(".Option._NAME_, .Map ._NAME_{color: blue;}\n".replace(
+                /_NAME_/g, target.name
+            ));
+            $('#name').text(target.name + "路线");
+            var status = false;
+            $("input.已完成").each(function (idx, obj) {
+                if (obj.checked) {
+                    status = true;
+                }
+            });
+            $('.Condition, .Event').each(function () {
+                var obj = $(this);
+                if (obj.attr('date') && new Date('2017/' + obj.attr('date')) < target.date) {
+                    console.log(this, obj.attr('date'), target.date);
+                    obj.hide();
+                    return;
+                }
+                if (obj.hasClass(target.name)
+                    || obj.hasClass("C-" + target.name)
+                    || (!status && obj.hasClass("N-二周目"))
+                    || (status && obj.hasClass("二周目"))) {
+                    obj.show();
+                } else {
+                    obj.hide();
+                }
+            });
+            $("div[date]").not('.Condition').each(function () {
+                var date = new Date('2017/' + $(this).attr('date'));
+                console.log(this, date, target.date);
+                if (date < target.date) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        }
+        $(function () {
+            $("div[date]").each(function () {
+                $(this).prepend('<h2>' + ($(this).attr('head') || $(this).attr('date')) + '</h2>');
+            });
+            $(".Map, .Event, .Choice, mark.End").append("<hr>");
+            $(".Place.琴里, .Place.狂三, .Place.凛祢").addClass("Condition 二周目");
+            $(".Place.凛祢").addClass("Condition 其他人全结局");
+            $("span.Option, span.Place").append('<br>');
+            $("span.Place").each(function () {
+                if (this.classList.length <= 1) {
+                    $(this).hide();
+                }
+            });
+
+            $("table#Status").html(statusTable());
+            $(localStorage.getItem("Status") || "table#Status input.未开始").prop('checked', true);
+
+            $("input[type='checkbox']").each(function (idx) {
+                var title = $(this).attr("title");
+                $(this).attr("name", title)
+                    .attr("id", "IN-" + idx)
+                    .before('<label for="IN-' + idx + '">' + title + '</label>');
+            });
+            setDate(localStorage.getItem('targetDate') || "6/25", true);
+            refresh();
+        });
+        var characters = "十香 折纸 四糸乃 琴里 狂三 凛祢".split(" ");
+        var states = "已完成 进行中 未开始".split(" ");
+        function statusTable() {
+            var html = "<tr><th></th>";
+            for (var i = 0; i < characters.length; i++) {
+                html += "<th>" + characters[i] + "</th>";
+            }
+            html += "</tr>";
+            for (var j = 0; j < states.length; j++) {
+                html += "<tr><th>" + states[j] + "</th>";
+                for (var i = 0; i < characters.length; i++) {
+                    html += '<td><input type="radio" onchange="updateStatus(this)" name="'
+                        + characters[i] + '" class="' + states[j] + '"></td>';
+                }
+                html += "</tr>";
+            }
+            return html;
+        }
+        function updateStatus(obj) {
+            obj = $(obj);
+            var pos = [obj.parent().index() - 1, obj.parent().parent().index() - 1];
+            console.log(pos, characters[pos[0]], states[pos[1]], obj.prop('checked'));
+
+            if (states[pos[1]] == "进行中") {
+                localStorage.setItem('targetDate', '6/25');
+                target.date = new Date('2017/' + '6/25');
+                $('input.进行中').each(function () {
+                    if (this.name !== obj.attr('name') && this.checked) {
+                        $(this).prop('checked', false);
+                        $('input.已完成[name=' + this.name + ']').prop('checked', true);
+                    }
+                });
+                target.name = characters[pos[0]];
+                localStorage.setItem("targetName", target.name);
+            }
+            var text = [];
+            $("table#Status input").each(function () {
+                if (this.checked) {
+                    text.push("table#Status input." + this.className + "[name=" + this.name + "]")
+                }
+            });
+            localStorage.setItem("Status", text.join(','));
+            refresh();
+        }
+    </script>
+</head>
+<body>
+<h1>Date A Live Twin Edition白金攻略 - 凛祢理想乡</h1>
+<div>
+    <mark class="Trophy Reincarnation Condition N-二周目">★楽園のはじまり</mark>
+    <table id="Status" class="Status"></table>
+    <label for="DateSelect">Date</label>
+    <select id="DateSelect" name="Date" title="Date" onchange="setDate(this.value)">
+        <option value="6/21">开始</option>
+        <option value="6/25">6/25</option>
+        <option value="6/26">6/26</option>
+        <option value="6/27">6/27</option>
+        <option value="6/28">6/28</option>
+        <option value="6/29">6/29</option>
+        <option value="6/30">6/30</option>
+        <option value="7/1">7/1</option>
+        <option value="7/2">7/2</option>
+    </select>
+    <hr>
+    <div>
+        <h2 id="name"></h2>
+        <p class="Condition 琴里">需要二周目以后。</p>
+        <p class="Condition 凛祢">需要其他角色全攻略以后。</p>
+    </div>
+    <div date="6/21" head="开始" class="Condition 十香 折纸 四糸乃 凛祢">
+        <p class="Condition 琴里 凛祢 十香 折纸 四糸乃">开始新游戏。</p>
+        <p class="Condition 狂三">读取存档<span class="LoadGame" about="琴里6/27">13</span></p>
+        <p class="Choice Condition 二周目 琴里">
+            <span class="Option 凛祢 十香 折纸 四糸乃">序言</span>
+            <span class="Option 琴里">跳过序言(プロローグをスキップする)</span>
+        </p>
+    </div>
+    <div date="6/25" class="Condition 十香 折纸 四糸乃 凛祢">
+        <p class="Choice Condition 十香 折纸 四糸乃 凛祢">
+            <span class="Option 凛祢">才没有期待呢!(期待なんかしてない!)</span>
+            <span class="Option 十香 折纸 四糸乃">说实话，其实有点期待(正直、ちょっぴり期待しているかも……?)</span>
+        </p>
+    </div>
+    <div date="6/26">
+        <div class="MapChoice">
+            <!--<mark class="Save Condition 十香 折纸 四糸乃" about="共通6/26">Save 01</mark>-->
+            <p class="Map">
+                <span class="Place ExtraCharacter">高台：村雨令音</span>
+
+                <span class="Place ExtraCharacter">天宫塔：神无月</span>
+
+                <span class="Place ExtraCharacter">站前：三人组</span>
+                <span class="Place ExtraCharacter">神社：日下部燎子</span>
+
+                <span class="Place 琴里">缓台：琴里</span>
+
+
+                <span class="Place 折纸">校舍后：折纸</span>
+                <span class="Place 四糸乃">走廊：四糸乃</span>
+
+                <span class="Place 十香">学校前：十香</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option">吃、吃的东西还是算了吧……(さ、さすがにもう食い物はちょっと……)</span>
+                <span class="Option Choose">那好，去面包店吧(じゃあ、パン屋によってみるか)</span>
+            </p>
+            <p class="Event 折纸">
+                <span class="Option">琴里的事(琴里の話)</span>
+                <span class="Option Choose">中午的事(お昼の話)</span>
+                <span class="Option">AST的事(ASTの話)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <span class="Option">(男の子だもん、仕方ないよ。知らぬふりで貫き通す)</span>
+                <span class="Option Choose">(まずはフォローを。素直にあやまっておく)</span>
+            </p>
+            <p class="Event 琴里">
+                <span class="Option">(琴里に従う)</span>
+                <span class="Option Choose">(やはり放っておけない)</span>
+            </p>
+        </div>
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place ExtraCharacter">高台：村雨令音</span>
+
+
+                <span class="Place 十香">住宅街：十香</span>
+
+                <span class="Place ExtraCharacter">神社：日下部燎子</span>
+                <span class="Place 四糸乃">五河家：四糸乃</span>
+
+
+                <span class="Place ExtraCharacter">校舍后：殿町</span>
+                <span class="Place 琴里">走廊：琴里</span>
+                <span class="Place ExtraCharacter">教室：小珠</span>
+                <span class="Place 折纸">学校前：折纸</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option">十香会被香味吸引到卖吃的的地方去(十香なら香りに釣られて食べ物屋に行ってる)</span>
+                <span class="Option Choose">十香会回来找我(十香なら俺を探しに戻ってくる)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <span class="Option">(ミスはミスだ。一言注意しておく)</span>
+                <span class="Option Choose">(失敗は仕方ない。ひたすらになぐさめる)</span>
+            </p>
+        </div>
+    </div>
+    <div date="6/27">
+        <p class="Choice">
+            <span class="Option 十香">给十香加油(十香を応援する)</span>
+            <span class="Option 折纸 四糸乃">给折纸加油(折紙を応援する)</span>
+            <span class="Option 凛祢 琴里">给凛祢加油()</span>
+        </p>
+        <div class="MapChoice">
+            <mark class="Save Condition 琴里" about="琴里6/27">Save 13</mark>
+            <p class="Map">
+                <span class="Place ExtraCharacter">高台：村雨令音</span>
+                <span class="Place ExtraCharacter">住宅街：小珠</span>
+                <span class="Place ExtraCharacter">站前：神无月</span>
+                <span class="Place ExtraCharacter">神社：三人组</span>
+                <span class="Place 琴里">物理准备室：琴里</span>
+                <span class="Place 折纸">校舍后：折纸</span>
+                <span class="Place 十香">教室：十香</span>
+                <span class="Place 四糸乃">学校前：四糸乃</span>
+            </p>
+            <p class="Event 十香">
+                <mark class="Save" about="5/27">Save 03 <br></mark>
+                <span class="Option BadEnd">太令人在意了，继续向上走走看(気になるので、もう少し上がってみる)</span>
+                <span class="Option Choose">十香的样子有点怪，还是回去吧(十香の様子がおかしいのでやめる)</span>
+            </p>
+            <p class="Event 折纸">
+                <span class="Option Choose">来一起收拾吧(一緒に片づけないか?)</span>
+                <span class="Option">一起去摸鱼吧(一緒にさぼらいないか?)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <span class="Option">(やっぱり心配。自分で買いに行く)</span>
+                <span class="Option Choose">(何事も経験が大事。四糸乃をはげまし送り出す)</span>
+            </p>
+        </div>
+        <!--十香 四糸乃 折纸 琴里 狂三 凛祢
+            村雨令音 神无月 三人组 殿町 小珠-->
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place 狂三">住宅街：狂三</span>
+                <span class="Place 四糸乃">站前：四糸乃</span>
+                <span class="Place ExtraCharacter">神社：三人组</span>
+                <span class="Place 十香">五河家：十香</span>
+                <span class="Place ExtraCharacter">缓台：小珠</span>
+                <span class="Place ExtraCharacter">物理准备室：村雨令音</span>
+                <span class="Place 折纸">走廊：折纸</span>
+                <span class="Place 琴里">学校前：琴里</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option">使出全力决胜负(本気で勝負する)</span>
+                <span class="Option Choose">稍有保留的决胜负(手加減して戦う)</span>
+            </p>
+        </div>
+    </div>
+    <div date="6/28">
+        <p class="Choice Condition 十香 折纸 四糸乃 琴里">
+            <span class="Option 四糸乃">去&lt;世界树&gt;探望(&lt;フラクシナス&gt;)</span>
+            <span class="Option 十香 折纸 琴里">早点去学校(学校に早めに登校する)</span>
+        </p>
+        <p class="Choice Condition 十香">
+            <mark class="Save" about="十香6/28">Save 04<br></mark>
+            <span class="Option 十香">领十香的便当(十香の弁当を食べる)</span>
+            <span class="Option BadEnd">推荐凜祢的便当(凜祢の弁当を薦める)</span>
+            <span class="Option">大事不好赶快逃跑(とりあえず逃げる)</span>
+        </p>
+        <p class="Choice Condition 四糸乃">
+            　　に四糸乃のお見舞い <br>
+            　　ベッドの下を調べる<br>
+            　　更衣室を調べる<br>
+            　　医務官のデスクを調べる<br>
+        </p>
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place ExtraCharacter">天宫塔：神无月</span>
+                <span class="Place ExtraCharacter">住宅街：日下部燎子</span>
+                <span class="Place ExtraCharacter">神社：三人组</span>
+                <span class="Place ExtraCharacter">五河家：村雨令音</span>
+                <span class="Place 狂三">屋顶：狂三</span>
+                <span class="Place 折纸">校舍后：折纸</span>
+                <span class="Place 十香">走廊：十香</span>
+                <span class="Place 四糸乃">教室：四糸乃</span>
+                <span class="Place 琴里">学校前：琴里</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option">果然还是去帮忙吧(やっぱり手伝いに行く)</span>
+                <span class="Option Choose">相信十香，在这里等(十香を信じて待つ)</span>
+            </p>
+            <p class="Event 折纸">
+                <span class="Option Choose">叫住她(こえをかける)</span>
+                <span class="Option">跟踪她(あとをつける)</span>
+            </p>
+            <p class="Event 折纸">
+                <span class="Option Choose">应该去试试看(やってみなよ)</span>
+                <span class="Option">不要勉强自己(無理するな)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <span class="Option">(外に出しておくのは危険。すぐ家に帰らせる)</span>
+                <span class="Option Choose">(ストレス解放が大事。四糸乃のしたいことをさせてやる)</span>
+            </p>
+        </div>
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place ExtraCharacter">高台：日下部燎子</span>
+                <span class="Place 十香">住宅街：十香</span>
+                <span class="Place 琴里">站前：琴里</span>
+                <span class="Place 狂三">新天宫塔：狂三</span>
+                <span class="Place ExtraCharacter">神社：三人组</span>
+                <span class="Place 四糸乃">五河家：四糸乃</span>
+                <span class="Place ExtraCharacter">缓台：小珠</span>
+                <span class="Place 折纸">教室：折纸</span>
+                <span class="Place ExtraCharacter">学校前：殿町</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option Choose">来坐秋千吧(ブランコに乗ろう)</span>
+                <span class="Option">来玩滑梯吧(滑り台で遊ぼう)
+                    <mark class="十香 Trophy Utopia">★十香スライド</mark>
+                </span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option Choose">好！两个人一起来！(よし!二人乗りしよう!)</span>
+                <span class="Option">还是算了吧(やっぱりよそう)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <span class="Option">(四糸乃にはまだ早い。ビデオを取り上げる)</span>
+                <span class="Option Choose">(何事も勉強が大事。このまま見せ続けてやる)</span>
+            </p>
+        </div>
+    </div>
+    <div date="6/29">
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place ExtraCharacter">高台：村雨令音</span>
+                <span class="Place ExtraCharacter">住宅街：三人组</span>
+                <span class="Place 折纸">站前：折纸</span>
+                <span class="Place ExtraCharacter">五河家：神无月</span>
+                <span class="Place ExtraCharacter">屋顶：殿町</span>
+                <span class="Place ExtraCharacter">校舍后：小珠</span>
+                <span class="Place Condition 琴里">走廊：琴里</span>
+                <span class="Place 狂三">教室：狂三</span>
+                <span class="Place 十香">学校前：十香</span>
+            </p>
+            <p class="Event 十香">
+                <mark class="Save">Save 05</mark>
+                <br>
+                <span class="Option Choose">3D超大作！SF冒险类影片！(3D超大作!SFアドベンチャー!)</span>
+                <span class="Option">绝对让你流泪！纯情派恋爱电影！(絶対泣ける!恋愛映画純情派!)</span>
+                <span class="Option BadEnd">疾行于黑暗中！夏天必看的恐怖片！(暗闇で急接近!夏定番ホラー映画!)</span>
+            </p>
+            <p class="Event 折纸">
+                <span class="Option">放声大笑(思いきり笑ってみる)</span>
+                <span class="Option Choose">给她讲笑话(ジョークを飛ばす)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <span class="Option">(ラブラブ空間、観覧車でふたりきりだ!)</span>
+                <span class="Option Choose">(ドキドキ作戦、お化け屋敷へGO!)</span>
+            </p>
+        </div>
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place ExtraCharacter">高台：村雨令音</span>
+                <span class="Place 十香">池周边：十香</span>
+                <span class="Place ExtraCharacter">天宫塔：三人组</span>
+                <span class="Place 狂三">住宅街：狂三</span>
+                <span class="Place 折纸">神社：折纸</span>
+                <span class="Place ExtraCharacter">屋顶：殿町</span>
+                <span class="Place ExtraCharacter">校舍后：小珠</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option Choose">跟她说说话(何か話をしてみる)</span>
+                <span class="Option">静静陪着她(黙って傍にいる)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <mark class="Save" about="四糸乃6/29">Save 12</mark>
+                <br>
+                <span class="Option">(あんまり遅くなるといけない。家に連れて帰ろう)</span>
+                <span class="Option Choose">(もう少し、四糸乃と一緒に夕日を見よう)</span>
+            </p>
+        </div>
+        <p class="Choice">
+            <span class="Option 十香 C-四糸乃 R-BadEnd">带十香一起去(十香を連れて行く)</span>
+            <span class="Option 折纸">和折纸一起去(折紙といく)</span>
+            <span class="Option Condition 四糸乃" condition="cond.四糸乃">带四糸乃一起去(四糸乃を連れて行く)</span>
+            <span class="Option Condition Utopia C-四糸乃 R-BadEnd" condition="cond.Utopia">(一人で行く)</span>
+        </p>
+    </div>
+    <div date="6/30">
+        <div class="MapChoice">
+            <p class="Map">
+                <span class="Place 十香">站前：十香</span>
+            </p>
+            <p class="Event 十香">
+                <span class="Option Choose">去店门口看看(うどん屋をのぞいてみる)
+                    <mark class="十香 Trophy Utopia">★十香アペタイト获得</mark>
+                </span>
+                <span class="Option">买完东西赶紧回家(買い物して早く帰る)</span>
+            </p>
+            <p class="Event 折纸">
+                <mark class="Save Condition 折纸" about="折纸6/30A">Save 08</mark>
+                <br>
+                <span class="Option Choose">(折紙を追う)</span>
+                <span class="Option BadEnd">(令音の分析を待つ)
+                <mark class="折纸 Trophy Utopia">折纸BadEnd★折紙アクシデント</mark>
+                </span>
+            </p>
+            <p class="Event 折纸">
+                <mark class="Save Condition 折纸" about="折纸6/30B">Save 09</mark>
+                <br>
+                <span class="Option Choose">(折紙のこと)</span>
+                <span class="Option">(適当にごまかす)</span>
+            </p>
+            <p class="Event 四糸乃">
+                <mark class="Save" about="四糸乃6/30">Save 11</mark>
+                <br>
+                <span class="Option">(一緒によしのんを待とう)</span>
+                <span class="Option BadEnd">(最初からいなかったと思えばいいさ)</span>
+                <span class="Option Choose">(四糸乃には俺がいるよ)</span>
+            </p>
+        </div>
+        <p class="Choice Condition 十香">
+            <mark class="Save Condition 十香" about="十香6/30">Save 06</mark>
+            <br>
+            <span class="Option 十香">青梅竹马(ただの幼馴染)</span>
+            <span class="Option BadEnd">喜欢的人(気になる子)</span>
+        </p>
+
+    </div>
+    <div date="7/1" class="Condition 凛祢">
+        <mark class="Condition 凜祢 Trophy Utopia Reincarnation">凜祢TrueEnd ★凜祢ユートピア</mark>
+        <mark class="Condition 凜祢 Trophy Utopia Reincarnation">凜祢IfEnd ★★凜祢ファンタジア</mark>
+    </div>
+    <div date="7/2">
+        <p class="Choice">
+            <mark class="Save Condition 十香" about="十香7/2">Save 07</mark>
+            <mark class="Save Condition 折纸" about="折纸7/2">Save 10</mark>
+            <mark class="Save Condition 四糸乃" about="四糸乃7/2">Save 10</mark>
+            <br>
+            <span class="Option Choose">不接(出ない)
+                <mark class="Condition 十香 Trophy Utopia Reincarnation">十香 Chara End ★十香ウェディング</mark>
+                <mark class="Condition 折纸 Trophy Utopia Reincarnation">折纸 Chara End★折紙ファミリー</mark>
+                <mark class="Condition 四糸乃 Trophy Utopia Reincarnation">四糸乃 Chara End ★四糸乃ロリータ</mark>
+                <mark class="Condition 琴里 Trophy Utopia Reincarnation">琴里 Chara End ★琴里フォーチュン</mark>
+                <mark class="Condition 狂三 Trophy Utopia Reincarnation">狂三 Chara End ★狂三リメイン</mark>
+            </span>
+            <span class="Option">接(出る)
+                <mark class="Condition 十香">十香フラグ END</mark>
+                <mark class="Condition 折纸">折纸フラグ END</mark>
+                <mark class="Condition 四糸乃">四糸乃フラグ END</mark>
+            </span>
+        </p>
+    </div>
+</div>
+<div>
+    <h2>或守安装</h2>
+</div>
+<div>
+    <h2>凛绪轮回</h2>
+</div>
+</body>

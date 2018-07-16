@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>《约会大作战 凛祢理想乡》白金攻略</title>
+    <style>
+        img {
+            max-width: 100%;
+            margin: auto;
+            clear: both;
+            display: block;
+        }
+
+        img.icon {
+            display: inline;
+            width: 54px;
+            height: 54px;
+        }
+
+        table {
+            margin: auto;
+            min-width: 70%;
+        }
+
+        td {
+            text-align: center;
+            background-color: darkolivegreen;
+            height: 26px;
+        }
+
+        .Trophy, .Note {
+            color: red;
+            font-weight: bold;
+        }
+
+        mark.Save {
+            background-color: yellowgreen;
+        }
+
+        mark.Load {
+            background-color: darkgrey;
+        }
+        p, mark{
+            margin-left: 2em;
+        }
+    </style>
+    <!--suppress JSDuplicatedDeclaration -->
+    <script>
+        var isMobile = /Android|BlackBerry|IEMobile|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        console.log(navigator.userAgent + ":" + isMobile);
+        if (!isMobile) {
+            document.write("<style>body{background-color: #333; color: wheat;padding-left: 3em; padding-right: 3em;}</style>");
+        }
+        function toggleIntro() {
+            var show = document.getElementById("CheckIntro").checked;
+            var items = document.getElementsByClassName("Intro");
+            for (var i = 0; i < items.length; i++) {
+                if (show) {
+                    items.item(i).style.display = '';
+                } else {
+                    items.item(i).style.display = 'none';
+                }
+            }
+            // updateStorage();
+        }
+        function toggleTarget() {
+            var items = document.getElementsByName('target');
+            var value = '';
+            for (var i = 0; i < items.length; i++) {
+                if (items.item(i).checked) {
+                    value = items.item(i).value;
+                }
+            }
+            console.log(value);
+            var routes = document.getElementsByClassName('MainRoute');
+            for (var i = 0; i < routes.length; i++) {
+                console.log(routes.item(i), routes.item(i).classList.contains(value));
+                if (routes.item(i).classList.contains(value)) {
+                    routes.item(i).style.display = '';
+                } else {
+                    routes.item(i).style.display = 'none';
+                }
+            }
+            // updateStorage();
+        }
+        function loadStorage() {
+            var checked = JSON.parse(localStorage.getItem("RinneUtopia")) || [];
+            //  alert("loadStorage" + checked);
+            var items = document.getElementsByTagName("input");
+            for (var i = 0; i < checked.length; i++) {
+                items.item(i).checked = checked[i] || false;
+            }
+        }
+        function updateStorage() {
+            var checked = [];
+            var items = document.getElementsByTagName("input");
+            for (var i = 0; i < items.length; i++) {
+                checked.push(items.item(i).checked);
+            }
+            // alert("updateStorage" + items + "" + checked);
+            localStorage.setItem("RinneUtopia", JSON.stringify(checked));
+        }
+        function initRoutes() {
+            var routes = document.getElementsByClassName('MainRoute');
+            var choice = document.getElementById("Choices");
+            for (var i = 0; i < routes.length; i++) {
+                console.log(routes.item(i).classList.item(1));
+                var input = ' <label for="Check_N_">_N_</label>\n' +
+                    '<input id="Check_N_" type="radio" name="target" value="_N_" onchange="toggleTarget()"_C_>&emsp;';
+                input = input.replace(/_N_/g, routes.item(i).classList.item(1)).replace(/_C_/g, i == 0 ? ' checked' : '');
+                choice.innerHTML += input;
+            }
+            document.addEventListener('change', updateStorage);
+        }
+    </script>
+</head>
+<body>
+<h1>《约会大作战 凛祢理想乡》白金攻略</h1>
+<label for="CheckIntro">介绍</label>
+<input id="CheckIntro" type="checkbox" onchange="toggleIntro()"><br>
+<div class="Intro">
+    <div class="Note">
+        <p>作者：巴士速攻-无限欲（小钰）</p>
+        <p><a href="http://bbs.tgbus.com/thread-4850884-1-1.html">来源：bbs.tgbus.com</a></p>
+        <img src="./files/2013070313465042.jpg" width="500" height="500">
+        
+    </div>
+    <table>
+        <tbody>
+        <tr>
+            <td><p>游戏名称: </p></td>
+            <td colspan="5"><p class="fontB"> 约会大作战 凛祢的理想乡</p></td>
+        </tr>
+        <tr>
+            <td><p>游戏原名: </p></td>
+            <td colspan="5"><p> デート・ア・ライブ 凜祢ユートピア </p></td>
+        </tr>
+        <tr>
+            <td><p>对应平台:</p></td>
+            <td><p> PS3</p></td>
+            <td><p>游戏类型:
+            </p></td>
+            <td><p> AVG</p></td>
+            <td><p>游戏版本:
+            </p></td>
+            <td><p> 日版</p></td>
+        </tr>
+        <tr>
+            <td><p>发售日期:
+            </p></td>
+            <td><p> 2013.06.27</p>
+            </td>
+            <td><p>年龄限制:
+            </p></td>
+            <td><p> CERO D</p>
+            </td>
+            <td><p>游戏人数:</p></td>
+            <td><p> 1人</p></td>
+        </tr>
+        <tr>
+            <td><p>发行厂商:</p></td>
+            <td colspan="3"><p>Compile Heart</p></td>
+            <td><p>对应周边:</p></td>
+            <td><p> 无</p></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>写在白金攻略前：</p>
+    <p>此游戏FANS向严重，虽然没看过动画的玩友也可能对游戏的立绘和人设略感兴趣，但是本作流程可以说在AVG里面算是极短的小品级游戏，
+        玩过每一条线都有种意犹未尽的感觉，还请慎重选择;但对于动画FANS而言本作可谓是神作无疑，
+        在5名女性角色的基础上还追加了新角色凛祢路线对剧情进行了补完，每条路线的结局可谓都还不错。</p>
+    <p>本作的白金难度在AVG游戏中算是比较高的，还请众位FANS按照本人介绍的路线进行游玩，并不会对欣赏剧情产生任何的影响。</p>
+    <div class="Trophy">
+        <p>白金：1</p>
+        <p>金：4</p>
+        <p>银：20</p>
+        <p>铜：5</p>
+        <p>合集点数：243</p>
+        <p>白金难度：★★★</p>
+        <p>耗时：全部阅读25~30小时<br>
+            (全skip12~15小时)</p>
+    </div>
+    <p><img class="icon" src="./files/20130717111845737.png">：デート･ア･コンプリート</p>
+    <p>白金奖杯，完成其他全部奖杯后自动获得。</p>
+    <p><img class="icon" src="./files/20130717111846940.png">：すべてのはじまり</p>
+    <p>开始第一天剧情后获得。</p>
+    <p><img class="icon" src="./files/20130717111846714.png">：さぁ、私たちの戦争を始めましょう</p>
+    <p>完成第一天剧情后获得。</p>
+    <p><img class="icon" src="./files/20130717111846681.png">：これまでのデート･ア･ライブ</p>
+    <p>翻看BACK LOG后获得。</p>
+    <p><img class="icon" src="./files/20130717111846570.png">：デートの準備</p>
+    <p>在OPTION中变更设定后获得。</p>
+    <p><img class="icon" src="./files/20130717111846637.png">：思い出の欠片</p>
+    <p>完成任一角色线后追加MEMORY模式，在其中再现任一场景即可获得。</p>
+    <p>以上奖杯没有任何难度。</p>
+    <p><img class="icon" src="./files/20130717111846224.png">：十香ウェディング</p>
+    <p><img class="icon" src="./files/20130717111846345.png">：折紙ファミリー</p>
+    <p><img class="icon" src="./files/20130717111846729.png">：四糸乃ロリータ</p>
+    <p><img class="icon" src="./files/20130717111846436.png">：狂三リメイン</p>
+    <p><img class="icon" src="./files/20130717111846795.png">：五河フォーチュン</p>
+    <p><img class="icon" src="./files/20130717111846167.png">：凛祢ユートピア</p>
+    <div class="Note">
+        <p>以上几个奖杯是每名角色的happy ending 我们在完成以上数个奖杯的同时还能开启绝大多数的奖杯，但要切记几点：</p>
+        <p>1 严格按照以下攻略进行</p>
+        <p>2 每名角色的档千万不要从一半开始打，原因后面会有叙述</p>
+        <p>3 养成勤存档的习惯，因为有既读率和支线的奖杯，在要求存档的位置请先完成次要选项清理既读率再继续</p>
+        <p>推荐攻略顺序：十香→折纸→四糸乃→琴里→狂三→凛祢</p>
+        <p>(括号中为次要选项)</p>
+    </div>
+</div>
+<div id="Choices"></div>
+<div class="MainRoute 十香">
+    <h3>十香route：</h3>
+    <h4>6月25日</h4>
+    <p>说实话，其实有点期待/正直、ちょっぴり期待しているかも……? <br>
+        (才没有期待呢!/期待なんかしてない!)</p>
+    <h4>6月26日</h4>
+    <mark class="Save">存档01</mark>
+    <p>高台</p>
+    <p>天宮タワー</p>
+    <p>学校前：十香</p>
+    <p>那好，去面包店吧/じゃあ、パン屋によってみるか<br>
+        (吃、吃的东西还是算了吧……/さ、さすがにもう食い物はちょっと……)</p>
+    <p>住宅街：十香</p>
+    <p>十香会回来找我/十香なら俺を探しに戻ってくる<br>
+        (十香会被香味吸引到卖吃的的地方去/十香なら香りに釣られて食べ物屋に行ってる)</p>
+    <h4>6月27日</h4>
+    <p>给十香加油/十香を応援する</p>
+    <p>高台</p>
+    <p>駅前</p>
+    <p>廊下：十香</p>
+    <mark class="Save">存档03</mark>
+    <p>十香的样子有点怪，还是回去吧/十香の様子がおかしいのでやめる</p>
+    <p>五河家：十香</p>
+    <p>稍有保留的决胜负/手加減して戦う<br>
+        (使出全力决胜负/本気で勝負する)</p>
+    <h4>6月28日</h4>
+    <p>早点去学校/学校に早めに登校する</p>
+    <mark class="Save">存档04</mark>
+    <p>领十香的便当/十香の弁当を食べる<br>
+        (大事不好赶快逃跑/とりあえず逃げる)</p>
+    <p>五河家</p>
+    <p>天宮タワー</p>
+    <p>廊下：十香</p>
+    <p>相信十香，在这里等/十香を信じて待つ<br>
+        (果然还是去帮忙吧/やっぱり手伝いに行く)</p>
+    <p>住宅街：十香</p>
+    <p>来坐秋千吧/ブランコに乗ろう<br>
+        (来玩滑梯吧/滑り台で遊ぼう)</p>
+    <p>好！两个人一起来！/よし!二人乗りしよう!<br>
+        (还是算了吧/やっぱりよそう)</p>
+    <h4>6月29日</h4>
+    <p>高台</p>
+    <p>五河家</p>
+    <p>学校前：十香</p>
+    <mark class="Save">存档05</mark>
+    <p>3D超大作！SF冒险类影片！/3D超大作!SFアドベンチャー<br>
+        (绝对让你流泪！纯情派恋爱电影！/絶対泣ける!恋愛映画純情派!)</p>
+    <p>池周辺</p>
+    <p>跟她说说话/何か話をしてみる<br>
+        (静静陪着她/黙って傍にいる)</p>
+    <p>带十香一起去/十香を連れて行く</p>
+    <h4>6月30日</h4>
+    <p>新天宮タワー</p>
+    <p>神社</p>
+    <p>駅前：十香</p>
+    <p>去店门口看看/うどん屋をのぞいてみる<br>
+        (买完东西赶紧回家/買い物して早く帰る)</p>
+    <p>★十香アペタイト获得</p>
+    <mark class="Save">存档06</mark>
+    <p>青梅竹马/ただの幼馴染</p>
+    <h4>7月2日</h4>
+    <mark class="Save">存档07</mark>
+    <p>不接/出ない</p>
+    <p>十香 END</p>
+    <p>★十香ウェディング 获得</p>
+    <mark class="Load">读取存档03</mark>
+    <p>太令人在意了，继续向上走走看/気になるので、もう少し上がってみる</p>
+    <p>BAD END 1</p>
+    <mark class="Load">读取存档04</mark>
+    <p>推荐凜祢的便当/凜祢の弁当を薦める</p>
+    <p>BAD END 2</p>
+    <mark class="Load">读取存档05</mark>
+    <p>疾行于黑暗中！夏天必看的恐怖片！/暗闇で急接近!夏定番ホラー映画!</p>
+    <p>BAD END 3</p>
+    <mark class="Load">读取存档06</mark>
+    <p>喜欢的人/気になる子</p>
+    <p>BAD END 4</p>
+    <mark class="Load">读取存档07</mark>
+    <p>接/出る</p>
+    <p>十香フラグEND</p>
+</div>
+<div class="MainRoute 折纸">
+    <h2>折纸route</h2>
+    <mark class="Load">读取存档01</mark>
+    <h4>6月26日</h4>
+    <p>神社</p>
+    <p>駅前</p>
+    <p>校舎裏：折紙</p>
+    <p>中午的事/お昼の話<br>
+        (琴里的事/琴里の話)<br>
+        (AST的事/ASTの話)</p>
+    <p>校舎裏</p>
+    <p>教室</p>
+    <p>学校前：折紙</p>
+    <h4>6月27日</h4>
+    <p>给折纸加油/折紙を応援する</p>
+    <p>神社</p>
+    <p>校舎裏：折紙</p>
+    <p>来一起收拾吧/一緒に片づけないか?<br>
+        (一起去摸鱼吧/一緒にさぼらいないか?)</p>
+    <p>物理準備室</p>
+    <p>踊り場</p>
+    <p>廊下：折紙</p>
+    <h4>6月28日</h4>
+    <p>早点去学校/学校に早めに登校</p>
+    <p>住宅街</p>
+    <p>神社</p>
+    <p>校舎裏：折紙</p>
+    <p>叫住她/こえをかける<br>
+        (跟踪她/あとをつける)</p>
+    <p>应该去试试看/やってみなよ<br>
+        (不要勉强自己/無理するな)</p>
+    <p>学校前</p>
+    <p>教室：折紙</p>
+    <h4>6月29日</h4>
+    <p>神社</p>
+    <p>住宅街</p>
+    <p>駅前：折紙</p>
+    <p>给她讲笑话/ジョークを飛ばす<br>
+        (放声大笑/思いきり笑ってみる)</p>
+    <p>神社：折紙</p>
+    <p>和折纸一起去/折紙といく</p>
+    <h4>6月30日</h4>
+    <p>高台</p>
+    <p>天宮タワー</p>
+    <p>住宅街：折紙</p>
+    <mark class="Save">存档08</mark>
+    <p>折紙を追う</p>
+    <mark class="Save">存档09</mark>
+    <p>折紙のこと</p>
+    <h4>7月2日</h4>
+    <mark class="Save">存档10</mark>
+    <p>不接/出ない</p>
+    <p>折紙 END</p>
+    <p>★折紙ファミリー获得</p>
+    <mark class="Load">读取存档08</mark>
+    <p>令音の分析を待つ</p>
+    <p>BAD END 5</p>
+    <p>★折紙アクシデント取得</p>
+    <mark class="Load">读取存档10</mark>
+    <p>接/出る</p>
+    <p>折紙フラグ END</p>
+    <mark class="Load">读取存档09</mark>
+    <p>適当にごまかす</p>
+    <p>BAD END 6</p></div>
+<div class="MainRoute 四糸乃">
+    <h2>四糸乃route</h2>
+    <h4>6月26日</h4>
+    <mark class="Load">读取存档01</mark>
+    <p>廊下：四糸乃</p>
+    <p>まずはフォローを。素直にあやまっておく<br>
+        (男の子だもん、仕方ないよ。知らぬふりで貫き通す)</p>
+    <p>校舎裏</p>
+    <p>教室</p>
+    <p>五河家：四糸乃</p>
+    <p>失敗は仕方ない。ひたすらになぐさめる<br>
+        (ミスはミスだ。一言注意しておく)</p>
+    <h4>6月27日</h4>
+    <p>给折纸加油/折紙を応援する</p>
+    <p>五河家</p>
+    <p>住宅街</p>
+    <p>学校前：四糸乃</p>
+    <p>何事も経験が大事。四糸乃をはげまし送り出す<br>
+        (やっぱり心配。自分で買いに行く)</p>
+    <p>駅前：四糸乃</p>
+    <h4>6月28日</h4>
+    <p>&lt;フラクシナス&gt;に四糸乃のお見舞い</p>
+    <p>ベッドの下を調べる</p>
+    <p>更衣室を調べる</p>
+    <p>医務官のデスクを調べる</p>
+    <p>教室：四糸乃</p>
+    <p>ストレス解放が大事。四糸乃のしたいことをさせてやる<br>
+        (外に出しておくのは危険。すぐ家に帰らせる)</p>
+    <p>学校前</p>
+    <p>五河家：四糸乃</p>
+    <p>何事も勉強が大事。このまま見せ続けてやる<br>
+        (四糸乃にはまだ早い。ビデオを取り上げる)</p>
+    <h4>6月29日</h4>
+    <p>校舎裏</p>
+    <p>屋上</p>
+    <p>踊り場：四糸乃</p>
+    <p>ドキドキ作戦、お化け屋敷へGO!<br>
+        (ラブラブ空間、観覧車でふたりきりだ!)</p>
+    <p>五河家：四糸乃</p>
+    <mark class="Save">存档12</mark>
+    <p>もう少し、四糸乃と一緒に夕日を見よう<br>
+        (あんまり遅くなるといけない。家に連れて帰ろう)</p>
+    <p>四糸乃を連れて行く</p>
+    <h4>6月30日</h4>
+    <p>天宮タワー</p>
+    <p>踊り場</p>
+    <p>学校前：四糸乃</p>
+    <mark class="Save">存档11</mark>
+    <p>四糸乃には俺がいるよ<br>
+        (一緒によしのんを待とう)</p>
+    <h4>7月2日</h4>
+    <mark class="Save">存档13</mark>
+    <p>不接/出ない</p>
+    <p>四糸乃 END</p>
+    <p>★四糸乃ロリータ</p>
+    <mark class="Load">读取存档13</mark>
+    <p>接/出る</p>
+    <p>四糸乃フラグ END</p>
+    <mark class="Load">读取存档11</mark>
+    <p>最初からいなかったと思えばいいさ</p>
+    <p>BAD END 7</p>
+    <mark class="Load">读取存档12</mark>
+    <p>あんまり遅くなるといけない。家に連れて帰ろう</p>
+    <p>一人で行く</p>
+    <h4>6月30日</h4>
+    <p>踊り場</p>
+    <p>天宮タワー</p>
+    <p>池周辺：十香</p>
+    <p>黙って傍にいる</p>
+    <p>BAD</p>
+    <p>END 8</p></div>
+<div class="MainRoute 琴里">
+    <h2>琴里route</h2>
+    <p>※2週目以降に最初から</p>
+    <p>跳过序章/プロローグをスキップする</p>
+    <h4>6月26日</h4>
+    <p>高台</p>
+    <p>天宮タワー</p>
+    <p>踊り場：琴里</p>
+    <p>还是不能扔下她不管/やはり放っておけない<br>
+        (听琴里的话/琴里に従う)</p>
+    <p>踊り場：琴里</p>
+    <h4>6月27日</h4>
+    <p>给凜祢加油/凜祢を応援する</p>
+    <p>高台</p>
+    <p>駅前</p>
+    <mark class="Save">存档14</mark>
+    <p>物理準備室：琴里</p>
+    <p>高台：琴里</p>
+    <h4>6月28日</h4>
+    <p>早点去学校/学校に早めに登校する</p>
+    <p>五河家</p>
+    <p>天宮タワー</p>
+    <p>学校前：琴里</p>
+    <p>毕竟还是个孩子。还是再看一会儿吧/まだまだ子供だな。しばらくこのまま眺めてる<br>
+        (琴里也是女孩子。叫醒她提醒一下/琴里も乙女だ。起こして、見えそうだと忠告する)</p>
+    <p>駅前：琴里</p>
+    <p>这炽热的感情已无法阻止。猛然将她抱紧!/この熱い思いは止められない。いきなり抱きしめる!<br>
+        (我的一切都给你看。马上开始脱衣服!/俺の全てを見てくれ。いきなり服を脱ぎ始める!)</p>
+    <h4>6月29日</h4>
+    <p>高台</p>
+    <p>五河家</p>
+    <p>廊下：琴里</p>
+    <p>駅前：琴里</p>
+    <p>用积极的口吻鼓励她。「这样可不像琴里哦!」/ここは前向きに励まそう。「琴里らしくないぞ!」<br>
+        (还是怜惜她一下吧。「快去多休息一下」/やっぱりいたわってやろう。「ゆっくり休めよ」)</p>
+    <p>和琴里一起去/琴里と行く</p>
+    <h4>6月30日</h4>
+    <p>新天宮タワー</p>
+    <p>神社</p>
+    <p>廊下：琴里</p>
+    <p>不能就这么放着。赶紧帮帮她吧/このままにはしておけない。手を貸してやろう<br>
+        (不要硬是去碰她。让她安静一下/動くのもつらそうだ。しばらく様子をみよう。)</p>
+    <mark class="Save">存档15</mark>
+    <p>我能为你做些什么吗？/俺に手伝える事はないか?<br>
+        (也许很辛苦，不过要加油哦/大変だと思うけど、がんばれよ)</p>
+    <h4>7月2日</h4>
+    <mark class="Save">存档16</mark>
+    <p>不接/出ない</p>
+    <p>琴里</p>
+    <p>END</p>
+    <p>★琴里フォーチュン</p>
+    <mark class="Load">读取存档16</mark>
+    <p>接/出る</p>
+    <p>琴里フラグ END</p>
+    <mark class="Load">读取存档15</mark>
+    <p>看来你很忙啊/忙しいみたいだな</p>
+    <p>BAD END 9</p>
+</div>
+<div class="MainRoute 狂三">
+    <h2>狂三route</h2>
+    <mark class="Load">读取存档14</mark>
+    <p>教室：狂三</p>
+    <p>似乎并无敌意。相信/敵対の意思はなさそうだ。狂三を信じる<br>
+        (一定有所隐瞒。不相信/何か隠してるに違いない。狂三は信じられない)</p>
+    <p>住宅街：狂三</p>
+    <p>若说不害怕，那是骗人的/怖くないって言ったら嘘になる<br>
+        (我不怕你/怖くなんてない)</p>
+    <h4>6月28日</h4>
+    <p>早点去学校/学校に早めに登校</p>
+    <p>屋上：狂三</p>
+    <p>新天宮タワー：狂三</p>
+    <p>……觉得有种违和感/……何か違和感を感じるんだ<br>
+        (我认为是天宫市的荣誉/天宮市の誇りだって思うよ)</p>
+    <p>去/行く<br>
+        (不去/行かない)</p>
+    <h4>6月29日</h4>
+    <p>教室：狂三</p>
+    <p>住宅街：狂三</p>
+    <p>一个人去/一人で行く</p>
+    <h4>6月30日</h4>
+    <p>教室：狂三</p>
+    <mark class="Save">存档17</mark>
+    <p>……我不知道/……分からない</p>
+    <h4>7月2日</h4>
+    <mark class="Save">存档18</mark>
+    <p>不接/出ない</p>
+    <p>狂三 END</p>
+    <p>★狂三リメイン</p>
+    <mark class="Load">读取存档17</mark>
+    <p>我想封印你/封印したい</p>
+    <p>BAD END 10</p>
+    <mark class="Load">读取存档17</mark>
+    <p>……是『敌人』吧/……『敵』、なんだろうな</p>
+    <p>BAD END 11</p>
+    <mark class="Load">读取存档18</mark>
+    <p>接/出る</p>
+    <p>狂三フラグ END</p>
+</div>
+<div class="MainRoute 凛祢">
+    <h2>凛祢route</h2>
+    <h4>6月25日</h4>
+    <p>期待なんかしてない!</p>
+    <h4>6月26日</h4>
+    <p>教室：凜祢</p>
+    <p>駅前：凜祢</p>
+    <mark class="Save">存档19</mark>
+    <p>不按门铃/インターフォンを押さない</p>
+    <h4>6月27日</h4>
+    <p>给凜祢加油/凜祢を応援する</p>
+    <p>踊り場：凜祢</p>
+    <p>天宮タワー：凜祢</p>
+    <h4>6月28日</h4>
+    <mark class="Save">存档20</mark>
+    <p>担心/凜祢を心配する</p>
+    <h4>6月29日</h4>
+    <h4>6月30日</h4>
+    <mark class="Save">存档21</mark>
+    <p>与大家的约会/みんなとのデート</p>
+    <h4>7月1日</h4>
+    <mark class="Save">存档22</mark>
+    <p>不能一直这样下去/こうしていちゃ、駄目だ</p>
+    <p>凜祢</p>
+    <p>END</p>
+    <p>★凜祢ユートピア</p>
+    <p>看MEMORY的　205小さな奇跡</p>
+    <p>★凜祢ファンタジア</p>
+    <mark class="Load">读取存档19</mark>
+    <p>按门铃/インターフォンを押す</p>
+    <p>BADEND12</p>
+    <mark class="Load">读取存档20</mark>
+    <p>追问/凜祢を問い詰める</p>
+    <p>BADEND13</p>
+    <mark class="Load">读取存档21</mark>
+    <p>与凜祢度过的时光/凜祢との日々</p>
+    <p>BADEND14</p>
+    <mark class="Load">读取存档22</mark>
+    <p>想永远和凜祢在一起/ずっと、こうしていたい</p>
+    <p>BADEND15</p>
+</div>
+<div class="MainRoute 全选项">
+    <p><img class="icon" src="./files/20130717111846739.png">：不法無線</p>
+    <p>选择过全部的选择肢</p>
+    <p><img class="icon" src="./files/20130717111847601.png">：生ける条件反射</p>
+    <p>听过全部NPC对话</p>
+    <p>跳过序章/プロローグをスキップする</p>
+    <h4>6月26日</h4>
+    <p>天宮タワー</p>
+    <p>学校前：十香</p>
+    <p>吃、吃的东西还是算了吧……/さ、さすがにもう食い物はちょと……</p>
+    <p>教室</p>
+    <p>廊下：琴里</p>
+    <p>难道是太累了？温柔地问问她/疲れてるのかな?優しい声をかけてやる<br>
+        (是不是太懈怠了？稍微忠告一句/たるんでるんじゃないか?一言忠告する)</p>
+    <h4>6月27日</h4>
+    <p>凜祢を応援する</p>
+    <p>駅前</p>
+    <p>住宅街</p>
+    <p>廊下：十香</p>
+    <p>十香的样子有点怪，还是回去吧/十香の様子がおかしいのでやめる</p>
+    <p>学校前：琴里</p>
+    <p>当然是白琴里了/もちろん、白琴里さ<br>
+        (还是黑琴里吧/やっぱり、黒琴里かな)<br>
+        (都一样喜欢哦/どっちも同じくらい好きだよ)</p>
+    <h4>6月28日</h4>
+    <p>早点去学校/学校に早めに登校</p>
+    <p>大事不好赶快逃跑/とりあえず逃げる</p>
+    <p>天宮タワー</p>
+    <p>踊り場</p>
+</div>
+<div class="MainRoute 迷える羊">
+    <p><img class="icon" src="./files/20130717111847383.png">：迷える羊</p>
+    <p>从新游戏开始未达成任何一条路线5次以上后获得，推荐下面路线，反复五次就可以解开这个奖杯(注意不要读取存档操作)。</p>
+    <p>プロローグをスキップする</p>
+    <h4>6月26日</h4>
+    <p>教室：凜祢</p>
+    <p>廊下：琴里</p>
+    <p>たるんでるんじゃないか?一言忠告する</p>
+    <h4>6月27日</h4>
+    <p>凜祢を応援する</p>
+    <p>教室：狂三</p>
+    <p>何か隠してるに違いない。狂三は信じられない</p>
+    <p>駅前：四糸乃</p>
+    <h4>6月28日</h4>
+    <p>&lt;フラクナシス&gt;四糸乃</p>
+    <p>ベッドの下を調べる</p>
+    <p>更衣室を調べる</p>
+    <p>医務官のデスクを調べる</p>
+    <p>廊下：十香</p>
+    <p>十香を信じて待つ</p>
+    <p>教室：折紙</p>
+    <h4>6月29日</h4>
+    <p>駅前：折紙</p>
+    <p>思い切り笑ってみる</p>
+    <p>池周辺：十香</p>
+    <p>黙って傍にいる</p>
+    <p>BAD END</p>
+</div>
+<div class="MainRoute 奖杯说明">
+    <p>完成以上全部路线之后这游戏可以说奖杯就完成了80%左右，剩下的就是一些扫尾工作。</p>
+    <p><img class="icon" src="./files/20130717111846511.png">：ラタトスク秘蔵回収データ･その1</p>
+    <p><img class="icon" src="./files/20130717111846408.png">：ラタトスク秘蔵回収データ･その2</p>
+    <p><img class="icon" src="./files/20130717111846875.png">：ラタトスク秘蔵回収データ･その3</p>
+    <p><img class="icon" src="./files/20130717111846162.png">：ラタトスク秘蔵回収データ･コンプリート</p>
+    <p>四个CG杯子，在完成全角色路线中就可以全部解开。</p>
+    <p><img class="icon" src="./files/20130717111846945.png">：凛祢ファンタジア</p>
+    <p>完成凛祢线后会提示追加 memory205 进入看一遍就能解开这个奖杯。</p>
+    <p><img class="icon" src="./files/20130717111846664.png">：シスコンブラザー</p>
+    <p>这个绝对是游戏中最令人抓狂的一个奖杯，因为并没有准确的完成方法，经过本人多次的尝试和测试终于解开了这个奖杯，只需要注意以下几点：</p>
+    <p>1 这个奖杯和每条路线的琴里更衣和如厕事件都有关系，看memory我们可以知道如厕事件的剧情都是一样的，而更衣事件只是十香，四糸乃，琴里，狂三四个人才有。</p>
+    <p>2 奖杯获得和观看次数有关，这个所谓的观看次数必须是从new game开始游戏看过相应事件并系统存档才算数，而读半路档，看memory偷懒什么的完全不算，总计次数大概在每个15~18次左右。</p>
+    <p>综上所述最好的方法就是先解开其他所有奖杯，之后每个角色按着推，推出两天的两个事件后随便给个结局存档(为了保险起见)，之后推下一个，基本在不到2个轮回的时候就可以解开了，耗时大概不到1个半小时。</p>
+    <p><img class="icon" src="./files/20130717111846100.png">： 旋律狂</p>
+    <p>听过全部BGM 在游戏中可以自动取得</p>
+    <p><img class="icon" src="./files/20130717111847827.png">：完全なる志願者</p>
+    <p>见过全部BAD END 在流程中可以自然解开。</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：十香スライド</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：十香アペタイト</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：折紙アクシデント</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：四糸乃トワイライト</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：狂三シャドウ</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：五河ゴースト</p>
+    <p>以上奖杯流程中均可以解开</p>
+    <p><img class="icon" src="./files/20130717111847424.png">：五河ゴースト</p>
+    <p>见过被ルーラー杀死的BAD END 没难度。</p>
+    <p>完成。</p>
+    <p align="center">
+        <a href="http://ps3.tgbus.com/UploadFiles/201307/20130717111847703.jpg" target="_blank">
+            <img src="./files/20130717111847516.jpg">
+        </a>
+    </p>
+</div>
+<script>
+    initRoutes();
+    loadStorage();
+    toggleIntro();
+    toggleTarget();
+</script>
+</body>
+</html>

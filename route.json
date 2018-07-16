@@ -1,0 +1,39 @@
+{Routes:[
+    {Type: "Normal", Name: "Commonmon1", Next: "Choice1"},
+    {Type: "Option", Name: "Choice1", Choices: [
+        {Choice: "Help Sachi", Result: "Common1.1"}, 
+        {Choice: "Wait and see", Result: "Common1.2"}
+    ]},
+    {Type: "Normal", Name: "Common1.1", Next: "Common2"},
+    {Type: "Normal", Name: "Common1.2", Next: "Common2"},
+    {Type: "Normal", Name: "Common2", Next: "Choice2"},
+    {Type: "Option", Name: "Choice2", Choices: [
+        {Choice: "Name1", Result: "Common2.1"},
+        {Choice: "Name2", Result: "Common2.2"},
+        {Choice: "Name3", Result: "Common2.3"}
+    ]},
+    {Type: "Normal", Name: "Common2.1", Next: "Common3"},
+    {Type: "Normal", Name: "Common2.2", Next: "Common3"},
+    {Type: "Normal", Name: "Common2.3", Next: "Common3"},
+    {Type: "Normal", Name: "Common3", Next: "Choice3"},
+    {Type: "Option", Name: "Choice3", Choices: [
+        {Choice: "Encourage and leave", Result: "Common3.1"},
+        {Choice: "Help Sachi", Result: "Common3.2"}
+    ]},
+    {Type: "Normal", Name: "Common3.1", Next: "Common4"},
+    {Type: "Normal", Name: "Common3.2", Next: "Common4"},
+    {Type: "Normal", Name: "Common4", Next: "Choice4"},
+    
+    {Type: "Option", Name: "Choice", Choices: [
+        {Choice: "", Result: "Common"},
+        {Choice: "", Result: "Common"}
+    ]}
+    
+], Examples: [
+    {Type: "Normal", Name: "<Name>", Next: "<Name>"},
+    {Type: "Option", Name: "<Name>", Choices: [
+        {Choice: "<Text>", Result: "<Name>"},
+        {Choice: "<Text>", Result: "<Name>", Affects: ["[Optional]<Affect>"]}
+    ]},
+    {Type: "RouteChecker", Name: "<Name>", Handler: "<Function (Context) -> <Name>>"}
+]}

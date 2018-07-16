@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>《约会大作战：或守install》白金攻略</title>
+    <style>
+        img {
+            max-width: 100%;
+            margin: auto;
+            clear: both;
+            display: block;
+        }
+
+        img.icon {
+            display: inline;
+            width: 54px;
+            height: 54px;
+        }
+
+        table {
+            margin: auto;
+            min-width: 70%;
+        }
+
+        td {
+            text-align: center;
+            background-color: darkolivegreen;
+            height: 26px;
+        }
+
+        .Trophy,
+        .Note {
+            color: red;
+            font-weight: bold;
+        }
+
+        mark.Save {
+            background-color: yellowgreen;
+        }
+
+        mark.Load {
+            background-color: darkgrey;
+        }
+
+        p {
+            margin-left: 2em;
+        }
+    </style>
+    <!--suppress JSDuplicatedDeclaration -->
+    <script>
+        var isMobile = /Android|BlackBerry|IEMobile|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        console.log(navigator.userAgent + ":" + isMobile);
+        if (!isMobile) {
+            document.write("<style>body{background-color: #333; color: wheat;padding-left: 3em; padding-right: 3em;}</style>");
+        }
+        function toggleIntro() {
+            var show = document.getElementById("CheckIntro").checked;
+            var items = document.getElementsByClassName("Intro");
+            for (var i = 0; i < items.length; i++) {
+                if (show) {
+                    items.item(i).style.display = '';
+                } else {
+                    items.item(i).style.display = 'none';
+                }
+            }
+            // updateStorage();
+        }
+        function toggleTarget() {
+            var items = document.getElementsByName('target');
+            var value = '';
+            for (var i = 0; i < items.length; i++) {
+                if (items.item(i).checked) {
+                    value = items.item(i).value;
+                }
+            }
+            console.log(value);
+            var routes = document.getElementsByClassName('MainRoute');
+            for (var i = 0; i < routes.length; i++) {
+                console.log(routes.item(i), routes.item(i).classList.contains(value));
+                if (routes.item(i).classList.contains(value)) {
+                    routes.item(i).style.display = '';
+                } else {
+                    routes.item(i).style.display = 'none';
+                }
+            }
+            // updateStorage();
+        }
+        function loadStorage() {
+            var checked = JSON.parse(localStorage.getItem("ArusuInstall")) || [];
+            //  alert("loadStorage" + checked);
+            var items = document.getElementsByTagName("input");
+            for (var i = 0; i < checked.length; i++) {
+                items.item(i).checked = checked[i] || false;
+            }
+        }
+        function updateStorage() {
+            var checked = [];
+            var items = document.getElementsByTagName("input");
+            for (var i = 0; i < items.length; i++) {
+                checked.push(items.item(i).checked);
+            }
+            // alert("updateStorage" + items + "" + checked);
+            localStorage.setItem("ArusuInstall", JSON.stringify(checked));
+        }
+        function initRoutes() {
+            var routes = document.getElementsByClassName('MainRoute');
+            var choice = document.getElementById("Choices");
+            for (var i = 0; i < routes.length; i++) {
+                console.log(routes.item(i).classList.item(1));
+                var input = ' <label for="Check_N_">_N_</label>\n' +
+                    '<input id="Check_N_" type="radio" name="target" value="_N_" onchange="toggleTarget()"_C_>&emsp;';
+                input = input.replace(/_N_/g, routes.item(i).classList.item(1)).replace(/_C_/g, i == 0 ? ' checked' : '');
+                choice.innerHTML += input;
+            }
+            document.addEventListener('change', updateStorage);
+        }
+    </script>
+</head>
+<body>
+<h1>《约会大作战：或守install》白金攻略</h1>
+<label for="CheckIntro">介绍</label>
+<input id="CheckIntro" type="checkbox" onchange="toggleIntro()"><br>
+<div class="Intro">
+    <p>作者：巴士速攻-无限欲（小钰）<br></p>
+    <p><a href="http://bbs.tgbus.com/thread-5492412-1-1.html">来源：bbs.tgbus.com</a></p>
+    <p align="center"><img
+            src="./files/f651e17b40299a49e734cf948630_87de8a40ad74d9151a2aeec944fcb255abc4a26ec17a7d40.jpg"></p>
+    <table>
+        <tbody>
+        <tr>
+            <td>
+                <p>
+                    游戏名称:
+                </p>
+            </td>
+            <td colspan="5">
+                <p>约会大作战：或守install</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    游戏原名:
+                </p>
+            </td>
+            <td colspan="5"><p>デート.ア.ライブ 或守インストール</p></td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    对应平台:
+                </p>
+            </td>
+            <td>
+                <p>PS3</p>
+            </td>
+            <td>
+                <p>
+                    游戏类型:
+                </p>
+            </td>
+            <td>
+                <p>AVG</p>
+            </td>
+            <td>
+                <p>
+                    游戏版本:
+                </p>
+            </td>
+            <td>
+                <p>日版</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    发售日期:
+                </p>
+            </td>
+            <td>
+                <p>2014.06.26</p>
+            </td>
+            <td>
+                <p>
+                    年龄限制:
+                </p>
+            </td>
+            <td>
+                <p>CERO D</p>
+            </td>
+            <td>
+                <p>
+                    游戏人数:
+                </p>
+            </td>
+            <td>
+                <p>1人</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>
+                    发行厂商:
+                </p>
+            </td>
+            <td colspan="3">
+                <p>COMPILE HEART</p>
+            </td>
+            <td>
+                <p>
+                    对应周边:
+                </p>
+            </td>
+            <td>
+                <p>无</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p>以前一代有玩，这次新加了人物毫不犹豫的买了，一路玩下来果然……比起一代简直是福利满满，而且没有一代那么多阴暗的badend，这次可以说主要是以各种福利为主了，约炮迷不可错过的一作，而且另外重点就是，白金简单。</p>
+    <p>白金难度：☆</p>
+    <p>白金时间：全skip 2.5~3.5小时；看剧情 15~25小时</p>
+    <p>白金准备：</p>
+    <p>1 本作不需要留太多存档，因为有quick save/load，但有全选择肢的奖杯，于是需要在自由时间主角选项那里全部选一遍，这个通过QUICK可以轻松实现。</p>
+    <p>2 请按照攻略文的攻略顺序展开。</p>
+    <img src="./files/103458tqqjhservcreeqhq.png.thumb.jpg">
+    <p>括号内为quick选项，先存档选一次后再选主要选项走剧情即可（为收集全选择肢）</p>
+</div>
+<div id="Choices"></div>
+<div class="MainRoute 十香">
+    <h3>夜刀神 十香</h3>
+    <mark class="Save">存档01</mark>
+    <p>十香とデートする</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>神社:日下部</p>
+    <p>駅前:亜衣</p>
+    <p>来禅高校⇒廊下：十香</p>
+    <p>帮助十香/十香を助ける <br>
+        (静观其变/手を出さずに見ている)</p>
+    <p>和折纸对话/折紙と話す</p>
+    <h4>2nd day</h4>
+    <p>天宮タワー:日下部</p>
+    <p>駅前:亜衣</p>
+    <p>商店街：十香</p>
+    <p>日式茶具?/ティーセット <br>
+        (成套茶具?/茶飲み道具)<br>
+        (宠物用喂食器/ペット用給餌器)</p>
+    <p>十香を手伝う</p>
+    <h4>3rd day</h4>
+    <p>就在这个班上/このクラスにすればいい</p>
+    
+    <p>借助十香的力量/十香の力を借りる</p>
+    <p>高台：日下部</p>
+    <p>来禅高校⇒踊り場：亜衣</p>
+    <p>保健室：十香</p>
+    <p>瘙痒地狱/くすぐり地獄 <br>
+        (出谜题/クイズを出す) <br>
+        (闻食物的香味/食べ物のにおいをかがせる)</p>
+    <h4>4th day</h4>
+    <p>和十香一起唱歌/十香と一緒に歌う</p>
+    <p>天宮タワー:日下部</p>
+    <p>来禅高校⇒屋上：亜衣</p>
+    <p>保健室：十香</p>
+    <p>胸围・腰围・臀围/バスト・ウエスト・ヒップのこと<br>
+        (体力・智力・敏捷/体力・知力・素早さのこと)<br>
+        (普通・大・特大/並・大盛・特盛のこと)</p>
+    <p>偷偷的到上风处/それとなく風上に立つ <br>
+        (站着吧/じっとしておく)</p>
+    <p>热血激唱！魂之动漫歌曲/熱唱系！魂のアニメソング<br>
+        (开朗阳光☆的偶像歌曲/きゃぴきゃぴ☆のアイドルソング)<br>
+        (日本之心！演歌/日本の心だ！演歌)</p>
+    <mark class="Save">存档02</mark>
+    <p>去帮她/助けてあげる</p>
+    <p>自己靠近/自分から近づく</p>
+    <p>十香END</p>
+    <mark class="Load">读取存档02</mark>
+    <p>就这样看着/そのまま見ている</p>
+    <p>等待十香的话/十香の言葉を待つ</p>
+    <p>十香END(normal)</p>
+    <img src="./files/103509xlzd41a1l4xxzx00.png.thumb.jpg">
+</div>
+<div class="MainRoute 折纸">
+    <h3>鳶一 折紙</h3>
+    <mark class="Load">读取存档01</mark>
+    <p>折紙とデートする</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>来禅高校⇒踊り場：美紀恵</p>
+    <p>教室：珠江</p>
+    <p>保健室：折紙</p>
+    <p>老师不在吗？/先生はいないのか？<br>
+        (啊，久等了/やあ、待たせたね)<br>
+        (不、不许动，举起手来！/う、動くな、手を上げろ！)</p>
+    <p>和十香对话/十香と話す</p>
+    <h4>2nd day</h4>
+    <p>来禅高校⇒学校前：美紀恵</p>
+    <p>踊り場：珠江</p>
+    <p>教室：折紙</p>
+    <p>和十香一起约会的梦/十香とデートする夢<br>
+        (和琴里一起洗澡的梦/琴里とお風呂に入る夢)<br>
+        (和殿町一起踏进了禁断之园的梦/殿町との禁断の園に踏み込む夢)</p>
+    <p>折紙を手伝う</p>
+    <h4>3rd day</h4>
+    <p>就在这个班上/このクラスにすればいい</p>
+    <p>折紙に助けを求める</p>
+    <p>来禅高校⇒校舎裏：美紀恵</p>
+    <p>学校前：珠江</p>
+    <p>街へ⇒商店街：折紙</p>
+    <p>笑顔が大事(ポーズが大事)(反骨精神が大事)</p>
+    <h4>4th day</h4>
+    <p>折紙と一緒に歌う</p>
+    <p>来禅高校⇒廊下：美紀恵</p>
+    <p>街へ⇒高台：珠江</p>
+    <p>神社：折紙</p>
+    <p>お参りをする(やっぱり止める)</p>
+    <p>何か世間話をする(気を紛らわすため、ひとりでゲームをする)</p>
+    <p>もう少しこのままでいる(手を引き抜く)</p>
+    <p>今着ている服を直接嗅いだらどうだ？(やっぱり止めておこう)</p>
+    <p>そっと折紙の机に袋を返す(においを嗅いでみる)<br>
+        (いっそ着てみる)</p>
+    <p>すぐに中に踏み込む(しばらくその場にいる)</p>
+    <mark class="Save">存档03</mark>
+    <p>折紙に許しを請う</p>
+    <p>お腹が空いた(そういえば、何か忘れているような……)</p>
+    <p>折紙END</p>
+    <mark class="Load">读取存档03</mark>
+    <p>大声で助けを呼ぶ</p>
+    <p>部屋を片付けたい</p>
+    <p>折紙END(normal)</p>
+</div>
+<div class="MainRoute 四糸乃">
+    <h3>四糸乃</h3>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒ダッシュで帰宅する</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>来禅高校⇒校舎裏：殿町</p>
+    <p>物理準備室：令音</p>
+    <p>街へ⇒住宅街：四糸乃</p>
+    <p>对了，让她给我鼓劲加油吧/そうだ、応援してもらおう<br>
+        (故意做出白痴的举动，引出她的斥责/わざとアホな行動をして、お叱りの言葉を！)</p>
+    <p>和狂三对话/狂三と話す</p>
+    <h4>2nd day</h4>
+    <p>来禅高校⇒保健室：殿町</p>
+    <p>物理準備室：令音</p>
+    <p>街へ⇒五河家：四糸乃</p>
+    <p>帮她清洗/洗ってあげる<br>
+        (让她自己洗/自分でやってもらう)</p>
+    <p>四糸乃を手伝う</p>
+    <h4>3rd day</h4>
+    <p>就在这个班上/このクラスにすればいい</p>
+    <p>请四糸乃帮忙/四糸乃に協力してもらう</p>
+    <p>来禅高校⇒教室：殿町</p>
+    <p>物理準備室：令音</p>
+    <p>街へ⇒駅前：四糸乃</p>
+    <p>泳衣很适合你哟/その新しい水着似合ってるぞ(今天不是学校泳装啊/今日はスク水じゃないんだな)</p>
+    <h4>4th day</h4>
+    <p>四糸乃と一緒に歌う</p>
+    <p>来禅高校⇒校舎裏：殿町</p>
+    <p>物理準備室：令音</p>
+    <p>街へ⇒五河家：四糸乃</p>
+    <p>包容力をアピールする(力強さをアピールする)</p>
+    <p>大丈夫だ(邪魔だ)</p>
+    <mark class="Save">存档04</mark>
+    <p>そうかもしれない</p>
+    <p>今の四糸乃が好きだ</p>
+    <p>四糸乃END</p>
+    <mark class="Load">读取存档04</mark>
+    <p>そういう意味じゃない</p>
+    <p>むしろ子供っぽいのがいいんだ</p>
+    <p>四糸乃END(normal)</p>
+
+    <img src="./files/103507dk1wk3djzmshl60e.png.thumb.jpg">
+</div>
+<div class="MainRoute 狂三">
+    <h3>時崎 狂三</h3>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒闇雲に走りだす</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>天宮タワー：神無月</p>
+    <p>商店街：真那</p>
+    <p>公園：狂三</p>
+    <p>萌え萌え☆だんすパフェを注文(横取り客に文句を言う)<br>
+        (禁断の究極技を繰り出す)</p>
+    <p>和四糸乃对话/四糸乃と話す</p>
+    <h4>2nd day</h4>
+    <p>高台：神無月</p>
+    <p>神社：真那</p>
+    <p>来禅高校⇒屋上：狂三</p>
+    <p>狂三に会いたくて(ひとりになりたくて)</p>
+    <p>次へ⇒狂三を手伝う</p>
+    <h4>3rd day</h4>
+    <p>就在这个班上/このクラスにすればいい</p>
+    <p>狂三に相談する</p>
+    <p>神社：神無月</p>
+    <p>天宮タワー：真那</p>
+    <p>住宅街：狂三</p>
+    <p>狂三に中身を聞いてみる(こっそり中を見る)</p>
+    <h4>4th day</h4>
+    <p>狂三と一緒に歌う</p>
+    <p>公園：神無月</p>
+    <p>商店街：真那</p>
+    <p>来禅高校⇒学校前：狂三</p>
+    <p>いやらしい話(勉強の話)(食べ物の話)</p>
+    <p>素直に謝る(静かに様子をうかがう)</p>
+    <p>どうせなら紐もはずしてと頼む(言われるがままサンオイルを塗る)</p>
+    <mark class="Save">存档05</mark>
+    <p>お願いします</p>
+    <p>狂三、助けてくれ！</p>
+    <p>狂三END</p>
+    <mark class="Load">读取存档05</mark>
+    <p>からかうなよ！</p>
+    <p>もう駄目だ……諦めよう</p>
+    <p>狂三END(normal)</p>
+    <img src="./files/103459vfmbo6n7rmj1jr7b.png.thumb.jpg">
+</div>
+<div class="MainRoute 琴里">
+    <h3>五河 琴里</h3>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒琴里に助けを求める</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>高台：琴里</p>
+    <p>琴里に注意を促す(いや、ここは俺が様子を見ていよう)</p>
+    <p>下一页⇒和八舞姐妹对话/次へ⇒八舞姉妹と話す</p>
+    <h4>2nd day</h4>
+    <p>住宅街：琴里</p>
+    <p>琴里の手伝いをしよう(ちょっといたずらしちゃおうかな)</p>
+    <p>琴里を手伝う</p>
+    <h4>3rd day</h4>
+    <p>隣のクラスがいいんじゃないか？</p>
+    <p>琴里に協力してもらう</p>
+    <p>来禅高校⇒廊下：琴里</p>
+    <p>思わず甘えたくなる(少しいじめてみたくなった)</p>
+    <h4>4th day</h4>
+    <p>次へ⇒琴里と一緒に歌う</p>
+    <p>住宅街：琴里</p>
+    <p>本を買いに行っていました、と正直に答える<br>
+        (盛り場で遊んできた、と嘘をつく)<br>
+        (婦警さんみたいな可愛い娘を探してたんだよ！)
+    </p>
+    <p>優しくアドバイスする(焚きつけてやる)</p>
+    <p>からかってみる(このまま仕事を続ける)</p>
+    <p>南の島でバカンス(温泉でしっぽり)(ガチ冬山登山)</p>
+    <mark class="Save">存档06</mark>
+    <p>起こさないようにじっとしていよう</p>
+    <p>琴里END</p>
+    <mark class="Load">读取存档06</mark>
+    <p>ちょ、ちょっとぐらいさわってもいいかな？</p>
+    <p>琴里END(normal)</p>
+</div>
+<div class="MainRoute 八舞姐妹">
+    <h3>八舞耶惧矢、八舞夕弦</h3>
+    <mark class="Load">读取存档01</mark>
+    <p>八舞姉妹とデートする</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>来禅高校⇒学校前：耶惧矢＆夕弦</p>
+    <p>耶惧矢、君に決めた！(夕弦、お前しかいない！)</p>
+    <p>次へ⇒琴里と話す(美九と話す)</p>
+    <h4>2nd day</h4>
+    <p>来禅高校⇒校舎裏：耶惧矢＆夕弦</p>
+    <p>疲れた振りをしてマッサージをお願いする<br>
+        (買い物に行ってきてもらおう)</p>
+    <p>次へ⇒八舞姉妹を手伝う</p>
+    <h4>3rd day</h4>
+    <p>隣のクラスがいいんじゃないか？</p>
+    <p>八舞姉妹に協力してもらう</p>
+    <p>公園：耶惧矢＆夕弦</p>
+    <p>もう少しだけ付き合ってあげる(遊びをやめて家に帰るよう説得する)</p>
+    <h4>4th day</h4>
+    <p>次へ⇒八舞姉妹と一緒に歌う</p>
+    <p>駅前：耶惧矢＆夕弦</p>
+    <p>どちらかを選ぶことなんてできない！<br>
+        (耶惧矢を愛してる)(夕弦を愛してる)</p>
+    <p>楽しいよ、それは間違いない(正直言うとよくわからない)</p>
+    <mark class="Save">存档07</mark>
+    <p>耶惧矢と一緒に過ごしたい</p>
+    <p>また二人で遊ぼうか</p>
+    <p>耶惧矢END</p>
+    <mark class="Load">读取存档07</mark>
+    <p>夕弦と一緒に過ごしたい</p>
+    <p>また、夕弦と一緒に</p>
+    <p>夕弦END</p>
+    <mark class="Load">读取存档07</mark>
+    <p>耶惧矢と一緒に過ごしたい</p>
+    <p>今度は夕弦も一緒に……</p>
+    <p>耶惧矢END(normal)</p>
+    <mark class="Load">读取存档07</mark>
+    <p>夕弦と一緒に過ごしたい</p>
+    <p>今度は耶惧矢も一緒に三人で</p>
+    <p>夕弦END(normal)</p>
+
+</div>
+<div class="MainRoute 美九">
+    <h3>誘宵美九</h3>
+    <mark class="Load">读取存档01</mark>
+    <p>美九とデートする</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>五河家：美九</p>
+    <p>YES(NO)</p>
+    <p>下一页⇒和八舞姉妹对话/次へ⇒八舞姉妹と話す</p>
+    <h4>2nd day</h4>
+    <p>来禅高校⇒廊下：美九</p>
+    <p>先輩とペアで(自由形で)(背泳ぎで)</p>
+    <p>次へ⇒美九を手伝う</p>
+    <h4>3rd day</h4>
+    <p>隣のクラスがいいんじゃないか？</p>
+    <p>美九に協力してもらう</p>
+    <p>五河家：美九</p>
+    <p>押してみる(押さない)</p>
+    <h4>4th day</h4>
+    <p>次へ⇒美九と一緒に歌う</p>
+    <p>来禅高校⇒教室：美九</p>
+    <p>付き合っている(違う)</p>
+    <p>そうだよ(そりゃ、ちょっとはかわいいと思ってるけどさ)</p>
+    <p>もうちょっと見ていてもいいかな？<br>
+        (早く着替えよう、な？)(ちょっと太ったんじゃないか？)</p>
+    <p>まだ早くないか？(まだ覚悟ができないから)</p>
+    <p>マッサージと見せかけて、全身をくすぐる<br>
+        (狙うは、足だ。足を揉みほぐすぞ)(肩の周りをまんべんなく触る)</p>
+    <mark class="Save">存档08</mark>
+    <p>でも、楽しいよ</p>
+    <p>美九END</p>
+    <mark class="Load">读取存档08</mark>
+    <p>こっちこそ、ごめん</p>
+    <p>美九END(nromal)</p>
+
+    <img src="./files/103501v5wafrbrvvizfrvi.png.thumb.jpg">
+</div>
+<div class="MainRoute 或守鞠亜">
+    <h3>或守鞠亜</h3>
+    <p>攻略以上八人后从头开始</p>
+    <p>プロローグをスキップする</p>
+    <p>※頷く</p>
+    <h4>1st day</h4>
+    <p>素直に謝る(言い訳をする)</p>
+    <h4>2nd day</h4>
+    <p>手をつないで歩く(腕を組んで歩く)</p>
+    <h4>3rd day</h4>
+    <p>ほっぺたをつついてみる(揺すって起こしてみる)</p>
+    <p>しっとりおしたバラードを選ぶ(明るいポップスにしよう)</p>
+    <h4>4th day</h4>
+    <p>鞠亜の方へ行ってみる四糸乃の方へ行ってみる)</p>
+    <p>(あえて中央に寄る)</p>
+    <h4>5th day</h4>
+    <p>何かあったのか？(よし、行くぞ！)</p>
+    <p>キスしない(キスする)</p>
+    <p>やっぱりキスしない(キスする)</p>
+    <p>キスをするしかない(キスする)</p>
+    <p>鞠亜END</p>
+
+    <p><img src="./files/17S7f1168.png">鞠亜リアライズ</p>
+    <p>完成全部真结局后获得</p>
+</div>
+<div class="MainRoute 全结局收集">
+    <!--<p>完成全部普通结局和一个bad end后获得</p>-->
+    <p>从头开始</p>
+    <p>プロローグをスキップする</p>
+    <p>※黙っている</p>
+    <h4>1st day</h4>
+    <p>住宅街：四糸乃</p>
+    <p>わざとアホな行動をして、お叱りの言葉を！</p>
+    <p>和美九对话/美九と話す</p>
+    <h4>2nd day</h4>
+    <p>住宅街：琴里</p>
+    <p>ちょっといたずらしちゃおうかな</p>
+    <p>十香を手伝う</p>
+    <h4>3rd day</h4>
+    <p>隣のクラスがいいんじゃないか？</p>
+    <p>八舞姉妹に協力してもらう</p>
+    <p>商店街：折紙</p>
+    <p>反骨精神が大事</p>
+    <h4>4th day</h4>
+    <p>狂三と一緒に歌う</p>
+    <p>駅前：八舞姉妹</p>
+    <p>どちらかを選ぶことなんてできない！</p>
+    <p>BADEND</p>
+</div>
+<div class="MainRoute 全选项收集">
+    <p>全选择肢收集 看过全部结局后只剩最开始的一个选项了</p>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒次へ⇒タマちゃんに助けを求める</p>
+    <p>回收后结束</p>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒次へ⇒真那に助けを求める</p>
+    <p>回收后结束</p>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒次へ⇒亜衣麻衣美衣とハッスルする</p>
+    <p>回收后结束</p>
+    <mark class="Load">读取存档01</mark>
+    <p>次へ⇒次へ⇒俺には殿町しかいない。心の友よ</p>
+    <p>回收后结束</p>
+
+    <p>这游戏从我个人而言是十分推荐的，比起一代良心了不是一点点。
+        虽然主线剧情还是略显薄弱， 但这游戏，压根就不是玩主线的嘛。
+        就冲着CH社在限界凸记和海王星等游戏上面的名号，这也是一款应景的绅士作品。</p>
+    <img src="./files/103503muv5gufmvglmda45.png.thumb.jpg">
+</div>
+<script>
+    initRoutes();
+    loadStorage();
+    toggleIntro();
+    toggleTarget();
+</script>
+</body>
+</html>

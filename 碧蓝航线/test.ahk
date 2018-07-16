@@ -1,0 +1,3 @@
+#SingleInstance force
+
+^!Right::RButton
