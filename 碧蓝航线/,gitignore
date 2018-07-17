@@ -1,0 +1,14 @@
+# vscode
+
+.vscode
+
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# jupyter
+.ipynb_checkpoints
