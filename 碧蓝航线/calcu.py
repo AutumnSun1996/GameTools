@@ -4,11 +4,11 @@ import numpy as np
 
 # 对舰输出, 生存能力， 防空性能
 weights = {
-    "默认": [0, 1, 0],
-    # "航母": [2, 1.5, 0.01],
+    "默认": [1, 1, 0.1],
+    "航母": [2, 1.5, 0.01],
     # "战列": [1.5, 1.5, 1],
-    # "轻巡": [1.5, 1.5, 0.5],
-    # "驱逐": [1, 1.5, 0.2]
+    "轻巡": [1.5, 1, 0.5],
+    "驱逐": [1, 1.5, 0.2]
 }
 
 own_now = re.findall("[^\s]+", """
@@ -21,7 +21,6 @@ own_now = re.findall("[^\s]+", """
 Z23 Z25 Z35 Z46 
 克雷文 麦考尔 卡辛 唐斯 女将 命运女神 天后
 弗莱彻 富特 斯彭斯 
-
 """)
 def accept(ship):
     if ship["Type"] == "其他":
@@ -34,7 +33,7 @@ def accept(ship):
 
 nums = re.compile("(\d+\.)?\d+")
 
-with open("输出.html", "r", -1, "UTF-8") as fl:
+with open("./输出.html", "r", -1, "UTF-8") as fl:
     html = pyquery.PyQuery(fl.read())
 
 ship_types = "驱逐	轻巡	重巡	战列	航母	其他".split("	")
@@ -59,7 +58,7 @@ def harm_mean(arr, weight=None):
     arr = 1 / (np.array(arr) + 1)
     if weight is not None:
         arr = np.array(arr) * np.array(weight) / np.mean(weight)
-    return 1 / arr.mean()
+    return (1 / arr.mean()) - 1
     
 def score(s):
     try:
