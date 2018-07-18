@@ -11,7 +11,7 @@ weights = {
     "重巡": [10, 10, 1],
     "驱逐": [20, 30, 2],
 }
-show_count = 10
+show_count = 12
 own_now = [s for s in re.findall(r"[^\s（）]+", """
 #维修:
 #航母: 列克星敦 齐柏林 蛟（苍龙） 约克城
@@ -24,13 +24,16 @@ own_now = [s for s in re.findall(r"[^\s（）]+", """
 Z46 
 拉菲 标枪 吸血鬼 
 Z23 Z25 Z35 
-格里德利 撒切尔 西姆斯 哈曼 女将 命运女神 天后 萩 ？ ？ Z19 弗莱彻
+格里德利 撒切尔 西姆斯 哈曼 女将 命运女神 天后 萩（阳炎） ？ ？ Z19 弗莱彻
 卡辛 唐斯 克雷文 麦考尔 奥利克 富特 斯彭斯 小猎兔犬 大斗犬 彗星 新月 小天鹅 狐提 Z20
+#潜艇:
+U-47 伊58
 """) if not s.endswith(":")]
 # print(own_now)
 def accept(ship):
-    if ship["Extra"] or ship["Type"] == "其他" or ship["Name"].endswith("改"):
+    if ship["Type"] == "其他":
         return False
+
     for name in own_now:
         if name in ship["Name"]:
             return True
@@ -41,7 +44,7 @@ nums = re.compile("(\d+\.)?\d+")
 with open("./输出.html", "r", -1, "UTF-8") as fl:
     html = pyquery.PyQuery(fl.read())
 
-ship_types = "驱逐	轻巡	重巡	战列	航母	其他".split("	")
+ship_types = "驱逐 轻巡 重巡 战列 航母 其他".split(" ")
 
 ship_list = []
 for span in html("td > span").items():
@@ -83,12 +86,12 @@ def set_name_format(ship, size=10):
     if suffix > 0:
         ship["Name"] += (" " * suffix)
 
-# for ship_type in ship_types:
-for ship_type in "驱逐 轻巡 重巡".split(" "):
+for ship_type in ship_types:
+# for ship_type in "驱逐 轻巡 重巡".split(" "):
     filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
     filted_ships.sort(key=score)
     width = max([str_width(ship["Name"]) for ship in filted_ships[:show_count]])
     for idx, ship in enumerate(filted_ships[:show_count]):
         set_name_format(ship, width + 2)
-        print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}{1[Extra]} 输出{1[对舰输出]:.0f} 生存{1[生存能力]:.0f} 防空{1[防空性能]:.0f}".format(idx+1, ship))
+        print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:.0f} 生存{1[生存能力]:.0f} 防空{1[防空性能]:.0f} {1[Extra]}".format(idx+1, ship))
     print()
