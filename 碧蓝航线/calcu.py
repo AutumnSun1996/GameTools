@@ -1,6 +1,7 @@
 import pyquery
 import re
 import numpy as np
+import time
 
 # 对舰输出, 生存能力， 防空性能
 weights = {
@@ -8,18 +9,19 @@ weights = {
     "航母": [20, 10, 1],
     "战列": [20, 10, 1],
     "轻巡": [30, 20, 5],
-    "重巡": [10, 10, 1],
-    "驱逐": [20, 30, 2],
+    "重巡": [30, 20, 1],
+    "驱逐": [30, 20, 2],
 }
 show_count = 12
 own_now = [s for s in re.findall(r"[^\s（）]+", """
 #维修:
 #航母: 列克星敦 齐柏林 蛟（苍龙） 约克城
 #轻航: 突击者 长岛 兰利 竞技神 鹞（祥凤） 博格 
-
 #战列/战巡: 罗德尼 纳尔逊 宾夕法尼亚 反击 声望 内华达 田纳西 加利福尼亚 俄克拉荷马 亚利桑那
-#重巡: 波特兰 希佩尔 印第安纳波利斯 什罗普郡 肯特 北安普敦 伦敦 芝加哥 萨福克 德意志
-#轻巡: 圣地亚哥 菲尼克斯 利安得 布鲁克林 阿贾克斯 蒙彼利埃
+#重炮: 黑暗界 恐怖
+
+#重巡: 波特兰 希佩尔 印第安纳波利斯 什罗普郡 肯特 北安普敦 伦敦 芝加哥 萨福克 德意志 
+#轻巡: 圣地亚哥 菲尼克斯 利安得 布鲁克林 阿贾克斯 蒙彼利埃 海伦娜
 #驱逐:
 Z46 
 拉菲 标枪 吸血鬼 
@@ -29,9 +31,10 @@ Z23 Z25 Z35
 #潜艇:
 U-47 伊58
 """) if not s.endswith(":")]
+
 # print(own_now)
 def accept(ship):
-    if ship["Type"] == "其他":
+    if not ship.get("对舰输出"):
         return False
 
     for name in own_now:
@@ -90,8 +93,11 @@ for ship_type in ship_types:
 # for ship_type in "驱逐 轻巡 重巡".split(" "):
     filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
     filted_ships.sort(key=score)
+    if len(filted_ships) == 0:
+        continue
     width = max([str_width(ship["Name"]) for ship in filted_ships[:show_count]])
     for idx, ship in enumerate(filted_ships[:show_count]):
         set_name_format(ship, width + 2)
         print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:.0f} 生存{1[生存能力]:.0f} 防空{1[防空性能]:.0f} {1[Extra]}".format(idx+1, ship))
+    time.sleep(1)
     print()
