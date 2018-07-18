@@ -14,12 +14,14 @@ weights = {
 }
 show_count = 12
 own_now = [s for s in re.findall(r"[^\s（）]+", """
+#后排主力:
 #维修:
 #航母: 列克星敦 齐柏林 蛟（苍龙） 约克城
 #轻航: 突击者 长岛 兰利 竞技神 鹞（祥凤） 博格 
 #战列/战巡: 罗德尼 纳尔逊 宾夕法尼亚 反击 声望 内华达 田纳西 加利福尼亚 俄克拉荷马 亚利桑那
 #重炮: 黑暗界 恐怖
 
+#前排先锋:
 #重巡: 波特兰 希佩尔 印第安纳波利斯 什罗普郡 肯特 北安普敦 伦敦 芝加哥 萨福克 德意志 
 #轻巡: 圣地亚哥 菲尼克斯 利安得 布鲁克林 阿贾克斯 蒙彼利埃 海伦娜
 #驱逐:
@@ -30,7 +32,7 @@ Z23 Z25 Z35
 卡辛 唐斯 克雷文 麦考尔 奥利克 富特 斯彭斯 小猎兔犬 大斗犬 彗星 新月 小天鹅 狐提 Z20
 #潜艇:
 U-47 伊58
-""") if not s.endswith(":")]
+""") if not s.endswith(":") or s.startswith("#")]
 
 # print(own_now)
 def accept(ship):
@@ -99,5 +101,5 @@ for ship_type in ship_types:
     for idx, ship in enumerate(filted_ships[:show_count]):
         set_name_format(ship, width + 2)
         print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:.0f} 生存{1[生存能力]:.0f} 防空{1[防空性能]:.0f} {1[Extra]}".format(idx+1, ship))
-    time.sleep(1)
+    # time.sleep(1)
     print()
