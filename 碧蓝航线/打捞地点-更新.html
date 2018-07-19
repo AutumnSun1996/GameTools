@@ -1,6 +1,9 @@
-<h1><a href="http://wiki.joyme.com/blhx/%E7%A2%A7%E8%93%9D%E8%88%AA%E7%BA%BF%E5%85%A8%E5%9C%B0%E5%9B%BE%E7%BB%83%E7%BA%A7%E5%92%8C%E5%9B%BE%E7%BA%B8%E8%88%B0%E5%A8%98%E6%89%93%E6%8D%9E%E6%8E%A8%E8%8D%90%E5%BA%A6%E8%AF%A6%E8%A1%A8">
-  碧蓝航线全地图练级和图纸舰娘打捞推荐度详表
-</a></h1>
+<h1>
+  <a href="http://wiki.joyme.com/blhx/%E7%A2%A7%E8%93%9D%E8%88%AA%E7%BA%BF%E5%85%A8%E5%9C%B0%E5%9B%BE%E7%BB%83%E7%BA%A7%E5%92%8C%E5%9B%BE%E7%BA%B8%E8%88%B0%E5%A8%98%E6%89%93%E6%8D%9E%E6%8E%A8%E8%8D%90%E5%BA%A6%E8%AF%A6%E8%A1%A8"
+    target="_blank">
+    碧蓝航线全地图练级和图纸舰娘打捞推荐度详表
+  </a>
+</h1>
 <p>已拥有的舰娘: </p>
 <pre id="ship">
     #后排主力:
@@ -12,7 +15,7 @@
     
     #前排先锋:
     #重巡: 波特兰 希佩尔 印第安纳波利斯 什罗普郡 肯特 北安普敦 伦敦 芝加哥 萨福克 德意志 
-    #轻巡: 圣地亚哥 菲尼克斯 利安得 布鲁克林 阿贾克斯 蒙彼利埃 海伦娜
+    #轻巡: 圣地亚哥 菲尼克斯 利安得 布鲁克林 阿贾克斯 蒙彼利埃 海伦娜 克利夫兰
     #驱逐:
     Z46 
     拉菲 标枪 吸血鬼 
@@ -26,7 +29,9 @@
 <pre id="equipment">
    
 </pre>
-<p>由 <a href="http://wiki.joyme.com/home/index.php?title=%E7%89%B9%E6%AE%8A:%E7%9D%80%E8%BF%B7%E8%B4%A1%E7%8C%AE&userid=5729780">井号5467</a> 原创</p>
+<p>由
+  <a href="http://wiki.joyme.com/home/index.php?title=%E7%89%B9%E6%AE%8A:%E7%9D%80%E8%BF%B7%E8%B4%A1%E7%8C%AE&userid=5729780"
+    target="_blank">井号5467</a> 原创</p>
 <style>
   table,
   th,
@@ -65,12 +70,12 @@
   </thead>
   <tbody>
     <tr>
-      <td>2-1/2-2</td>
+      <td>2-2</td>
       <td>布鲁克林</td>
       <td></td>
-      <td>液压陀机，海军迷彩</td>
+      <td>液压舵机，海军迷彩</td>
       <td>0.5</td>
-      <td>海军迷彩和陀机这个东西适合重巡用，萌新重巡能用的应该是波特兰改，波特兰改好了以后带小海狸、金SG打PVE都替代了海军迷彩和陀机，所以。。挺尴尬的定位，我个人不推荐捞，开箱出一两个就足够用到毕业了。(除非重巡崛起)</td>
+      <td>海军迷彩和陀机这个东西适合重巡用，萌新重巡能用的应该是波特兰改，波特兰改好了以后带小海狸、金SG打PVE都替代了海军迷彩和陀机，所以。。挺尴尬的定位，我个人不推荐，开箱出一两个就足够用到毕业了。(除非重巡崛起)</td>
     </tr>
     <tr>
       <td>2-3</td>
@@ -194,15 +199,15 @@
     </tr>
     <tr>
       <td>6-4</td>
-      <td>poi，萨拉托加，列克星敦</td>
-      <td>poi</td>
+      <td>夕立，萨拉托加，列克星敦</td>
+      <td>夕立</td>
       <td>四联610</td>
       <td>6</td>
       <td>要五战(你不是6图！)版本第一手操鱼雷，其实poi对萌新帮助不大，萌新期不用强求</td>
     </tr>
     <tr>
       <td>7-1</td>
-      <td>伊丽莎白</td>
+      <td>伊丽莎白女王</td>
       <td></td>
       <td>八连碰碰</td>
       <td>2</td>
@@ -238,8 +243,8 @@
       <td>电、阿武隈</td>
       <td>金高平，120mm双联</td>
       <td>5</td>
-      <td>好用的驱逐炮,8图开始4战。8-1道路类似7-1反人类,减分,但是
-          是金高平和紫菜并存的唯二地点之一,另一个在10-3。</td>
+      <td>好用的驱逐炮,8图开始4战。8-1道路类似7-1反人类,减分,但是 是金高平和紫菜并存的唯二地点之一,另一个在10-3。
+      </td>
     </tr>
     <tr>
       <td>8-2</td>
@@ -308,15 +313,19 @@
     return item.innerText.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim().split(" ");
   }
 
-  function intersect(here, own) {
+  function intersect(here, own, addLink) {
     var common = new Set();
     for (var ih in here) {
+      var href = here[ih];
       for (var io in own) {
         if (here[ih] == own[io]) {
           common.add(own[io]);
           here[ih] = '<span class="del">' + here[ih] + "</span>";
           break;
         }
+      }
+      if (addLink) {
+        here[ih] = '<a href="http://wiki.joyme.com/blhx/' + href + '" target="_blank">' + here[ih] + "</a>";
       }
     }
     return [...common];
@@ -329,15 +338,18 @@
     return [...new Set(a)];
   }
 
-  function commonCount(item_here, own) {
+  function commonCount(item_here, own, addLink) {
     var want_here = get_set(item_here);
-    var common = intersect(want_here, own);
-    if (common.length > 0) {
-      console.log("Update", item_here, want_here);
-      item_here.innerHTML = want_here.join(", ");
-    }
+    var common = intersect(want_here, own, addLink);
+    console.log("Update", item_here, want_here);
+    item_here.innerHTML = want_here.join(", ");
     return common;
   }
+
+  function updateItems(item_list, target) {
+
+  }
+
   var ship_own = get_set(document.getElementById("ship"));
   var equipment_own = get_set(document.getElementById("equipment"));
 
@@ -346,10 +358,11 @@
   for (var i = 1; i < items.length; i++) {
     var item = items[i];
     console.log(item);
-    var commmonShip1 = commonCount(item.children[1], ship_own);
-    var commmonShip2 = commonCount(item.children[2], ship_own);
+    item.children[0].innerHTML = '<a href="http://wiki.joyme.com/blhx/' + item.children[0].innerHTML + '" target="_blank">' + item.children[0].innerHTML + '</a>';
+    var commmonShip1 = commonCount(item.children[1], ship_own, true);
+    var commmonShip2 = commonCount(item.children[2], ship_own, true);
     var commmonShip = union(commmonShip1, commmonShip2).length;
-    var commmonEquipment = commonCount(item.children[3], equipment_own).length;
+    var commmonEquipment = commonCount(item.children[3], equipment_own, false).length; //装备基本使用了简称，不添加链接
 
     console.log(commmonShip1, commmonShip2, commmonShip, commmonEquipment)
 
