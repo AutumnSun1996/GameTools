@@ -1,0 +1,31 @@
+table, th, td {
+  border: 1px solid;
+}
+
+th {
+  height: 1em;
+}
+
+table {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.del {
+  text-decoration: line-through;
+  color: gray;
+}
+
+pre {
+    display: block;
+    font-family: -moz-fixed;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 1em 0;
+}
+
+a {
+    text-decoration: none;
+}

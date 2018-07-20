@@ -1,4 +1,4 @@
-var data = getstr(function(){/*
+var shipOwnInfo = getstr(function(){/*
 - 驱逐:
   - 常见:
     - [x]卡辛, [x]唐斯, [x]克雷文, [x]麦考尔, [x]奥利克, [x]富特, [x]斯彭斯, [x]小猎兔犬, [x]大斗犬, [x]彗星, [x]新月, [x]小天鹅, [x]狐提, [x]不知火(蒲), [x]Z20, [ ]Z21, [x]睦月(松), [ ]如月(樟), [x]卯月(楙), [ ]水无月(杌), [ ]三日月(檧)
@@ -79,6 +79,37 @@ var data = getstr(function(){/*
   - 超稀有:
     - [ ]伊19, [ ]U-81, [x]U-47
 */});
+var equipmentOwnInfo = getstr(function (){/*
+灭火器T3蓝(12): 4
+维修工具T3紫(12): 3+4/10
+SB2C地狱俯冲者T3紫(6): 2+2/10
+四联装533mm磁性鱼雷T3金(6): 1
+四联装610mm鱼雷T3(3): 0
+双联装127mm高平两用炮MK12T3金(6): 0
+76mm火炮T3蓝(2): 0
+双联100mm98式高射炮T3金(3): 0
+双联装128mmSKC41高平两用炮T3紫(4): 0
+试作型三联装152mm主炮T0金(4): 0
+F4U（VF-17“海盗”中队）T0金(4): 0
+XF5F天箭T0紫(2): 0
+梭鱼T3金(4): 0
+*/});
 function getstr(fn) {
     return fn.toString().split('\n').slice(1,-1).join('\n') + '\n'
+}
+
+function getShipOwned(set_item) {
+  document.getElementById(set_item).innerText = shipOwnInfo;
+  var text = text.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim();
+  var items = [];
+  text.replace(/\[x\]([^\s]+)/g, function (a, b) {
+      console.log(a, b);
+      items.push(b)
+      return a;
+  });
+  return items;
+}
+
+function getEquipmentOwned(setItem){
+  return [];
 }

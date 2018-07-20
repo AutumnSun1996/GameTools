@@ -2,40 +2,7 @@
 <div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 20px"><pre id="ship"></pre></div>
 <p>已够用的装备: </p>
 <pre id="equipment"></pre>
-<style>
-    table,
-    th,
-    td {
-        border: 1px solid;
-    }
-
-    th {
-        height: 1em;
-    }
-
-    table {
-        width: 90%;
-        margin: auto;
-        text-align: center;
-        border-collapse: collapse;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    .del {
-        text-decoration: line-through;
-        color: gray !important;
-    }
-    xmp, pre, plaintext {
-        display: block;
-        font-family: -moz-fixed;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        margin: 1em 0;
-    }
-</style>
+<link rel="stylesheet" href="common.css"></link>
 
 <div class="LotusRoot" onload="init">
     <p>
@@ -1749,23 +1716,8 @@
 
 <script src="舰娘列表.js"></script>
 <script>
-    function check_own(text) {
-        if (text == "") {
-            return [];
-        }
-        var text = text.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim();
-        var items = [];
-        text.replace(/\[x\]([^\s]+)/g, function (a, b) {
-            console.log(a, b);
-            items.push(b)
-            return a;
-        });
-        return items;
-    }
-
     function init() {
-        var ship_own = check_own(data);
-        document.getElementById("ship").innerText = data;
+        var ship_own = getShipOwned("ship");
         console.log(ship_own);
         var items = document.getElementsByTagName("a");
         for (var i = 1; i < items.length; i++) {
