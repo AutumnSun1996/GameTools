@@ -100,7 +100,7 @@ function getstr(fn) {
 
 function getShipOwned(set_item) {
   document.getElementById(set_item).innerText = shipOwnInfo;
-  var text = text.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim();
+  var text = shipOwnInfo.replace(/[，,]/g, " ").replace(/[\s\r\n（）()、]+/g, " ").trim();
   var items = [];
   text.replace(/\[x\]([^\s]+)/g, function (a, b) {
       console.log(a, b);
