@@ -5,9 +5,13 @@
   </a>
 </h1>
 <p>已拥有的舰娘: </p>
-<div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 20px"><pre id="ship"></pre></div>
+<div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 20px">
+  <pre id="ship"></pre>
+</div>
 <p>已够用的装备: </p>
-<pre id="equipment"></pre>
+<div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 20px">
+  <pre id="equipment"></pre>
+</div>
 <p>由
   <a href="http://wiki.joyme.com/home/index.php?title=%E7%89%B9%E6%AE%8A:%E7%9D%80%E8%BF%B7%E8%B4%A1%E7%8C%AE&userid=5729780"
     target="_blank">井号5467</a> 原创</p>
@@ -298,49 +302,51 @@
   function commonCount(item_here, own, addLink) {
     var want_here = get_set(item_here);
     var common = intersect(want_here, own, addLink);
-    console.log("Update", item_here, want_here);
+    // console.log("Update", item_here, want_here);
     item_here.innerHTML = want_here.join(", ");
     return common;
   }
 
-    function check_own(text) {
-        if (text == "") {
-            return [];
-        }
-        document.getElementById("ship").innerText = text;
-        var text = text.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim();
-        var items = [];
-        text.replace(/\[x\]([^\s]+)/g, function (a, b) {
-            console.log(a, b);
-            items.push(b)
-            return a;
-        });
-        return items;
+  function check_own(text) {
+    if (text == "") {
+      return [];
     }
+    document.getElementById("ship").innerText = text;
+    var text = text.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim();
+    var items = [];
+    text.replace(/\[x\]([^\s]+)/g, function (a, b) {
+      // console.log(a, b);
+      items.push(b)
+      return a;
+    });
+    return items;
+  }
+  function init() {
+    var ship_own = getShipOwned("ship");
+    var equipment_own = getEquipmentOwned("equipment");
 
-  var ship_own = getShipOwned("ship");
-  var equipment_own = getEquipmentOwned("equipment");
+    console.log(ship_own, equipment_own);
+    var items = document.getElementsByTagName("tr");
+    for (var i = 1; i < items.length; i++) {
+      var item = items[i];
+      // console.log(item);
+      item.children[0].innerHTML = '<a href="http://wiki.joyme.com/blhx/' + item.children[0].innerHTML + '" target="_blank">' + item.children[0].innerHTML + '</a>';
+      var commmonShip1 = commonCount(item.children[1], ship_own, true);
+      var commmonShip2 = commonCount(item.children[2], ship_own, true);
+      var commmonShip = union(commmonShip1, commmonShip2).length;
+      var commmonEquipment = commonCount(item.children[3], equipment_own, false).length; //装备基本使用了简称，不添加链接
 
-  console.log(ship_own, equipment_own);
-  var items = document.getElementsByTagName("tr");
-  for (var i = 1; i < items.length; i++) {
-    var item = items[i];
-    console.log(item);
-    item.children[0].innerHTML = '<a href="http://wiki.joyme.com/blhx/' + item.children[0].innerHTML + '" target="_blank">' + item.children[0].innerHTML + '</a>';
-    var commmonShip1 = commonCount(item.children[1], ship_own, true);
-    var commmonShip2 = commonCount(item.children[2], ship_own, true);
-    var commmonShip = union(commmonShip1, commmonShip2).length;
-    var commmonEquipment = commonCount(item.children[3], equipment_own, false).length; //装备基本使用了简称，不添加链接
+      // console.log(commmonShip1, commmonShip2, commmonShip, commmonEquipment)
 
-    console.log(commmonShip1, commmonShip2, commmonShip, commmonEquipment)
-
-    var ownCount = commmonShip + commmonEquipment;
-    if (ownCount > 0) {
-      var originalCount = union(get_set(item.children[1]), get_set(item.children[2])).length + get_set(item.children[3]).length;
-      var originalScore = parseFloat(item.children[4].innerText);
-      var newScore = parseInt(10 * originalScore * (originalCount - ownCount) / originalCount) / 10;
-      newScore = newScore > 0 ? newScore : 0;
-      item.children[4].innerHTML = newScore + '<span class="del">(' + originalScore + ")</span>";
+      var ownCount = commmonShip + commmonEquipment;
+      if (ownCount > 0) {
+        var originalCount = union(get_set(item.children[1]), get_set(item.children[2])).length + get_set(item.children[3]).length;
+        var originalScore = parseFloat(item.children[4].innerText);
+        var newScore = parseInt(10 * originalScore * (originalCount - ownCount) / originalCount) / 10;
+        newScore = newScore > 0 ? newScore : 0;
+        item.children[4].innerHTML = newScore + '<span class="del">(' + originalScore + ")</span>";
+      }
     }
   }
+  init();
 </script>

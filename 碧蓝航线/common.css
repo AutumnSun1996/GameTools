@@ -13,9 +13,9 @@ table {
   border-collapse: collapse;
 }
 
-.del {
+.del, .del span {
   text-decoration: line-through;
-  color: gray;
+  color: gray !important;
 }
 
 pre {
