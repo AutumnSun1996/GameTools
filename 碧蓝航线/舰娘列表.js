@@ -1,9 +1,9 @@
-var shipOwnInfo = getstr(function(){/*
+var shipOwnInfo = `
 - 驱逐:
   - 常见:
     - [x]卡辛, [x]唐斯, [x]克雷文, [x]麦考尔, [x]奥利克, [x]富特, [x]斯彭斯, [x]小猎兔犬, [x]大斗犬, [x]彗星, [x]新月, [x]小天鹅, [x]狐提, [x]不知火(蒲), [x]Z20, [ ]Z21, [x]睦月(松), [ ]如月(樟), [x]卯月(楙), [ ]水无月(杌), [ ]三日月(檧)
   - 稀有:
-    - [x]格里德利, [x]弗莱彻, [x]撒切尔, [ ]本森, [x]西姆斯, [x]哈曼, [xs]女将, [ ]阿卡司塔, [ ]热心, [x]命运女神, [x]天后, [ ]晓(枫), [ ]雷(梓), [ ]电(柏), [ ]白露(梿), [x]阳炎(萩), [ ]初春(梅), [ ]若叶(楉), [ ]初霜(檨), [ ]有明(榎), [ ]夕暮(棭), [ ]黑潮(蓉), [ ]亲潮(藮), [ ]贝利, [x]Z19, [ ]神风(榊), [x]松风(棡), [ ]文月(橗), [ ]拉德福特, [ ]杰金斯, [ ]丘比特, [ ]泽西, [ ]浦风(槆), [ ]矶风(柉), [ ]滨风(樇), [x]谷风(栭), [ ]朝潮(棹), [ ]大潮(荙), [ ]满潮(樠), [ ]Z18
+    - [x]格里德利, [x]弗莱彻, [x]撒切尔, [ ]本森, [x]西姆斯, [x]哈曼, [x]女将, [ ]阿卡司塔, [ ]热心, [x]命运女神, [x]天后, [ ]晓(枫), [ ]雷(梓), [ ]电(柏), [ ]白露(梿), [x]阳炎(萩), [ ]初春(梅), [ ]若叶(楉), [ ]初霜(檨), [ ]有明(榎), [ ]夕暮(棭), [ ]黑潮(蓉), [ ]亲潮(藮), [ ]贝利, [x]Z19, [ ]神风(榊), [x]松风(棡), [ ]文月(橗), [ ]拉德福特, [ ]杰金斯, [ ]丘比特, [ ]泽西, [ ]浦风(槆), [ ]矶风(柉), [ ]滨风(樇), [x]谷风(栭), [ ]朝潮(棹), [ ]大潮(荙), [ ]满潮(樠), [ ]Z18
   - 精锐:
     - [x]泛用型布里, [ ]莫里, [x]查尔斯·奥斯本, [x]拉菲, [ ]萤火虫, [x]标枪, [x]吸血鬼, [ ]吹雪(桐), [ ]绫波(柚), [x]时雨(栴), [ ]野分(苓), [ ]Z1, [x]Z23, [x]Z25, [ ]鞍山, [ ]抚顺, [ ]长春, [ ]太原, [ ]新月JP(枥), [ ]春月(桸), [ ]宵月(楛), [ ]尼古拉斯, [ ]无敌, [ ]火枪手, [x]Z35, [ ]布兰, [ ]22, [ ]33
   - 超稀有:
@@ -52,7 +52,7 @@ var shipOwnInfo = getstr(function(){/*
   - 稀有:
     - [ ]胡蜂
   - 精锐:
-    - [x]列克星敦, [ ]萨拉托加, [x]约克城, [ ]大黄蜂, [ ]皇家方舟, [ ]光荣, [x]苍龙(蛟), [ ]飞龙(龙), [ ]贝露
+    - [x]列克星敦, [x]萨拉托加, [x]约克城, [ ]大黄蜂, [ ]皇家方舟, [ ]光荣, [x]苍龙(蛟), [ ]飞龙(龙), [ ]贝露
   - 超稀有:
     - [ ]企业, [x]光辉, [ ]胜利, [x]赤城(凰), [x]加贺(鸾), [ ]翔鹤(鹬), [ ]瑞鹤(鹤), [x]齐柏林伯爵, [ ]翡绿之心
 - 航战:
@@ -78,13 +78,15 @@ var shipOwnInfo = getstr(function(){/*
     - [ ]伊26, [x]伊58, [ ]鲦鱼, [ ]U-557
   - 超稀有:
     - [ ]伊19, [ ]U-81, [x]U-47
-*/});
-var equipmentOwnInfo = getstr(function (){/*
+`
+var equipmentOwnInfo = `
+双联装113mm高射炮T3金(12): 0
+127mm连装高射炮T3紫(12): 0
 灭火器T3蓝(12): 4
 维修工具T3紫(12): 3+4/10
 SB2C地狱俯冲者T3紫(6): 2+2/10
 四联装533mm磁性鱼雷T3金(6): 1
-四联装610mm鱼雷T3(3): 0
+四联装610mm鱼雷T3金(3): 0
 双联装127mm高平两用炮MK12T3金(6): 0
 76mm火炮T3蓝(2): 0
 双联100mm98式高射炮T3金(3): 0
@@ -93,23 +95,33 @@ SB2C地狱俯冲者T3紫(6): 2+2/10
 F4U（VF-17“海盗”中队）T0金(4): 0
 XF5F天箭T0紫(2): 0
 梭鱼T3金(4): 0
-*/});
-function getstr(fn) {
-    return fn.toString().split('\n').slice(1,-1).join('\n') + '\n'
-}
+`
 
-function getShipOwned(set_item) {
-  document.getElementById(set_item).innerText = shipOwnInfo;
-  var text = shipOwnInfo.replace(/[，,]/g, " ").replace(/[\s\r\n（）()、]+/g, " ").trim();
+function getShipOwned(setItem) {
+  document.getElementById(setItem).innerText = shipOwnInfo;
   var items = [];
-  text.replace(/\[x\]([^\s]+)/g, function (a, b) {
-      console.log(a, b);
-      items.push(b)
+  var regShip = /\[x\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
+  shipOwnInfo.replace(regShip, function (a, b, c) {
+      console.log(a, b, c);
+      items.push(b);
+      if (c) items.push(c);
       return a;
   });
   return items;
 }
 
 function getEquipmentOwned(setItem){
-  return [];
+  document.getElementById(setItem).innerText = equipmentOwnInfo;
+  var items = [];
+  var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)([+/\d]+)?/gm;
+  equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build) {
+      console.log(name, t, color, want, own, build);
+      want = parseInt(want);
+      own = parseInt(own)
+      if (want > own){
+        items.push(name + t);
+      }
+      return "";
+  });
+  return items;
 }
