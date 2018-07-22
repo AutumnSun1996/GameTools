@@ -19,12 +19,12 @@
 <table>
   <thead>
     <tr>
-      <th>地图</th>
-      <th>强度舰娘</th>
-      <th>收藏向舰娘</th>
-      <th>萌新向装备图纸</th>
-      <th>推荐度(满分10)</th>
-      <th>备注</th>
+      <th style="min-width: 2em;">地图</th>
+      <th style="min-width: 4em;">强度舰娘</th>
+      <th style="min-width: 5em;">收藏向舰娘</th>
+      <th style="min-width: 7em;">萌新向装备图纸</th>
+      <th style="min-width: 8em;">推荐度(满分10)</th>
+      <th style="min-width: 2em;">备注</th>
     </tr>
   </thead>
   <tbody>
@@ -305,21 +305,6 @@
     // console.log("Update", item_here, want_here);
     item_here.innerHTML = want_here.join(", ");
     return common;
-  }
-
-  function check_own(text) {
-    if (text == "") {
-      return [];
-    }
-    document.getElementById("ship").innerText = text;
-    var text = text.replace(/[，,]/g, " ").replace(/[\s\r\n（）、]+/g, " ").trim();
-    var items = [];
-    text.replace(/\[x\]([^\s]+)/g, function (a, b) {
-      // console.log(a, b);
-      items.push(b)
-      return a;
-    });
-    return items;
   }
   function init() {
     var ship_own = getShipOwned("ship");
