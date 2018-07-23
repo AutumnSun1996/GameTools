@@ -15,7 +15,7 @@ table {
 
 .del, .del span {
   text-decoration: line-through;
-  color: gray !important;
+  color: #dddddd !important;
 }
 
 pre {

@@ -17,7 +17,7 @@
                     </th>
                     <th style="background-color:#1bb7eb;width:25%">稀有 26%
                     </th>
-                    <th style="background-color:#dbdcdf;width:25%">普通 55%
+                    <th style="background-color:#8b8c8f;width:25%">普通 55%
                     </th>
                 </tr>
                 <tr>
@@ -738,7 +738,7 @@
                     </th>
                     <th style="background-color:#1bb7eb;width:25%">稀有 51%
                     </th>
-                    <th style="background-color:#dbdcdf;width:25%">普通 30%
+                    <th style="background-color:#8b8c8f;width:25%">普通 30%
                     </th>
                 </tr>
                 <tr>
@@ -1289,7 +1289,7 @@
                     </th>
                     <th style="background-color:#1bb7eb;width:25%">稀有 51%
                     </th>
-                    <th style="background-color:#dbdcdf;width:25%">普通 30%
+                    <th style="background-color:#8b8c8f;width:25%">普通 30%
                     </th>
                 </tr>
                 <tr>
@@ -1734,6 +1734,22 @@
                 }
             }
         }
+        
+        for(var table of document.getElementsByTagName("table")){
+            var total = 0;
+            var owned = 0;
+            for(var span of table.getElementsByClassName("xtb-image")){
+                if(span.children[1].className == "del"){
+                    console.log(span.innerText);
+                    owned++;
+                }
+                total++;
+            // 	console.log(span.innerText);
+            }
+            table.previousElementSibling.innerText += "(已有" + owned + "/" + total + ", 还差"+ (total - owned) +")";
+        }
     }
     init();
+
+
 </script>
