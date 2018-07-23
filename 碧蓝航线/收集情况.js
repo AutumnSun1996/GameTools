@@ -98,15 +98,20 @@ XF5F天箭T0紫(2): 0
 `
 
 function getShipOwned(setItem) {
-  document.getElementById(setItem).innerText = shipOwnInfo;
+  if (setItem){
+    document.getElementById(setItem).innerText = shipOwnInfo;
+  }
   var items = [];
   var regShip = /\[x\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
+  var count = 0;
   shipOwnInfo.replace(regShip, function (a, b, c) {
       console.log(a, b, c);
+      count ++;
       items.push(b);
       if (c) items.push(c);
       return a;
   });
+  console.log("已获得舰娘数量: " + count);
   return items;
 }
 
