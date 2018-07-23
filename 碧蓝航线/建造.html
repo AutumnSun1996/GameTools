@@ -1746,7 +1746,9 @@
                 total++;
             // 	console.log(span.innerText);
             }
-            table.previousElementSibling.innerText += "(已有" + owned + "/" + total + ", 还差"+ (total - owned) +")";
+            var diff = total - owned;
+            var ratio = parseInt(100 * diff / total) + "%";
+            table.previousElementSibling.innerText += "(已有" + owned + ", 还差"+ diff + "/" + total + "="+ ratio +")";
         }
     }
     init();
