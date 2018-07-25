@@ -78,7 +78,7 @@ var shipOwnInfo = `
     - [ ]伊26, [x]伊58, [ ]鲦鱼, [ ]U-557
   - 超稀有:
     - [ ]伊19, [ ]U-81, [x]U-47
-`
+`.trim()
 var equipmentOwnInfo = `
 #战列主炮:
 三联装406mm主炮MK6T3紫(2): 1
@@ -146,23 +146,28 @@ SB2C地狱俯冲者T3紫(6): 5+5/10
 九三式纯氧鱼雷T3彩(6): 0
 九三式纯氧鱼雷T2金(2): 1
 SG雷达T3金(1): 0
-`
+`.trim()
 
 function getShipOwned(setItem) {
-  if (setItem){
-    document.getElementById(setItem).innerText = shipOwnInfo;
-  }
   var items = [];
-  var regShip = /\[x\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
+  var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
   var count = 0;
-  shipOwnInfo.replace(regShip, function (a, b, c) {
-      console.log(a, b, c);
-      count ++;
-      items.push(b);
-      if (c) items.push(c);
-      return a;
+  var total = 0;
+  shipOwnInfo.replace(regShip, function (text, own, name, name2) {
+      console.log(own, name, name2);
+      total ++;
+      if (own == "x"){
+        count ++;
+        items.push(name);
+        if (name2) items.push(name2);
+        return text;
+      }
   });
-  console.log("已获得舰娘数量: " + count);
+  var describe = "已获得舰娘:"+ count + "/" + total;
+  console.log(describe);
+  if (setItem){
+    document.getElementById(setItem).innerText = describe + "\n" + shipOwnInfo;
+  }
   return items;
 }
 
