@@ -1747,7 +1747,7 @@
                 var total_td = 0;
                 var owned_td = 0;
                 for(var span of tds[i].getElementsByClassName("xtb-image")){
-                    if (buildNotOpen.contains(span.innerText.trim())){
+                    if (span.classList.contains("disabled")){
                         console.log("Skip", span)
                         continue;
                     }

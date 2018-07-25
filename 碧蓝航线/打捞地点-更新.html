@@ -103,7 +103,7 @@
     <tr>
       <td>5-1</td>
       <td>海伦娜，布鲁克林，菲尼克斯</td>
-      <td>妙高</td>
+      <td>妙高, Z1</td>
       <td>金高平</td>
       <td>4</td>
       <td>海妈第一个出现点</td>
@@ -275,28 +275,33 @@
   }
 
   function intersect(here, own, addLink) {
-    var common = new Set();
+    var common = [];
     for (var ih in here) {
       var href = here[ih];
-      for (var io in own) {
-        if (here[ih] == own[io]) {
-          common.add(own[io]);
-          here[ih] = '<span class="del">' + here[ih] + "</span>";
-          break;
-        }
+      // for (var io in own) {
+      //   if (here[ih] == own[io]) {
+      //     common.add(own[io]);
+      //     here[ih] = '<span class="del">' + here[ih] + "</span>";
+      //     break;
+      //   }
+      // }
+      if (own.contains(href)) {
+        common.push(href);
+        here[ih] = '<span class="del">' + href + "</span>";
       }
       if (addLink) {
         here[ih] = '<a href="http://wiki.joyme.com/blhx/' + href + '" target="_blank">' + here[ih] + "</a>";
       }
     }
-    return [...common];
+    return common;
   }
 
-  function union(a, b) {
-    for (var i of b) {
-      a.push(b);
+  function union(A, B) {
+    var both = new Set(A);
+    for (var b of B) {
+      both.add(b);
     }
-    return [...new Set(a)];
+    return new Array(...both);
   }
 
   function commonCount(item_here, own, addLink) {
@@ -321,13 +326,14 @@
       var commmonShip = union(commmonShip1, commmonShip2).length;
       var commmonEquipment = commonCount(item.children[3], equipment_own, false).length; //装备基本使用了简称，不添加链接
 
-      // console.log(commmonShip1, commmonShip2, commmonShip, commmonEquipment)
+      console.log(item.children[0].innerText, commmonShip1, commmonShip2, commmonShip, commmonEquipment)
 
       var ownCount = commmonShip + commmonEquipment;
       if (ownCount > 0) {
         var originalCount = union(get_set(item.children[1]), get_set(item.children[2])).length + get_set(item.children[3]).length;
         var originalScore = parseFloat(item.children[4].innerText);
         var newScore = parseInt(10 * originalScore * (originalCount - ownCount) / originalCount) / 10;
+        console.log(item.children[0].innerText, ownCount, originalCount, originalScore, newScore)
         newScore = newScore > 0 ? newScore : 0;
         item.children[4].innerHTML = newScore + '<span class="del">(' + originalScore + ")</span>";
       }
