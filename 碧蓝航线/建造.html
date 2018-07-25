@@ -1718,37 +1718,60 @@
     function init() {
         var ship_own = getShipOwned("ship");
         console.log(ship_own);
-        var items = document.getElementsByTagName("a");
-        for (var i = 1; i < items.length; i++) {
-            var item = items[i];
+        for (var item of document.getElementsByClassName("xtb-image")) {
             var name = item.innerText.trim();
-            if (name) {
-                console.log(name);
-                for (o of ship_own) {
-                    console.log("Check:", name, o, name == o);
-                    if (name == o) {
-                        console.log("Have:" + o);
-                        item.classList.add("del");
-                        break;
-                    }
-                }
+            if (ship_own.contains(name)) {
+                // console.log("Have:" + name);
+                item.classList.add("owned");
+            } else {
+                console.log("Not Have:" + name);
+            }
+            if (buildNotOpen.contains(name)){
+                item.classList.add("disabled");
             }
         }
         
         for(var table of document.getElementsByTagName("table")){
-            var total = 0;
-            var owned = 0;
-            for(var span of table.getElementsByClassName("xtb-image")){
-                if(span.children[1].className == "del"){
-                    console.log(span.innerText);
-                    owned++;
-                }
-                total++;
-            // 	console.log(span.innerText);
+            var total_table = 0;
+            var owned_table = 0;
+            var chance_table = 0;
+            var possibilities = []
+            var ths = table.getElementsByTagName("th");
+            for(var th of ths){
+                possibilities.push(parseFloat(RegExp("\\d+").exec(th.innerText)[0]));
             }
-            var diff = total - owned;
-            var ratio = parseInt(100 * diff / total) + "%";
-            table.previousElementSibling.innerText += "(已有" + owned + ", 还差"+ diff + "/" + total + "="+ ratio +")";
+            console.log(possibilities);
+            var tds = table.getElementsByClassName("BuildingList");
+            for(var i=0; i<tds.length; i++){
+                console.log(tds[i]);
+                var total_td = 0;
+                var owned_td = 0;
+                for(var span of tds[i].getElementsByClassName("xtb-image")){
+                    if (buildNotOpen.contains(span.innerText.trim())){
+                        console.log("Skip", span)
+                        continue;
+                    }
+                    total_td++;
+                    if(span.classList.contains("owned")){
+                        // console.log(span.innerText);
+                        owned_td++;
+                    }
+                // 	console.log(span.innerText);
+                }
+                var chance_td = possibilities[i] * (total_td - owned_td) / total_td;
+                if (owned_td < total_td){
+                    ths[i].innerText += "(已有" + owned_td + ", 还差" + (total_td - owned_td) + "/" + total_td + ") "+parseInt(100*chance_td) / 100 + "%几率获取新船";
+                }else{
+                    ths[i].innerText += "(已有" + owned_td + "/" +  total_td + ") ";
+                }
+                owned_table += owned_td;
+                total_table += total_td;
+                chance_table += chance_td;
+            }
+            var left_table = total_table - owned_table;
+            var ratio = (parseInt(10000 * left_table / total_table) / 100) + "%";
+            chance_table = parseInt(100*chance_table) / 100 + "%几率获取新船";
+            table.previousElementSibling.innerText += "(已有" + owned_table + ", 还差"+ left_table + "/" + total_table + "="+ ratio + ")" + chance_table;
         }
     }
     init();

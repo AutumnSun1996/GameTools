@@ -13,9 +13,13 @@ table {
   border-collapse: collapse;
 }
 
-.del, .del span {
+.del, .owned a {
   text-decoration: line-through;
   color: #dddddd !important;
+}
+
+.disabled{
+  display: none;
 }
 
 pre {

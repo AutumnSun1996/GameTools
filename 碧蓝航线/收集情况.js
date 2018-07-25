@@ -1,3 +1,7 @@
+var buildNotOpen = `
+绫波（柚） 莫里 威奇塔 莱比锡 多塞特郡 明石（茗）
+`.replace(/[\s（）()]+/g, " ").trim().split(" ")
+
 var shipOwnInfo = `
 - 驱逐:
   - 常见:
@@ -149,6 +153,16 @@ SB2C地狱俯冲者T3紫(6): 5+5/10
 SG雷达T3金(1): 0
 `.trim()
 
+Array.prototype.contains = function (obj) {
+  var i = this.length;
+  while (i--) {
+      if (this[i] === obj) {
+          return true;
+      }
+  }
+  return false;
+}
+
 function getShipOwned(setItem) {
   var items = [];
   var count = 0;
@@ -161,9 +175,9 @@ function getShipOwned(setItem) {
         count ++;
         items.push(name);
         if (name2) items.push(name2);
-        text = '<a class="del" href="http://wiki.joyme.com/blhx/' + text + '" target="_blank">' + text + "</a>";
+        text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
       } else {
-        text = '<a href="http://wiki.joyme.com/blhx/' + text + '" target="_blank">' + text + "</a>";
+        text = '<a href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
       }
       return text;
   });
