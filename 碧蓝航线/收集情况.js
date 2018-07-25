@@ -79,6 +79,7 @@ var shipOwnInfo = `
   - 超稀有:
     - [ ]伊19, [ ]U-81, [x]U-47
 `.trim()
+
 var equipmentOwnInfo = `
 #战列主炮:
 三联装406mm主炮MK6T3紫(2): 1
@@ -150,39 +151,44 @@ SG雷达T3金(1): 0
 
 function getShipOwned(setItem) {
   var items = [];
-  var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
   var count = 0;
   var total = 0;
-  shipOwnInfo.replace(regShip, function (text, own, name, name2) {
+  var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
+  var setText = shipOwnInfo.replace(regShip, function (text, own, name, name2) {
       console.log(own, name, name2);
       total ++;
       if (own == "x"){
         count ++;
         items.push(name);
         if (name2) items.push(name2);
-        return text;
+        text = '<a class="del" href="http://wiki.joyme.com/blhx/' + text + '" target="_blank">' + text + "</a>";
+      } else {
+        text = '<a href="http://wiki.joyme.com/blhx/' + text + '" target="_blank">' + text + "</a>";
       }
+      return text;
   });
-  var describe = "已获得舰娘:"+ count + "/" + total;
+  var describe = "已获得:"+ count + "/" + total;
   console.log(describe);
-  if (setItem){
-    document.getElementById(setItem).innerText = describe + "\n" + shipOwnInfo;
+  if (document.getElementById(setItem)){
+    document.getElementById(setItem).innerHTML = describe + "\n" + setText;
   }
   return items;
 }
 
 function getEquipmentOwned(setItem){
-  document.getElementById(setItem).innerText = equipmentOwnInfo;
   var items = [];
   var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)([+/\d]+)?/gm;
-  equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build) {
+  var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build) {
       console.log(name, t, color, want, own, build);
       want = parseInt(want);
       own = parseInt(own)
       if (want > own){
         items.push(name + t);
       }
-      return "";
+      return '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
   });
+  if (document.getElementById(setItem)){
+    document.getElementById(setItem).innerHTML = setText;
+  }
   return items;
 }
