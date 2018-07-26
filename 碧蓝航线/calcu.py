@@ -13,7 +13,7 @@ weights = {
     "重巡": [30, 20, 1],
     "驱逐": [30, 20, 2],
 }
-show_count = 50
+show_count = 12
 with open("收集情况.js", "r", -1, "UTF-8") as fl:
     data = fl.read()
 own_now = []
@@ -76,16 +76,17 @@ def get_list(url):
     }
     try:
         res = requests.get(url, headers=headers)
-        res.encoding = res.apparent_encoding
+        if res.encoding == "ISO-8859-1":
+            res.encoding = res.apparent_encoding
     except Exception as e:
-        print("Get Local Content", e)
+        print("Use Local Content For", e)
         with open("./天梯榜数据.html", "r", -1, "UTF-8") as fl:
             pq = pyquery.PyQuery(fl.read())
     else:
         print("Get Online Content")
-        with open("./天梯榜数据.html", "w", -1, "UTF-8") as fl:
-            fl.write(res.text)
         pq = pyquery.PyQuery(res.text)
+        with open("./天梯榜数据.html", "w", -1, "UTF-8") as fl:
+            fl.write(pq("body").html())
     return [get_info_online(s) for s in pq("#LTputintable span.itemhover").items()]
 
 ship_list = get_list("http://wiki.joyme.com/blhx/%E7%A2%A7%E8%93%9D%E8%88%AA%E7%BA%BFWIKI%E5%A4%A9%E6%A2%AF%E6%A6%9C")
