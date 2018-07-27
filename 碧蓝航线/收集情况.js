@@ -169,7 +169,7 @@ function getShipOwned(setItem) {
   var total = 0;
   var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
   var setText = shipOwnInfo.replace(regShip, function (text, own, name, name2) {
-      console.log(own, name, name2);
+      console.log(own, name, name2 || "");
       total ++;
       if (own == "x"){
         count ++;
@@ -183,7 +183,7 @@ function getShipOwned(setItem) {
   });
   var describe = "已获得:"+ count + "/" + total;
   console.log(describe);
-  if (document.getElementById(setItem)){
+  if (setItem && document.getElementById(setItem)){
     document.getElementById(setItem).innerHTML = describe + "\n" + setText;
   }
   return items;
@@ -193,7 +193,7 @@ function getEquipmentOwned(setItem){
   var items = [];
   var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)([+/\d]+)?/gm;
   var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build) {
-      console.log(name, t, color, want, own, build);
+      console.log(name, t, color, want, own, build || "");
       want = parseInt(want);
       own = parseInt(own)
       if (want > own){
@@ -201,8 +201,12 @@ function getEquipmentOwned(setItem){
       }
       return '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
   });
-  if (document.getElementById(setItem)){
+  if (setItem && document.getElementById(setItem)){
     document.getElementById(setItem).innerHTML = setText;
   }
   return items;
+}
+
+if (typeof(document)== 'undefined'){
+  getShipOwned();
 }
