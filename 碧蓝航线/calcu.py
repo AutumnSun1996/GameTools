@@ -89,7 +89,7 @@ def get_list(url):
             fl.write(pq("body").html())
     return [get_info_online(s) for s in pq("#LTputintable span.itemhover").items()]
 
-ship_list = get_list("http://wiki.joyme.com/blhx/%E7%A2%A7%E8%93%9D%E8%88%AA%E7%BA%BFWIKI%E5%A4%A9%E6%A2%AF%E6%A6%9C")
+ship_list = get_list("http://wiki.joyme.com/blhx/碧蓝航线WIKI天梯榜")
 print(len(ship_list))
 
 def harm_mean(arr, weight=None):
