@@ -1,5 +1,5 @@
 var buildNotOpen = `
-绫波（柚） 莫里 威奇塔 莱比锡 多塞特郡 明石（茗）
+绫波(柚) 莫里 威奇塔 莱比锡 多塞特郡 明石(茗)
 `.replace(/[\s（）()]+/g, " ").trim().split(" ")
 
 var shipOwnInfo = `
