@@ -72,7 +72,7 @@ var shipOwnInfo = `
     - [x]黑暗界, [x]恐怖, [ ]阿贝克隆比
 - 维修:
   - 精锐:
-    - [ ]女灶神
+    - [x]女灶神
   - 超稀有:
     - [ ]明石(茗)
 - 潜艇:
@@ -167,10 +167,11 @@ function getShipOwned(setItem) {
   var total = 0;
   var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
   var setText = shipOwnInfo.replace(regShip, function (text, own, name, name2) {
-      console.log(own, name, name2 || "");
+      // console.log(own, name, name2 || "");
       total ++;
       if (own == "x"){
         count ++;
+        console.log(count, own, name, name2 || "");
         items.push(name);
         if (name2) items.push(name2);
         text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
