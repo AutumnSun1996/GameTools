@@ -15,13 +15,13 @@ weights = {
 }
 show_count = 12
 with open("收集情况.js", "r", -1, "UTF-8") as fl:
-    data = fl.read()
+    text = fl.read()
+shipOwnInfo = re.search("(?ms)var shipOwnInfo = `(.+?)^`", text).group(1)
 own_now = []
-for own, name, name2 in re.findall("\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?", data):
-    if own == "x":
-        own_now.append(name)
-        if name2:
-            own_now.append(name2)
+for name, name2 in re.findall("\[x\]([^\s(),]+)(?:\(([^\s]+)\))?", shipOwnInfo):
+    own_now.append(name)
+    if name2:
+        own_now.append(name2)
 
 
 print(own_now)
@@ -84,9 +84,9 @@ def get_list(url):
             pq = pyquery.PyQuery(fl.read())
     else:
         print("Get Online Content")
-        pq = pyquery.PyQuery(res.text)
+        pq = pyquery.PyQuery(res.text)("div#mw-content-text")
         with open("./天梯榜数据.html", "w", -1, "UTF-8") as fl:
-            fl.write(pq("body").html())
+            fl.write(pq.html())
     return [get_info_online(s) for s in pq("#LTputintable span.itemhover").items()]
 
 ship_list = get_list("http://wiki.joyme.com/blhx/碧蓝航线WIKI天梯榜")
