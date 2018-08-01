@@ -14,17 +14,7 @@ weights = {
     "驱逐": [30, 20, 2],
 }
 show_count = 12
-with open("收集情况.js", "r", -1, "UTF-8") as fl:
-    text = fl.read()
-shipOwnInfo = re.search("(?ms)var shipOwnInfo = `(.+?)^`", text).group(1)
-own_now = []
-for name, name2 in re.findall("\[x\]([^\s(),]+)(?:\(([^\s]+)\))?", shipOwnInfo):
-    own_now.append(name)
-    if name2:
-        own_now.append(name2)
 
-
-print(own_now)
 def accept(ship):
     if not ship.get("对舰输出"):
         return False
@@ -34,12 +24,12 @@ def accept(ship):
             return True
     return False
 
-nums = re.compile("(\d+\.)?\d+")
+nums = re.compile(r"(\d+\.)?\d+")
 
 def get_info_online(entry):
     TypeDict = {"zhanlie": "战列", "quzhu": "驱逐", "hangmu": "航母", "qingxun": "轻巡", "zhongxun": "重巡"}
     # print("{!r} {!r} {!r}".format(entry, entry.parent(), entry.attr("class")))
-    ship_type = re.compile("\d+([a-z]+)shuchu").search(entry.parent().attr("class")).group(1)
+    ship_type = re.compile(r"\d+([a-z]+)shuchu").search(entry.parent().attr("class")).group(1)
     info = [item.text() for item in entry("div.panel-body > p").items()]
     cur_ship = {
         "Name": info[0],
@@ -50,12 +40,12 @@ def get_info_online(entry):
         cur_ship["Extra"] = "(" + entry("div.panel-footer").text() + ")"
     for each in info[1:]:
         idx = each.find("：")
-        cur_ship[each[:idx]] = float(re.compile("[.\d]+").search(each).group(0))
+        cur_ship[each[:idx]] = float(re.compile(r"[.\d]+").search(each).group(0))
     return cur_ship
 
 def get_info_local(entry):
     ship_types = "驱逐 轻巡 重巡 战列 航母 其他".split(" ")
-    info = [item.text() for item in span("div.panel-body > p").items()]
+    info = [item.text() for item in entry("div.panel-body > p").items()]
     cur_ship = {
         "Name": info[0],
         "Type": ship_types[len(entry.parent().prevAll())-1],
@@ -89,8 +79,6 @@ def get_list(url):
             fl.write(pq.html())
     return [get_info_online(s) for s in pq("#LTputintable span.itemhover").items()]
 
-ship_list = get_list("http://wiki.joyme.com/blhx/碧蓝航线WIKI天梯榜")
-print(len(ship_list))
 
 def harm_mean(arr, weight=None):
     arr = 1 / (np.array(arr) + 1)
@@ -109,22 +97,41 @@ def score(s):
         return 0
 
 def str_width(text):
-    return sum([1 if ord(c) < 0x7F else 2 for c in text])
+    return sum([1 if ord(c) < 0xFF else 2 for c in text])
 
 def set_name_format(ship, size=10):
     suffix = size - str_width(ship["Name"])
     if suffix > 0:
         ship["Name"] += (" " * suffix)
 
-for ship_type in "驱逐 轻巡 重巡 战列 航母 其他".split(" "):
-# for ship_type in "驱逐 轻巡 重巡".split(" "):
-    filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
-    filted_ships.sort(key=score)
-    if len(filted_ships) == 0:
-        continue
-    width = max([str_width(ship["Name"]) for ship in filted_ships[:show_count]])
-    for idx, ship in enumerate(filted_ships[:show_count]):
-        set_name_format(ship, width + 2)
-        print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:.0f} 生存{1[生存能力]:.0f} 防空{1[防空性能]:.0f} {1[Extra]}".format(idx+1, ship))
-    # time.sleep(1)
-    print()
+if __name__ == '__main__':
+    # for i in range(0xFF):
+    #     print("{0:02X}, {0:3d}: {1}".format(i, chr(i)))
+    # exit(0)
+    with open("收集情况.js", "r", -1, "UTF-8") as fl:
+        text = fl.read()
+    shipOwnInfo = re.search("(?ms)var shipOwnInfo = `(.+?)^`", text).group(1)
+    own_now = []
+    for name, name2 in re.findall(r"\[x\]([^\s(),]+)(?:\(([^\s]+)\))?", shipOwnInfo):
+        own_now.append(name)
+        if name2:
+            own_now.append(name2)
+
+
+    print(own_now)
+
+    ship_list = get_list("http://wiki.joyme.com/blhx/碧蓝航线WIKI天梯榜")
+    print(len(ship_list))
+
+    for ship_type in "驱逐 轻巡 重巡 战列 航母 其他".split(" "):
+    # for ship_type in "驱逐 轻巡 重巡".split(" "):
+        filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
+        filted_ships.sort(key=score)
+        if len(filted_ships) == 0:
+            continue
+        width = max([str_width(ship["Name"]) for ship in filted_ships[:show_count]])
+        for idx, ship in enumerate(filted_ships[:show_count]):
+            set_name_format(ship, width + 2)
+            print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:4.0f} 生存{1[生存能力]:4.0f} 防空{1[防空性能]:4.0f} {1[Extra]}".format(idx+1, ship))
+        # time.sleep(1)
+        print()
