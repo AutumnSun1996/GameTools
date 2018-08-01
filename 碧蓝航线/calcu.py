@@ -19,9 +19,8 @@ def accept(ship):
     if not ship.get("对舰输出"):
         return False
 
-    for name in own_now:
-        if name in ship["Name"]:
-            return True
+    if ship["Name"] in own_now:
+        return True
     return False
 
 nums = re.compile(r"(\d+\.)?\d+")
