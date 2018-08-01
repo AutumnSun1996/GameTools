@@ -18,8 +18,10 @@ show_count = 12
 def accept(ship):
     if not ship.get("对舰输出"):
         return False
-
-    if ship["Name"] in own_now:
+    name = ship["Name"]
+    if name.endswith("改"):
+        name = name[:-1]
+    if name in own_now:
         return True
     return False
 
