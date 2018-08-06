@@ -213,8 +213,11 @@ function getEquipmentOwned(setItem){
       own = parseInt(own)
       if (want > own){
         items.push(name + t);
+        text =  '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
+      } else {
+        text =  '<a class="del" href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
       }
-      return '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
+      return text;
   });
   if (setItem && document.getElementById(setItem)){
     document.getElementById(setItem).innerHTML = setText;
