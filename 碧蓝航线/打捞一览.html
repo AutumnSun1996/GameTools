@@ -1,0 +1,70 @@
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="common.css"></link>
+<table id="DropDescribe">
+<tr><th style="min-width: 2em;">关卡</th><th style="min-width: 3em;">推荐度</th><th>舰娘</th><th>装备图纸</th></tr>
+</table>
+<script src="DropList.js"></script>
+<script src="收集情况.js"></script>
+<script>
+  var table = document.getElementById("DropDescribe");
+  var ship_owned = new Set(getShipOwned());
+  var equipment_wanted = new Set(getEquipmentWanted());
+  var appeared_ships = new Set();
+  var appeared_equipments = new Set();
+  for (var item of dropList){
+    var ships = [];
+    for(var key in item["舰娘"]){
+      ships = ships.concat(item["舰娘"][key]);
+    }
+    var blueprints = item["图纸"] || [];
+    console.log(item["关卡"], ships, blueprints);
+    
+    var ship_full = ships.join(", ");
+    var ship_count = 0;
+    for (var i=0;i<ships.length;i++){
+      if (ship_owned.has(ships[i])){
+        if (appeared_ships.has(ships[i])){
+          ships.splice(i, 1);
+          i--;
+        } else {
+          appeared_ships.add(ships[i]);
+          ships[i] = get_del_a(ships[i]);
+        }
+      } else {
+        ship_count ++;
+        ships[i] = get_a(ships[i]);
+      }
+    }
+    ships.sort();
+    var html_ships = '<td title="' + ship_full + '">' + ships.join(", &nbsp;") + "</td>";
+
+    var equipment_full = blueprints.join(", ");
+    var equipment_count = 0;
+    for (var i=0;i<blueprints.length;i++){
+      if (equipment_wanted.has(blueprints[i])){
+        equipment_count ++;
+        blueprints[i] = get_a(blueprints[i]);
+      } else {
+        if (appeared_equipments.has()){
+          blueprints.splice(i, 1);
+          i--;
+        } else {
+          appeared_equipments.add(blueprints[i]);
+          blueprints[i] = get_del_a(blueprints[i]);
+        }
+      }
+    }
+    blueprints.sort()
+    var html_blueprints = '<td title="' + equipment_full + '">' + blueprints.join(", &nbsp;") + "</td>";
+    
+    child ='<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
+    table.innerHTML += child;
+  }
+
+  function get_a(href, text){
+    return '<a idx="0" class="nowrap" href="http://wiki.joyme.com/blhx/' + href + '" target="_blank">' + (text || href) + '</a>';
+  }
+  function get_del_a(href, text){
+    return '<a idx="1" class="del nowrap" href="http://wiki.joyme.com/blhx/' + href + '" target="_blank">' + (text || href) + '</a>';
+  }
+</script>

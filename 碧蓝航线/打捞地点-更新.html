@@ -314,9 +314,9 @@
   }
   function init() {
     var ship_own = getShipOwned("ship");
-    var equipment_own = getEquipmentOwned("equipment");
+    var equipment_want = getEquipmentWanted("equipment");
 
-    console.log(ship_own, equipment_own);
+    console.log(ship_own, equipment_want);
     var items = document.getElementsByTagName("tr");
     for (var i = 1; i < items.length; i++) {
       var item = items[i];

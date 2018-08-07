@@ -204,7 +204,7 @@ function getShipOwned(setItem) {
   return items;
 }
 
-function getEquipmentOwned(setItem){
+function getEquipmentWanted(setItem){
   var items = [];
   var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)([+/\d]+)?/gm;
   var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build) {
