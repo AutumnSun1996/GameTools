@@ -33,3 +33,6 @@ pre {
 a {
     text-decoration: none;
 }
+.nowrap{
+  white-space:nowrap;
+}
