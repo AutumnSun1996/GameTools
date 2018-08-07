@@ -35,7 +35,7 @@
         ships[i] = get_a(ships[i]);
       }
     }
-    ships.sort();
+    // ships.sort();
     var html_ships = '<td title="' + ship_full + '">' + ships.join(", &nbsp;") + "</td>";
 
     var equipment_full = blueprints.join(", ");
@@ -54,7 +54,7 @@
         }
       }
     }
-    blueprints.sort()
+    // blueprints.sort()
     var html_blueprints = '<td title="' + equipment_full + '">' + blueprints.join(", &nbsp;") + "</td>";
     
     child ='<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
