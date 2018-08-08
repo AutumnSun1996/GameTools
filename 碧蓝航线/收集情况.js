@@ -172,9 +172,9 @@ SG雷达T3金(2): 0+5/15
 Array.prototype.contains = function (obj) {
   var i = this.length;
   while (i--) {
-      if (this[i] === obj) {
-          return true;
-      }
+    if (this[i] === obj) {
+      return true;
+    }
   }
   return false;
 }
@@ -185,48 +185,71 @@ function getShipOwned(setItem) {
   var total = 0;
   var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
   var setText = shipOwnInfo.replace(regShip, function (text, own, name, name2) {
-      // console.log(own, name, name2 || "");
-      total ++;
-      if (own == "x"){
-        count ++;
-        console.log(count, own, name, name2 || "");
-        items.push(name);
-        if (name2) items.push(name2);
-        text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
-      } else {
-        text = '<a href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
-      }
-      return text;
+    // console.log(own, name, name2 || "");
+    total++;
+    if (own == "x") {
+      count++;
+      console.log(count, own, name, name2 || "");
+      items.push(name);
+      if (name2) items.push(name2);
+      text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
+    } else {
+      text = '<a href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
+    }
+    return text;
   });
-  var describe = "已获得:"+ count + "/" + total;
+  var describe = "已获得:" + count + "/" + total;
   console.log(describe);
-  if (setItem && document.getElementById(setItem)){
+  if (setItem && document.getElementById(setItem)) {
     document.getElementById(setItem).innerHTML = describe + "\n" + setText;
   }
   return items;
 }
 
-function getEquipmentWanted(setItem){
+function getEquipmentWanted(setItem) {
   var items = [];
   var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)([+/\d]+)?/gm;
   var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build) {
-      console.log(name, t, color, want, own, build || "");
-      want = parseInt(want);
-      own = parseInt(own)
-      if (want > own){
-        items.push(name + t);
-        text =  '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
-      } else {
-        text =  '<a class="del" href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
-      }
-      return text;
+    console.log(name, t, color, want, own, build || "");
+    want = parseInt(want);
+    own = parseInt(own)
+    if (want > own) {
+      items.push(name + t);
+      text = '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
+    } else {
+      text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
+    }
+    return text;
   });
-  if (setItem && document.getElementById(setItem)){
+  if (setItem && document.getElementById(setItem)) {
+    document.getElementById(setItem).innerHTML = setText;
+  }
+  return items;
+}
+function getEquipmentInfo(setItem) {
+  var items = {};
+  var bp_default = { "蓝": 5, "紫": 10, "金": 15 };
+  var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)(\+(\d+)\/(\d+))?/gm;
+  var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build, bp_now, bp_each) {
+    console.log(name, t, color, want, own, bp_now || "", bp_each || "");
+    want = parseInt(want);
+    own = parseInt(own);
+    bp_now = parseInt(bp_now || 0);
+    bp_each = parseInt(bp_each || bp_default[color]);
+    if (own + bp_now / bp_each < want) {
+      items[name + t] = {"want": want, "own": own, "bp_now": bp_now, "bp_each": bp_each, "own_text": want + ":" + own + "+" + bp_now + "/" + bp_each};
+      text = '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
+    } else {
+      text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
+    }
+    return text;
+  });
+  if (setItem && document.getElementById(setItem)) {
     document.getElementById(setItem).innerHTML = setText;
   }
   return items;
 }
 
-if (typeof(document)== 'undefined'){
+if (typeof (document) == 'undefined') {
   getShipOwned();
 }
