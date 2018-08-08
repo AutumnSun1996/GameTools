@@ -52,7 +52,8 @@
       var info = equipment_wanted[name];
       if (info) {
         console.log("Want", name, info);
-        blueprints[i] = get_a(blueprints[i], 0, 0, { "title": info.own_text });
+        equipment_count += info.bp_each * (info.want - info.own) - info.bp_now;
+        blueprints[i] = get_a(blueprints[i], 0, 0, {"title": info.own_text});
       } else {
         if (appeared_equipments.has()) {
           blueprints.splice(i, 1);
@@ -66,7 +67,7 @@
     // blueprints.sort()
     var html_blueprints = '<td title="' + equipment_full + '">' + blueprints.join(", &nbsp;") + "</td>";
 
-    child = '<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
+    child = '<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count * 10 + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
     table.innerHTML += child;
   }
 
