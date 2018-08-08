@@ -1,37 +1,44 @@
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <link rel="stylesheet" href="common.css"></link>
 <table id="DropDescribe">
-<tr><th style="min-width: 2em;">关卡</th><th style="min-width: 3em;">推荐度</th><th>舰娘</th><th>装备图纸</th></tr>
+  <tr>
+    <th style="min-width: 2em;">关卡</th>
+    <th style="min-width: 3em;">推荐度</th>
+    <th>舰娘</th>
+    <th>装备图纸</th>
+  </tr>
 </table>
 <script src="DropList.js"></script>
 <script src="收集情况.js"></script>
 <script>
   var table = document.getElementById("DropDescribe");
   var ship_owned = new Set(getShipOwned());
-  var equipment_wanted = new Set(getEquipmentWanted());
+  var equipment_wanted = getEquipmentInfo();
+
   var appeared_ships = new Set();
   var appeared_equipments = new Set();
-  for (var item of dropList){
+
+  for (var item of dropList) {
     var ships = [];
-    for(var key in item["舰娘"]){
+    for (var key in item["舰娘"]) {
       ships = ships.concat(item["舰娘"][key]);
     }
     var blueprints = item["图纸"] || [];
     console.log(item["关卡"], ships, blueprints);
-    
+
     var ship_full = ships.join(", ");
     var ship_count = 0;
-    for (var i=0;i<ships.length;i++){
-      if (ship_owned.has(ships[i])){
-        if (appeared_ships.has(ships[i])){
+    for (var i = 0; i < ships.length; i++) {
+      if (ship_owned.has(ships[i])) {
+        if (appeared_ships.has(ships[i])) {
           ships.splice(i, 1);
           i--;
         } else {
           appeared_ships.add(ships[i]);
-          ships[i] = get_del_a(ships[i]);
+          ships[i] = get_a(ships[i], 0, "del");
         }
       } else {
-        ship_count ++;
+        ship_count++;
         ships[i] = get_a(ships[i]);
       }
     }
@@ -40,31 +47,43 @@
 
     var equipment_full = blueprints.join(", ");
     var equipment_count = 0;
-    for (var i=0;i<blueprints.length;i++){
-      if (equipment_wanted.has(blueprints[i])){
-        equipment_count ++;
-        blueprints[i] = get_a(blueprints[i]);
+    for (var i = 0; i < blueprints.length; i++) {
+      var name = blueprints[i];
+      var info = equipment_wanted[name];
+      if (info) {
+        console.log("Want", name, info);
+        blueprints[i] = get_a(blueprints[i], 0, 0, { "title": info.own_text });
       } else {
-        if (appeared_equipments.has()){
+        if (appeared_equipments.has()) {
           blueprints.splice(i, 1);
           i--;
         } else {
           appeared_equipments.add(blueprints[i]);
-          blueprints[i] = get_del_a(blueprints[i]);
+          blueprints[i] = get_a(blueprints[i], 0, "del");
         }
       }
     }
     // blueprints.sort()
     var html_blueprints = '<td title="' + equipment_full + '">' + blueprints.join(", &nbsp;") + "</td>";
-    
-    child ='<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
+
+    child = '<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
     table.innerHTML += child;
   }
 
-  function get_a(href, text){
-    return '<a idx="0" class="nowrap" href="http://wiki.joyme.com/blhx/' + href + '" target="_blank">' + (text || href) + '</a>';
-  }
-  function get_del_a(href, text){
-    return '<a idx="1" class="del nowrap" href="http://wiki.joyme.com/blhx/' + href + '" target="_blank">' + (text || href) + '</a>';
+  function get_a(href, text, extra_class, attrs) {
+    var obj = document.createElement("a");
+    obj.setAttribute("target", "_blank");
+    obj.setAttribute("href", "http://wiki.joyme.com/blhx/" + href);
+    obj.classList.add("nowrap");
+    if (extra_class) {
+      obj.classList.add(extra_class);
+    }
+    if (attrs) {
+      for (var key in attrs) {
+        obj.setAttribute(key, attrs[key]);
+      }
+    }
+    obj.innerText = text || href;
+    return obj.outerHTML;
   }
 </script>
