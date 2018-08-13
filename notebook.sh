@@ -1,1 +1,1 @@
-jupyter notebook
+~/anaconda3/bin/jupyter notebook
