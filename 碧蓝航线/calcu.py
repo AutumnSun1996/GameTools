@@ -67,19 +67,10 @@ def get_list(url):
         "Cookie": "Hm_lvt_dcb5060fba0123ff56d253331f28db6a=1531287514,1531290019,1531299417; Hm_lpvt_dcb5060fba0123ff56d253331f28db6a=1531299417",
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
     }
-    try:
-        res = requests.get(url, headers=headers)
-        if res.encoding == "ISO-8859-1":
-            res.encoding = res.apparent_encoding
-    except Exception as e:
-        print("Use Local Content For", e)
-        with open("./天梯榜数据.html", "r", -1, "UTF-8") as fl:
-            pq = pyquery.PyQuery(fl.read())
-    else:
-        print("Get Online Content")
-        pq = pyquery.PyQuery(res.text)("div#mw-content-text")
-        with open("./天梯榜数据.html", "w", -1, "UTF-8") as fl:
-            fl.write(pq.html())
+    res = requests.get(url, headers=headers)
+    if res.encoding == "ISO-8859-1":
+        res.encoding = res.apparent_encoding
+    pq = pyquery.PyQuery(res.text)
     return [get_info_online(s) for s in pq("#LTputintable span.itemhover").items()]
 
 
