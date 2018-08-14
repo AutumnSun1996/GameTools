@@ -1,5 +1,18 @@
-<meta charset="UTF-8" />
-<link rel="stylesheet" href="common.css"></link>
+<meta charset="UTF-8" /><meta charset="UTF-8"/>
+<h1>
+    碧蓝航线全地图舰娘及装备打捞表
+</h1>
+<p>舰娘收集情况: </p>
+<div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 40px">
+  <pre id="ship"></pre>
+</div>
+<p>装备收集情况: </p>
+<div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 40px">
+  <pre id="equipment"></pre>
+</div>
+
+<link rel="stylesheet" href="common.css"/>
+
 <table id="DropDescribe">
   <tr>
     <th style="min-width: 2em;">关卡</th>
@@ -12,8 +25,8 @@
 <script src="收集情况.js"></script>
 <script>
   var table = document.getElementById("DropDescribe");
-  var ship_owned = new Set(getShipOwned());
-  var equipment_wanted = getEquipmentInfo();
+  var ship_owned = new Set(getShipOwned("ship"));
+  var equipment_wanted = getEquipmentInfo("equipment");
 
   var appeared_ships = new Set();
   var appeared_equipments = new Set();
@@ -50,17 +63,19 @@
     for (var i = 0; i < blueprints.length; i++) {
       var name = blueprints[i];
       var info = equipment_wanted[name];
-      if (info) {
+      var wantMore = info ? info.bp_each * (info.want - info.own) - info.bp_now : 0;
+      var ownText = info ? "需求{want}; 已有{own}+{bp_now}/{bp_each};".formatObj(info)+"尚缺蓝图"+wantMore : "无需更多";
+      if (wantMore > 0) {
         console.log("Want", name, info);
-        equipment_count += info.bp_each * (info.want - info.own) - info.bp_now;
-        blueprints[i] = get_a(blueprints[i], 0, 0, {"title": info.own_text});
+        equipment_count += wantMore;
+        blueprints[i] = get_a(blueprints[i], 0, 0, {"title": ownText});
       } else {
-        if (appeared_equipments.has()) {
+        if (appeared_equipments.has(blueprints[i])) {
           blueprints.splice(i, 1);
           i--;
         } else {
           appeared_equipments.add(blueprints[i]);
-          blueprints[i] = get_a(blueprints[i], 0, "del");
+          blueprints[i] = get_a(blueprints[i], 0, "del", {"title": ownText});
         }
       }
     }

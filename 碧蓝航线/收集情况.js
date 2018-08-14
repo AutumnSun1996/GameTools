@@ -83,7 +83,7 @@ var shipOwnInfo = `
   - 驱逐:
     - [ ]卡辛.改, [ ]唐斯.改, [ ]拉菲.改, [ ]哈曼.改, [ ]阿卡司塔.改, [ ]热心.改, [ ]彗星.改, [ ]新月.改, [ ]小天鹅.改, [ ]狐提.改, [ ]命运女神.改, [ ]标枪.改, [ ]绫波.改, [ ]不知火.改, [x]Z23.改, [ ]贝利.改, [ ]神风.改, [ ]松风.改, [ ]睦月.改, [ ]尼古拉斯.改, [ ]滨风.改, [ ]谷风.改, [ ]福尔班.改, [ ]勒马尔.改
   - 重巡:
-    - [ ]波特兰.改, [ ]萨福克.改, [ ]埃克塞特.改, [ ]古鹰.改, [ ]加古.改
+    - [x]波特兰.改, [ ]萨福克.改, [ ]埃克塞特.改, [ ]古鹰.改, [ ]加古.改
   - 战列:
     - [ ]内华达.改, [ ]俄克拉荷马.改, [ ]扶桑.改, [ ]山城.改
   - 轻航:
@@ -206,6 +206,12 @@ Array.prototype.contains = function (obj) {
   return false;
 }
 
+String.prototype.formatObj = function(obj){
+  return this.replace(/\{(.+?)\}/g, function (full, key){
+    return typeof(obj[key]) === "undefined" ? key : obj[key];
+  });
+}
+
 function getShipOwned(setItem) {
   var items = [];
   var count = 0;
@@ -219,9 +225,9 @@ function getShipOwned(setItem) {
       console.log(count, own, name, name2 || "");
       items.push(name);
       if (name2) items.push(name2);
-      text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
+      text = '<a class="nowrap del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
     } else {
-      text = '<a href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
+      text = '<a class="nowrap" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
     }
     return text;
   });
@@ -253,18 +259,29 @@ function getEquipmentWanted(setItem) {
   }
   return items;
 }
+
+function defaultBpEach(name, t, color){
+  var special = {};
+  if (special[name+t]){ // 特殊装备
+    return special[name+t];
+  }
+  if (t === "T0" && color == "金"){ // 科研装备
+    return 25;
+  }
+  return {"蓝": 5, "紫": 10, "金": 15}[color] || 1;
+}
+
 function getEquipmentInfo(setItem) {
   var items = {};
-  var bp_default = { "蓝": 5, "紫": 10, "金": 15 };
   var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)(\+(\d+)\/(\d+))?/gm;
   var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build, bp_now, bp_each) {
     console.log(name, t, color, want, own, bp_now || "", bp_each || "");
     want = parseInt(want);
     own = parseInt(own);
     bp_now = parseInt(bp_now || 0);
-    bp_each = parseInt(bp_each || bp_default[color]);
+    bp_each = parseInt(bp_each || defaultBpEach(name, t, color));
+    items[name + t] = {"want": want, "own": own, "bp_now": bp_now, "bp_each": bp_each};
     if (own + bp_now / bp_each < want) {
-      items[name + t] = {"want": want, "own": own, "bp_now": bp_now, "bp_each": bp_each, "own_text": want + ":" + own + "+" + bp_now + "/" + bp_each};
       text = '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
     } else {
       text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
