@@ -8,24 +8,31 @@ import time
 
 # 对舰输出, 生存能力， 防空性能
 weights = {
-    "默认": [10, 10, 1],
+    "默认": [30, 20, 1],
     "航母": [80, 15, 1],
-    "战列": [20, 10, 1],
+    "战列": [60, 40, 1],
     "轻巡": [30, 20, 5],
-    "重巡": [30, 20, 1],
-    "驱逐": [30, 20, 2],
+    "重巡": [30, 40, 1],
+    "驱逐": [30, 20, 1],
 }
 show_count = 12
 
+filter_set = set()
 def accept(ship):
     if not ship.get("对舰输出"):
         return False
     name = ship["Name"]
     if name.endswith("改"):
         name = name[:-1]
-    if name in own_now:
+
+    if name not in own_now:
+        return False
+
+    if name in filter_set:
+        return False
+    else:
+        filter_set.add(name)
         return True
-    return False
 
 nums = re.compile(r"(\d+\.)?\d+")
 
@@ -86,8 +93,8 @@ def score(s):
         s["Score"] = harm_mean([s["对舰输出"], s["生存能力"], s["防空性能"]/10], weights.get(s["Type"]) or weights["默认"])
         return -s["Score"]
     except Exception as e:
-        print(s)
-        print("Error", e)
+        # print(s)
+        # print("Error", e)
         return 0
 
 def str_width(text):
@@ -119,8 +126,8 @@ if __name__ == '__main__':
 
     for ship_type in "驱逐 轻巡 重巡 战列 航母 其他".split(" "):
     # for ship_type in "驱逐 轻巡 重巡".split(" "):
+        ship_list.sort(key=score)
         filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
-        filted_ships.sort(key=score)
         if len(filted_ships) == 0:
             continue
         width = max([str_width(ship["Name"]) for ship in filted_ships[:show_count]])
