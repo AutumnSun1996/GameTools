@@ -219,9 +219,9 @@ function getShipOwned(setItem) {
       console.log(count, own, name, name2 || "");
       items.push(name);
       if (name2) items.push(name2);
-      text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
+      text = '<a class="nowrap del" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
     } else {
-      text = '<a href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
+      text = '<a class="nowrap" href="http://wiki.joyme.com/blhx/' + name + '" target="_blank">' + text + "</a>";
     }
     return text;
   });
