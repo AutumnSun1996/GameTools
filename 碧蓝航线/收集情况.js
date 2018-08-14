@@ -206,6 +206,12 @@ Array.prototype.contains = function (obj) {
   return false;
 }
 
+String.prototype.formatObj = function(obj){
+  return this.replace(/\{(.+?)\}/g, function (full, key){
+    return typeof(obj[key]) === "undefined" ? key : obj[key];
+  });
+}
+
 function getShipOwned(setItem) {
   var items = [];
   var count = 0;
@@ -253,18 +259,29 @@ function getEquipmentWanted(setItem) {
   }
   return items;
 }
+
+function defaultBpEach(name, t, color){
+  var special = {};
+  if (special[name+t]){ // 特殊装备
+    return special[name+t];
+  }
+  if (t === "T0" && color == "金"){ // 科研装备
+    return 25;
+  }
+  return {"蓝": 5, "紫": 10, "金": 15}[color] || 1;
+}
+
 function getEquipmentInfo(setItem) {
   var items = {};
-  var bp_default = { "蓝": 5, "紫": 10, "金": 15 };
   var regEquipment = /^(.+?)(T\d)(.)\((\d+)\):\s*(\d+)(\+(\d+)\/(\d+))?/gm;
   var setText = equipmentOwnInfo.replace(regEquipment, function (text, name, t, color, want, own, build, bp_now, bp_each) {
     console.log(name, t, color, want, own, bp_now || "", bp_each || "");
     want = parseInt(want);
     own = parseInt(own);
     bp_now = parseInt(bp_now || 0);
-    bp_each = parseInt(bp_each || bp_default[color]);
+    bp_each = parseInt(bp_each || defaultBpEach(name, t, color));
+    items[name + t] = {"want": want, "own": own, "bp_now": bp_now, "bp_each": bp_each};
     if (own + bp_now / bp_each < want) {
-      items[name + t] = {"want": want, "own": own, "bp_now": bp_now, "bp_each": bp_each, "own_text": want + ":" + own + "+" + bp_now + "/" + bp_each};
       text = '<a href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
     } else {
       text = '<a class="del" href="http://wiki.joyme.com/blhx/' + name + t + '" target="_blank">' + text + "</a>";
