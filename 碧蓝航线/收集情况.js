@@ -27,7 +27,7 @@ var shipOwnInfo = `
   - 常见:
     - [x]彭萨科拉, [x]盐湖城, [x]古鹰(狼), [x]加古(狌), [x]青叶(犹), [x]衣笠(猅)
   - 稀有:
-    - [x]北安普敦, [x]芝加哥, [x]波特兰, [x]什罗普郡, [x]肯特, [x]萨福克, [x]诺福克, [x]妙高(獌), [ ]那智(狏), [x]苏塞克斯
+    - [x]北安普敦, [x]芝加哥, [x]波特兰, [x]什罗普郡, [x]肯特, [x]萨福克, [x]诺福克, [x]妙高(獌), [x]那智(狏), [x]苏塞克斯
   - 精锐:
     - [x]休斯敦, [x]印第安纳波利斯, [x]阿斯托利亚, [x]昆西, [x]文森斯, [ ]威奇塔, [x]伦敦, [ ]多塞特郡, [x]约克, [x]埃克塞特, [x]希佩尔海军上将, [x]德意志, [ ]斯佩伯爵海军上将, [ ]诺瓦露
   - 超稀有:
@@ -140,9 +140,9 @@ var equipmentOwnInfo = `
 100mm连装高炮T0金(3): 0+13/25
 双联105mmSKC高炮T3金(6): 0+2/15
 四联40mm博福斯对空机炮T3金(3): 1+5/15
-双联装113mm高射炮T2紫(3): 3
+双联装113mm高射炮T2紫(3): 5
 127mm连装高射炮T3紫(3): 0+4/10
-四联40mm博福斯对空机炮T2紫(3): 4
+四联40mm博福斯对空机炮T2紫(3): 6
 
 #战斗机:
 F6F地狱猫T3金(4): 0+4/15
@@ -156,7 +156,7 @@ Me-155A舰载战斗机T3金(2): 2+1/15
 梭鱼T3金(4): 3+2/15
 #集束雷
 流星T3金(4): 0+3/15
-天山T3紫(4): 3+4/10
+天山T3紫(4): 4+4/10
 #减速
 剑鱼(818中队)T0金(1): 0
 
@@ -177,12 +177,12 @@ SB2C地狱俯冲者T3紫(7): 6+6/10
 
 #航母
 液压弹射装置T3金(6): 3+1/15
-航空副油箱T3紫(3): 4
+航空副油箱T3紫(3): 5
 
 #炮击
-一式穿甲弹T3金(6): 1
+一式穿甲弹T3金(6): 2
 超重弹T3金(6): 1
-火控雷达T3紫(3): 1+9/10
+火控雷达T3紫(3): 4+9/10
 
 #雷击
 九三式纯氧鱼雷T3彩(6): 0
@@ -237,6 +237,23 @@ function getShipOwned(setItem) {
     document.getElementById(setItem).innerHTML = describe + "\n" + setText;
   }
   return items;
+}
+
+function shipCount(){
+  var count = {"已有": 0,"总计": 0, "改造": 0,};
+  var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
+  shipOwnInfo.replace(regShip, function (text, own, name, name2) {
+    // console.log(own, name, name2 || "");
+    count.总计++;
+    if (name.substring(name.length-2) === ".改"){
+      count.改造++;
+    }
+    if (own == "x") {
+      count.已有++;
+    }
+    return text;
+  });
+  console.log(JSON.stringify(count));
 }
 
 function getEquipmentWanted(setItem) {
@@ -295,5 +312,5 @@ function getEquipmentInfo(setItem) {
 }
 
 if (typeof (document) == 'undefined') {
-  getShipOwned();
+  shipCount();
 }
