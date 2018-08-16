@@ -26,7 +26,8 @@ def accept(ship):
         name = name[:-1]
 
     if name not in own_now:
-        return False
+        ship["Extra"] = "NotOwn " + ship["Extra"]
+        # return False
 
     if name in filter_set:
         return False
@@ -133,6 +134,6 @@ if __name__ == '__main__':
         width = max([str_width(ship["Name"]) for ship in filted_ships[:show_count]])
         for idx, ship in enumerate(filted_ships[:show_count]):
             set_name_format(ship, width + 2)
-            print("{0:3d}({1[Score]:3.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:4.0f} 生存{1[生存能力]:4.0f} 防空{1[防空性能]:4.0f} {1[Extra]}".format(idx+1, ship))
+            print("{0:3d}({1[Score]:4.0f}):{1[Type]} {1[Name]}输出{1[对舰输出]:4.0f} 生存{1[生存能力]:4.0f} 防空{1[防空性能]:4.0f} {1[Extra]}".format(idx+1, ship))
         # time.sleep(1)
         print()
