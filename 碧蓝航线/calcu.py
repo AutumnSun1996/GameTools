@@ -93,7 +93,7 @@ def score(s):
         # print(s)
         s["Score"] = harm_mean([s["对舰输出"], s["生存能力"], s["防空性能"]/10], weights.get(s["Type"]) or weights["默认"])
         return -s["Score"]
-    except Exception as e:
+    except:
         # print(s)
         # print("Error", e)
         return 0
