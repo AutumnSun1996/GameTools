@@ -135,10 +135,10 @@ var equipmentOwnInfo = `
 五联装533mm磁性鱼雷T2金(0): 1
 
 #防空炮:
-双联装113mm高射炮T3金(6): 0+4/15
+双联装113mm高射炮T3金(12): 0+4/15
 双联装40mm博福斯STAAGT0金(3): 0+20/25
 100mm连装高炮T0金(3): 0+13/25
-双联105mmSKC高炮T3金(6): 0+2/15
+双联105mmSKC高炮T3金(3): 0+2/15
 四联40mm博福斯对空机炮T3金(3): 1+5/15
 双联装113mm高射炮T2紫(3): 5
 127mm连装高射炮T3紫(3): 0+4/10
@@ -206,9 +206,14 @@ Array.prototype.contains = function (obj) {
   return false;
 }
 
-String.prototype.formatObj = function(obj){
+String.prototype.format = function(){
+  if (arguments.length === 1 && typeof(arguments[0]) === "object"){
+    var args = arguments[0];
+  } else {
+    var args = arguments;
+  }
   return this.replace(/\{(.+?)\}/g, function (full, key){
-    return typeof(obj[key]) === "undefined" ? key : obj[key];
+    return typeof(args[key]) === "undefined" ? key : args[key];
   });
 }
 
@@ -240,16 +245,21 @@ function getShipOwned(setItem) {
 }
 
 function shipCount(){
-  var count = {"已有": 0,"总计": 0, "改造": 0,};
+  var count = {"已有": 0,"总计": 0, "改造": 0, "已改造": 0,};
   var regShip = /\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?/g;
   shipOwnInfo.replace(regShip, function (text, own, name, name2) {
     // console.log(own, name, name2 || "");
     count.总计++;
-    if (name.substring(name.length-2) === ".改"){
+    var 改造 = name.substring(name.length-2) === ".改";
+    var 已有 = own == "x";
+    if (改造){
       count.改造++;
     }
-    if (own == "x") {
+    if (已有) {
       count.已有++;
+    }
+    if (已有 && 改造) {
+      count.已改造++;
     }
     return text;
   });

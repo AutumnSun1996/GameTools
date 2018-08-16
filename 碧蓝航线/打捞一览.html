@@ -64,7 +64,7 @@
       var name = blueprints[i];
       var info = equipment_wanted[name];
       var wantMore = info ? info.bp_each * (info.want - info.own) - info.bp_now : 0;
-      var ownText = info ? "需求{want}; 已有{own}+{bp_now}/{bp_each}".formatObj(info) : "无需更多";
+      var ownText = info ? "需求{want}; 已有{own}+{bp_now}/{bp_each}".format(info) : "无需更多";
       if (wantMore > 0) {
         console.log("Want", name, info);
         equipment_count += wantMore;
