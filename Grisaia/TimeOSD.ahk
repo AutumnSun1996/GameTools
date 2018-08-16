@@ -170,6 +170,17 @@ LoadSave(){
 Right::WheelDown
 LCtrl::ShowTip("Force Skip Disabled")
 
+*-::
+If(IsSkipping){
+    Send, {RControl Up}
+    IsSkipping := 0
+} Else {
+    Send, {RControl Down}
+    ToolTip, Skip...
+    IsSkipping := 1
+}
+Return
+
 ; NumLk:None /:Esc *:QuickSave -:QuickLoad
 ; 7:Auto+ 8:Auto- 9:None +:BackLog
 ; .......................
