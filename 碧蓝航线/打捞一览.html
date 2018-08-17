@@ -3,7 +3,7 @@
   <title>全地图打捞表</title>
 </head>
 <h1 style="text-align:center">
-    碧蓝航线全地图舰娘及装备打捞表
+  碧蓝航线全地图舰娘及装备打捞表
 </h1>
 <p>舰娘收集情况: </p>
 <div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 40px">
@@ -14,7 +14,7 @@
   <pre id="equipment"></pre>
 </div>
 
-<link rel="stylesheet" href="common.css"/>
+<link rel="stylesheet" href="common.css" />
 
 <table id="DropDescribe">
   <tr>
@@ -22,10 +22,27 @@
     <th style="min-width: 4em;">打捞需求</th>
     <th>舰娘</th>
     <th>装备图纸</th>
+    <th>其他</th>
   </tr>
 </table>
 <script src="DropList.js"></script>
 <script src="收集情况.js"></script>
+<script>
+  var extraInfo = {
+    "7-2": {
+      "加分": 100,
+      "说明": "4个问号点, 无飞机, 无物资船, boss点固定"
+    },
+    "8-1": {
+      "加分": -10,
+      "说明": "道路设计差"
+    },
+    "7-1": {
+      "加分": -10,
+      "说明": "道路设计差"
+    },
+  };
+</script>
 <script>
   var table = document.getElementById("DropDescribe");
   var ship_owned = new Set(getShipOwned("ship"));
@@ -59,7 +76,7 @@
       }
     }
     // ships.sort();
-    var html_ships = '<td title="' + ship_full + '">' + ships.join(", &nbsp;") + "</td>";
+    var html_ships = '<td title="{0}">{1}</td>'.format(ship_full, ships.join(", &nbsp;"));
 
     var equipment_full = blueprints.join(", ");
     var equipment_count = 0;
@@ -71,22 +88,23 @@
       if (wantMore > 0) {
         console.log("Want", name, info);
         equipment_count += wantMore;
-        blueprints[i] = get_a(blueprints[i], 0, 0, {"title": ownText + "; 尚缺蓝图" + wantMore });
+        blueprints[i] = get_a(blueprints[i], 0, 0, { "title": ownText + "; 尚缺蓝图" + wantMore });
       } else {
         if (appeared_equipments.has(blueprints[i])) {
           blueprints.splice(i, 1);
           i--;
         } else {
           appeared_equipments.add(blueprints[i]);
-          blueprints[i] = get_a(blueprints[i], 0, "del", {"title": ownText});
+          blueprints[i] = get_a(blueprints[i], 0, "del", { "title": ownText });
         }
       }
     }
+    var score = ship_count * 100 + equipment_count + (extraInfo[item["关卡"]] ? extraInfo[item["关卡"]]["加分"] : 0);
+    score = score > 0 ? score : 0;
     // blueprints.sort()
-    var html_blueprints = '<td title="' + equipment_full + '">' + blueprints.join(", &nbsp;") + "</td>";
-
-    child = '<tr><td>' + get_a(item["关卡"]) + "</td><td>" + (ship_count * 10 + equipment_count) + "</td>" + html_ships + html_blueprints + "</tr>"
-    table.innerHTML += child;
+    var html_blueprints = '<td title="{0}">{1}</td>'.format(equipment_full, blueprints.join(", &nbsp;"));
+    var html_extra = "<td>" + (extraInfo[item["关卡"]] ? extraInfo[item["关卡"]]["说明"] : "") + "</td>";
+    table.innerHTML += '<tr><td>{0}</td><td>{1}</td>{2}{3}{4}</tr>'.format(get_a(item["关卡"]), score, html_ships, html_blueprints, html_extra);
   }
 
   function get_a(href, text, extra_class, attrs) {
