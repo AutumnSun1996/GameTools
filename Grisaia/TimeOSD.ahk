@@ -13,7 +13,7 @@ WinSet, AlwaysOnTop, on
 ; WinSet, Transparent, 150
 ; Make all pixels of CustomColor transparent and make the text itself translucent:
 WinSet, TransColor, %BackGroundColor% 200
-Gui, Show, x2450 y20 NoActivate,  ; NoActivate avoids deactivating the currently active window.
+Gui, Show, x2450 y1780 NoActivate,  ; NoActivate avoids deactivating the currently active window.
 ; Gui, Show, x0 y45
 SetTimer, ShowTime, 500
 SetTimer, IdelCheck, 10000
@@ -166,13 +166,14 @@ LoadSave(){
     MouseMove, 3000, 1000
 }
 
-#If WinActive("ahk_class CoreSystem2")
+#If WinActive("ahk_class CoreSystem2") && IsFull
 Right::WheelDown
 LCtrl::ShowTip("Force Skip Disabled")
 
 *-::
 If(IsSkipping){
     Send, {RControl Up}
+    ToolTip,
     IsSkipping := 0
 } Else {
     Send, {RControl Down}
