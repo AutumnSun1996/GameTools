@@ -208,6 +208,7 @@ Numpad3::PgDn
 ~RButton & WheelUp::Volume_Up
 ~RButton & WheelDown::Volume_Down
 
+#If WinActive("ahk_class CoreSystem2") && IsFull && not WinExist("かがみ ahk_class QWidget")
 LButton::
 MouseGetPos, PosX, PosY
 If (PosY < 150) {
@@ -219,7 +220,17 @@ If (PosY < 150) {
 }
 Return
 
-p::GetStatus(-1)
+#If
+^p::GetStatus(-1)
+
+; ^o::
+; res := WinExist("かがみ ahk_class QWidget")
+; WinGetTitle, Title, ahk_class QWidget
+; WinGetPos, X, Y, Width, Height, ahk_class QWidget
+; Clipboard := res ":" Title "; " X "x" Y "; " Width "x" Height
+; ; かがみ; 0x0; 2880x1920
+; ToolTip, % Clipboard
+; Return
 
 GetStatus(ShowNow:=500){
 	MouseGetPos, x, y
