@@ -108,7 +108,7 @@ if __name__ == '__main__':
     ship_list = get_list("http://wiki.joyme.com/blhx/碧蓝航线WIKI天梯榜")
     print(len(ship_list))
 
-    for ship_type in "驱逐 轻巡 重巡 战列 航母 其他".split(" "):
+    for ship_type in "驱逐 轻巡 重巡 战列 航母".split(" "):
     # for ship_type in "驱逐 轻巡 重巡".split(" "):
         ship_list.sort(key=score)
         filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
