@@ -54,25 +54,9 @@ def get_info_online(entry):
         cur_ship[each[:idx]] = float(re.compile(r"[.\d]+").search(each).group(0))
     return cur_ship
 
-def get_info_local(entry):
-    ship_types = "驱逐 轻巡 重巡 战列 航母 其他".split(" ")
-    info = [item.text() for item in entry("div.panel-body > p").items()]
-    cur_ship = {
-        "Name": info[0],
-        "Type": ship_types[len(entry.parent().prevAll())-1],
-        "Extra": "",
-    }
-    if entry("div.panel-footer"):
-        cur_ship["Extra"] = "(" + entry("div.panel-footer").text() + ")"
-    for each in info[1:]:
-        idx = each.find("：")
-        cur_ship[each[:idx]] = float(nums.search(each).group(0))
-    return cur_ship
-
 def get_list(url):
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-        "Cookie": "Hm_lvt_dcb5060fba0123ff56d253331f28db6a=1531287514,1531290019,1531299417; Hm_lpvt_dcb5060fba0123ff56d253331f28db6a=1531299417",
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
     }
     res = requests.get(url, headers=headers)
