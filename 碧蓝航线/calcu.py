@@ -94,15 +94,14 @@ if __name__ == '__main__':
     # for i in range(0xFF):
     #     print("{0:02X}, {0:3d}: {1}".format(i, chr(i)))
     # exit(0)
-    with open("收集情况.js", "r", -1, "UTF-8") as fl:
+    with open("common.js", "r", -1, "UTF-8") as fl:
         text = fl.read()
     shipOwnInfo = re.search("(?ms)var shipOwnInfo = `(.+?)^`", text).group(1)
-    own_now = []
+    own_now = set()
     for name, name2 in re.findall(r"\[x\]([^\s(),]+)(?:\(([^\s]+)\))?", shipOwnInfo):
-        own_now.append(name)
+        own_now.add(name)
         if name2:
-            own_now.append(name2)
-
+            own_now.add(name2)
 
     print(own_now)
 
