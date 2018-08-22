@@ -24,7 +24,7 @@ def get_build_info():
 
     for a in res("a").items():
         a.attr("href", urljoin(base_url, a.attr("href")))
-        
+
     names = [item.outerHtml() for item in res("span.Lotus").items()]
 
     ship = [item for item in res("div.Root").items()]
@@ -32,16 +32,17 @@ def get_build_info():
     result = []
     for name, info in zip(names, ship):
         result.append(name)
-        result.append(info.outerHtml())
+        result.append(info.outer_html())
 
     with open("建造.html", "r", -1, "UTF-8") as fin:
         source = pyquery.PyQuery(fin.read())
 
     source("div.LotusRoot").html("\n".join(result))
 
-    with open ("建造.html", "w", -1, "UTF-8") as fl:
-        fl.write(source.outerHtml())
+    with open("建造.html", "w", -1, "UTF-8") as fl:
+        fl.write(source.outer_html())
     print("建造.html已更新.")
+
 
 def update_ship_info():
     print("更新舰娘列表")
@@ -68,12 +69,14 @@ def update_ship_info():
     ship_count = 0
     with open("common.js", "r", -1, "UTF-8") as fl:
         content = fl.read()
+    reg_info = r"(?s)var shipOwnInfo = `(.+?)`"
+    shipOwnInfo = re.search(reg_info, content).group(1)
     own_now = []
-    for own, name, name2 in re.findall("\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?", content):
-        if own == "x":
-            own_now.append(name)
-            if name2:
-                own_now.append(name2)
+    reg_own = r"\[x\]([^\s(),]+)(?:\(([^\s]+)\))?"
+    for name, name2 in re.findall(reg_own, shipOwnInfo):
+        own_now.append(name)
+        if name2:
+            own_now.append(name2)
     own_now = set(own_now)
 
     own_count = 0
@@ -125,11 +128,12 @@ def update_ship_info():
         text.append("- %s:" % t)
         for r in all_ship2[t]:
             if all_ship2[t][r]:
-    #             all_ship2[t][r].sort(key=lambda a:a[3:])
-                text.append("  - %s:\n    - %s" % (r, ", ".join(all_ship2[t][r])))
+                #             all_ship2[t][r].sort(key=lambda a:a[3:])
+                text.append("  - %s:\n    - %s" %
+                            (r, ", ".join(all_ship2[t][r])))
     ship_info = "\n".join(text)
-
-    new_content = re.sub(r"(?s)var shipOwnInfo = `(.+?)`", "var shipOwnInfo = `\n{}\n`".format(ship_info), content)
+    
+    new_content = re.sub(reg_info, "var shipOwnInfo = `\n{}\n`".format(ship_info), content)
     if new_content == content:
         print("common.js 已是最新.")
         return
@@ -137,6 +141,7 @@ def update_ship_info():
     with open("common.js", "w", -1, "UTF-8") as fl:
         fl.write(new_content)
     print("common.js 已更新.")
+
 
 def get_drop(name):
     pq = get_pq("http://wiki.joyme.com/blhx/"+name)
@@ -161,11 +166,12 @@ def update_drop_info():
             name = '{}-{}'.format(chap, node)
             drop = get_drop(name)
             drop_list.append(drop)
-    
+
     with open("DropList.js", "w", -1, "UTF-8") as fl:
         fl.write("var dropList=" + json.dumps(drop_list,
                                               indent="  ", ensure_ascii=False) + ";")
     print("DropList.js已更新.")
+
 
 def main():
     functions = [
@@ -178,6 +184,7 @@ def main():
         print("{0:2d}: {1[0]}".format(idx, item))
     choice = int(input("选择:"))
     functions[choice][1]()
+
 
 if __name__ == "__main__":
     main()
