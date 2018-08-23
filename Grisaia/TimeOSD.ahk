@@ -167,7 +167,10 @@ LoadSave(){
 }
 
 #If WinActive("ahk_class CoreSystem2") && IsFull
-Right::WheelDown
+Right::
+Send, {WheelDown}
+Return
+
 LCtrl::ShowTip("Force Skip Disabled")
 
 *-::
