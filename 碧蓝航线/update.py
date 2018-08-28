@@ -164,8 +164,7 @@ def update_drop_info():
     for chap in range(1, 13):
         for node in range(1, 5):
             name = '{}-{}'.format(chap, node)
-            drop = get_drop(name)
-            drop_list.append(drop)
+            drop_list.append(get_drop(name))
 
     with open("DropList.js", "w", -1, "UTF-8") as fl:
         fl.write("var dropList=" + json.dumps(drop_list,
