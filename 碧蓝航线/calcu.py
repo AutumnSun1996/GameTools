@@ -16,6 +16,8 @@ weights = {
     "驱逐": [30, 20, 1],
 }
 show_count = 12
+choices = "驱逐 轻巡 重巡 战列 航母".split(" ")
+# choices = "战列".split(" ")
 
 filter_set = set()
 def accept(ship):
@@ -102,14 +104,12 @@ if __name__ == '__main__':
         own_now.add(name)
         if name2:
             own_now.add(name2)
-
-    print(own_now)
+    # print(own_now)
 
     ship_list = get_list("http://wiki.joyme.com/blhx/碧蓝航线WIKI天梯榜")
-    print(len(ship_list))
+    # print(len(ship_list))
 
-    for ship_type in "驱逐 轻巡 重巡 战列 航母".split(" "):
-    # for ship_type in "驱逐 轻巡 重巡".split(" "):
+    for ship_type in choices:
         ship_list.sort(key=score)
         filted_ships = [ship for ship in ship_list if (ship["Type"] == ship_type and accept(ship))]
         if len(filted_ships) == 0:
