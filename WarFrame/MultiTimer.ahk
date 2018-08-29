@@ -5,7 +5,7 @@ If (A_ScriptName = "MultiTimer.ahk"){
 
 #SingleInstance force
 SetTitleMatchMode, 3
-#include D:\Documents\Code\AutoHotkey\CommonFunctions.ahk
+#include CommonFunctions.ahk
 
 
 RoleInit:
