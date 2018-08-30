@@ -10,6 +10,4 @@ count = {"x": 0, " ": 0}
 regShip = r'\[([x ])\]([^\s(),]+)(?:\(([^\s]+)\))?'
 for own, name, name2 in re.findall(regShip, shipOwnInfo):
     count[own] += 1
-    if own == " ":
-        print(name, name2)
-print(count, sum(count.values()))
+print("已获取: {}/{}".format(count["x"], sum(count.values())))
