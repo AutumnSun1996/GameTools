@@ -1,1 +1,1 @@
-jupyter-notebook.exe || D:\QiuShiyang\Python37\Scripts\jupyter-notebook.exe
+jupyter-notebook.exe || D:\QiuShiyang\Py37x86\Scripts\jupyter-notebook.exe
