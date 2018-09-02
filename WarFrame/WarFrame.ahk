@@ -7,7 +7,7 @@ SetTitleMatchMode, 3
 
 ^l::Send, qsy19960105{Enter}
 
-#If (UseSkillLimit) and WinActive("WARFRAME")
+#If (UseSkillLimit) and WinActive("Warframe")
 ^Enter::
 ShowTip("技能限制 Off")
 UseSkillLimit := false
@@ -29,13 +29,13 @@ If (Waiting < 0)
 ShowTip("技能限制中" Waiting, -1)
 Return
 
-#If (not UseSkillLimit) and WinActive("WARFRAME")
+#If (not UseSkillLimit) and WinActive("Warframe")
 ^Enter::
 ShowTip("技能限制 On")
 UseSkillLimit := true
 Return
 
-#IfWinActive WARFRAME
+#IfWinActive Warframe
 ^+v::Send, % UStr(Clipboard)
 
 UStr(Text){
@@ -95,10 +95,33 @@ Loop, 10
 }
 Return
 
-*WheelUp::Send, ^{Space}
+*WheelUp::
+If (!LastWheelUp){
+    ShowTip("Bullet Jump")
+    Send, ^{Space}
+    LastWheelUp := 1
+    SetTimer, ClearWheelUp, 800
+} Else If (LastWheelUp = 1) {
+    ShowTip("Second Jump")
+    Send, {Space}
+    LastWheelUp := 2
+    SetTimer, ClearWheelUp, 800
+} Else If (LastWheelUp = 2){
+    ShowTip("Shift")
+    Send, {Shift}
+    LastWheelUp := 0
+}
+Return
+
+ClearWheelUp:
+SetTimer, ClearWheelUp, Off
+LastWheelUp := ""
+ToolTip, 
+Return
 
 *WheelDown::
 ; Send, {MButton}
+; ToolTip, Slide
 Send, ^e
 Return
 
