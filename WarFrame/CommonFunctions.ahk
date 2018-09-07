@@ -4,6 +4,7 @@
 Init:
 If (A_ScriptName = "CommonFunctions.ahk"){
     ShowTip("Exit:" . A_ScriptName)
+    Sleep, 1000
     ExitApp
     Return
 }
@@ -46,8 +47,7 @@ ShowTip(Tip, Time:=1000, X:="", Y:="")
     global ToolTipNow
     If (ToolTipNow = Tip)
     {
-        GuiControl,, MyText, 
-        ToolTipNow := ""
+        Gosub, ClearTip
         Return
     }
 	GuiControl,, MyText, %A_ScriptName%:`n%Tip%
@@ -119,8 +119,8 @@ TRandSleep(Mean, Range:=-1, Smooth:=5)
     Sleep, dt
     Return dt
 }
-; 0x04090409 Ó¢Óï(ÃÀ¹ú) ÃÀÊ½¼üÅÌ
-; 0x08040804 ÖÐÎÄ(ÖÐ¹ú) ¼òÌåÖÐÎÄ-ÃÀÊ½¼üÅÌ
+; 0x04090409 Ó¢ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
+; 0x08040804 ï¿½ï¿½ï¿½ï¿½(ï¿½Ð¹ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
 SwitchIME(dwLayout:=0x04090409){
     HKL:=DllCall("LoadKeyboardLayout", Str, dwLayout, UInt, 1)
     ControlGetFocus,ctl,A

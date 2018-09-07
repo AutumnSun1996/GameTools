@@ -1,5 +1,7 @@
 ﻿#SingleInstance force
 SetTitleMatchMode, 3
+gosub, CheckGameStatus
+SetTimer, CheckGameStatus, 200
 #include MultiTimer.ahk
 
 #If
@@ -7,7 +9,56 @@ SetTitleMatchMode, 3
 
 ^l::Send, qsy19960105{Enter}
 
-#If (UseSkillLimit) and WinActive("Warframe")
+CheckGameStatus:
+If (not WinActive("Warframe")){
+    UpdateGameStatus("Not Active")
+    Return
+}
+
+MouseGetPos, X, Y
+CursorColor := ColorMatches(X, Y, 0xF3F3F3)
+If (CursorColor){
+    UpdateGameStatus("Using Cursor")
+    Return
+}
+
+BloodBar := ColorMatches(1895, 92, 0x2827B7, 5) or ColorMatches(1895, 92, 0x505050, 5)
+If (BloodBar){
+    UpdateGameStatus("In Mission")
+    Return
+}
+
+UpdateGameStatus("In Game")
+Return
+
+ColorMatches(X, Y, Color, Variant:=10){
+    global GameStatus
+    PixelSearch, tmpX, tmpY, X, Y, X, Y, Color, Variant
+    Result := !ErrorLevel
+    ; PixelGetColor, OutputVar, X, Y
+    ; ShowTip(GameStatus "; ColorMatches: " X "x" Y ": " OutputVar  " with " Color " : " Result)
+    Return Result
+}
+UpdateGameStatus(Status){
+    global GameStatus, LastStatusChange, StatusMeets
+    if (LastStatusChange = Status){
+        StatusMeets := StatusMeets + 1
+        If (GameStatus != Status){
+            SetTimer, CheckGameStatus, 200
+        }
+    } Else {
+        StatusMeets := 0
+        LastStatusChange := Status
+    }
+    If (GameStatus != Status and StatusMeets > 2){
+        text = Update GameStatus From: "%GameStatus%" To "%Status%"
+        ShowTip(text, 2000)
+        GameStatus := Status
+        SetTimer, CheckGameStatus, 1000
+    }
+}
+
+#If (UseSkillLimit) and (GameStatus = "In Mission")
 ^Enter::
 ShowTip("技能限制 Off")
 UseSkillLimit := false
@@ -29,7 +80,7 @@ If (Waiting < 0)
 ShowTip("技能限制中" Waiting, -1)
 Return
 
-#If (not UseSkillLimit) and WinActive("Warframe")
+#If (not UseSkillLimit) and (GameStatus = "In Mission")
 ^Enter::
 ShowTip("技能限制 On")
 UseSkillLimit := true
@@ -61,6 +112,8 @@ UStr(Text){
     Return UnicodeText
 }
 
+
+#If (GameStatus = "In Mission") or (GameStatus = "In Game")
 NumpadDot::MButton
 
 *^g::
