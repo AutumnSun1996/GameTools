@@ -22,7 +22,7 @@ If (CursorColor){
     Return
 }
 
-BloodBar := ColorMatches(1895, 92, 0x2827B7, 5) or ColorMatches(1895, 92, 0x505050, 5)
+BloodBar := ColorMatches(1895, 92, 0x2827B7) or ColorMatches(1895, 92, 0x505050)
 If (BloodBar){
     UpdateGameStatus("In Mission")
     Return
