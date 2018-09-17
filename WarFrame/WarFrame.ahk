@@ -148,6 +148,8 @@ Loop, 10
 }
 Return
 
+*XButton2::MButton
+
 *WheelUp::
 If (!LastWheelUp){
     ShowTip("Bullet Jump")
@@ -172,6 +174,7 @@ LastWheelUp := ""
 ToolTip, 
 Return
 
+*XButton1::
 *WheelDown::
 ; Send, {MButton}
 ; ToolTip, Slide
