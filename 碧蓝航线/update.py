@@ -16,14 +16,23 @@ def get_pq(url):
     return pyquery.PyQuery(res.text)
 
 
+def get_wiki(name):
+    url = "http://wiki.joyme.com/blhx/"+name
+    pq = get_pq(url)("#content")
+
+    for a in pq("[href]").items():
+        a.attr("href", urljoin(url, a.attr("href")))
+
+    for a in pq("[src]").items():
+        a.attr("src", urljoin(url, a.attr("src")))
+
+    return pq
+
+
 def get_build_info():
     print("更新建造表...")
-    base_url = "http://wiki.joyme.com/blhx/建造模拟器"
-    pq = get_pq(base_url)
+    pq = get_wiki("建造模拟器")
     res = pq(".LotusRoot")
-
-    for a in res("a").items():
-        a.attr("href", urljoin(base_url, a.attr("href")))
 
     names = [item.outerHtml() for item in res("span.Lotus").items()]
 
@@ -46,7 +55,7 @@ def get_build_info():
 
 def update_ship_info():
     print("更新舰娘列表")
-    pq_trans = get_pq("http://wiki.joyme.com/blhx/重樱船名称对照表")
+    pq_trans = get_wiki("重樱船名称对照表")
     pq_trans("#FlourPackage tr").eq(0).remove()
     name_trans = {item("td").eq(1).text(): item("td").eq(0)("rb").text()[
         :1] for item in pq_trans("#FlourPackage tr").items()}
@@ -59,7 +68,7 @@ def update_ship_info():
         "舰娘头像外框最高方案.png": "方案",
     }
 
-    pq = get_pq("http://wiki.joyme.com/blhx/舰娘图鉴")
+    pq = get_wiki("舰娘图鉴")
     type_names = {"con_"+li.attr("id"): li.text()
                   for li in pq('#mw-content-text > div.MenuBox li').items()}
 
@@ -132,8 +141,10 @@ def update_ship_info():
                 text.append("  - %s:\n    - %s" %
                             (r, ", ".join(all_ship2[t][r])))
     ship_info = "\n".join(text)
+
+    new_content = re.sub(
+        reg_info, "var shipOwnInfo = `\n{}\n`".format(ship_info), content)
     
-    new_content = re.sub(reg_info, "var shipOwnInfo = `\n{}\n`".format(ship_info), content)
     if new_content == content:
         print("common.js 已是最新.")
         return
@@ -144,7 +155,7 @@ def update_ship_info():
 
 
 def get_drop(name):
-    pq = get_pq("http://wiki.joyme.com/blhx/"+name)
+    pq = get_wiki(name)
     drop = {"关卡": name, "舰娘": {}}
     for item in pq(".table-DropList > tr").items():
         drop_type = item("th").text()
@@ -157,6 +168,18 @@ def get_drop(name):
     print("关卡{}获取成功.".format(name))
     return drop
 
+def update_file(file_name, new_content):
+    with open(file_name, "r", -1, "UTF-8") as fl:
+        content = fl.read()
+
+    if content == new_content:
+        print("{}已是最新.".format(file_name))
+        return
+
+    with open(file_name, "w", -1, "UTF-8") as fl:
+        fl.write(new_content)
+    print("{}已更新.".format(file_name))
+
 
 def update_drop_info():
     print("更新掉落表...")
@@ -166,10 +189,31 @@ def update_drop_info():
             name = '{}-{}'.format(chap, node)
             drop_list.append(get_drop(name))
 
-    with open("DropList.js", "w", -1, "UTF-8") as fl:
-        fl.write("var dropList=" + json.dumps(drop_list,
-                                              indent="  ", ensure_ascii=False) + ";")
-    print("DropList.js已更新.")
+    new_content = "var dropList=" + json.dumps(drop_list,
+                                               indent="  ", ensure_ascii=False) + ";"
+    update_file("DropList.js", new_content)
+
+pre_html = """
+<style>
+    .noresize {
+        width: 1170;
+        margin: auto;
+    }
+</style>
+<meta charset="UTF-8" />
+<div>
+%s
+</div>
+""".strip()
+
+def update_equipment_info():
+    print("更新装备一图榜...")
+    pq = get_wiki('装备一图榜')("#mw-content-text")
+    for rm in ['#toc', 'div.bread', 'center']:
+        pq(rm).remove()
+    new_content = pre_html % (pq.html())
+    new_content = re.sub('(?s)<!--.*?-->', '', new_content)
+    update_file("装备一图榜.html", new_content)
 
 
 def main():
@@ -178,6 +222,7 @@ def main():
         ["更新掉落表", update_drop_info],
         ["更新舰娘列表", update_ship_info],
         ["更新建造表", get_build_info],
+        ["更新装备一图榜", update_equipment_info],
     ]
     for idx, item in enumerate(functions):
         print("{0:2d}: {1[0]}".format(idx, item))
