@@ -1,0 +1,111 @@
+<head>
+    <meta charset="UTF-8" />
+    <title>指挥喵</title>
+    <style>
+        .selector{
+            /* display: none; */
+            position: absolute;
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js "></script>
+    <script src="funcs.js"></script>
+</head>
+
+<div class="selector">
+    <h2>天赋选择器</h2>
+    <form id="test" action="javascript: updateSelector();">
+    </form>
+</div>
+
+<script>
+    var selector = $('.selector')[0];
+    selector.style.top = 0;
+    var shipType = [
+        {
+            'Name': '先锋', 'Children': [
+                { 'Name': '驱逐' },
+                {
+                    'Name': '巡洋', 'Children': [
+                        { 'Name': '轻巡' },
+                        { 'Name': '重巡' }
+                    ]
+                },
+            ]
+        },
+        {
+            'Name': '主力', 'Children': [
+                {
+                    'Name': '大炮', 'Children': [
+                        { 'Name': '战列' },
+                        { 'Name': '战巡' },
+                        { 'Name': '航战' },
+                        { 'Name': '重炮' },
+                    ]
+                },
+                {
+                    'Name': '航母', 'Children': [
+                        { 'Name': '正航' },
+                        { 'Name': '轻航' }
+                    ]
+                },
+                { 'Name': '维修' },
+            ]
+        }
+    ];
+    var talents = [];
+    var choices = new Set();
+    function UpdatChoice(obj) {
+        var re = new RegExp(obj.value+".*");
+        var checked = $(obj).prop('checked');
+        console.log(re, checked)
+        $('input[name="舰娘种类"]').each((idx, elem)=>{
+            var $elem = $(elem);
+            if (re.test($elem.attr('value'))){
+                $elem.prop('checked', !!checked);
+                if (checked){
+                    choices.add($elem.attr('value'));
+                } else {
+                    choices.delete($elem.attr('value'));
+                }
+            }
+        });
+        console.log(choices);
+        updateSelector();
+    }
+    function updateSelector(cur_choices) {
+        if (!cur_choices){
+            cur_choices = choices;
+        }
+        return;
+    }
+    function getChoice(name, prefix) {
+        console.log(name, prefix);
+        prefix = new Array(...prefix, name).join('-');
+        return `
+        <label>
+            <input type="checkbox" value="{1}" name="舰娘种类" onchange="UpdatChoice(this);">
+            {0}
+        </label>
+        <br>
+        `.format(name, prefix);
+    }
+    function getNodes(items, prefix=[]) {
+        if (!items) {
+            return '';
+        }
+        var text = [];
+        text.push('<ul>');
+        for (var item of items) {
+            text.push('<li>');
+            text.push(getChoice(item.Name, prefix));
+            // prefix.push(item.Name);
+            text.push(getNodes(item.Children, new Array(...prefix, item.Name)));
+            text.push('</li>');
+        }
+        text.push('</ul>');
+        return text.join('');
+    }
+    $("#test").html(getNodes(shipType));
+</script>
