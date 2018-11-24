@@ -31,7 +31,7 @@
   var extraInfo = {
     "7-2": {
       "加分": 100,
-      "说明": "4个问号点, 无飞机, 无物资船, boss点固定"
+      "说明": "4个问号点, 不用防空, boss点固定"
     },
     "8-1": {
       "加分": -10,
@@ -99,12 +99,19 @@
         }
       }
     }
-    var score = ship_count * 100 + equipment_count + (extraInfo[item["关卡"]] ? extraInfo[item["关卡"]]["加分"] : 0);
+    var score = ship_count * 100 + equipment_count;
+    var html_extra = "<td></td>";
+    if (extraInfo[item["关卡"]]) {
+      var extra_score = extraInfo[item["关卡"]]["加分"];
+      score = score + extra_score;
+      var prefix = extra_score >= 0 ? "+" : '';
+      html_extra = `<td>${prefix}${extra_score}: ${extraInfo[item["关卡"]]["说明"]}</td>`;
+    }
+
     score = score > 0 ? score : 0;
     // blueprints.sort()
-    var html_blueprints = '<td title="{0}">{1}</td>'.format(equipment_full, blueprints.join(", &nbsp;"));
-    var html_extra = "<td>" + (extraInfo[item["关卡"]] ? extraInfo[item["关卡"]]["说明"] : "") + "</td>";
-    table.innerHTML += '<tr><td>{0}</td><td>{1}</td>{2}{3}{4}</tr>'.format(get_a(item["关卡"]), score, html_ships, html_blueprints, html_extra);
+    var html_blueprints = `<td title="${equipment_full}">${blueprints.join(", &nbsp;")}</td>`;
+    table.innerHTML += `<tr><td>${get_a(item["关卡"])}</td><td>${score}</td>${html_ships}${html_blueprints}${html_extra}</tr>`;
   }
 
   function get_a(href, text, extra_class, attrs) {
