@@ -24,6 +24,8 @@ def drag(hwnd, start, end, step=100, error=10):
                          win32con.MK_LBUTTON, win32api.MAKELONG(*start))
 
     count = int(np.linalg.norm(np.array(start) - np.array(end)) / step)
+    # 最少需要2个坐标
+    count = max(count, 2)
     points = np.zeros((count, 2))
     points[:, 0] = np.linspace(start[0], end[0], count)
     points[:, 1] = np.linspace(start[1], end[1], count)
