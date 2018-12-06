@@ -52,6 +52,10 @@ scene_list = [
             {"Rect": (920, 610, 1200, 720), "Name": "出击.png", "TreshHold": 5}
         ],
         "Actions": [
+            # 使可能存在的消息消失
+            {"Type": "Click", "Target": (20, 280, 80, 450)},
+            {"Type": "Wait", "Time": 2},
+            # 心情检测
             {"Type": "InnerCall", "Target": "face_detect"},
             {"Type": "Click", "Target": (920, 610, 1200, 720)},
             {"Type": "Wait", "Time": 1},
@@ -132,6 +136,9 @@ scene_list = [
         "Name": "舰队选择",
         "Compare": [{"Rect": (960, 630, 1180, 680), "Name": "立刻前往2.png", "TreshHold": 5}],
         "Actions": [
+            # 心情检测
+            {"Type": "InnerCall", "Target": "face_detect"},
+            # {"Type": "InnerCall", "Target": "critical"},
             {"Type": "Click", "Target": (1000, 630, 1150, 680)},
             {"Type": "Wait", "Time": 4},
         ]
@@ -197,41 +204,41 @@ class AzurLaneControl:
     def go_top(self):
         make_foreground(self.hwnd)
 
-    def critical(self, message):
+    def critical(self, message=None):
         info = "需要手动操作: (%s)" % message
         logger.critical(info)
         self.go_top()
         input(info)
 
-    def error(self, message):
+    def error(self, message=None):
         info = "需要手动操作: (%s)" % message
         logger.critical(info)
         self.go_top()
         input(info)
 
-    def warning(self, message):
+    def warning(self, message=None):
         info = "出现异常情况: (%s)" % message
         logger.warning(info)
         # self.go_top()
         # input(info)
 
     def face_detect(self):
-        # 使可能存在的消息消失
-        rand_click(self.hwnd, (20, 280, 80, 450))
-        time.sleep(2)
-
         image = get_window_shot(self.hwnd)
-        diff, pos = get_match(image, cv_imread("images/face-green.png"))
+
+        diff, pos = get_match(image, cv_imread("images/face-red.png"))
+        logger.debug("Match Red: %.3f", diff)
         if diff < 0.02:
-            self.warning("舰娘心情值低(绿脸)")
+            self.critical("舰娘心情值低(红脸)")
 
         diff, pos = get_match(image, cv_imread("images/face-yellow.png"))
+        logger.debug("Match Yellow: %.3f", diff)
         if diff < 0.02:
             self.error("舰娘心情值低(黄脸)")
 
-        diff, pos = get_match(image, cv_imread("images/face-red.png"))
+        diff, pos = get_match(image, cv_imread("images/face-green.png"))
+        logger.debug("Match Green: %.3f", diff)
         if diff < 0.02:
-            self.critical("舰娘心情值低(红脸)")
+            self.warning("舰娘心情值低(绿脸)")
 
     def select_ships(self):
         image = get_window_shot(self.hwnd)
