@@ -22,7 +22,9 @@ scene_list = [
     },
     {
         "Name": "非自律战斗中",
-        "Compare": [{"Rect": (83, 56, 235, 106), "Name": "开始自律.png", "TreshHold": 5}],
+        "Compare": [
+            {"Rect": (83, 56, 235, 106), "Name": "开始自律.png", "TreshHold": 5}
+        ],
         "Actions": [
             {"Type": "Click", "Target": (83, 56, 235, 106)},
             {"Type": "Wait", "Time": 0.5},
@@ -37,11 +39,18 @@ scene_list = [
                 "Name": "潜艇未出击.png", "TreshHold": 5},
             {"Rect": (665, 676, 684, 714),
                 "Name": "潜艇数量1.png", "TreshHold": 1},
-        ], "Actions": [{"Type": "Wait", "Time": 15, "FirstOnly": True}, {"Type": "Click", "Target": (630, 600, 720, 680)}, {"Type": "Wait", "Time": 0.5}, ]
+        ],
+        "Actions": [
+            {"Type": "Wait", "Time": 15, "FirstOnly": True},
+            {"Type": "Click", "Target": (630, 600, 720, 680)},
+            {"Type": "Wait", "Time": 0.5},
+        ]
     },
     {
         "Name": "战斗准备",
-        "Compare": [{"Rect": (920, 610, 1200, 720), "Name": "出击.png", "TreshHold": 5}],
+        "Compare": [
+            {"Rect": (920, 610, 1200, 720), "Name": "出击.png", "TreshHold": 5}
+        ],
         "Actions": [
             {"Type": "InnerCall", "Target": "face_detect"},
             {"Type": "Click", "Target": (920, 610, 1200, 720)},
