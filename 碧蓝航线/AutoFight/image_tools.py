@@ -5,7 +5,7 @@ import win32con
 import cv2.cv2 as cv
 import numpy as np
 
-from config import logger
+from config import logger, options
 
 
 def cv_imread(file_path):
@@ -32,9 +32,9 @@ def get_window_shot(hwnd):
 
     # 获取句柄窗口的大小信息
     # 可以通过修改该位置实现自定义大小截图
-    left, top, right, bot = win32gui.GetWindowRect(hwnd)
+    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
     w = right - left
-    h = bot - top
+    h = bottom - top
 
     # 返回句柄窗口的设备环境、覆盖整个窗口，包括非客户区，标题栏，菜单，边框
     hwndDC = win32gui.GetWindowDC(hwnd)
@@ -69,6 +69,10 @@ def get_window_shot(hwnd):
     saveDC.DeleteDC()
     mfcDC.DeleteDC()
     win32gui.ReleaseDC(hwnd, hwndDC)
+
+    if (w, h) != options.ORIGIN_WINDOW_SIZE:
+        image_data = cv.resize(image_data, options.ORIGIN_WINDOW_SIZE, interpolation=cv.INTER_CUBIC)
+        logger.warning("Resize From %s To %s", (w, h), options.ORIGIN_WINDOW_SIZE)
 
     return cv.cvtColor(image_data, cv.COLOR_BGRA2BGR)
 

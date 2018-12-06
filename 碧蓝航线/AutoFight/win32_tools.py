@@ -8,10 +8,22 @@ import win32con
 import pywintypes
 import numpy as np
 
-from config import logger
+from config import logger, options
+
+
+def rescale_point(hwnd, point):
+    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    w = right - left
+    h = bottom - top
+    x = point[0] * options.ORIGIN_WINDOW_SIZE[0] / w
+    y = point[1] * options.ORIGIN_WINDOW_SIZE[1] / h
+    # logger.debug("Rescale: %s -> %s", point, (x, y))
+    return int(np.round(x)), int(np.round(y))
+
 
 def click_at(hwnd, x, y, ):
     # 向后台窗口发送单击事件，(x, y)为相对于窗口左上角的位置
+    x, y = rescale_point(hwnd, (x, y))
     pos = win32api.MAKELONG(int(x), int(y))
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, pos)
@@ -19,7 +31,8 @@ def click_at(hwnd, x, y, ):
 
 
 def drag(hwnd, start, end, step=100, error=10):
-    start = np.array(start, dtype='int')
+    start = rescale_point(hwnd, start)
+    end = rescale_point(hwnd, end)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, win32api.MAKELONG(*start))
 
@@ -38,6 +51,7 @@ def drag(hwnd, start, end, step=100, error=10):
 
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
+
 def rand_click(hwnd, rect):
     x_min, y_min, x_max, y_max = rect
     x = np.random.triangular(x_min, (x_min + x_max) / 2, x_max)
@@ -55,6 +69,7 @@ def make_foreground(hwnd, retry=True):
             shell = win32com.client.Dispatch("WScript.Shell")
             shell.SendKeys('%')
             make_foreground(hwnd, False)
+
 
 def get_window_hwnd(title):
     return win32gui.FindWindow(None, title)
