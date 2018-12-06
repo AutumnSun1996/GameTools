@@ -67,11 +67,11 @@ scene_list = [
         "Compare": [{"Rect": (320, 300, 980, 420), "Name": "A胜.png", "TreshHold": 5}],
         "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
     },
-    {
-        "Name": "点击继续",
-        "Compare": [{"Rect": (280, 540, 1000, 600), "Name": "点击继续.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
-    },
+    # {
+    #     "Name": "点击继续",
+    #     "Compare": [{"Rect": (280, 540, 1000, 600), "Name": "点击继续.png", "TreshHold": 5}],
+    #     "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
+    # },
     {
         "Name": "获得舰娘",
         "Compare": [{"Rect": (989, 590, 1055, 654), "Name": "性能.png", "TreshHold": 5}],
@@ -80,26 +80,39 @@ scene_list = [
     {
         "Name": "获得道具",
         "Compare": [{"Rect": (500, 120, 800, 240), "Name": "获得道具.png", "TreshHold": 10}],
-        "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
+        "Actions": [
+            {"Type": "Click", "Target": (920, 610, 1200, 720)},
+            # 多次点击后将会停留在确认经验界面
+            {"Type": "Wait", "Time": 0.3},
+            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
+            {"Type": "Wait", "Time": 0.3},
+            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
+            {"Type": "Wait", "Time": 0.3},
+            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
+            {"Type": "Wait", "Time": 0.3},
+            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
+            {"Type": "Wait", "Time": 0.5},
+        ]
     },
     {
         "Name": "确认经验",
         "Compare": [{"Rect": (760, 600, 1280, 680), "Name": "确认经验.png", "TreshHold": 5}],
         "Actions": [
             {"Type": "Click", "Target": (1020, 610, 1200, 670)},
-            {"Type": "Wait", "Time": 3},
+            # 战胜旗舰后会先回到战斗地图再退出地图. 等待退出地图.
+            {"Type": "Wait", "Time": 5},
         ]
     },
-    {
-        "Name": "获得经验-S胜",
-        "Compare": [{"Rect": (40, 60, 490, 140), "Name": "S胜-左上角.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (1020, 610, 1200, 670)}, {"Type": "Wait", "Time": .5}, ]
-    },
-    {
-        "Name": "获得经验-A胜",
-        "Compare": [{"Rect": (40, 60, 490, 140), "Name": "A胜-左上角.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (1020, 610, 1200, 670)}, {"Type": "Wait", "Time": .5}, ]
-    },
+    # {
+    #     "Name": "获得经验-S胜",
+    #     "Compare": [{"Rect": (40, 60, 490, 140), "Name": "S胜-左上角.png", "TreshHold": 5}],
+    #     "Actions": [{"Type": "Click", "Target": (1020, 610, 1200, 670)}, {"Type": "Wait", "Time": 1}, ]
+    # },
+    # {
+    #     "Name": "获得经验-A胜",
+    #     "Compare": [{"Rect": (40, 60, 490, 140), "Name": "A胜-左上角.png", "TreshHold": 5}],
+    #     "Actions": [{"Type": "Click", "Target": (1020, 610, 1200, 670)}, {"Type": "Wait", "Time": 1}, ]
+    # },
     {
         "Name": "消息",
         "Compare": [
@@ -141,6 +154,7 @@ class AzurLaneControl:
         self.hwnd = get_window_hwnd("夜神模拟器")
         self.scene_list = scene_list
         self.last_scene = None
+        self.last_check = 0
 
     @staticmethod
     def get_fight_index():
@@ -167,7 +181,10 @@ class AzurLaneControl:
             a = cv_imread(os.path.join('images', info['Name']))
             b = cv_crop(image, info['Rect'])
             diff = get_diff(a, b) * 50
-            if diff > info['TreshHold']:
+            passed = diff <= info['TreshHold']
+            logger.debug("Scene Check %s: %.3f-%.2f %s", passed,
+                         diff,  info['TreshHold'], scene['Name'])
+            if not passed:
                 return False
         return True
 
@@ -181,15 +198,21 @@ class AzurLaneControl:
         make_foreground(self.hwnd)
 
     def critical(self, message):
-        self.go_top()
         info = "需要手动操作: (%s)" % message
         logger.critical(info)
+        self.go_top()
+        input(info)
+
+    def error(self, message):
+        info = "需要手动操作: (%s)" % message
+        logger.critical(info)
+        self.go_top()
         input(info)
 
     def warning(self, message):
-        # self.go_top()
         info = "出现异常情况: (%s)" % message
         logger.warning(info)
+        # self.go_top()
         # input(info)
 
     def face_detect(self):
@@ -198,9 +221,13 @@ class AzurLaneControl:
         time.sleep(2)
 
         image = get_window_shot(self.hwnd)
+        diff, pos = get_match(image, cv_imread("images/face-green.png"))
+        if diff < 0.02:
+            self.warning("舰娘心情值低(绿脸)")
+
         diff, pos = get_match(image, cv_imread("images/face-yellow.png"))
         if diff < 0.02:
-            self.warning("舰娘心情值低(黄脸)")
+            self.error("舰娘心情值低(黄脸)")
 
         diff, pos = get_match(image, cv_imread("images/face-red.png"))
         if diff < 0.02:
@@ -280,12 +307,12 @@ class AzurLaneControl:
     def check_scene(self):
         scene = self.get_current_scene()
 
-        if self.last_scene == scene:
-            nochange = "(Not change)"
+        now = time.time()
+        if self.last_scene != scene or now - self.last_check > 5:
+            self.last_check = now
+            logger.info("%s - %s" % (scene['Name'], scene['Actions']))
         else:
-            nochange = ""
-
-        logger.info("%s - %s %s" % (scene['Name'], scene['Actions'], nochange))
+            logger.debug("%s - %s" % (scene['Name'], scene['Actions']))
 
         for action in scene['Actions']:
             if action.get('FirstOnly') and self.last_scene == scene:
@@ -295,7 +322,10 @@ class AzurLaneControl:
                 time.sleep(action['Time'])
             elif action['Type'] == 'InnerCall':
                 target = getattr(self, action['Target'])
-                target()
+                try:
+                    target()
+                except Exception as e:
+                    self.critical(e)
             elif action['Type'] == 'Click':
                 rand_click(self.hwnd, action['Target'])
             else:
