@@ -109,7 +109,10 @@ scene_list = [
     {
         "Name": "舰队选择",
         "Compare": [{"Rect": (960, 630, 1180, 680), "Name": "立刻前往2.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (1000, 630, 1150, 680)}, {"Type": "Wait", "Time": 2}, ]
+        "Actions": [
+            {"Type": "Click", "Target": (1000, 630, 1150, 680)},
+            {"Type": "Wait", "Time": 4},
+        ]
     },
     {
         "Name": "战斗地图",
@@ -117,8 +120,8 @@ scene_list = [
         "Actions": [
             # {"Type": "Call", "Target": go_top, "FirstOnly": True},
             {"Type": "InnerCall", "Target": "fight"},
-            {"Type": "Wait", "Time": 2},
             {"Type": "InnerCall", "Target": "inc_fight_index"},
+            {"Type": "Wait", "Time": 2},
         ]
     },
 ]
@@ -215,6 +218,8 @@ class AzurLaneControl:
     def retire(self):
         logger.debug("滑动到最后一页")
         drag(self.hwnd, (1250, 180), (1250, 1000))
+        time.sleep(0.3)
+        drag(self.hwnd, (1250, 500), (1250, 1000))
         time.sleep(1)
         waiting = 1
         targets = self.select_ships()
