@@ -56,7 +56,7 @@ scene_list = [
             {"Type": "Click", "Target": (20, 280, 80, 450)},
             {"Type": "Wait", "Time": 2},
             # 心情检测
-            {"Type": "InnerCall", "Target": "face_detect"},
+            {"Type": "InnerCall", "Target": "face_detect", "kwargs": {"size": "26x25"}},
             {"Type": "Click", "Target": (920, 610, 1200, 720)},
             {"Type": "Wait", "Time": 1},
         ]
@@ -137,8 +137,8 @@ scene_list = [
         "Compare": [{"Rect": (960, 630, 1180, 680), "Name": "立刻前往2.png", "TreshHold": 5}],
         "Actions": [
             # 心情检测
-            {"Type": "InnerCall", "Target": "face_detect"},
-            # {"Type": "InnerCall", "Target": "critical"},
+            {"Type": "InnerCall", "Target": "face_detect", "kwargs": {"size": "32x32"}},
+            {"Type": "InnerCall", "Target": "critical"},
             {"Type": "Click", "Target": (1000, 630, 1150, 680)},
             {"Type": "Wait", "Time": 4},
         ]
@@ -222,23 +222,24 @@ class AzurLaneControl:
         # self.go_top()
         # input(info)
 
-    def face_detect(self):
+    def face_detect(self, size):
         image = get_window_shot(self.hwnd)
+        if size == "26x25":
+            diff, pos = get_match(image, cv_imread("images/face-red%s.png" % size))
+            logger.debug("Match Red: %.3f", diff)
+            if diff < 0.02:
+                self.critical("舰娘心情值低(红脸)")
 
-        diff, pos = get_match(image, cv_imread("images/face-red.png"))
-        logger.debug("Match Red: %.3f", diff)
-        if diff < 0.02:
-            self.critical("舰娘心情值低(红脸)")
-
-        diff, pos = get_match(image, cv_imread("images/face-yellow.png"))
+        diff, pos = get_match(image, cv_imread("images/face-yellow%s.png" % size))
         logger.debug("Match Yellow: %.3f", diff)
         if diff < 0.02:
             self.error("舰娘心情值低(黄脸)")
 
-        diff, pos = get_match(image, cv_imread("images/face-green.png"))
-        logger.debug("Match Green: %.3f", diff)
-        if diff < 0.02:
-            self.warning("舰娘心情值低(绿脸)")
+        if size == "26x25":
+            diff, pos = get_match(image, cv_imread("images/face-green%s.png" % size))
+            logger.debug("Match Green: %.3f", diff)
+            if diff < 0.02:
+                self.warning("舰娘心情值低(绿脸)")
 
     def select_ships(self):
         image = get_window_shot(self.hwnd)
@@ -329,8 +330,10 @@ class AzurLaneControl:
                 time.sleep(action['Time'])
             elif action['Type'] == 'InnerCall':
                 target = getattr(self, action['Target'])
+                args = action.get("args", [])
+                kwargs = action.get("kwargs", {})
                 try:
-                    target()
+                    target(*args, **kwargs)
                 except Exception as e:
                     self.critical(e)
             elif action['Type'] == 'Click':
