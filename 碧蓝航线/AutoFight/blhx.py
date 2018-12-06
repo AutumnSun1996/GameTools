@@ -168,6 +168,18 @@ class AzurLaneControl:
     def go_top(self):
         make_foreground(self.hwnd)
 
+    def critical(self, message):
+        self.go_top()
+        info = "需要手动操作: (%s)" % message
+        logger.critical(info)
+        input(info)
+
+    def warning(self, message):
+        # self.go_top()
+        info = "出现异常情况: (%s)" % message
+        logger.warning(info)
+        # input(info)
+
     def face_detect(self):
         # 使可能存在的消息消失
         rand_click(self.hwnd, (20, 280, 80, 450))
@@ -176,12 +188,11 @@ class AzurLaneControl:
         image = get_window_shot(self.hwnd)
         diff, pos = get_match(image, cv_imread("images/face-yellow.png"))
         if diff < 0.02:
-            logger.warn("舰娘心情值低")
-        
+            self.warning("舰娘心情值低(黄脸)")
+
         diff, pos = get_match(image, cv_imread("images/face-red.png"))
         if diff < 0.02:
-            self.go_top()
-            input("舰娘心情值低, 等待用户操作")
+            self.critical("舰娘心情值低(红脸)")
 
     def select_ships(self):
         image = get_window_shot(self.hwnd)
@@ -207,6 +218,8 @@ class AzurLaneControl:
         time.sleep(1)
         waiting = 1
         targets = self.select_ships()
+        if len(targets) == 0:
+            self.critical("自动退役失败")
         while targets:
             logger.debug("退役舰娘*%d", len(targets))
             for x, y in targets:
