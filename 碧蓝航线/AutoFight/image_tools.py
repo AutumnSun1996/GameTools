@@ -71,8 +71,10 @@ def get_window_shot(hwnd):
     win32gui.ReleaseDC(hwnd, hwndDC)
 
     if (w, h) != options.ORIGIN_WINDOW_SIZE:
-        image_data = cv.resize(image_data, options.ORIGIN_WINDOW_SIZE, interpolation=cv.INTER_CUBIC)
-        logger.warning("Resize From %s To %s", (w, h), options.ORIGIN_WINDOW_SIZE)
+        image_data = cv.resize(
+            image_data, options.ORIGIN_WINDOW_SIZE, interpolation=cv.INTER_CUBIC)
+        logger.warning("Resize From %s To %s", (w, h),
+                       options.ORIGIN_WINDOW_SIZE)
 
     return cv.cvtColor(image_data, cv.COLOR_BGRA2BGR)
 
