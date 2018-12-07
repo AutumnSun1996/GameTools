@@ -28,7 +28,6 @@ def get_cell(sheet, i, j):
 
 
 def load_talents(path='天赋.xlsx', name_row=2, split_idx=None):
-
     if split_idx is None:
         split_idx = [4, 16]
 
@@ -122,7 +121,9 @@ def show_talents(fleet, talents=None, limit=None):
     show_scores(items)
 
 
-def search_talent(ship_types, talent_short):
+def search_talent(ship_types, talent_short, info=None):
+    if info is None:
+        info = talents_info
     candidates = []
     for talent in info.values():
         if talent_short == talent['desc']['简称']:
@@ -146,6 +147,19 @@ def get_talents(cat):
     for s in s_talents:
         talents.append(search_talent(ship_types, s))
     return talents
+
+
+def cat_score(fleet, cat, show_scores=False, info=None):
+    if info is None:
+        info = talents_info
+
+    talents = {key: info[key] for key in get_talents(cat)}
+    scores = sort_talents(fleet, talents)
+    total_score = sum([item['score'] for item in scores])
+    if show_scores:
+        print('{:5.3f}: {} for {}'.format(total_score, cat, fleet, ))
+        show_scores(scores)
+    return {"Score": total_score, "Info": scores}
 
 
 if __name__ == "__main__":
