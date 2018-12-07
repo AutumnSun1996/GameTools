@@ -1,21 +1,24 @@
+"""
+碧蓝航线通用功能
+
+By AutumnSun
+"""
 import os
 import time
 
-import numpy as np
-import win32api
-import win32con
 import ctypes
+import win32con
+import win32api
 
 from config import logger
 from image_tools import get_window_shot, cv_imread, cv_crop, get_diff, get_match
 from win32_tools import drag, rand_click, click_at, get_window_hwnd, make_foreground
 
-scene_list = [
+SCENE_LIST = [
     {
         "Name": "船坞已满",
         "Compare": [
-            {"Rect": (310, 200, 900, 550),
-                "Name": "船坞已满.png", "TreshHold": 5}
+            {"Rect": (310, 200, 900, 550), "Name": "船坞已满.png", "TreshHold": 5}
         ], "Actions": [
             # {"Type": "Call", "Target": go_top, "FirstOnly": True},
             {"Type": "Click", "Target": (400, 500, 580, 550)},
@@ -39,9 +42,9 @@ scene_list = [
         "Name": "潜艇未出击",
         "Compare": [
             {"Rect": (610, 570, 740, 715),
-                "Name": "潜艇未出击.png", "TreshHold": 5},
+             "Name": "潜艇未出击.png", "TreshHold": 5},
             {"Rect": (665, 676, 684, 714),
-                "Name": "潜艇数量1.png", "TreshHold": 1},
+             "Name": "潜艇数量1.png", "TreshHold": 1},
         ],
         "Actions": [
             {"Type": "Wait", "Time": 15, "FirstOnly": True},
@@ -67,7 +70,10 @@ scene_list = [
     {
         "Name": "S胜",
         "Compare": [{"Rect": (320, 300, 980, 420), "Name": "S胜.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
+        "Actions": [
+            {"Type": "Click", "Target": (920, 610, 1200, 720)},
+            {"Type": "Wait", "Time": 0.5},
+        ]
     },
     {
         "Name": "A胜",
@@ -81,7 +87,10 @@ scene_list = [
     # {
     #     "Name": "点击继续",
     #     "Compare": [{"Rect": (280, 540, 1000, 600), "Name": "点击继续.png", "TreshHold": 5}],
-    #     "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
+    #     "Actions": [
+    #         {"Type": "Click", "Target": (920, 610, 1200, 720)},
+    #         {"Type": "Wait", "Time": 0.5},
+    #     ]
     # },
     {
         "Name": "获得舰娘",
@@ -126,10 +135,8 @@ scene_list = [
     {
         "Name": "消息",
         "Compare": [
-            {"Rect": (310, 200, 950, 250),
-                "Name": "信息.png", "TreshHold": 5},
-            {"Rect": (310, 480, 950, 580),
-                "Name": "确认.png", "TreshHold": 5},
+            {"Rect": (310, 200, 950, 250), "Name": "信息.png", "TreshHold": 5},
+            {"Rect": (310, 480, 950, 580), "Name": "确认.png", "TreshHold": 5},
         ],
         "Actions": [{"Type": "Click", "Target": (550, 500, 720, 550)}, {"Type": "Wait", "Time": .5}, ]
     },
@@ -165,7 +172,7 @@ scene_list = [
 class AzurLaneControl:
     def __init__(self):
         self.hwnd = get_window_hwnd("夜神模拟器")
-        self.scene_list = scene_list
+        self.scene_list = SCENE_LIST
         self.current_scene = None
         self.last_scene = None
         self.last_check = 0
@@ -225,7 +232,7 @@ class AzurLaneControl:
     def error(self, message=None, title="", action="继续"):
         logger.error(message)
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
-        flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
         title = "碧蓝航线自动脚本 - %s警告" % title
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDNO:
@@ -244,7 +251,7 @@ class AzurLaneControl:
             exit(0)
 
     def face_detect(self, image, color, size):
-        diff, pos = get_match(image, cv_imread(
+        diff, _ = get_match(image, cv_imread(
             "images/face-%s%s.png" % (color, size)))
         return diff < 0.02
 
@@ -298,7 +305,7 @@ class AzurLaneControl:
         time.sleep(1)
         waiting = 1
         targets = self.select_ships()
-        if len(targets) == 0:
+        if targets:
             self.critical("自动退役失败")
         while targets:
             logger.info("退役舰娘*%d", len(targets))
@@ -352,9 +359,9 @@ class AzurLaneControl:
         now = time.time()
         if self.last_scene != scene or now - self.last_check > 5:
             self.last_check = now
-            logger.info("%s - %s" % (scene['Name'], scene['Actions']))
+            logger.info("%s - %s", scene['Name'], scene['Actions'])
         else:
-            logger.debug("%s - %s" % (scene['Name'], scene['Actions']))
+            logger.debug("%s - %s", scene['Name'], scene['Actions'])
 
         for action in scene['Actions']:
             if action.get('FirstOnly') and self.last_scene == scene:
@@ -378,5 +385,5 @@ class AzurLaneControl:
 
 
 if __name__ == "__main__":
-    control = AzurLaneControl()
-    print(control.select_ships())
+    controler = AzurLaneControl()
+    print(controler.select_ships())

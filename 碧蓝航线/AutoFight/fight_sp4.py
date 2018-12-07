@@ -1,10 +1,13 @@
+"""
+传颂之物联动SP4专用脚本
+"""
 import time
 
 from config import logger
 from map_anchor import FightMap
 from blhx import AzurLaneControl
 
-anchors = [
+ANCHORS = [
     {
         "Name": "anchor-D7.png",
         "OnMap": "D7",
@@ -38,7 +41,7 @@ anchors = [
 ]
 
 
-scene_map = {
+SCENE_MAP = {
     "Name": "SP地图",
     "Compare": [{"Rect": (1070, 670, 1260, 730), "Name": "作战补给.png", "TreshHold": 7}],
     "Actions": [
@@ -52,8 +55,8 @@ scene_map = {
 class SP4Control(AzurLaneControl):
     def __init__(self):
         AzurLaneControl.__init__(self)
-        self.scene_list.append(scene_map)
-        self.map = FightMap(self.hwnd, anchors)
+        self.scene_list.append(SCENE_MAP)
+        self.map = FightMap(self.hwnd, ANCHORS)
 
     def reset_fight_index(self):
         fight_idx = self.get_fight_index()

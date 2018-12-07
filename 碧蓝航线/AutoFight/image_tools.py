@@ -1,9 +1,9 @@
-import win32gui
-import win32ui
-import win32con
-
 import cv2.cv2 as cv
 import numpy as np
+import win32con
+import win32gui
+import win32ui
+
 
 from config import logger, options
 
@@ -23,8 +23,8 @@ def get_diff(a, b):
 
 def get_match(image, needle):
     match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
-    minVal, maxVal, minLoc, maxLoc = cv.minMaxLoc(match)
-    return minVal, np.array(minLoc)
+    min_val, _, min_loc, _ = cv.minMaxLoc(match)
+    return min_val, np.array(min_loc)
 
 
 def get_window_shot(hwnd):
@@ -81,11 +81,11 @@ def get_window_shot(hwnd):
 
 if __name__ == "__main__":
     import win32_tools
-    hwnd = win32_tools.get_window_hwnd("夜神模拟器")
-    image = get_window_shot(hwnd)
+    nox_hwnd = win32_tools.get_window_hwnd("夜神模拟器")
+    screen_shot = get_window_shot(nox_hwnd)
 
     anchor = cv_imread("images/anchor-D7.png")
-    diff, pos = get_match(image, anchor)
+    diff, pos = get_match(screen_shot, anchor)
     if diff < 0.05:
         pass
     print(diff, pos)

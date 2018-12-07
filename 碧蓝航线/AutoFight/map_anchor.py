@@ -4,7 +4,7 @@ import time
 import numpy as np
 
 from config import logger
-from image_tools import cv_imread, cv_crop, get_match, get_window_shot
+from image_tools import cv_imread, get_match, get_window_shot
 from win32_tools import drag, click_at
 
 cell_width = 120

@@ -1,11 +1,10 @@
 import time
 
-import win32api
-import win32gui
-import win32ui
-import win32com.client
 import win32con
 import pywintypes
+import win32api
+import win32gui
+import win32com.client
 import numpy as np
 
 from config import logger, options
@@ -30,7 +29,7 @@ def click_at(hwnd, x, y, ):
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
 
-def drag(hwnd, start, end, step=100, error=10):
+def drag(hwnd, start, end, step=100):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
