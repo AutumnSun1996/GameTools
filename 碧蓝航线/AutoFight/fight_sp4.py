@@ -58,6 +58,7 @@ class SP4Control(AzurLaneControl):
     def reset_fight_index(self):
         fight_idx = self.get_fight_index()
         mod = fight_idx % 6
+        logger.warning("Current Fight Index: %d (%d)", fight_idx, mod)
         if mod != 0:
             self.set_fight_index(fight_idx+mod)
             logger.warning("Reset Fight Index From %d To %d", fight_idx, fight_idx+mod)
@@ -67,17 +68,16 @@ class SP4Control(AzurLaneControl):
         logger.info("Fight index: %d", fight_idx)
         fight_idx = fight_idx % 6
         if fight_idx == 0:
-            logger.info("触发扫描")
+            logger.info("触发扫描-E6")
             self.map.click_at_map("E6")
             # click_at(645, 460, hwnd)
             time.sleep(10)
-            logger.info("前往待命")
+            logger.info("前往待命-E4")
             self.map.click_at_map("E4")
             # click_at(645, 280, hwnd)
             time.sleep(4)
             logger.info("切换2队")
             self.toggle_fleet()
-            time.sleep(2)
             # reset_map_pos()
             # time.sleep(2)
             logger.info("左边精英-D4")
@@ -116,7 +116,6 @@ class SP4Control(AzurLaneControl):
         elif fight_idx == 5:
             logger.info("切换1队")
             self.toggle_fleet()
-            time.sleep(2)
             # reset_map_pos()
             logger.info("Boss-E1")
             self.map.click_at_map("E1")
