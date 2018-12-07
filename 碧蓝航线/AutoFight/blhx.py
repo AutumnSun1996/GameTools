@@ -2,6 +2,9 @@ import os
 import time
 
 import numpy as np
+import win32api
+import win32con
+import ctypes
 
 from config import logger
 from image_tools import get_window_shot, cv_imread, cv_crop, get_diff, get_match
@@ -56,7 +59,7 @@ scene_list = [
             {"Type": "Click", "Target": (20, 280, 80, 450)},
             {"Type": "Wait", "Time": 2},
             # 心情检测
-            {"Type": "InnerCall", "Target": "face_detect", "kwargs": {"size": "26x25"}},
+            {"Type": "InnerCall", "Target": "mood_detect"},
             {"Type": "Click", "Target": (920, 610, 1200, 720)},
             {"Type": "Wait", "Time": 1},
         ]
@@ -69,7 +72,11 @@ scene_list = [
     {
         "Name": "A胜",
         "Compare": [{"Rect": (320, 300, 980, 420), "Name": "A胜.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (920, 610, 1200, 720)}, {"Type": "Wait", "Time": 0.5}, ]
+        "Actions": [
+            {"Type": "Click", "Target": (920, 610, 1200, 720)},
+            {"Type": "InnerCall", "Target": "notice", "kwargs": {"message": "A胜提醒"}},
+            {"Type": "Wait", "Time": 0.5},
+        ]
     },
     # {
     #     "Name": "点击继续",
@@ -86,16 +93,7 @@ scene_list = [
         "Compare": [{"Rect": (500, 120, 800, 240), "Name": "获得道具.png", "TreshHold": 10}],
         "Actions": [
             {"Type": "Click", "Target": (920, 610, 1200, 720)},
-            # 多次点击后将会停留在确认经验界面
-            {"Type": "Wait", "Time": 0.3},
-            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
-            {"Type": "Wait", "Time": 0.3},
-            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
-            {"Type": "Wait", "Time": 0.3},
-            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
-            {"Type": "Wait", "Time": 0.3},
-            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
-            {"Type": "Wait", "Time": 0.5},
+            {"Type": "Wait", "Time": 1},
         ]
     },
     {
@@ -107,16 +105,24 @@ scene_list = [
             {"Type": "Wait", "Time": 5},
         ]
     },
-    # {
-    #     "Name": "获得经验-S胜",
-    #     "Compare": [{"Rect": (40, 60, 490, 140), "Name": "S胜-左上角.png", "TreshHold": 5}],
-    #     "Actions": [{"Type": "Click", "Target": (1020, 610, 1200, 670)}, {"Type": "Wait", "Time": 1}, ]
-    # },
-    # {
-    #     "Name": "获得经验-A胜",
-    #     "Compare": [{"Rect": (40, 60, 490, 140), "Name": "A胜-左上角.png", "TreshHold": 5}],
-    #     "Actions": [{"Type": "Click", "Target": (1020, 610, 1200, 670)}, {"Type": "Wait", "Time": 1}, ]
-    # },
+    {
+        "Name": "获得经验-S胜",
+        "Compare": [{"Rect": (40, 60, 490, 140), "Name": "S胜-左上角.png", "TreshHold": 5}],
+        "Actions": [
+            # 点击右边空白区域
+            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
+            {"Type": "Wait", "Time": 0.5},
+        ]
+    },
+    {
+        "Name": "获得经验-A胜",
+        "Compare": [{"Rect": (40, 60, 490, 140), "Name": "A胜-左上角.png", "TreshHold": 5}],
+        "Actions": [
+            # 点击右边空白区域
+            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
+            {"Type": "Wait", "Time": 0.5},
+        ]
+    },
     {
         "Name": "消息",
         "Compare": [
@@ -137,8 +143,8 @@ scene_list = [
         "Compare": [{"Rect": (960, 630, 1180, 680), "Name": "立刻前往2.png", "TreshHold": 5}],
         "Actions": [
             # 心情检测
-            {"Type": "InnerCall", "Target": "face_detect", "kwargs": {"size": "32x32"}},
-            {"Type": "InnerCall", "Target": "critical"},
+            {"Type": "InnerCall", "Target": "mood_detect"},
+            # {"Type": "InnerCall", "Target": "critical"},
             {"Type": "Click", "Target": (1000, 630, 1150, 680)},
             {"Type": "Wait", "Time": 4},
         ]
@@ -160,6 +166,7 @@ class AzurLaneControl:
     def __init__(self):
         self.hwnd = get_window_hwnd("夜神模拟器")
         self.scene_list = scene_list
+        self.current_scene = None
         self.last_scene = None
         self.last_check = 0
 
@@ -197,6 +204,7 @@ class AzurLaneControl:
 
     def toggle_fleet(self):
         click_at(self.hwnd, 950, 700)
+        time.sleep(2)
 
     def fight(self):
         raise NotImplementedError()
@@ -204,42 +212,65 @@ class AzurLaneControl:
     def go_top(self):
         make_foreground(self.hwnd)
 
-    def critical(self, message=None):
-        info = "需要手动操作: (%s)" % message
-        logger.critical(info)
-        self.go_top()
-        input(info)
+    def critical(self, message=None, title="", action=None):
+        logger.critical(message)
+        info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
+        flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        title = "碧蓝航线自动脚本 - %s错误" % title
+        res = win32api.MessageBox(0, info, title, flag)
+        if res == win32con.IDYES:
+            self.go_top()
+        exit(0)
 
-    def error(self, message=None):
-        info = "需要手动操作: (%s)" % message
-        logger.critical(info)
-        self.go_top()
-        input(info)
+    def error(self, message=None, title="", action="继续"):
+        logger.error(message)
+        info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
+        flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        title = "碧蓝航线自动脚本 - %s警告" % title
+        res = win32api.MessageBox(0, info, title, flag)
+        if res == win32con.IDNO:
+            self.go_top()
+            exit(0)
 
-    def warning(self, message=None):
-        info = "出现异常情况: (%s)" % message
-        logger.warning(info)
-        # self.go_top()
-        # input(info)
+    def notice(self, message=None, title="", action="继续"):
+        logger.warning(message)
+        info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
+        flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
+        title = "碧蓝航线自动脚本 - %s提醒" % title
+        res = ctypes.windll.user32.MessageBoxTimeoutA(
+            0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
+        if res == win32con.IDNO:
+            self.go_top()
+            exit(0)
 
-    def face_detect(self, size):
+    def face_detect(self, image, color, size):
+        diff, pos = get_match(image, cv_imread(
+            "images/face-%s%s.png" % (color, size)))
+        return diff < 0.02
+
+    def mood_detect(self):
         image = get_window_shot(self.hwnd)
-        if size == "26x25":
-            diff, pos = get_match(image, cv_imread("images/face-red%s.png" % size))
-            logger.debug("Match Red: %.3f", diff)
-            if diff < 0.02:
-                self.critical("舰娘心情值低(红脸)")
-
-        diff, pos = get_match(image, cv_imread("images/face-yellow%s.png" % size))
-        logger.debug("Match Yellow: %.3f", diff)
-        if diff < 0.02:
-            self.error("舰娘心情值低(黄脸)")
-
-        if size == "26x25":
-            diff, pos = get_match(image, cv_imread("images/face-green%s.png" % size))
-            logger.debug("Match Green: %.3f", diff)
-            if diff < 0.02:
-                self.warning("舰娘心情值低(绿脸)")
+        if self.current_scene['Name'] == "舰队选择":
+            size = "32x32"
+            colors = {
+                "yellow": self.error
+            }
+            action = "进入地图"
+        elif self.current_scene['Name'] == "战斗准备":
+            size = "26x25"
+            colors = {
+                "red": self.critical,
+                "yellow": self.error,
+                "green": self.notice
+            }
+            action = "继续战斗"
+        color2mood = {"red": "红", "yellow": "黄", "green": "绿"}
+        for color in colors:
+            if self.face_detect(image, color, size):
+                colors[color]("舰娘心情值低(%s色, %s界面)" % (
+                    color2mood[color], self.current_scene['Name']), "舰娘心情值", action)
+                # 检测顺序为红黄绿, 因此无需多次检测
+                return
 
     def select_ships(self):
         image = get_window_shot(self.hwnd)
@@ -270,7 +301,7 @@ class AzurLaneControl:
         if len(targets) == 0:
             self.critical("自动退役失败")
         while targets:
-            logger.debug("退役舰娘*%d", len(targets))
+            logger.info("退役舰娘*%d", len(targets))
             for x, y in targets:
                 rand_click(self.hwnd, (x-10, y-10, x+10, y+10))
                 time.sleep(0.3)
@@ -300,20 +331,23 @@ class AzurLaneControl:
         rand_click(self.hwnd, (830, 680, 980, 730))
         time.sleep(3)
 
-    def get_current_scene(self):
+    def update_current_scene(self):
         image = get_window_shot(self.hwnd)
         for scene in self.scene_list:
             passed = self.scene_match_check(scene, image)
             if passed:
+                self.current_scene = scene
                 return scene
-        return {
+
+        self.current_scene = {
             "Name": "无匹配场景",
             "Compare": [],
             "Actions": [{"Type": "Wait", "Time": 1}, ]
         }
+        return self.current_scene
 
     def check_scene(self):
-        scene = self.get_current_scene()
+        scene = self.update_current_scene()
 
         now = time.time()
         if self.last_scene != scene or now - self.last_check > 5:
@@ -335,7 +369,7 @@ class AzurLaneControl:
                 try:
                     target(*args, **kwargs)
                 except Exception as e:
-                    self.critical(e)
+                    self.critical(e, "程序")
             elif action['Type'] == 'Click':
                 rand_click(self.hwnd, action['Target'])
             else:
