@@ -5,6 +5,7 @@ By AutumnSun
 """
 import os
 import time
+from collections import deque
 
 import ctypes
 import win32con
@@ -110,7 +111,7 @@ SCENE_LIST = [
         "Compare": [{"Rect": (760, 600, 1280, 680), "Name": "确认经验.png", "TreshHold": 5}],
         "Actions": [
             {"Type": "Click", "Target": (1020, 610, 1200, 670)},
-            # 战胜旗舰后会先回到战斗地图再退出地图. 等待退出地图.
+            {"Type": "InnerCall", "Target": "inc_fight_index", "FirstOnly": True},
             {"Type": "Wait", "Time": 5},
         ]
     },
@@ -162,7 +163,6 @@ SCENE_LIST = [
         "Actions": [
             # {"Type": "Call", "Target": go_top, "FirstOnly": True},
             {"Type": "InnerCall", "Target": "fight"},
-            {"Type": "InnerCall", "Target": "inc_fight_index"},
             {"Type": "Wait", "Time": 2},
         ]
     },
@@ -173,9 +173,25 @@ class AzurLaneControl:
     def __init__(self):
         self.hwnd = get_window_hwnd("夜神模拟器")
         self.scene_list = SCENE_LIST
-        self.current_scene = None
-        self.last_scene = None
+        self.fallback_scene = {
+            "Name": "无匹配场景",
+            "Compare": [],
+            "Actions": [{"Type": "Wait", "Time": 1}, ]
+        }
+        self.scene_history = deque(maxlen=10)
         self.last_check = 0
+    
+    @property
+    def last_scene(self):
+        if len(self.scene_history) < 2:
+            return self.fallback_scene
+        return self.scene_history[-2]
+        
+    @property
+    def current_scene(self):
+        if not self.scene_history:
+            return self.fallback_scene
+        return self.scene_history[-1]
 
     @staticmethod
     def get_fight_index():
@@ -203,8 +219,8 @@ class AzurLaneControl:
             b = cv_crop(image, info['Rect'])
             diff = get_diff(a, b) * 50
             passed = diff <= info['TreshHold']
-            logger.debug("Scene Check %s: %.3f-%.2f %s", passed,
-                         diff,  info['TreshHold'], scene['Name'])
+            logger.debug("Scene Check %s=%s: %.3f-%.2f %s", scene["Name"], passed,
+                         diff,  info['TreshHold'], info['Name'])
             if not passed:
                 return False
         return True
@@ -281,16 +297,17 @@ class AzurLaneControl:
 
     def select_ships(self):
         image = get_window_shot(self.hwnd)
+
         targets = []
         rare = cv_imread("images/rare.png")
         common = cv_imread("images/common.png")
         h, w = rare.shape[:2]
-        for y in [426, 194]:
+        for y in [103, 335]:
             for i in range(7):
                 x = 148 + 170 * i
                 ship = cv_crop(image, (x, y, x+w, y+h))
                 for needle in [rare, common]:
-                    if get_diff(ship, needle) < 0.015:
+                    if get_diff(ship, needle) < 0.03:
                         targets.append((x-38, y+106))
                         break
                 if len(targets) >= 10:
@@ -298,14 +315,14 @@ class AzurLaneControl:
         return targets[:10]
 
     def retire(self):
-        logger.debug("滑动到最后一页")
-        drag(self.hwnd, (1250, 180), (1250, 1000))
-        time.sleep(0.3)
-        drag(self.hwnd, (1250, 500), (1250, 1000))
-        time.sleep(1)
+        image = get_window_shot(self.hwnd)
+        if get_diff(cv_crop(image, (910, 40, 1060, 80)), cv_imread("images/降序.png")) < 0.02:
+            logger.debug("切换倒序显示")
+            rand_click(self.hwnd, (910, 40, 1060, 80))
+            time.sleep(1)
         waiting = 1
         targets = self.select_ships()
-        if targets:
+        if not targets:
             self.critical("自动退役失败")
         while targets:
             logger.info("退役舰娘*%d", len(targets))
@@ -343,19 +360,14 @@ class AzurLaneControl:
         for scene in self.scene_list:
             passed = self.scene_match_check(scene, image)
             if passed:
-                self.current_scene = scene
+                self.scene_history.append(scene)
                 return scene
 
-        self.current_scene = {
-            "Name": "无匹配场景",
-            "Compare": [],
-            "Actions": [{"Type": "Wait", "Time": 1}, ]
-        }
+        self.scene_history.append(self.fallback_scene)
         return self.current_scene
 
     def check_scene(self):
         scene = self.update_current_scene()
-
         now = time.time()
         if self.last_scene != scene or now - self.last_check > 5:
             self.last_check = now
@@ -381,9 +393,10 @@ class AzurLaneControl:
                 rand_click(self.hwnd, action['Target'])
             else:
                 raise TypeError("Invalid Type %s" % action["Type"])
-        self.last_scene = scene
 
 
 if __name__ == "__main__":
+    logger.setLevel("DEBUG")
     controler = AzurLaneControl()
     print(controler.select_ships())
+    print(controler.retire())
