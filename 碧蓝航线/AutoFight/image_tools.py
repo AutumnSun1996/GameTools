@@ -1,5 +1,8 @@
+import os
+
 import cv2.cv2 as cv
 import numpy as np
+import ctypes
 import win32con
 import win32gui
 import win32ui
@@ -11,6 +14,10 @@ from config import logger, options
 def cv_imread(file_path):
     return cv.imdecode(np.fromfile(file_path, dtype='uint8'), -1)
 
+def cv_save(file_path, image):
+    ext = os.path.splitext(file_path)[1]
+    data = cv.imencode(ext, image)[1]
+    data.tofile(file_path)
 
 def cv_crop(data, rect):
     min_x, min_y, max_x, max_y = rect
@@ -33,8 +40,12 @@ def get_window_shot(hwnd):
     # 获取句柄窗口的大小信息
     # 可以通过修改该位置实现自定义大小截图
     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
     w = right - left
     h = bottom - top
+    if dpi != 96:
+        w = int(w * dpi / 96)
+        h = int(h * dpi / 96)
 
     # 返回句柄窗口的设备环境、覆盖整个窗口，包括非客户区，标题栏，菜单，边框
     hwndDC = win32gui.GetWindowDC(hwnd)
@@ -84,8 +95,11 @@ if __name__ == "__main__":
     nox_hwnd = win32_tools.get_window_hwnd("夜神模拟器")
     screen_shot = get_window_shot(nox_hwnd)
 
-    anchor = cv_imread("images/anchor-D7.png")
-    diff, pos = get_match(screen_shot, anchor)
-    if diff < 0.05:
-        pass
+    target = cv_imread("images/作战补给.png")
+    diff, pos = get_match(screen_shot, target)
     print(diff, pos)
+
+    anchor = cv_imread("images/SP地图.png")
+    diff, pos = get_match(screen_shot, anchor)
+    print(diff, pos)
+    cv.imwrite("images/screen.png", screen_shot)

@@ -1,6 +1,7 @@
 import time
 
 import win32con
+import ctypes
 import pywintypes
 import win32api
 import win32gui
@@ -12,8 +13,12 @@ from config import logger, options
 
 def rescale_point(hwnd, point):
     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
     w = right - left
     h = bottom - top
+    if dpi != 96:
+        w = int(w * dpi / 96)
+        h = int(h * dpi / 96)
     x = point[0] * options.ORIGIN_WINDOW_SIZE[0] / w
     y = point[1] * options.ORIGIN_WINDOW_SIZE[1] / h
     # logger.debug("Rescale: %s -> %s", point, (x, y))
@@ -72,3 +77,9 @@ def make_foreground(hwnd, retry=True):
 
 def get_window_hwnd(title):
     return win32gui.FindWindow(None, title)
+
+
+if __name__ == "__main__":
+    nox_hwnd = get_window_hwnd("夜神模拟器")
+    x0, y0, x1, y1 = (630, 370, 680, 420)
+    click_at(nox_hwnd, (x0+x1) / 2, (y0+y1)/2)
