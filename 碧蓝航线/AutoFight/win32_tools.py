@@ -8,21 +8,15 @@ import win32gui
 import win32com.client
 import numpy as np
 
-from config import logger, options
+from config import logger, config
 
 
 def rescale_point(hwnd, point):
-    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
     dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
-    w = right - left
-    h = bottom - top
-    if dpi != 96:
-        w = int(w * dpi / 96)
-        h = int(h * dpi / 96)
-    x = point[0] * options.ORIGIN_WINDOW_SIZE[0] / w
-    y = point[1] * options.ORIGIN_WINDOW_SIZE[1] / h
+    x = point[0] + config.getint("Device", "EdgeOffsetX")
+    y = point[1] + config.getint("Device", "EdgeOffsetY")
     # logger.debug("Rescale: %s -> %s", point, (x, y))
-    return int(np.round(x)), int(np.round(y))
+    return int(np.round(x * 96 / dpi)), int(np.round(y * 96 / dpi))
 
 
 def click_at(hwnd, x, y, ):
@@ -77,6 +71,10 @@ def make_foreground(hwnd, retry=True):
 
 def get_window_hwnd(title):
     return win32gui.FindWindow(None, title)
+
+
+def heartbeat():
+    ctypes.windll.kernel32.SetThreadExecutionState(0)
 
 
 if __name__ == "__main__":

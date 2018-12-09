@@ -5,174 +5,22 @@ By AutumnSun
 """
 import os
 import time
+import json
+import traceback
 from collections import deque
 
 import ctypes
 import win32con
 import win32api
 
-from config import logger
-from image_tools import get_window_shot, cv_imread, cv_crop, get_diff, get_match
-from win32_tools import drag, rand_click, click_at, get_window_hwnd, make_foreground
-
-SCENE_LIST = [
-    {
-        "Name": "船坞已满",
-        "Compare": [
-            {"Rect": (310, 200, 900, 550), "Name": "船坞已满.png", "TreshHold": 5}
-        ], "Actions": [
-            # {"Type": "Call", "Target": go_top, "FirstOnly": True},
-            {"Type": "Click", "Target": (400, 500, 580, 550)},
-            {"Type": "Wait", "Time": 2},
-            {"Type": "InnerCall", "Target": "retire"}
-        ]
-    },
-    {
-        "Name": "非自律战斗中",
-        "Compare": [
-            {"Rect": (83, 56, 235, 106), "Name": "开始自律.png", "TreshHold": 5}
-        ],
-        "Actions": [
-            {"Type": "Click", "Target": (83, 56, 235, 106)},
-            {"Type": "Wait", "Time": 0.5},
-            {"Type": "Click", "Target": (1100, 200, 1200, 550)},
-            {"Type": "Wait", "Time": 1},
-        ]
-    },
-    {
-        "Name": "潜艇未出击",
-        "Compare": [
-            {"Rect": (610, 570, 740, 715),
-             "Name": "潜艇未出击.png", "TreshHold": 5},
-            {"Rect": (665, 676, 684, 714),
-             "Name": "潜艇数量1.png", "TreshHold": 1},
-        ],
-        "Actions": [
-            {"Type": "Wait", "Time": 15, "FirstOnly": True},
-            {"Type": "Click", "Target": (630, 600, 720, 680)},
-            {"Type": "Wait", "Time": 0.5},
-        ]
-    },
-    {
-        "Name": "战斗准备",
-        "Compare": [
-            {"Rect": (920, 610, 1200, 720), "Name": "出击.png", "TreshHold": 5}
-        ],
-        "Actions": [
-            # 使可能存在的消息消失
-            {"Type": "Click", "Target": (20, 280, 80, 450)},
-            {"Type": "Wait", "Time": 2},
-            # 心情检测
-            {"Type": "InnerCall", "Target": "mood_detect"},
-            {"Type": "Click", "Target": (920, 610, 1200, 720)},
-            {"Type": "Wait", "Time": 1},
-        ]
-    },
-    {
-        "Name": "S胜",
-        "Compare": [{"Rect": (320, 300, 980, 420), "Name": "S胜.png", "TreshHold": 5}],
-        "Actions": [
-            {"Type": "Click", "Target": (920, 610, 1200, 720)},
-            {"Type": "Wait", "Time": 0.5},
-        ]
-    },
-    {
-        "Name": "A胜",
-        "Compare": [{"Rect": (320, 300, 980, 420), "Name": "A胜.png", "TreshHold": 5}],
-        "Actions": [
-            {"Type": "Click", "Target": (920, 610, 1200, 720)},
-            {"Type": "InnerCall", "Target": "notice", "kwargs": {"message": "A胜提醒"}},
-            {"Type": "Wait", "Time": 0.5},
-        ]
-    },
-    # {
-    #     "Name": "点击继续",
-    #     "Compare": [{"Rect": (280, 540, 1000, 600), "Name": "点击继续.png", "TreshHold": 5}],
-    #     "Actions": [
-    #         {"Type": "Click", "Target": (920, 610, 1200, 720)},
-    #         {"Type": "Wait", "Time": 0.5},
-    #     ]
-    # },
-    {
-        "Name": "获得舰娘",
-        "Compare": [{"Rect": (989, 590, 1055, 654), "Name": "性能.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (1100, 500, 1200, 700)}, {"Type": "Wait", "Time": 0.5}, ]
-    },
-    {
-        "Name": "获得道具",
-        "Compare": [{"Rect": (500, 120, 800, 240), "Name": "获得道具.png", "TreshHold": 10}],
-        "Actions": [
-            {"Type": "Click", "Target": (920, 610, 1200, 720)},
-            {"Type": "Wait", "Time": 1},
-        ]
-    },
-    {
-        "Name": "确认经验",
-        "Compare": [{"Rect": (760, 600, 1280, 680), "Name": "确认经验.png", "TreshHold": 5}],
-        "Actions": [
-            {"Type": "Click", "Target": (1020, 610, 1200, 670)},
-            {"Type": "InnerCall", "Target": "inc_fight_index", "FirstOnly": True},
-            {"Type": "Wait", "Time": 5},
-        ]
-    },
-    {
-        "Name": "获得经验-S胜",
-        "Compare": [{"Rect": (40, 60, 490, 140), "Name": "S胜-左上角.png", "TreshHold": 5}],
-        "Actions": [
-            # 点击右边空白区域
-            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
-            {"Type": "Wait", "Time": 0.5},
-        ]
-    },
-    {
-        "Name": "获得经验-A胜",
-        "Compare": [{"Rect": (40, 60, 490, 140), "Name": "A胜-左上角.png", "TreshHold": 5}],
-        "Actions": [
-            # 点击右边空白区域
-            {"Type": "Click", "Target": (1150, 200, 1250, 400)},
-            {"Type": "Wait", "Time": 0.5},
-        ]
-    },
-    {
-        "Name": "消息",
-        "Compare": [
-            {"Rect": (310, 200, 950, 250), "Name": "信息.png", "TreshHold": 5},
-            {"Rect": (310, 480, 950, 580), "Name": "确认.png", "TreshHold": 5},
-        ],
-        "Actions": [{"Type": "Click", "Target": (550, 500, 720, 550)}, {"Type": "Wait", "Time": .5}, ]
-    },
-    {
-        "Name": "进入地图确认",
-        "Compare": [{"Rect": (840, 480, 1020, 540), "Name": "立刻前往.png", "TreshHold": 5}],
-        "Actions": [{"Type": "Click", "Target": (840, 480, 1020, 540)}, {"Type": "Wait", "Time": .5}, ]
-    },
-    {
-        "Name": "舰队选择",
-        "Compare": [{"Rect": (960, 630, 1180, 680), "Name": "立刻前往2.png", "TreshHold": 5}],
-        "Actions": [
-            # 心情检测
-            {"Type": "InnerCall", "Target": "mood_detect"},
-            # {"Type": "InnerCall", "Target": "critical"},
-            {"Type": "Click", "Target": (1000, 630, 1150, 680)},
-            {"Type": "Wait", "Time": 4},
-        ]
-    },
-    {
-        "Name": "战斗地图",
-        "Compare": [{"Rect": (840, 670, 1280, 740), "Name": "切换-迎击.png", "TreshHold": 5}],
-        "Actions": [
-            # {"Type": "Call", "Target": go_top, "FirstOnly": True},
-            {"Type": "InnerCall", "Target": "fight"},
-            {"Type": "Wait", "Time": 2},
-        ]
-    },
-]
+from config import logger, config
+from image_tools import get_window_shot, update_resource, cv_crop, get_diff, get_match, cv_save
+from win32_tools import drag, rand_click, click_at, get_window_hwnd, make_foreground, heartbeat
 
 
 class AzurLaneControl:
     def __init__(self):
-        self.hwnd = get_window_hwnd("夜神模拟器")
-        self.scene_list = SCENE_LIST
+        self.hwnd = get_window_hwnd(config.get("Path", "WindowTitle"))
         self.fallback_scene = {
             "Name": "无匹配场景",
             "Compare": [],
@@ -180,6 +28,15 @@ class AzurLaneControl:
         }
         self.scene_history = deque(maxlen=10)
         self.last_check = 0
+        with open(config.get("Path", "Scenes"), "r", -1, "UTF-8") as fl:
+            self.scenes = json.load(fl)
+        with open(config.get("Path", "Resources"), "r", -1, "UTF-8") as fl:
+            self.resources = json.load(fl)
+        
+        folder = config.get("Path", "ResourcesFolder")
+        for val in self.resources.values():
+            update_resource(val, folder)
+            
     
     @property
     def last_scene(self):
@@ -212,22 +69,68 @@ class AzurLaneControl:
         with open('fightIndex.txt', 'w') as fl:
             fl.write("%d" % index)
 
-    @staticmethod
-    def scene_match_check(scene, image):
-        for info in scene['Compare']:
-            a = cv_imread(os.path.join('images', info['Name']))
-            b = cv_crop(image, info['Rect'])
-            diff = get_diff(a, b) * 50
-            passed = diff <= info['TreshHold']
-            logger.debug("Scene Check %s=%s: %.3f-%.2f %s", scene["Name"], passed,
-                         diff,  info['TreshHold'], info['Name'])
-            if not passed:
-                return False
-        return True
+    def resource_in_screen(self, name, image=None):
+        if image is None:
+            image = get_window_shot(self.hwnd)
+        if name not in self.resources:
+            logger.warning("No resource: %s", name)
+            return False
+        info = self.resources[name]
+        if info["Type"] == "Static":
+            rect = self.get_resource_rect(name)
+            target = info['ImageData']
+            cropped = cv_crop(image, rect)
+            diff = get_diff(target, cropped)
+            # 有位置限制, 可以使用较为宽松的阈值
+            res = diff <= info.get('MaxDiff', 0.06)
+        elif info["Type"] in {"Dynamic", "Anchor"}:
+            target = info['ImageData']
+            diff, res = get_match(image, target)
+            if diff <= info.get('MaxDiff', 0.02):
+                res = False
+        return res
+    
+    def wait_resource(self, name, interval=1, repeat=5):
+        if repeat == 0:
+            self.error("Can't find resource %s" % name)
+            return False
+        if self.resource_in_screen(name):
+            return True
+        else:
+            time.sleep(interval)
+            return self.wait_resource(name, interval, repeat-1)
+    
+    def click_at_resource(self, name, wait=False):
+        if wait:
+            if not self.wait_resource(name):
+                return
+        rect = self.get_resource_rect(name)
+        rand_click(self.hwnd, rect)
 
-    def toggle_fleet(self):
-        click_at(self.hwnd, 950, 700)
-        time.sleep(2)
+    def scene_match_check(self, scene, image):
+        # logger.debug("Check scene: %s", scene)
+        res = self.parse_condition(scene["Condition"], image)
+        if res:
+            self.scene_history.append(scene)
+        return res
+    
+    def parse_condition(self, condition, image):
+        if isinstance(condition, str):
+            return self.resource_in_screen(condition, image)
+        elif condition[0] == "All":
+            for sub_cond in condition[1:]:
+                if not self.parse_condition(sub_cond, image):
+                    return False
+            return True
+        elif condition[0] == "Any":
+            for sub_cond in condition[1:]:
+                if self.parse_condition(sub_cond, image):
+                    return True
+            return False
+        elif condition[0] == "Not":
+            return not self.parse_condition(condition[1], image)
+        else:
+            raise ValueError("Invalid Condition: %s", condition)
 
     def fight(self):
         raise NotImplementedError()
@@ -266,32 +169,26 @@ class AzurLaneControl:
             self.go_top()
             exit(0)
 
-    def face_detect(self, image, color, size):
-        diff, _ = get_match(image, cv_imread(
-            "images/face-%s%s.png" % (color, size)))
-        return diff < 0.02
-
     def mood_detect(self):
         image = get_window_shot(self.hwnd)
         if self.current_scene['Name'] == "舰队选择":
-            size = "32x32"
-            colors = {
-                "yellow": self.error
-            }
+            colors = [
+                # ("黄", self.error),
+            ]
             action = "进入地图"
         elif self.current_scene['Name'] == "战斗准备":
-            size = "26x25"
-            colors = {
-                "red": self.critical,
-                "yellow": self.error,
-                "green": self.notice
-            }
+            colors = [
+                ("红", self.critical),
+                ("黄", self.error),
+                ("绿", self.notice),
+            ]
             action = "继续战斗"
-        color2mood = {"red": "红", "yellow": "黄", "green": "绿"}
         for color in colors:
-            if self.face_detect(image, color, size):
-                colors[color]("舰娘心情值低(%s色, %s界面)" % (
-                    color2mood[color], self.current_scene['Name']), "舰娘心情值", action)
+            name = "{0}-{1[0]}脸".format(self.current_scene['Name'], color)
+            if self.resource_in_screen(name):
+                color[1](
+                    "舰娘心情值低(%s)" % (name), 
+                    "舰娘心情值", action)
                 # 检测顺序为红黄绿, 因此无需多次检测
                 return
 
@@ -299,26 +196,32 @@ class AzurLaneControl:
         image = get_window_shot(self.hwnd)
 
         targets = []
-        rare = cv_imread("images/rare.png")
-        common = cv_imread("images/common.png")
-        h, w = rare.shape[:2]
-        for y in [103, 335]:
-            for i in range(7):
-                x = 148 + 170 * i
+        blue = self.resources["退役-蓝色舰娘"]
+        white = self.resources["退役-白色舰娘"]
+        for item in [blue, white]:
+            w, h = item["Size"]
+            dx, dy = item["Offset"]
+            for pos in item["Positions"]:
+                x, y = pos
                 ship = cv_crop(image, (x, y, x+w, y+h))
-                for needle in [rare, common]:
-                    if get_diff(ship, needle) < 0.03:
-                        targets.append((x-38, y+106))
-                        break
+                diff = get_diff(ship, item["ImageData"])
+                logger.debug("Ship %s: %s %.3f", pos, diff < 0.02, diff)
+                if diff < 0.02:
+                    targets.append((x+dx, y+dy))
                 if len(targets) >= 10:
                     return targets[:10]
+        logger.info("select_ships: %s", targets)
+        if not targets:
+            import datetime
+            now = datetime.datetime.now()
+            name = "noShipForRetire-{:%Y-%m-%d_%H%M%S}.png".format(now)
+            cv_save(name, image)
         return targets[:10]
 
     def retire(self):
-        image = get_window_shot(self.hwnd)
-        if get_diff(cv_crop(image, (910, 40, 1060, 80)), cv_imread("images/降序.png")) < 0.02:
+        if self.resource_in_screen("降序"):
             logger.debug("切换倒序显示")
-            rand_click(self.hwnd, (910, 40, 1060, 80))
+            self.click_at_resource("降序")
             time.sleep(1)
         waiting = 1
         targets = self.select_ships()
@@ -331,43 +234,74 @@ class AzurLaneControl:
                 time.sleep(0.3)
 
             logger.debug("确定")
-            rand_click(self.hwnd, (1020, 680, 1210, 730))
+            self.click_at_resource("退役-确定", True)
             time.sleep(waiting)
-            logger.debug("确认退役")
-            rand_click(self.hwnd, (920, 630, 1100, 670))
+            logger.debug("确定拆解")
+            self.click_at_resource("退役-二次确定", True)
             time.sleep(waiting)
             logger.debug("点击继续")
-            rand_click(self.hwnd, (920, 630, 1100, 670))
+            self.wait_resource("获得道具")
+            self.click_at_resource("退役-二次确定")
             time.sleep(waiting)
             logger.debug("装备拆解")
-            rand_click(self.hwnd, (920, 630, 1100, 670))
+            self.click_at_resource("退役-装备-确定", True)
             time.sleep(waiting)
-            logger.debug("确认拆解")
-            rand_click(self.hwnd, (680, 500, 860, 550))
+            logger.debug("确定拆解")
+            self.click_at_resource("退役-装备-拆解", True)
             time.sleep(waiting)
             logger.debug("点击继续")
-            rand_click(self.hwnd, (680, 500, 860, 550))
-            time.sleep(waiting*2)
+            self.wait_resource("获得道具")
+            self.click_at_resource("退役-装备-拆解")
+            time.sleep(waiting)
             targets = self.select_ships()
 
         time.sleep(waiting)
         logger.debug("返回之前界面")
-        rand_click(self.hwnd, (830, 680, 980, 730))
+        self.click_at_resource("退役-取消", True)
         time.sleep(3)
 
-    def update_current_scene(self):
+    def update_current_scene(self, candidates=None):
+        if candidates is None:
+            candidates = list(self.scenes.keys())
+        else:
+            candidates = set(candidates)
+            candidates.update(self.global_scenes)
+        
         image = get_window_shot(self.hwnd)
-        for scene in self.scene_list:
+        for key in candidates:
+            scene = self.scenes[key]
             passed = self.scene_match_check(scene, image)
+            
+            logger.debug("Check Scene %s: %s=%s", scene["Name"], scene["Condition"], passed)
             if passed:
-                self.scene_history.append(scene)
                 return scene
 
         self.scene_history.append(self.fallback_scene)
-        return self.current_scene
-
+        return self.fallback_scene
+    
+    def wait_for_scene(self, candidates, interval=1, repeat=5):
+        if repeat == 0:
+            raise ValueError("场景判断失败! 上一场景: %s" % self.current_scene)
+        candidates = set(candidates).union(self.global_scenes)
+        for key in candidates:
+            if self.scene_match_check(scene, image):
+                return scene
+        
+        for key in self.global_scenes:
+            if self.scene_match_check(scene, image):
+                return scene
+        
+        time.sleep(interval)
+        return self.wait_for_scene(candidates, interval, repeat-1)
+        
+    def get_resource_rect(self, key):
+        x, y = self.resources[key]["Offset"]
+        w, h = self.resources[key]["Size"]
+        return (x, y, x+w, y+h)
+        
     def check_scene(self):
         scene = self.update_current_scene()
+        heartbeat()
         now = time.time()
         if self.last_scene != scene or now - self.last_check > 5:
             self.last_check = now
@@ -388,9 +322,9 @@ class AzurLaneControl:
                 try:
                     target(*args, **kwargs)
                 except Exception as e:
-                    self.critical(e, "程序")
+                    self.critical(traceback.format_exc(), "程序")
             elif action['Type'] == 'Click':
-                rand_click(self.hwnd, action['Target'])
+                self.click_at_resource(action['Target'], action.get("Wait", False))
             else:
                 raise TypeError("Invalid Type %s" % action["Type"])
 
@@ -398,5 +332,6 @@ class AzurLaneControl:
 if __name__ == "__main__":
     logger.setLevel("DEBUG")
     controler = AzurLaneControl()
-    print(controler.select_ships())
-    print(controler.retire())
+    print(controler.update_current_scene())
+    # print(controler.select_ships())
+    # print(controler.retire())

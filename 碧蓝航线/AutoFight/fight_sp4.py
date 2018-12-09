@@ -6,77 +6,48 @@ import time
 from config import logger
 from map_anchor import FightMap
 
-ANCHORS = [
-    {
-        "Name": "anchor-D7.png",
-        "OnMap": "D7",
-        "Translate": (60, 40),
-    },
-    {
-        "Name": "anchor-E5.png",
-        "OnMap": "E5",
-        "Translate": (46, 20)
-    },
-    {
-        "Name": "anchor-A4.png",
-        "OnMap": "A4",
-        "Translate": (0, 50)
-    },
-    {
-        "Name": "anchor-I4.png",
-        "OnMap": "I4",
-        "Translate": (50, 45)
-    },
-    {
-        "Name": "anchor-I5.png",
-        "OnMap": "I5",
-        "Translate": (50, 10)
-    },
-    {
-        "Name": "Boss.png",
-        "OnMap": "E1",
-        "Translate": (31, 45)
-    },
-]
-
-
-SCENE_MAP = {
-    "Name": "SP地图",
-    "Compare": [{"Rect": (1070, 670, 1260, 730), "Name": "作战补给.png", "TreshHold": 7}],
-    "Actions": [
-        {"Type": "Click", "Target": (630, 370, 680, 420)},
-        {"Type": "Wait", "Time": 0.5},
-        {"Type": "InnerCall", "Target": "reset_fight_index"}
-    ]
+NEW_SCENES = {
+    "活动地图": {
+        "Name": "活动地图",
+        "Condition": "梦幻的交汇SP4",
+        "Actions": [
+            {"Type": "Click", "Target": "梦幻的交汇SP4"},
+            {"Type": "Wait", "Time": 0.5},
+            {"Type": "InnerCall", "Target": "reset_fight_index"}
+        ]
+    }
 }
 
 
 class SP4Control(FightMap):
     def __init__(self):
-        super().__init__(ANCHORS)
-        self.scene_list.append(SCENE_MAP)
-        self.fight_idx_offset = 0
-    
-    def get_fight_index(self):
-        return super().get_fight_index() + self.fight_idx_offset
+        super().__init__()
+        self.scenes.update(NEW_SCENES)
+        self.fight_idx_offset = 4
+        self.map_name = "梦幻的交汇SP4"
     
     def reset_fight_index(self):
-        fight_idx = self.get_fight_index()
+        self.fight_idx_offset = 0
+        fight_idx = self.get_fight_index() + self.fight_idx_offset
         mod = fight_idx % 6
         logger.warning("Current Fight Index: %d (%d)", fight_idx, mod)
         if mod != 0:
-            self.set_fight_index(fight_idx+6-mod)
-            logger.warning("Reset Fight Index From %d To %d", fight_idx, fight_idx+6-mod)
+            self.fight_idx_offset += 6-mod
+            logger.info("Reset Fight Index From %d To %d", fight_idx, fight_idx+6-mod)
 
     def fight(self):
         if self.last_scene['Name'] == "战斗地图":
-            logger.info("停留在战斗界面. 增加虚拟战斗次数")
-            logger.info("history: %s", [scene["Name"] for scene in self.scene_history])
-            self.fight_idx_offset += 1
-        fight_idx = self.get_fight_index()
+            if len(self.scene_history) > 3 and self.scene_history[-3]['Name'] == "战斗地图":
+                logger.info("第三次回到在战斗界面. 增加虚拟战斗次数")
+                logger.info("history: %s", [scene["Name"] for scene in self.scene_history])
+                self.fight_idx_offset += 1
+            else:
+                logger.info("第二次回到战斗界面, 重做前次动作.")
+        fight_idx = self.get_fight_index() + self.fight_idx_offset
         mod = fight_idx % 6
         logger.info("Fight index: %d (%d)", fight_idx, mod)
         if mod == 0:
+            time.sleep(2)
             logger.info("触发扫描-E6")
             self.click_at_map("E6")
             # click_at(645, 460, hwnd)
@@ -86,9 +57,9 @@ class SP4Control(FightMap):
             # click_at(645, 280, hwnd)
             time.sleep(3)
             logger.info("切换2队")
-            self.toggle_fleet()
+            self.click_at_resource("切换舰队")
             # reset_map_pos()
-            # time.sleep(2)
+            time.sleep(2)
             logger.info("左边精英-D4")
             self.click_at_map("D4")
             # click_at(535, 300, hwnd)
@@ -125,7 +96,8 @@ class SP4Control(FightMap):
             time.sleep(2)
         elif mod == 5:
             logger.info("切换1队")
-            self.toggle_fleet()
+            self.click_at_resource("切换舰队")
+            time.sleep(2)
             # reset_map_pos()
             logger.info("Boss-E1")
             self.click_at_map("E1")
@@ -136,6 +108,13 @@ class SP4Control(FightMap):
 
 
 if __name__ == "__main__":
+    import datetime
     sp4 = SP4Control()
+    start_index = sp4.get_fight_index()
     while True:
         sp4.check_scene()
+        if sp4.current_scene["Name"] == "活动地图":
+            new_fight = sp4.get_fight_index() - start_index
+            logger.info("战斗次数:%d(%d)", sp4.get_fight_index(), new_fight)
+            if sp4.get_fight_index() >= 21398+60:
+                exit(0)
