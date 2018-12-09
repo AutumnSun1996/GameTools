@@ -32,10 +32,13 @@ class AzurLaneControl:
             self.scenes = json.load(fl)
         with open(config.get("Path", "Resources"), "r", -1, "UTF-8") as fl:
             self.resources = json.load(fl)
-        
+        self.global_scenes = set()
         folder = config.get("Path", "ResourcesFolder")
         for val in self.resources.values():
             update_resource(val, folder)
+            if val.get("Global"):
+                self.global_scenes.add(val["Name"])
+        
             
     
     @property
@@ -170,7 +173,6 @@ class AzurLaneControl:
             exit(0)
 
     def mood_detect(self):
-        image = get_window_shot(self.hwnd)
         if self.current_scene['Name'] == "舰队选择":
             colors = [
                 # ("黄", self.error),
@@ -282,8 +284,9 @@ class AzurLaneControl:
     def wait_for_scene(self, candidates, interval=1, repeat=5):
         if repeat == 0:
             raise ValueError("场景判断失败! 上一场景: %s" % self.current_scene)
-        candidates = set(candidates).union(self.global_scenes)
+        image = get_window_shot(self.hwnd)
         for key in candidates:
+            scene = self.scenes[key]
             if self.scene_match_check(scene, image):
                 return scene
         
@@ -321,7 +324,7 @@ class AzurLaneControl:
                 kwargs = action.get("kwargs", {})
                 try:
                     target(*args, **kwargs)
-                except Exception as e:
+                except:
                     self.critical(traceback.format_exc(), "程序")
             elif action['Type'] == 'Click':
                 self.click_at_resource(action['Target'], action.get("Wait", False))
