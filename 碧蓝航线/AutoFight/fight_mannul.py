@@ -12,11 +12,12 @@ from map_anchor import FightMap
 class SP4Control(FightMap):
     def __init__(self):
         super().__init__()
-        self.scene_list.append({
-            "Name": "进入档案确认",
-            "Compare": ["进入档案确认"],
-            "Actions": [{"Type": "Click", "Target": "进入档案确认"}, {"Type": "Wait", "Time": 0.5}, ]
-        })
+        self.scenes.update({
+            "进入档案确认": {
+                "Name": "进入档案确认",
+                "Condition": "进入档案确认",
+                "Actions": [{"Type": "Click", "Target": "进入档案确认"}, {"Type": "Wait", "Time": 0.5}, ]
+            }})
 
     def fight(self):
         if self.last_scene['Name'] in {"战斗地图", "无匹配场景"}:
