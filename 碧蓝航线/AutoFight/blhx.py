@@ -5,6 +5,7 @@ By AutumnSun
 """
 import os
 import time
+import datetime
 import json
 import traceback
 from collections import deque
@@ -32,6 +33,7 @@ class AzurLaneControl:
         }
         self.scene_history = deque(maxlen=10)
         self.last_check = 0
+        self.screen = None
         with open(config.get("Path", "Scenes"), "r", -1, "UTF-8") as fl:
             self.scenes = json.load(fl)
         with open(config.get("Path", "Resources"), "r", -1, "UTF-8") as fl:
@@ -79,10 +81,15 @@ class AzurLaneControl:
         with open('fightIndex.txt', 'w') as fl:
             fl.write("%d" % index)
 
-    def resource_in_screen(self, name, image=None):
+    def make_screen_shot(self):
+        """获取窗口截图"""
+        self.screen = get_window_shot(self.hwnd)
+        return self.screen
+
+    def resource_in_screen(self, name, reshot=True):
         """判断资源是否存在于画面内"""
-        if image is None:
-            image = get_window_shot(self.hwnd)
+        if reshot:
+            self.make_screen_shot()
         if name not in self.resources:
             logger.warning("No resource: %s", name)
             return False
@@ -90,15 +97,16 @@ class AzurLaneControl:
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
             if 'ImageData' not in info:
-                raise ValueError("No ImageData for %s" % info)
+                self.error("No ImageData for %s" % info)
+                return False
             target = info['ImageData']
-            cropped = cv_crop(image, rect)
+            cropped = cv_crop(self.screen, rect)
             diff = get_diff(target, cropped)
             # 有位置限制, 可以使用较为宽松的阈值
             res = diff <= info.get('MaxDiff', 0.06)
         elif info["Type"] in {"Dynamic", "Anchor"}:
             target = info['ImageData']
-            diff, res = get_match(image, target)
+            diff, res = get_match(self.screen, target)
             if diff <= info.get('MaxDiff', 0.02):
                 res = False
         return res
@@ -123,9 +131,8 @@ class AzurLaneControl:
             Timer(delay, self.delayed_click, [name, condition]).start()
             return
         if condition is not None:
-            image = get_window_shot(self.hwnd)
-            if not self.parse_condition(condition, image):
-                logger.warning("条件%s=False, 取消点击%s", condition, name)
+            if not self.parse_condition(condition):
+                logger.warning("%s=False, 取消点击%s", condition, name)
                 return
         self.click_at_resource(name)
 
@@ -140,34 +147,32 @@ class AzurLaneControl:
         rect = self.get_resource_rect(name)
         rand_click(self.hwnd, rect)
 
-    def scene_match_check(self, scene, image):
+    def scene_match_check(self, scene, reshot):
         """检查场景是否与画面一致
         """
         # logger.debug("Check scene: %s", scene)
-        res = self.parse_condition(scene["Condition"], image)
+        res = self.parse_condition(scene["Condition"], reshot)
         if res:
             self.scene_history.append(scene)
         return res
 
-    def parse_condition(self, condition, image):
+    def parse_condition(self, condition, reshot=True):
         """检查condition是否被满足
         """
+        result = False
         if isinstance(condition, str):
-            return self.resource_in_screen(condition, image)
+            result = self.resource_in_screen(condition, reshot)
+        elif not isinstance(condition, (list, tuple)):
+            self.error("Invalid Condition: %s" % condition)
         elif condition[0] == "All":
-            for sub_cond in condition[1:]:
-                if not self.parse_condition(sub_cond, image):
-                    return False
-            return True
+            result = all([self.parse_condition(sub, reshot) for sub in condition[1:]])
         elif condition[0] == "Any":
-            for sub_cond in condition[1:]:
-                if self.parse_condition(sub_cond, image):
-                    return True
-            return False
+            result = any([self.parse_condition(sub, reshot) for sub in condition[1:]])
         elif condition[0] == "Not":
-            return not self.parse_condition(condition[1], image)
+            result = not self.parse_condition(condition[1], reshot)
         else:
-            raise ValueError("Invalid Condition: %s", condition)
+            self.error("Invalid Condition: %s" % condition)
+        return result
 
     def fight(self):
         """处理战斗内容. 随每个地图变化"""
@@ -180,8 +185,12 @@ class AzurLaneControl:
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
         logger.critical(message)
+        name = "Critical-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
+        cv_save(name, self.screen)
+
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
-        flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
+            | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
         title = "碧蓝航线自动脚本 - %s错误" % title
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDYES:
@@ -191,6 +200,9 @@ class AzurLaneControl:
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
         logger.error(message)
+        name = "Error-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
+        cv_save(name, self.screen)
+
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
@@ -271,10 +283,6 @@ class AzurLaneControl:
         targets = self.select_ships()
         if not targets:
             # TODO: 解决偶尔的退役失败
-            import datetime
-            now = datetime.datetime.now()
-            name = "noShipForRetire-{:%Y-%m-%d_%H%M%S}.png".format(now)
-            cv_save(name, self.last_shot)
             self.critical("自动退役失败")
         while targets:
             logger.info("退役舰娘*%d", len(targets))
@@ -317,10 +325,10 @@ class AzurLaneControl:
             candidates = set(candidates)
             candidates.update(self.global_scenes)
 
-        image = get_window_shot(self.hwnd)
+        self.make_screen_shot()
         for key in candidates:
             scene = self.scenes[key]
-            passed = self.scene_match_check(scene, image)
+            passed = self.scene_match_check(scene, False)
 
             logger.debug("Check Scene %s: %s=%s", scene["Name"], scene["Condition"], passed)
             if passed:
@@ -332,15 +340,16 @@ class AzurLaneControl:
     def wait_for_scene(self, candidates, interval=1, repeat=5):
         """等待指定的场景或全局场景"""
         if repeat == 0:
-            raise ValueError("场景判断失败! 上一场景: %s" % self.current_scene)
-        image = get_window_shot(self.hwnd)
+            self.error("场景判断失败! 上一场景: %s" % self.current_scene)
+            return
+        self.make_screen_shot()
         for key in candidates:
             scene = self.scenes[key]
-            if self.scene_match_check(scene, image):
+            if self.scene_match_check(scene, False):
                 return scene
 
         for key in self.global_scenes:
-            if self.scene_match_check(scene, image):
+            if self.scene_match_check(scene, False):
                 return scene
 
         time.sleep(interval)
@@ -357,11 +366,13 @@ class AzurLaneControl:
         scene = self.update_current_scene()
         heartbeat()
         now = time.time()
-        if self.last_scene != scene or now - self.last_check > 5:
+        nochange = "" if self.last_scene != scene else "(No Change)"
+        if not nochange or now - self.last_check > 10:
             self.last_check = now
-            logger.info("%s - %s", scene['Name'], scene['Actions'])
+            log = logger.info
         else:
-            logger.debug("%s - %s", scene['Name'], scene['Actions'])
+            log = logger.debug
+        log("%s - %s%s", scene['Name'], scene['Actions'], nochange)
 
         for action in scene['Actions']:
             if action.get('FirstOnly') and self.last_scene == scene:
@@ -382,7 +393,7 @@ class AzurLaneControl:
             elif action['Type'] == 'DelayedClick':
                 self.delayed_click(action["Target"], action.get("Recheck"), action.get("Delay"))
             else:
-                raise TypeError("Invalid Type %s" % action["Type"])
+                self.critical("Invalid Type %s" % action["Type"])
 
 
 if __name__ == "__main__":
