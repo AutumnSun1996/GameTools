@@ -8,6 +8,7 @@ import time
 import json
 import traceback
 from collections import deque
+from threading import Timer
 
 import ctypes
 import win32con
@@ -19,6 +20,9 @@ from win32_tools import drag, rand_click, click_at, get_window_hwnd, make_foregr
 
 
 class AzurLaneControl:
+    """模拟器通用控制
+    """
+
     def __init__(self):
         self.hwnd = get_window_hwnd(config.get("Path", "WindowTitle"))
         self.fallback_scene = {
@@ -38,29 +42,31 @@ class AzurLaneControl:
             update_resource(val, folder)
             if val.get("Global"):
                 self.global_scenes.add(val["Name"])
-        
-            
-    
+
     @property
     def last_scene(self):
+        """上一次检测出的场景"""
         if len(self.scene_history) < 2:
             return self.fallback_scene
         return self.scene_history[-2]
-        
+
     @property
     def current_scene(self):
+        """最近检测出的场景"""
         if not self.scene_history:
             return self.fallback_scene
         return self.scene_history[-1]
 
     @staticmethod
     def get_fight_index():
+        """战斗次数计数"""
         with open('fightIndex.txt', 'r') as fl:
             fight_idx = int(fl.read())
         return fight_idx
 
     @staticmethod
     def inc_fight_index():
+        """增加战斗次数"""
         with open('fightIndex.txt', 'r') as fl:
             fight_idx = int(fl.read())
         logger.debug("增加Fight Index: %d -> %d", fight_idx, fight_idx+1)
@@ -69,10 +75,12 @@ class AzurLaneControl:
 
     @staticmethod
     def set_fight_index(index=0):
+        """设置战斗次数"""
         with open('fightIndex.txt', 'w') as fl:
             fl.write("%d" % index)
 
     def resource_in_screen(self, name, image=None):
+        """判断资源是否存在于画面内"""
         if image is None:
             image = get_window_shot(self.hwnd)
         if name not in self.resources:
@@ -81,6 +89,8 @@ class AzurLaneControl:
         info = self.resources[name]
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
+            if 'ImageData' not in info:
+                raise ValueError("No ImageData for %s" % info)
             target = info['ImageData']
             cropped = cv_crop(image, rect)
             diff = get_diff(target, cropped)
@@ -92,8 +102,9 @@ class AzurLaneControl:
             if diff <= info.get('MaxDiff', 0.02):
                 res = False
         return res
-    
+
     def wait_resource(self, name, interval=1, repeat=5):
+        """等待资源出现在画面内"""
         if repeat == 0:
             self.error("Can't find resource %s" % name)
             return False
@@ -102,22 +113,45 @@ class AzurLaneControl:
         else:
             time.sleep(interval)
             return self.wait_resource(name, interval, repeat-1)
-    
+
+    def delayed_click(self, name, condition=None, delay=None):
+        """等待固定时间后点击资源
+
+        condition 不为None时将先检查condition
+        """
+        if delay:
+            Timer(delay, self.delayed_click, [name, condition]).start()
+            return
+        if condition is not None:
+            image = get_window_shot(self.hwnd)
+            if not self.parse_condition(condition, image):
+                logger.warning("条件%s=False, 取消点击%s", condition, name)
+                return
+        self.click_at_resource(name)
+
     def click_at_resource(self, name, wait=False):
+        """点击资源
+
+        wait 为等待资源出现的时间
+        """
         if wait:
-            if not self.wait_resource(name):
+            if not self.wait_resource(name, 1, wait):
                 return
         rect = self.get_resource_rect(name)
         rand_click(self.hwnd, rect)
 
     def scene_match_check(self, scene, image):
+        """检查场景是否与画面一致
+        """
         # logger.debug("Check scene: %s", scene)
         res = self.parse_condition(scene["Condition"], image)
         if res:
             self.scene_history.append(scene)
         return res
-    
+
     def parse_condition(self, condition, image):
+        """检查condition是否被满足
+        """
         if isinstance(condition, str):
             return self.resource_in_screen(condition, image)
         elif condition[0] == "All":
@@ -136,12 +170,15 @@ class AzurLaneControl:
             raise ValueError("Invalid Condition: %s", condition)
 
     def fight(self):
+        """处理战斗内容. 随每个地图变化"""
         raise NotImplementedError()
 
     def go_top(self):
+        """使模拟器窗口前置"""
         make_foreground(self.hwnd)
 
     def critical(self, message=None, title="", action=None):
+        """致命错误提醒"""
         logger.critical(message)
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
@@ -152,9 +189,11 @@ class AzurLaneControl:
         exit(0)
 
     def error(self, message=None, title="", action="继续"):
+        """错误提醒"""
         logger.error(message)
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
-        flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
+        flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
+            | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
         title = "碧蓝航线自动脚本 - %s警告" % title
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDNO:
@@ -162,6 +201,7 @@ class AzurLaneControl:
             exit(0)
 
     def notice(self, message=None, title="", action="继续"):
+        """提醒"""
         logger.warning(message)
         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
@@ -173,9 +213,10 @@ class AzurLaneControl:
             exit(0)
 
     def mood_detect(self):
+        """舰娘心情检测"""
         if self.current_scene['Name'] == "舰队选择":
             colors = [
-                # ("黄", self.error),
+                ("黄", self.error),
             ]
             action = "进入地图"
         elif self.current_scene['Name'] == "战斗准备":
@@ -189,15 +230,17 @@ class AzurLaneControl:
             name = "{0}-{1[0]}脸".format(self.current_scene['Name'], color)
             if self.resource_in_screen(name):
                 color[1](
-                    "舰娘心情值低(%s)" % (name), 
+                    "舰娘心情值低(%s)" % (name),
                     "舰娘心情值", action)
                 # 检测顺序为红黄绿, 因此无需多次检测
                 return
 
     def select_ships(self):
+        """选择退役舰娘"""
         image = get_window_shot(self.hwnd)
 
         targets = []
+        # TODO: 将退役选择放到配置文件或json中
         blue = self.resources["退役-蓝色舰娘"]
         white = self.resources["退役-白色舰娘"]
         for item in [blue, white]:
@@ -214,13 +257,12 @@ class AzurLaneControl:
                     return targets[:10]
         logger.info("select_ships: %s", targets)
         if not targets:
-            import datetime
-            now = datetime.datetime.now()
-            name = "noShipForRetire-{:%Y-%m-%d_%H%M%S}.png".format(now)
-            cv_save(name, image)
+            # TODO: 解决偶尔的退役失败
+            self.last_shot = image
         return targets[:10]
 
     def retire(self):
+        """执行退役操作"""
         if self.resource_in_screen("降序"):
             logger.debug("切换倒序显示")
             self.click_at_resource("降序")
@@ -228,6 +270,11 @@ class AzurLaneControl:
         waiting = 1
         targets = self.select_ships()
         if not targets:
+            # TODO: 解决偶尔的退役失败
+            import datetime
+            now = datetime.datetime.now()
+            name = "noShipForRetire-{:%Y-%m-%d_%H%M%S}.png".format(now)
+            cv_save(name, self.last_shot)
             self.critical("自动退役失败")
         while targets:
             logger.info("退役舰娘*%d", len(targets))
@@ -263,25 +310,27 @@ class AzurLaneControl:
         time.sleep(3)
 
     def update_current_scene(self, candidates=None):
+        """判断当前场景"""
         if candidates is None:
             candidates = list(self.scenes.keys())
         else:
             candidates = set(candidates)
             candidates.update(self.global_scenes)
-        
+
         image = get_window_shot(self.hwnd)
         for key in candidates:
             scene = self.scenes[key]
             passed = self.scene_match_check(scene, image)
-            
+
             logger.debug("Check Scene %s: %s=%s", scene["Name"], scene["Condition"], passed)
             if passed:
                 return scene
 
         self.scene_history.append(self.fallback_scene)
         return self.fallback_scene
-    
+
     def wait_for_scene(self, candidates, interval=1, repeat=5):
+        """等待指定的场景或全局场景"""
         if repeat == 0:
             raise ValueError("场景判断失败! 上一场景: %s" % self.current_scene)
         image = get_window_shot(self.hwnd)
@@ -289,20 +338,22 @@ class AzurLaneControl:
             scene = self.scenes[key]
             if self.scene_match_check(scene, image):
                 return scene
-        
+
         for key in self.global_scenes:
             if self.scene_match_check(scene, image):
                 return scene
-        
+
         time.sleep(interval)
         return self.wait_for_scene(candidates, interval, repeat-1)
-        
+
     def get_resource_rect(self, key):
+        """获取资源的bbox"""
         x, y = self.resources[key]["Offset"]
         w, h = self.resources[key]["Size"]
         return (x, y, x+w, y+h)
-        
+
     def check_scene(self):
+        """判断当前场景, 执行对应的操作"""
         scene = self.update_current_scene()
         heartbeat()
         now = time.time()
@@ -324,10 +375,12 @@ class AzurLaneControl:
                 kwargs = action.get("kwargs", {})
                 try:
                     target(*args, **kwargs)
-                except:
+                except Exception:
                     self.critical(traceback.format_exc(), "程序")
             elif action['Type'] == 'Click':
                 self.click_at_resource(action['Target'], action.get("Wait", False))
+            elif action['Type'] == 'DelayedClick':
+                self.delayed_click(action["Target"], action.get("Recheck"), action.get("Delay"))
             else:
                 raise TypeError("Invalid Type %s" % action["Type"])
 

@@ -20,13 +20,17 @@ NEW_SCENES = {
 
 
 class SP4Control(FightMap):
+    """传颂之物联动SP4专用脚本
+    """
     def __init__(self):
         super().__init__()
         self.scenes.update(NEW_SCENES)
-        self.fight_idx_offset = 4
+        self.fight_idx_offset = 3
         self.map_name = "梦幻的交汇SP4"
-    
+
     def reset_fight_index(self):
+        """进入战场，重置虚拟战斗次数，使下一次战斗正常开始
+        """
         self.fight_idx_offset = 0
         fight_idx = self.get_fight_index() + self.fight_idx_offset
         mod = fight_idx % 6
@@ -36,6 +40,8 @@ class SP4Control(FightMap):
             logger.info("Reset Fight Index From %d To %d", fight_idx, fight_idx+6-mod)
 
     def fight(self):
+        """处理战斗逻辑
+        """
         if self.last_scene['Name'] == "战斗地图":
             if len(self.scene_history) > 3 and self.scene_history[-3]['Name'] == "战斗地图":
                 logger.info("第三次回到在战斗界面. 增加虚拟战斗次数")
@@ -108,7 +114,6 @@ class SP4Control(FightMap):
 
 
 if __name__ == "__main__":
-    import datetime
     sp4 = SP4Control()
     start_index = sp4.get_fight_index()
     while True:
@@ -116,5 +121,5 @@ if __name__ == "__main__":
         if sp4.current_scene["Name"] == "活动地图":
             new_fight = sp4.get_fight_index() - start_index
             logger.info("战斗次数:%d(%d)", sp4.get_fight_index(), new_fight)
-            if sp4.get_fight_index() >= 21398+60:
+            if new_fight >= 100:
                 exit(0)
