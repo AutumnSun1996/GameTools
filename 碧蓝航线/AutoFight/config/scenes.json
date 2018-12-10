@@ -41,7 +41,7 @@
   },
   "潜艇未出击": {
     "Name": "潜艇未出击",
-    "Condition": ["All", "潜艇数量1", ["Not", "自律战斗"]],
+    "Condition": "潜艇数量1",
     "Actions": [
       {
         "Type": "DelayedClick",
@@ -52,7 +52,7 @@
       },
       {
         "Type": "Wait",
-        "Time": 0.5
+        "Time": 3
       }
     ]
   },
