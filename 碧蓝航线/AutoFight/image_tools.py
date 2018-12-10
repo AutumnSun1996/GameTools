@@ -12,20 +12,31 @@ from config import logger, config
 
 
 def cv_imread(file_path):
+    """读取图片
+    为支持中文文件名, 不能使用cv.imread
+    """
     return cv.imdecode(np.fromfile(file_path, dtype='uint8'), -1)
 
+
 def cv_save(path, image):
+    """保存图片
+    为支持中文文件名, 不能使用cv.imread
+    """
     ext = os.path.splitext(path)[1]
     data = cv.imencode(ext, image)[1]
     data.tofile(path)
-    
+
+
 def rescale_item(item, rx, ry):
+    """将每个点按rx, ry进行缩放"""
     if isinstance(item[0], int):
         return (int(np.round(item[0] * rx)), int(np.round(item[1] * ry)))
     else:
         return (rescale_item(sub, rx, ry) for sub in item)
 
+
 def update_resource(resource, folder='.'):
+    """根据当前配置更新资源属性, 加载图片并进行缩放"""
     dw = config.getint("Device", "MainWidth")
     dh = config.getint("Device", "MainHeight")
     sdw, sdh = resource["MainSize"]
@@ -37,27 +48,26 @@ def update_resource(resource, folder='.'):
         resource["ImageData"] = cv.resize(cv_imread(img_path), resource["Size"], cv.INTER_CUBIC)
 
 
-def cv_save(file_path, image):
-    ext = os.path.splitext(file_path)[1]
-    data = cv.imencode(ext, image)[1]
-    data.tofile(file_path)
-
 def cv_crop(data, rect):
+    """图片裁剪"""
     min_x, min_y, max_x, max_y = rect
     return data[min_y:max_y, min_x:max_x]
 
 
 def get_diff(a, b):
+    """比较图片差异"""
     return cv.matchTemplate(a, b, cv.TM_SQDIFF_NORMED)[0, 0]
 
 
 def get_match(image, needle):
+    """在image中搜索needle"""
     match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, np.array(min_loc)
 
+
 def detect_window_size(hwnd):
-    # 获取句柄窗口的大小信息
+    """获取窗口的大小信息"""
     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
     dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
     w = right - left
@@ -66,11 +76,11 @@ def detect_window_size(hwnd):
         w = int(w * dpi / 96)
         h = int(h * dpi / 96)
     return w, h
-    
+
 
 def get_window_shot(hwnd):
     # 对后台应用程序截图，程序窗口可以被覆盖，但如果最小化后只能截取到标题栏、菜单栏等。
-    
+
     # 使用自定义的窗口边缘和大小设置
     dx = config.getint("Device", "EdgeOffsetX")
     dy = config.getint("Device", "EdgeOffsetY")
@@ -80,7 +90,7 @@ def get_window_shot(hwnd):
     if dx+w > window_w or dy+h > window_h:
         raise ValueError("截图区域超出窗口! 请检查配置文件")
     # logger.debug("截图: %dx%d at %dx%d", w, h, dx, dy)
-    
+
     # 返回句柄窗口的设备环境、覆盖整个窗口，包括非客户区，标题栏，菜单，边框
     hwndDC = win32gui.GetWindowDC(hwnd)
     # 创建设备描述表
