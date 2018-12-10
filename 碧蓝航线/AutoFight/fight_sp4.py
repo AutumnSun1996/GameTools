@@ -13,7 +13,16 @@ NEW_SCENES = {
         "Actions": [
             {"Type": "Click", "Target": "梦幻的交汇SP4"},
             {"Type": "Wait", "Time": 0.5},
-            {"Type": "InnerCall", "Target": "reset_fight_index"}
+        ]
+    },
+    "舰队选择": {
+        "Name": "舰队选择",
+        "Condition": "舰队选择-立刻前往",
+        "Actions": [
+            {"Type": "InnerCall", "Target": "mood_detect"},
+            {"Type": "Click", "Target": "舰队选择-立刻前往"},
+            {"Type": "InnerCall", "Target": "reset_fight_index"},
+            {"Type": "Wait", "Time": 4}
         ]
     }
 }
@@ -22,6 +31,7 @@ NEW_SCENES = {
 class SP4Control(FightMap):
     """传颂之物联动SP4专用脚本
     """
+
     def __init__(self):
         super().__init__()
         self.scenes.update(NEW_SCENES)
@@ -121,5 +131,5 @@ if __name__ == "__main__":
         if sp4.current_scene["Name"] == "活动地图":
             new_fight = sp4.get_fight_index() - start_index
             logger.info("战斗次数:%d(%d)", sp4.get_fight_index(), new_fight)
-            if new_fight >= 100:
+            if new_fight >= 40:
                 exit(0)
