@@ -851,9 +851,13 @@
       1920,
       1080
     ],
-    "Offset": [
-      -57,
-      109
+    "ClickOffset": [
+      -67,
+      99
+    ],
+    "ClickSize": [
+      20,
+      20
     ],
     "Positions": [
       [
@@ -960,9 +964,13 @@
       1920,
       1080
     ],
-    "Offset": [
-      -57,
-      109
+    "ClickOffset": [
+      -67,
+      99
+    ],
+    "ClickSize": [
+      20,
+      20
     ],
     "Positions": [
       [
