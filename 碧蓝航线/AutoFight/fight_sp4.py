@@ -31,12 +31,12 @@ NEW_SCENES = {
 class SP4Control(FightMap):
     """传颂之物联动SP4专用脚本
     """
+    map_name = "梦幻的交汇SP4"
 
     def __init__(self):
         super().__init__()
         self.scenes.update(NEW_SCENES)
         self.fight_idx_offset = 3
-        self.map_name = "梦幻的交汇SP4"
 
     def reset_fight_index(self):
         """进入战场，重置虚拟战斗次数，使下一次战斗正常开始
