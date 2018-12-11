@@ -1,19 +1,15 @@
 """
 碧蓝航线配置项
 """
-import os
-import sys
-import json
 import logging
+import logging.config
 import socket
 from configparser import ConfigParser
 
-config_file = "config-Company.ini"
-
-logging.basicConfig(stream=sys.stdout, level=logging.INFO,
-                    format='%(asctime)s %(filename)s[%(lineno)d] - %(levelname)s: %(message)s')
+logging.config.fileConfig("logging.conf")
 logger = logging.getLogger()
 
+config_file = "config-Company.ini"
 
 class Config(ConfigParser):
     def save(self):
