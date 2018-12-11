@@ -54,16 +54,22 @@ def cv_crop(data, rect):
     return data[min_y:max_y, min_x:max_x]
 
 
-def get_diff(a, b):
-    """比较图片差异"""
-    return cv.matchTemplate(a, b, cv.TM_SQDIFF_NORMED)[0, 0]
 
+def get_all_match(image, needle):
+    """在image中搜索needle"""
+    match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
+    return match
 
 def get_match(image, needle):
     """在image中搜索needle"""
-    match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
+    match = get_all_match(image, needle)
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, np.array(min_loc)
+
+def get_diff(a, b):
+    """比较图片差异"""
+    return get_match(a, b)[0]
+
 
 
 def detect_window_size(hwnd):
