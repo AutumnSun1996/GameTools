@@ -32,7 +32,9 @@ def rescale_item(item, rx, ry):
     if isinstance(item[0], int):
         return (int(np.round(item[0] * rx)), int(np.round(item[1] * ry)))
     else:
-        return (rescale_item(sub, rx, ry) for sub in item)
+        # 解决退役失败问题
+        # (x for x in xs) 返回的是生成器, 改为返回list
+        return [rescale_item(sub, rx, ry) for sub in item]
 
 
 def update_resource(resource, folder='.'):

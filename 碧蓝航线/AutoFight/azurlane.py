@@ -6,6 +6,7 @@ By AutumnSun
 import time
 
 from config import logger
+from win32_tools import rand_click
 from simulator import SimulatorControl
 
 
@@ -84,12 +85,11 @@ class AzurLaneControl(SimulatorControl):
         waiting = 1
         targets = self.select_ships()
         if not targets:
-            # TODO: 解决偶尔的退役失败
             self.critical("自动退役失败")
         while targets:
             logger.info("退役舰娘*%d", len(targets))
-            for name in targets:
-                self.click_at_resource(name)
+            for rect in targets:
+                rand_click(self.hwnd, rect)
                 time.sleep(0.3)
 
             logger.debug("确定")

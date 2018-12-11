@@ -68,7 +68,6 @@ class SimulatorControl:
         """
         if reshot:
             self.make_screen_shot()
-        logger.debug("Check Resource %s, reshot=%s", name, reshot)
         if name not in self.resources:
             logger.warning("No resource: %s", name)
             return False
@@ -94,14 +93,14 @@ class SimulatorControl:
             res = []
             for x, y in info["Positions"]:
                 cropped = cv_crop(self.screen, (x, y, x+w, y+h))
-                diff = get_diff(self.screen, target)
-                if diff <= info.get('MaxDiff', 0.06):
+                diff = get_diff(cropped, target)
+                if diff <= info.get('MaxDiff', 0.02):
                     res.append((x, y))
         elif info["Type"] == "MultiDynamic":
             target = info['ImageData']
             match = get_all_match(self.screen, target)
             res = list(zip(*np.where(match < 0.02)))
-        logger.debug("Check Resource Result: %s=%s", name, res)
+        logger.debug("Check Resource(reshot=%s): %s=%s", reshot, name, res)
         return res
 
     def wait_resource(self, name, interval=1, repeat=5):
@@ -142,9 +141,10 @@ class SimulatorControl:
     def scene_match_check(self, scene, reshot):
         """检查场景是否与画面一致
         """
-        # logger.debug("Check scene: %s", scene)
+        logger.debug("Check scene: %s", scene)
         res = self.parse_condition(scene["Condition"], reshot)
         if res:
+            logger.debug("Scene Matched: %s", scene)
             self.scene_history.append(scene)
         return res
 
@@ -173,7 +173,7 @@ class SimulatorControl:
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
         logger.critical(message)
-        name = "Critical-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
+        name = "logs/Critical-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
         cv_save(name, self.screen)
 
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
@@ -188,7 +188,7 @@ class SimulatorControl:
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
         logger.error(message)
-        name = "Error-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
+        name = "logs/Error-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
         cv_save(name, self.screen)
 
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
@@ -212,10 +212,15 @@ class SimulatorControl:
             self.go_top()
             exit(0)
 
-    def update_current_scene(self, candidates=None):
+    def update_current_scene_old(self, candidates=None):
         """判断当前场景"""
         if candidates is None:
-            candidates = set(self.scenes.keys())
+            if self.current_scene is None or self.current_scene.get("Next") is None:
+                candidates = list(self.scenes.keys())
+            else:
+                candidates = self.current_scene["Next"]
+                logger.info("Next for %s: %s", self.current_scene["Name"], candidates)
+
         self.make_screen_shot()
         for key in candidates:
             scene = self.scenes[key]
@@ -228,22 +233,38 @@ class SimulatorControl:
         self.scene_history.append(self.fallback_scene)
         return self.fallback_scene
 
-    def wait_for_scene(self, candidates, interval=1, repeat=5):
+    def update_current_scene(self, candidates=None, interval=1, repeat=5):
         """等待指定的场景或全局场景"""
         if repeat == 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
             # 若选择忽略错误，则返回“无匹配场景”
             return self.fallback_scene
-        candidates = set(candidates)
+
+        if candidates is None:
+            if self.current_scene is None or self.current_scene.get("Next") is None:
+                candidates = list(self.scenes.keys())
+            else:
+                candidates = self.current_scene["Next"]
+                if isinstance(candidates, dict):
+                    interval = candidates.get("Interval", interval)
+                    repeat = candidates.get("Repeat", repeat)
+                    candidates = candidates["Candidates"]
+                logger.info("Next for %s: %s", self.current_scene["Name"], candidates)
+
         self.make_screen_shot()
+        for key in candidates:
+            scene = self.scenes[key]
+            if self.scene_match_check(scene, False):
+                return scene
+
         for key in self.scenes:
             scene = self.scenes[key]
-            if key in candidates or scene.get("Global"):
+            if scene.get("Global"):
                 if self.scene_match_check(scene, False):
                     return scene
 
         time.sleep(interval)
-        return self.wait_for_scene(candidates, interval, repeat-1)
+        return self.update_current_scene(candidates, interval, repeat-1)
 
     def get_resource_rect(self, key):
         """获取资源的bbox"""
