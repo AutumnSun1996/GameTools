@@ -6,7 +6,7 @@ from config import logger, config
 from image_tools import get_match
 from win32_tools import drag, click_at
 
-from blhx import AzurLaneControl
+from azurlane import AzurLaneControl
 
 
 def get_map_pos(origin, origin_name, target_name):
