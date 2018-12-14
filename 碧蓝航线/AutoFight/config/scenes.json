@@ -19,7 +19,8 @@
         "Type": "InnerCall",
         "Target": "retire"
       }
-    ]
+    ],
+    "Next": [["History", 1], ["History", 2]]
   },
   "非自律战斗中": {
     "Name": "非自律战斗中",

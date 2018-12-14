@@ -1,0 +1,12 @@
+{
+    "Name": "7-2",
+    "Map": [
+        "ENEENOEB"
+    ],
+    "Strategy": {
+        "Type": "Search",
+        "FightBeforeBoss": 6,
+        "FleetForBoss": 2
+    },
+    "Anchors": {}
+}

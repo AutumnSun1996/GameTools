@@ -312,158 +312,6 @@
     "Type": "Static",
     "Image": "梦幻的交汇.png"
   },
-  "梦幻的交汇SP4-A4": {
-    "Name": "梦幻的交汇SP4-A4",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      70,
-      70
-    ],
-    "Size": [
-      100,
-      150
-    ],
-    "Type": "Anchor",
-    "MapName": "梦幻的交汇SP4",
-    "OnMap": "A4",
-    "Image": "梦幻的交汇SP4-A4.png"
-  },
-  "梦幻的交汇SP4-B6": {
-    "Name": "梦幻的交汇SP4-B6",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      80,
-      80
-    ],
-    "Size": [
-      180,
-      100
-    ],
-    "Type": "Anchor",
-    "MapName": "梦幻的交汇SP4",
-    "OnMap": "B6",
-    "Image": "梦幻的交汇SP4-B6.png"
-  },
-  "梦幻的交汇SP4-E1-Boss": {
-    "Name": "梦幻的交汇SP4-E1-Boss",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      50,
-      70
-    ],
-    "Size": [
-      110,
-      46
-    ],
-    "Type": "Anchor",
-    "MapName": "梦幻的交汇SP4",
-    "OnMap": "E1",
-    "Image": "梦幻的交汇SP4-E1-Boss.png"
-  },
-  "梦幻的交汇SP4-E5": {
-    "Name": "梦幻的交汇SP4-E5",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      75,
-      30
-    ],
-    "Size": [
-      135,
-      90
-    ],
-    "Type": "Anchor",
-    "OnMap": "E5",
-    "Image": "梦幻的交汇SP4-E5.png",
-    "MapName": "梦幻的交汇SP4"
-  },
-  "梦幻的交汇SP4-G7": {
-    "Name": "梦幻的交汇SP4-G7",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      80,
-      80
-    ],
-    "Size": [
-      180,
-      100
-    ],
-    "Type": "Anchor",
-    "OnMap": "G7",
-    "Image": "梦幻的交汇SP4-G7.png",
-    "MapName": "梦幻的交汇SP4"
-  },
-  "梦幻的交汇SP4-H5": {
-    "Name": "梦幻的交汇SP4-H5",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      80,
-      60
-    ],
-    "Size": [
-      180,
-      100
-    ],
-    "Type": "Anchor",
-    "MapName": "梦幻的交汇SP4",
-    "OnMap": "H5",
-    "Image": "梦幻的交汇SP4-H5.png"
-  },
-  "梦幻的交汇SP4-H7": {
-    "Name": "梦幻的交汇SP4-H7",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      80,
-      50
-    ],
-    "Size": [
-      180,
-      100
-    ],
-    "Type": "Anchor",
-    "MapName": "梦幻的交汇SP4",
-    "OnMap": "H7",
-    "Image": "梦幻的交汇SP4-H7.png"
-  },
-  "梦幻的交汇SP4-I4": {
-    "Name": "梦幻的交汇SP4-I4",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      90,
-      70
-    ],
-    "Size": [
-      140,
-      100
-    ],
-    "Type": "Anchor",
-    "MapName": "梦幻的交汇SP4",
-    "OnMap": "I4",
-    "Image": "梦幻的交汇SP4-I4.png"
-  },
   "梦幻的交汇SP4": {
     "Name": "梦幻的交汇SP4",
     "MainSize": [
@@ -1087,5 +935,59 @@
     ],
     "Type": "Static",
     "Image": "降序.png"
+  },
+  "敌人1": {
+    "Name": "敌人1",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      0,
+      -10
+    ],
+    "Size": [
+      33,
+      33
+    ],
+    "SearchArea": "可移动区域",
+    "Type": "MultiDynamic",
+    "Image": "enemy1.png"
+  },
+  "敌人2": {
+    "Name": "敌人2",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      0,
+      -10
+    ],
+    "Size": [
+      33,
+      33
+    ],
+    "SearchArea": "可移动区域",
+    "Type": "MultiDynamic",
+    "Image": "enemy2.png"
+  },
+  "敌人3": {
+    "Name": "敌人3",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      0,
+      -10
+    ],
+    "Size": [
+      33,
+      33
+    ],
+    "SearchArea": "可移动区域",
+    "Type": "MultiDynamic",
+    "Image": "enemy3.png"
   }
 }

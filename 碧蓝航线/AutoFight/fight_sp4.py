@@ -4,7 +4,9 @@
 import time
 
 from config import logger
+from image_tools import load_map
 from map_anchor import FightMap
+
 
 NEW_SCENES = {
     "活动地图": {
@@ -37,6 +39,8 @@ class SP4Control(FightMap):
         super().__init__()
         self.scenes.update(NEW_SCENES)
         self.fight_idx_offset = 3
+        self.map_data = load_map(self.map_name)
+        self.resources.update(self.map_data["Anchors"])
 
     def reset_fight_index(self):
         """进入战场，重置虚拟战斗次数，使下一次战斗正常开始
@@ -131,5 +135,5 @@ if __name__ == "__main__":
         if sp4.current_scene["Name"] == "活动地图":
             new_fight = sp4.get_fight_index() - start_index
             logger.info("战斗次数:%d(%d)", sp4.get_fight_index(), new_fight)
-            if new_fight >= 40:
+            if new_fight >= 0:
                 exit(0)
