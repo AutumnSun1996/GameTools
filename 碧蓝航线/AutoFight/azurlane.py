@@ -11,7 +11,7 @@ from simulator import SimulatorControl
 
 
 class AzurLaneControl(SimulatorControl):
-    """模拟器通用控制
+    """碧蓝航线通用控制
     """
     retire_choices = ["退役-白色舰娘", "退役-蓝色舰娘"]
 
@@ -39,7 +39,7 @@ class AzurLaneControl(SimulatorControl):
 
     def fight(self):
         """处理战斗内容. 随每个地图变化"""
-        raise NotImplementedError()
+        pass
 
     def mood_detect(self):
         """舰娘心情检测"""
