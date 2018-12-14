@@ -117,7 +117,7 @@ class SimulatorControl:
 
     def wait_till_scene(self, name, interval=1, repeat=5):
         """等待给定场景"""
-        condition = self.scenes["选择技能"]["Condition"]
+        condition = self.scenes[name]["Condition"]
         return self.wait_till(condition, interval, repeat-1)
 
     def delayed_click(self, name, condition=None, delay=None):
