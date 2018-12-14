@@ -381,5 +381,56 @@
     ],
     "Type": "Dynamic",
     "Image": "Quick.png"
+  },
+  "宝具背景1": {
+    "Name": "宝具背景1",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      340,
+      120
+    ],
+    "Size": [
+      140,
+      180
+    ],
+    "Type": "Static",
+    "Image": null
+  },
+  "宝具背景2": {
+    "Name": "宝具背景2",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      570,
+      120
+    ],
+    "Size": [
+      140,
+      180
+    ],
+    "Type": "Static",
+    "Image": null
+  },
+  "宝具背景3": {
+    "Name": "宝具背景3",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      800,
+      120
+    ],
+    "Size": [
+      140,
+      180
+    ],
+    "Type": "Static",
+    "Image": null
   }
 }
