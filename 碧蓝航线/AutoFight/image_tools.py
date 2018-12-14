@@ -1,12 +1,12 @@
 import os
+import ctypes
+import json
 
 import cv2.cv2 as cv
 import numpy as np
-import ctypes
 import win32con
 import win32gui
 import win32ui
-
 
 from config import logger, config
 
@@ -15,7 +15,7 @@ def cv_imread(file_path):
     """读取图片
     为支持中文文件名, 不能使用cv.imread
     """
-    return cv.imdecode(np.fromfile(file_path, dtype='uint8'), -1)
+    return cv.imdecode(np.fromfile(file_path, dtype='uint8'), cv.IMREAD_UNCHANGED)
 
 
 def cv_save(path, image):
@@ -29,15 +29,22 @@ def cv_save(path, image):
 
 def rescale_item(item, rx, ry):
     """将每个点按rx, ry进行缩放"""
-    if isinstance(item[0], int):
-        return (int(np.round(item[0] * rx)), int(np.round(item[1] * ry)))
-    else:
+    if isinstance(item, str):
+        return item
+    if isinstance(item, dict):
+        return {key: rescale_item(val, rx, ry) for key, val in item.items()}
+    if isinstance(item, list):
+        if isinstance(item[0], int):
+            return (int(np.round(item[0] * rx)), int(np.round(item[1] * ry)))
+        if isinstance(item[0], float):
+            return (item[0] * rx, item[1] * ry)
         # 解决退役失败问题
         # (x for x in xs) 返回的是生成器, 改为返回list
         return [rescale_item(sub, rx, ry) for sub in item]
+    raise ValueError("Invalid Item %s" % item)
 
 
-def update_resource(resource, folder='.'):
+def update_resource(resource):
     """根据当前配置更新资源属性, 加载图片并进行缩放"""
     dw = config.getint("Device", "MainWidth")
     dh = config.getint("Device", "MainHeight")
@@ -46,8 +53,35 @@ def update_resource(resource, folder='.'):
         if isinstance(resource[key], list):
             resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
     if resource.get("Image"):
-        img_path = os.path.join(folder, resource["Image"])
-        resource["ImageData"] = cv.resize(cv_imread(img_path), resource["Size"], cv.INTER_CUBIC)
+        load_image(resource)
+
+
+def load_image(resource):
+    img_path = os.path.join(config.get("Path", "ResourcesFolder"), resource["Image"])
+    resource["ImageData"] = cv.resize(cv_imread(img_path), resource["Size"], cv.INTER_CUBIC)
+    return resource["ImageData"]
+
+
+def load_scenes():
+    with open(config.get("Path", "Scenes"), "r", -1, "UTF-8") as fl:
+        items = json.load(fl)
+    return items
+
+
+def load_resources():
+    with open(config.get("Path", "Resources"), "r", -1, "UTF-8") as fl:
+        items = json.load(fl)
+    for resource in items.values():
+        update_resource(resource)
+    return items
+
+
+def load_map(name):
+    with open("maps/%s.json" % name, "r", -1, "UTF-8") as fl:
+        items = json.load(fl)
+    for val in items["Anchors"].values():
+        update_resource(val)
+    return items
 
 
 def cv_crop(data, rect):
@@ -56,11 +90,24 @@ def cv_crop(data, rect):
     return data[min_y:max_y, min_x:max_x]
 
 
+def split_bgra(bgra):
+    """将BGRA图像分离为BGR图像和Mask"""
+    bgr = bgra[:, :, :3]
+    h, w = bgr.shape[:2]
+    a = bgra[:, :, 3].reshape(h, w, 1)
+    mask = np.concatenate((a, a, a), axis=2)
+    return bgr, mask
+
 
 def get_all_match(image, needle):
     """在image中搜索needle"""
-    match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
+    if needle.shape[2] == 4:
+        needle, mask = split_bgra(needle)
+        match = 1 - cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask)
+    else:
+        match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
     return match
+
 
 def get_match(image, needle):
     """在image中搜索needle"""
@@ -68,10 +115,10 @@ def get_match(image, needle):
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, np.array(min_loc)
 
+
 def get_diff(a, b):
     """比较图片差异"""
     return get_match(a, b)[0]
-
 
 
 def detect_window_size(hwnd):
@@ -129,18 +176,11 @@ def get_window_shot(hwnd):
 
 if __name__ == "__main__":
     import win32_tools
+    import datetime
     logger.setLevel("DEBUG")
     nox_hwnd = win32_tools.get_window_hwnd("碧蓝航线模拟器")
     print(nox_hwnd)
-    cv.imshow("ScreenShot", get_window_shot(nox_hwnd))
+    screen = get_window_shot(nox_hwnd)
+    cv_save("images/shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen)
+    cv.imshow("ScreenShot", screen)
     cv.waitKey(0)
-    # screen_shot = get_window_shot(nox_hwnd)
-
-    # target = cv_imread("images/作战补给.png")
-    # diff, pos = get_match(screen_shot, target)
-    # print(diff, pos)
-
-    # anchor = cv_imread("images/SP地图.png")
-    # diff, pos = get_match(screen_shot, anchor)
-    # print(diff, pos)
-    # cv.imwrite("images/screen.png", screen_shot)

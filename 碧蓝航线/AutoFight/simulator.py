@@ -16,7 +16,7 @@ import win32con
 import win32api
 
 from config import logger, config
-from image_tools import get_window_shot, update_resource, cv_crop, get_diff, get_match, get_all_match, cv_save
+from image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, cv_save, load_scenes, load_resources
 from win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 
@@ -34,13 +34,8 @@ class SimulatorControl:
         self.scene_history = deque(maxlen=10)
         self.last_check = 0
         self.screen = None
-        with open(config.get("Path", "Scenes"), "r", -1, "UTF-8") as fl:
-            self.scenes = json.load(fl)
-        with open(config.get("Path", "Resources"), "r", -1, "UTF-8") as fl:
-            self.resources = json.load(fl)
-        folder = config.get("Path", "ResourcesFolder")
-        for val in self.resources.values():
-            update_resource(val, folder)
+        self.scenes = load_scenes()
+        self.resources = load_resources()
 
     @property
     def last_scene(self):
@@ -74,7 +69,7 @@ class SimulatorControl:
         info = self.resources[name]
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
-            if 'ImageData' not in info:
+            if not info.get("Image"):
                 self.error("No ImageData for %s" % info)
                 return False
             target = info['ImageData']
@@ -253,7 +248,18 @@ class SimulatorControl:
 
         self.make_screen_shot()
         for key in candidates:
-            scene = self.scenes[key]
+            if isinstance(key, (list, tuple)):
+                if key[0] == "History":
+                    if len(self.scene_history) > key[1]:
+                        scene = self.scene_history[-key[1]-1]
+                    else:
+                        logger.warning("Ignore %s for len(history)=%d", key, len(self.scene_history))
+                        continue
+                else:
+                    self.error("Invalid Scene %s", key)
+                    continue
+            else:
+                scene = self.scenes[key]
             if self.scene_match_check(scene, False):
                 return scene
 
