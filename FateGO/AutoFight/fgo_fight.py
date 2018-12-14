@@ -1,6 +1,6 @@
 import numpy as np
 
-from image_tools import cv_crop, extract_text, get_all_match
+from image_tools import cv_crop, extract_text, get_all_match, get_match
 from simulator import SimulatorControl
 
 
@@ -34,8 +34,28 @@ class FateGrandOrder(SimulatorControl):
                 self.wait_till_scene("选择技能")
                 self.wait(0.2)
 
+    def update_background(self):
+        """保存当前画面为背景, 供之后的分析使用
+        """
+        for i in range(3):
+            name = '宝具背景%d' % (i+1)
+            rect = self.get_resource_rect(name)
+            self.resources[name]['ImageData'] = cv_crop(self.screen, rect)
+
+    def choose_match(self, image, candidates):
+        best = None
+        best_diff = 1
+        for name in candidates:
+            data = self.resources[name]
+            diff, _ = get_match(image, data['ImageData'])
+            if diff < best_diff:
+                best_diff = diff
+                best = name
+        return best_diff, best
+
     def extract_card_info(self):
-        pass
+        for cards in ['Buster', 'Arts', 'Quick']:
+            pass
 
     def choose_card(self):
         pass
