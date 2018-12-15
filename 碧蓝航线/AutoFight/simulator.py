@@ -16,7 +16,7 @@ import win32con
 import win32api
 
 from config import logger, config
-from image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, cv_save, load_scenes, load_resources
+from image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, cv_save, load_scenes, load_resources, load_image
 from win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 
@@ -65,47 +65,63 @@ class SimulatorControl:
             self.make_screen_shot()
         if name not in self.resources:
             logger.warning("No resource: %s", name)
-            return False
+            return False, []
         info = self.resources[name]
+        if not info.get("Image"):
+            self.error("No ImageData for %s" % info)
+            return False, []
+
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
-            if not info.get("Image"):
-                self.error("No ImageData for %s" % info)
-                return False
             target = info['ImageData']
             cropped = cv_crop(self.screen, rect)
             diff = get_diff(target, cropped)
             # 有位置限制, 可以使用较为宽松的阈值
-            res = diff <= info.get('MaxDiff', 0.06)
+            ret = diff <= info.get('MaxDiff', 0.06)
+            if ret:
+                pos = rect[:2]
+            else:
+                pos = []
         elif info["Type"] in {"Dynamic", "Anchor"}:
             target = info['ImageData']
-            diff, res = get_match(self.screen, target)
+            diff, pos = get_match(self.screen, target)
             if diff > info.get('MaxDiff', 0.02):
-                res = False
+                ret = False
+                pos = []
+            else:
+                ret = True
         elif info["Type"] == "MultiStatic":
             target = info['ImageData']
             w, h = info["Size"]
-            res = []
+            pos = []
+            ret = False
             for x, y in info["Positions"]:
                 cropped = cv_crop(self.screen, (x, y, x+w, y+h))
                 diff = get_diff(cropped, target)
                 if diff <= info.get('MaxDiff', 0.02):
-                    res.append((x, y))
+                    pos.append((x, y))
+                    ret = True
         elif info["Type"] == "MultiDynamic":
             target = info['ImageData']
             match = get_all_match(self.screen, target)
-            res = list(zip(*np.where(match < 0.02)))
-        logger.debug("Check Resource(reshot=%s): %s=%s", reshot, name, res)
-        return res
+            pos = list(zip(*np.where(match < 0.02)))
+            ret = bool(pos)
+        else:
+            self.critical("Invalid Type %s", info['Type'])
+        logger.debug("Check Resource(reshot=%s): %s=%s", reshot, name, pos)
+        return ret, pos
+
+    def wait(self, dt):
+        time.sleep(dt)
 
     def wait_resource(self, name, interval=1, repeat=5):
         """等待资源出现在画面内"""
         if repeat < 0:
             self.error("Can't find resource %s" % name)
             return False
-        if self.resource_in_screen(name):
+        if self.resource_in_screen(name)[0]:
             return True
-        time.sleep(interval)
+        self.wait(interval)
         return self.wait_resource(name, interval, repeat-1)
 
     def delayed_click(self, name, condition=None, delay=None):
@@ -148,7 +164,7 @@ class SimulatorControl:
         """
         result = False
         if isinstance(condition, str):
-            result = self.resource_in_screen(condition, reshot)
+            result, _ = self.resource_in_screen(condition, reshot)
         elif not isinstance(condition, (list, tuple)):
             self.error("Invalid Condition: %s" % condition)
         elif condition[0] == "All":
@@ -194,6 +210,16 @@ class SimulatorControl:
         if res == win32con.IDNO:
             self.go_top()
             exit(0)
+
+    def wait_mannual(self):
+        """等待手动操作"""
+        logger.info("等待手动操作")
+
+        info = "等待手动指令."
+        flag = win32con.MB_ICONINFORMATION | win32con.MB_OK | win32con.MB_TOPMOST \
+            | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        title = "碧蓝航线自动脚本 - 等待手动指令"
+        res = win32api.MessageBox(0, info, title, flag)
 
     def notice(self, message=None, title="", action="继续"):
         """提醒"""
@@ -269,7 +295,7 @@ class SimulatorControl:
                 if self.scene_match_check(scene, False):
                     return scene
 
-        time.sleep(interval)
+        self.wait(interval)
         return self.update_current_scene(candidates, interval, repeat-1)
 
     def get_resource_rect(self, key):
@@ -296,7 +322,7 @@ class SimulatorControl:
                 continue
 
             if action['Type'] == 'Wait':
-                time.sleep(action['Time'])
+                self.wait(action['Time'])
             elif action['Type'] == 'InnerCall':
                 target = getattr(self, action['Target'])
                 args = action.get("args", [])
