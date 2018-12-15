@@ -510,23 +510,6 @@
     "Type": "Static",
     "Image": "立刻前往.png"
   },
-  "船坞已满-内容": {
-    "Name": "船坞已满-内容",
-    "MainSize": [
-      1920,
-      1080
-    ],
-    "Offset": [
-      600,
-      400
-    ],
-    "Size": [
-      800,
-      200
-    ],
-    "Type": "Static",
-    "Image": "船坞已满-内容.png"
-  },
   "船坞已满-整理": {
     "Name": "船坞已满-整理",
     "MainSize": [
@@ -1023,5 +1006,39 @@
     ],
     "Type": "Anchor",
     "Image": "Ammo.png"
+  },
+  "Pointer": {
+    "Name": "Pointer",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      45,
+      200
+    ],
+    "Size": [
+      91,
+      56
+    ],
+    "Type": "Anchor",
+    "Image": "Pointer.png"
+  },
+  "问号点": {
+    "Name": "问号点",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      30,
+      70
+    ],
+    "Size": [
+      60,
+      40
+    ],
+    "Type": "Anchor",
+    "Image": "问号点.png"
   }
 }
