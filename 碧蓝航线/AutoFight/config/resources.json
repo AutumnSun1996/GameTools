@@ -989,5 +989,22 @@
     "SearchArea": "可移动区域",
     "Type": "MultiDynamic",
     "Image": "enemy3.png"
+  },
+  "Lv": {
+    "Name": "Lv",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      -8,
+      -25
+    ],
+    "Size": [
+      20,
+      20
+    ],
+    "Type": "Anchor",
+    "Image": "Lv.png"
   }
 }
