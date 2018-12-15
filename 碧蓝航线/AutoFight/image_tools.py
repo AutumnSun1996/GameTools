@@ -79,6 +79,8 @@ def load_resources():
 def load_map(name):
     with open("maps/%s.json" % name, "r", -1, "UTF-8") as fl:
         items = json.load(fl)
+    for val in items["Resources"].values():
+        update_resource(val)
     for val in items["Anchors"].values():
         update_resource(val)
     return items
