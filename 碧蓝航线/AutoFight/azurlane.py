@@ -57,7 +57,7 @@ class AzurLaneControl(SimulatorControl):
             action = "继续战斗"
         for color in colors:
             name = "{0}-{1[0]}脸".format(self.current_scene['Name'], color)
-            if self.resource_in_screen(name) is not False:
+            if self.resource_in_screen(name)[0]:
                 color[1](
                     "舰娘心情值低(%s)" % (name),
                     "舰娘心情值", action)
@@ -71,14 +71,14 @@ class AzurLaneControl(SimulatorControl):
         for name in self.retire_choices:
             dx, dy = self.resources[name].get("ClickOffset", (-10, -10))
             w, h = self.resources[name].get("ClickSize", (20, 20))
-            for x, y in self.resource_in_screen(name):
+            for x, y in self.resource_in_screen(name)[1]:
                 targets.append((x+dx, y+dy, x+dx+w, y+dy+h))
         logger.info("select_ships: %s", targets)
         return targets[:10]
 
     def retire(self):
         """执行退役操作"""
-        if self.resource_in_screen("降序"):
+        if self.resource_in_screen("降序")[0]:
             logger.debug("切换倒序显示")
             self.click_at_resource("降序")
             time.sleep(1)
