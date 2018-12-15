@@ -1006,5 +1006,22 @@
     ],
     "Type": "Anchor",
     "Image": "Lv.png"
+  },
+  "Ammo": {
+    "Name": "Ammo",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      -20,
+      160
+    ],
+    "Size": [
+      36,
+      36
+    ],
+    "Type": "Anchor",
+    "Image": "Ammo.png"
   }
 }
