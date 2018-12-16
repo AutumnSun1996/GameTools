@@ -1005,7 +1005,8 @@
       36
     ],
     "Type": "Anchor",
-    "Image": "Ammo.png"
+    "Image": "Ammo.png",
+    "MaxDiff": 0.06
   },
   "Pointer": {
     "Name": "Pointer",
@@ -1022,7 +1023,8 @@
       56
     ],
     "Type": "Anchor",
-    "Image": "Pointer.png"
+    "Image": "Pointer.png",
+    "MaxDiff": 0.06
   },
   "问号点": {
     "Name": "问号点",
@@ -1048,14 +1050,50 @@
       720
     ],
     "Offset": [
-      45,
-      50
+      30,
+      20
     ],
     "Size": [
-      110,
-      46
+      46,
+      26
     ],
     "Type": "Anchor",
-    "Image": "Boss.png"
+    "Image": "Boss.png",
+    "MaxDiff": 0.06
+  },
+  "Boss-Bigger": {
+    "Name": "Boss-Bigger",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      30,
+      20
+    ],
+    "Size": [
+      56,
+      32
+    ],
+    "Type": "Anchor",
+    "Image": "Boss.png",
+    "MaxDiff": 0.06
+  },
+  "收起右侧菜单": {
+    "Name": "收起右侧菜单",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      1056,
+      346
+    ],
+    "Size": [
+      28,
+      45
+    ],
+    "Type": "Static",
+    "Image": "收起右侧菜单.png"
   }
 }
