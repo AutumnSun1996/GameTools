@@ -52,6 +52,7 @@
       ],
       "Actions": [
         {"Type": "Click", "Target": "切换舰队"},
+        {"Type": "Wait", "Time": 2},
         {"Type": "InnerCall", "Target": "search_for_boss"}
       ]
     }
