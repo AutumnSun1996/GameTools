@@ -112,7 +112,7 @@ class FightMap(AzurLaneControl):
         if not ret:
             logger.debug("未找到anchor, 重置地图")
             self.reset_map()
-            self.click_at_map(target, repeat+1)
+            FightMap.click_at_map(self, target, repeat+1)
             return
 
         x, y = target_pos
@@ -120,7 +120,7 @@ class FightMap(AzurLaneControl):
         if x < x_min or x > x_max or y < y_min or y > y_max:
             logger.debug("目标不在中间区域")
             self.move_map_to(x, y)
-            self.click_at_map(target, repeat+1)
+            FightMap.click_at_map(self, target, repeat+1)
             return
         logger.info("点击%s: (%d, %d)", target, x, y)
         click_at(self.hwnd, x, y)
