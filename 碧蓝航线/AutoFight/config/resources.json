@@ -1040,5 +1040,22 @@
     ],
     "Type": "Anchor",
     "Image": "问号点.png"
+  },
+  "Boss": {
+    "Name": "Boss",
+    "MainSize": [
+      1280,
+      720
+    ],
+    "Offset": [
+      45,
+      50
+    ],
+    "Size": [
+      110,
+      46
+    ],
+    "Type": "Anchor",
+    "Image": "Boss.png"
   }
 }
