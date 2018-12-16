@@ -211,11 +211,11 @@ class SimulatorControl:
             self.go_top()
             exit(0)
 
-    def wait_mannual(self):
+    def wait_mannual(self, message=None, title="", action="继续"):
         """等待手动操作"""
-        logger.info("等待手动操作")
+        logger.info("等待手动操作: %s", message)
 
-        info = "等待手动指令."
+        info = "等待手动指令:\n%s" % message
         flag = win32con.MB_ICONINFORMATION | win32con.MB_OK | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
         title = "碧蓝航线自动脚本 - 等待手动指令"
