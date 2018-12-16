@@ -75,7 +75,7 @@ class SimulatorControl:
             rect = self.get_resource_rect(name)
             target = info['ImageData']
             cropped = cv_crop(self.screen, rect)
-            diff = get_diff(target, cropped)
+            diff = get_diff(cropped, target)
             # 有位置限制, 可以使用较为宽松的阈值
             ret = diff <= info.get('MaxDiff', 0.06)
             if ret:
@@ -304,21 +304,10 @@ class SimulatorControl:
         w, h = self.resources[key]["Size"]
         return (x, y, x+w, y+h)
 
-    def check_scene(self):
-        """判断当前场景, 执行对应的操作"""
-        scene = self.update_current_scene()
-        heartbeat()
-        now = time.time()
-        nochange = "" if self.last_scene != scene else "(No Change)"
-        if not nochange or now - self.last_check > 10:
-            self.last_check = now
-            log = logger.info
-        else:
-            log = logger.debug
-        log("%s - %s%s", scene['Name'], scene['Actions'], nochange)
-
-        for action in scene['Actions']:
-            if action.get('FirstOnly') and self.last_scene == scene:
+    def do_actions(self, actions):
+        """执行指定的操作"""
+        for action in actions:
+            if action.get('FirstOnly') and self.last_scene == self.current_scene:
                 continue
 
             if action['Type'] == 'Wait':
@@ -337,6 +326,20 @@ class SimulatorControl:
                 self.delayed_click(action["Target"], action.get("Recheck"), action.get("Delay"))
             else:
                 self.critical("Invalid Type %s" % action["Type"])
+
+    def check_scene(self):
+        """判断当前场景, 执行对应的操作"""
+        scene = self.update_current_scene()
+        heartbeat()
+        now = time.time()
+        nochange = "" if self.last_scene != scene else "(No Change)"
+        if not nochange or now - self.last_check > 10:
+            self.last_check = now
+            log = logger.info
+        else:
+            log = logger.debug
+        log("%s - %s%s", scene['Name'], scene['Actions'], nochange)
+        self.do_actions(scene['Actions'])
 
 
 if __name__ == "__main__":
