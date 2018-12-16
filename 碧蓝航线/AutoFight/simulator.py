@@ -98,7 +98,7 @@ class SimulatorControl:
             for x, y in info["Positions"]:
                 cropped = cv_crop(self.screen, (x, y, x+w, y+h))
                 diff = get_diff(cropped, target)
-                if diff <= info.get('MaxDiff', 0.02):
+                if diff <= info.get('MaxDiff', 0.03):
                     pos.append((x, y))
                     ret = True
         elif info["Type"] == "MultiDynamic":
