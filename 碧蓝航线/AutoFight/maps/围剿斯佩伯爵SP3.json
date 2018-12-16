@@ -9,6 +9,7 @@
     "OENNEONEEB",
     "ONNENENOOO"
   ],
+  "ViewPort": ["C3", "C5", "G3", "G5"],
   "Strategy": [
     {
       "Condition": [
@@ -24,7 +25,7 @@
         ]
       ],
       "Actions": [
-        "NormalFight"
+        {"Type": "InnerCall", "Target": "normal_fight"}
       ]
     },
     {
@@ -36,8 +37,9 @@
         3
       ],
       "Actions": [
-        "问号点",
-        "NormalFight"
+        {"Type": "InnerCall", "Target": "click_at_map", "args": ["I2"]},
+        {"Type": "InnerCall", "Target": "after_bonus"},
+        {"Type": "InnerCall", "Target": "normal_fight"}
       ]
     },
     {
@@ -49,8 +51,8 @@
         5
       ],
       "Actions": [
-        "ToggleFleet",
-        "Boss"
+        {"Type": "Click", "Target": "切换舰队"},
+        {"Type": "InnerCall", "Target": "search_for_boss"}
       ]
     }
   ],
