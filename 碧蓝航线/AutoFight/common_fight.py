@@ -20,7 +20,7 @@ class CommonMap(FightMap):
         self.resource_points = []
         self.enemies = set()
         self.pos = {}
-        self.virtual_fight_index = 1
+        self.virtual_fight_index = 6
         for j, row in enumerate(self.data['Map']):
             for i, cell_type in enumerate(row):
                 name = chr(ord('A')+i) + str(j+1)
@@ -195,22 +195,65 @@ class CommonMap(FightMap):
         logger.info("选择最近的敌人: %s", distance[0][1])
         return distance[0][1]
 
-    def search_for_boss(self):
-        self.wait_mannual()
+    def search_for_boss(self, repeat=0):
+        if repeat >= 5:
+            self.critical("Boss搜索失败")
 
-    def search_for_bonus(self):
-        ret, pos = self.resource_in_screen('问号点')
+        ret, pos = self.resource_in_screen('Boss')
         if ret:
             x, y = pos
-            dx, dy = self.resources['问号点']['Offset']
-            w, h = self.resources['问号点']['Size']
-            logger.info("找到问号点")
+            x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
+            if x < x_min or x > x_max or y < y_min or y > y_max:
+                logger.debug("目标不在中间区域")
+                self.move_map_to(x, y)
+                self.search_for_boss(repeat+1)
+                return
+            dx, dy = self.resources['Boss']['Offset']
+            w, h = self.resources['Boss']['Size']
+            logger.info("找到Boss")
             rand_click(self.hwnd, (x+dx, y+dy, x+dx+w, y+dy+h))
             self.wait(6)
             return
-        self.error("未找到问号点")
+        self.wait_mannual("未找到Boss")
+
+    def recheck_full_map(self):
+        # TODO: 地图信息更新
+        pass
+
+    def after_bonus(self):
+        # TODO: 前往问号点后判断获得道具, 获得维修
+        pass
+
+    def search_for_bonus(self,  repeat=0):
+        if repeat >= 5:
+            self.critical("问号点搜索失败")
+        ret, pos = self.resource_in_screen('问号点')
+        if not ret:
+            self.wait_mannual("未找到问号点")
+            self.recheck_full_map()
+            self.search_for_bonus(repeat+1)
+            return
+        
+        x, y = pos
+        x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
+        if x < x_min or x > x_max or y < y_min or y > y_max:
+            logger.debug("目标不在中间区域")
+            self.move_map_to(x, y)
+            self.search_for_bonus(repeat+1)
+            return
+        
+        dx, dy = self.resources['问号点']['Offset']
+        w, h = self.resources['问号点']['Size']
+        logger.info("找到问号点")
+        rand_click(self.hwnd, (x+dx, y+dy, x+dx+w, y+dy+h))
+        self.wait(6)
+        self.after_bonus()
+        return
 
     def fight(self):
+        fight_idx = self.get_fight_index() + self.virtual_fight_index
+        mod = fight_idx % 6
+        logger.info("战斗轮次%d(%d)", fight_idx, mod)
         for item in self.data['Strategy']:
             if self.parse_fight_condition(item['Condition']):
                 logger.info("战斗策略：%s", item)
