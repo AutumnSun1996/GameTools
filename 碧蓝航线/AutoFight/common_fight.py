@@ -321,6 +321,7 @@ class CommonMap(FightMap):
         fight_idx = self.get_fight_index() + self.virtual_fight_index
         mod = fight_idx % 6
         logger.info("战斗轮次%d(%d)", fight_idx, mod)
+        self.check_map()
         for item in self.data['Strategy']:
             if self.parse_fight_condition(item['Condition']):
                 logger.info("战斗策略：%s", item)
