@@ -126,6 +126,9 @@ class FightMap(AzurLaneControl):
         click_at(self.hwnd, x, y)
 
     def get_best_anchor(self):
+        """在屏幕上搜索最佳的锚点
+        当前使用匹配程度最高的锚点
+        """
         res = []
         for anchor in self.data['Anchors'].values():
             logger.debug("Check Anchor %s", anchor['Name'])
