@@ -15,7 +15,7 @@ class CommonMap(FightMap):
 
     def __init__(self, map_name=None):
         super().__init__(map_name)
-        self.virtual_fight_index = 5
+        self.virtual_fight_index = 7
         self.reset_map_data()
 
     def parse_fight_condition(self, condition):
@@ -283,10 +283,11 @@ class CommonMap(FightMap):
             self.check_map()
 
     def after_bonus(self):
-        # TODO: 前往问号点后判断获得道具, 获得维修
+        """处理到达问号点之后的获得道具, 获得维修判断"""
         scene = self.update_current_scene(['获得道具', '战斗地图'])
         if scene['Name'] == '获得道具':
             self.do_actions(scene['Actions'])
+            self.wait(1)
             if self.resource_in_screen('收起右侧菜单')[0]:
                 self.click_at_resource('收起右侧菜单')
             self.update_current_scene(['战斗地图'])
@@ -362,8 +363,8 @@ if __name__ == "__main__":
     # s.reset_fight_index()
     while True:
         s.check_scene()
-        if s.current_scene["Name"] == "活动地图":
+        if s.current_scene["Name"] == "外部地图":
             new_fight = s.get_fight_index() - start_index
             logger.info("战斗次数:%d(%d)", s.get_fight_index(), new_fight)
-            if new_fight > 0:
+            if new_fight > 6*10:
                 exit(0)
