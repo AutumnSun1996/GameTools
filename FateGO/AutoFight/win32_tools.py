@@ -74,7 +74,15 @@ def get_window_hwnd(title):
 
 
 def heartbeat():
-    ctypes.windll.kernel32.SetThreadExecutionState(0)
+    
+    info = win32api.GetLastInputInfo()
+    tick = win32api.GetTickCount()
+    if tick - info > 30000:
+        win32api.keybd_event(win32con.VK_CAPITAL, 0, 0, 0)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0, win32con.KEYEVENTF_KEYUP, 0)
+        time.sleep(0.1)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0, 0, 0)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0, win32con.KEYEVENTF_KEYUP, 0)
 
 
 if __name__ == "__main__":

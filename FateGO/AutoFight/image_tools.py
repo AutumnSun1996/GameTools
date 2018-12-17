@@ -7,8 +7,6 @@ import numpy as np
 import win32con
 import win32gui
 import win32ui
-from PIL import Image, ImageFont, ImageDraw
-
 
 from config import logger, config
 
@@ -92,29 +90,6 @@ def cv_crop(data, rect):
     """图片裁剪"""
     min_x, min_y, max_x, max_y = rect
     return data[min_y:max_y, min_x:max_x]
-
-
-def make_text(text, size):
-    font = ImageFont.truetype('resources/FGO-Main-Font.ttf', size)
-    # 根据文字大小创建图片
-    img = Image.new("RGBA", font.getsize(text), "#00000000")
-    drawBrush = ImageDraw.Draw(img)  # 创建画刷，用来写文字到图片img上
-    drawBrush.text((0, 0), text, fill="#FFFFFF", font=font)
-    return cv.cvtColor(np.array(img), cv.COLOR_RGBA2BGRA)
-
-
-def extract_text(image, font_size, text='0123456789/'):
-    result = []
-    for char in text:
-        number = make_text(char, font_size)
-        match = get_all_match(image, number)
-        last = -10
-        for x in np.where(match < 0.06)[1]:
-            if x - last > 2:
-                result.append((x, char))
-            last = x
-    result.sort(key=lambda a: a[0])
-    return ''.join(item[1] for item in result)
 
 
 def split_bgra(bgra):
