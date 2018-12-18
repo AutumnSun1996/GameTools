@@ -16,7 +16,8 @@ import win32con
 import win32api
 
 from config import logger, config
-from image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, cv_save, load_scenes, load_resources, load_image
+from image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, \
+    cv_save, load_scenes, load_resources, load_image
 from win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 
@@ -148,6 +149,21 @@ class SimulatorControl:
                 return
         rect = self.get_resource_rect(name)
         rand_click(self.hwnd, rect)
+
+    def wait_till(self, condition, interval=1, repeat=5):
+        """等待画面满足给定条件"""
+        if repeat < 0:
+            self.error("Can't find resource %s" % condition)
+            return False
+        if self.parse_condition(condition):
+            return True
+        time.sleep(interval)
+        return self.wait_till(condition, interval, repeat-1)
+
+    def wait_till_scene(self, name, interval=1, repeat=5):
+        """等待给定场景"""
+        condition = self.scenes[name]["Condition"]
+        return self.wait_till(condition, interval, repeat-1)
 
     def scene_match_check(self, scene, reshot):
         """检查场景是否与画面一致
