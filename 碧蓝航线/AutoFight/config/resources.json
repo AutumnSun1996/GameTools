@@ -154,7 +154,6 @@
       123
     ],
     "Image": "大获全胜.png",
-    "MaxDiff": 0.03,
     "Type": "Static"
   },
   "大获全胜": {
@@ -223,7 +222,6 @@
       123
     ],
     "Image": "战术碾压.png",
-    "MaxDiff": 0.03,
     "Type": "Static"
   },
   "战术碾压": {
@@ -258,7 +256,6 @@
       123
     ],
     "Image": "旗舰大破.png",
-    "MaxDiff": 0.03,
     "Type": "Static"
   },
   "旗舰大破": {
