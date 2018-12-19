@@ -5,7 +5,8 @@
     "Actions": [
       {"Type": "InnerCall", "Target": "choose_target"},
       {"Type": "Wait", "Time": 1}
-    ]
+    ],
+    "Next": ["助战选择"]
   },
   "助战选择": {
     "Name": "助战选择",
@@ -60,6 +61,15 @@
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 1}
     ],
+    "Next": ["获得经验值", "羁绊加深"]
+  },
+  "羁绊加深": {
+    "Name": "羁绊加深",
+    "Condition": "羁绊加深",
+    "Actions": [
+      {"Type": "Click", "Target": "右侧空白区域"},
+      {"Type": "Wait", "Time": 1}
+    ],
     "Next": ["获得经验值"]
   },
   "获得经验值": {
@@ -77,6 +87,7 @@
     "Actions": [
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
-    ]
+    ],
+    "Next": ["关卡选择"]
   }
 }
