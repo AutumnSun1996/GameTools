@@ -10,6 +10,7 @@ import win32ui
 
 from config import logger, config
 
+from PIL import Image, ImageFont, ImageDraw
 
 def cv_imread(file_path):
     """读取图片
@@ -103,7 +104,7 @@ def split_bgra(bgra):
 
 def get_all_match(image, needle):
     """在image中搜索needle"""
-    if needle.shape[2] == 4:
+    if len(needle.shape) == 3 and needle.shape[2] == 4:
         needle, mask = split_bgra(needle)
         match = 1 - cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask)
     else:
@@ -174,6 +175,29 @@ def get_window_shot(hwnd):
     win32gui.ReleaseDC(hwnd, hwndDC)
 
     return image_data
+
+
+def make_text(text, size, color="#FFFFFF", background="#000000"):
+    font = ImageFont.truetype('resources/FGO-Main-Font.ttf', size)
+    # 根据文字大小创建图片
+    img = Image.new("RGB", font.getsize(text), background)
+    drawBrush = ImageDraw.Draw(img)  # 创建画刷，用来写文字到图片img上
+    drawBrush.text((0, 0), text, fill=color, font=font)
+    return cv.cvtColor(np.array(img), cv.COLOR_RGBA2BGRA)
+
+
+def extract_text(image, font_size, text='0123456789/'):
+    result = []
+    for char in text:
+        number = make_text(char, font_size)
+        match = get_all_match(image, number)
+        last = -10
+        for x in np.where(match < 0.06)[1]:
+            if x - last > 2:
+                result.append((x, char))
+            last = x
+    result.sort(key=lambda a: a[0])
+    return ''.join(item[1] for item in result)
 
 
 if __name__ == "__main__":

@@ -61,6 +61,9 @@ class FateGrandOrder(SimulatorControl):
             if ret:
                 rand_click(self.hwnd, rect)
                 return
+        self.servant_scroll_to_top()
+        ret, pos = self.resource_in_screen("最后登录")
+        
 
     def equipment_check(self, target):
         res = self.resources['最后登录']
@@ -137,6 +140,3 @@ if __name__ == "__main__":
     print(fgo.resources['战斗速度']['ImageData'].shape)
     fgo.update_current_scene()
     print(fgo.scene_history)
-    # fgo.extract_combat_info()
-    # print(fgo.combat_info)
-    # fgo.click_at_resource("Attack")

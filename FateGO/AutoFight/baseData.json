@@ -1,0 +1,94 @@
+{
+    "职阶中英转换": {
+        "剑": "Saber",
+        "弓": "Archer",
+        "枪": "Lancer",
+        "术": "Caster",
+        "骑": "Rider",
+        "杀": "Assassin",
+        "狂": "Berserker",
+        "盾": "Shielder"
+    },
+    "职阶攻击伤害倍率": {
+        "Saber": {
+            "Archer": 0.5,
+            "Lancer": 2,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "Archer": {
+            "Saber": 2,
+            "Lancer": 0.5,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "Lancer": {
+            "Saber": 0.5,
+            "Archer": 2,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "Caster": {
+            "Rider": 0.5,
+            "Assassin": 2,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "Rider": {
+            "Caster": 2,
+            "Assassin": 0.5,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "Assassin": {
+            "Caster": 0.5,
+            "Rider": 2,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "Ruler": {
+            "MoonCancer": 2,
+            "Avenger": 0.5,
+            "Berserker": 2,
+            "Ruler": 0.5
+        },
+        "MoonCancer": {
+            "Ruler": 0.5,
+            "Avenger": 2,
+            "Berserker": 2
+        },
+        "Avenger": {
+            "Ruler": 2,
+            "MoonCancer": 0.5,
+            "Berserker": 2
+        },
+        "Berserker": {
+            "Saber": 1.5,
+            "Archer": 1.5,
+            "Lancer": 1.5,
+            "Caster": 1.5,
+            "Rider": 1.5,
+            "Assassin": 1.5,
+            "Berserker": 2,
+            "Ruler": 1.5,
+            "MoonCancer": 1.5,
+            "Avenger": 1.5,
+            "Alterego": 1.5,
+            "Foreigner": 0.5
+        },
+        "Alterego": {
+            "Saber": 0.5,
+            "Archer": 0.5,
+            "Lancer": 0.5,
+            "Caster": 2,
+            "Rider": 2,
+            "Assassin": 2,
+            "Berserker": 2
+        },
+        "Foreigner": {
+            "Alterego": 0.5,
+            "Berserker": 2
+        },
+        "Shielder": {}
+    }
+}
