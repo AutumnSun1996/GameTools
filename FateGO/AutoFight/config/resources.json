@@ -1,727 +1,327 @@
 {
   "战斗菜单": {
     "Name": "战斗菜单",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      1160,
-      175
-    ],
-    "Size": [
-      70,
-      60
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [1160, 175],
+    "Size": [70, 60],
     "Type": "Static",
     "Image": "战斗菜单.png"
   },
   "角色1技能1": {
     "Name": "角色1技能1",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      38,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [38, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色1技能2": {
     "Name": "角色1技能2",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      132,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [132, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色1技能3": {
     "Name": "角色1技能3",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      226,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [226, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色2技能1": {
     "Name": "角色2技能1",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      356,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [356, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色2技能2": {
     "Name": "角色2技能2",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      450,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [450, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色2技能3": {
     "Name": "角色2技能3",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      544,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [544, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色3技能1": {
     "Name": "角色3技能1",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      674,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [674, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色3技能2": {
     "Name": "角色3技能2",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      768,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [768, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "角色3技能3": {
     "Name": "角色3技能3",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      862,
-      546
-    ],
-    "Size": [
-      64,
-      64
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [862, 546],
+    "Size": [64, 64],
     "Type": "Static"
   },
   "御主技能1": {
     "Name": "御主技能1",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      874,
-      280
-    ],
-    "Size": [
-      64,
-      64
-    ],
-    "Type": "Static",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [874, 280],
+    "Size": [64, 64],
+    "Type": "Static"
   },
   "御主技能2": {
     "Name": "御主技能2",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      963,
-      280
-    ],
-    "Size": [
-      64,
-      64
-    ],
-    "Type": "Static",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [963, 280],
+    "Size": [64, 64],
+    "Type": "Static"
   },
   "御主技能3": {
     "Name": "御主技能3",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      1052,
-      280
-    ],
-    "Size": [
-      64,
-      64
-    ],
-    "Type": "Static",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [1052, 280],
+    "Size": [64, 64],
+    "Type": "Static"
   },
   "队伍确认": {
     "Name": "队伍确认",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      1040,
-      0
-    ],
-    "Size": [
-      240,
-      80
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [1040, 0],
+    "Size": [240, 80],
     "Type": "Static",
     "Image": "队伍确认.png"
   },
   "助战选择": {
     "Name": "助战选择",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      1040,
-      0
-    ],
-    "Size": [
-      240,
-      80
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [1040, 0],
+    "Size": [240, 80],
     "Type": "Static",
     "Image": "助战选择.png"
   },
   "加载提示": {
     "Name": "加载提示",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      500,
-      150
-    ],
-    "Size": [
-      300,
-      100
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [500, 150],
+    "Size": [300, 100],
     "Type": "Static",
     "Image": "加载提示.png"
   },
   "战斗轮次": {
     "Name": "战斗轮次",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      850,
-      10
-    ],
-    "Size": [
-      100,
-      30
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [850, 10],
+    "Size": [100, 30],
     "Type": "Virtual"
   },
   "剩余敌人": {
     "Name": "剩余敌人",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      850,
-      46
-    ],
-    "Size": [
-      130,
-      30
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [850, 46],
+    "Size": [130, 30],
     "Type": "Virtual"
   },
   "回合数": {
     "Name": "回合数",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      850,
-      82
-    ],
-    "Size": [
-      130,
-      30
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [850, 82],
+    "Size": [130, 30],
     "Type": "Virtual"
   },
   "Attack": {
     "Name": "Attack",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      1070,
-      540
-    ],
-    "Size": [
-      130,
-      130
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [1070, 540],
+    "Size": [130, 130],
     "Type": "Virtual"
   },
   "战斗速度": {
     "Name": "战斗速度",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      1055,
-      30
-    ],
-    "Size": [
-      160,
-      70
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [1055, 30],
+    "Size": [160, 70],
     "Type": "Static",
     "Image": "战斗速度.png"
   },
   "Buster": {
     "Name": "Buster",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Size": [
-      184,
-      81
-    ],
+    "MainSize": [1280, 720],
+    "Size": [184, 81],
     "Type": "Dynamic",
     "Image": "Buster.png"
   },
   "Arts": {
     "Name": "Arts",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Size": [
-      146,
-      81
-    ],
+    "MainSize": [1280, 720],
+    "Size": [146, 81],
     "Type": "Dynamic",
     "Image": "Buster.png"
   },
   "Quick": {
     "Name": "Quick",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Size": [
-      172,
-      89
-    ],
+    "MainSize": [1280, 720],
+    "Size": [172, 89],
     "Type": "Dynamic",
     "Image": "Quick.png"
   },
   "宝具背景1": {
     "Name": "宝具背景1",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      340,
-      120
-    ],
-    "Size": [
-      140,
-      180
-    ],
-    "Type": "Static",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [340, 120],
+    "Size": [140, 180],
+    "Type": "Static"
   },
   "宝具背景2": {
     "Name": "宝具背景2",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      570,
-      120
-    ],
-    "Size": [
-      140,
-      180
-    ],
-    "Type": "Static",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [570, 120],
+    "Size": [140, 180],
+    "Type": "Static"
   },
   "宝具背景3": {
     "Name": "宝具背景3",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      800,
-      120
-    ],
-    "Size": [
-      140,
-      180
-    ],
-    "Type": "Static",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [800, 120],
+    "Size": [140, 180],
+    "Type": "Static"
   },
   "star-center": {
     "Name": "star-center",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      -60,
-      -10
-    ],
-    "Size": [
-      8,
-      7
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [-60, -10],
+    "Size": [8, 7],
     "Type": "Anchor",
     "Image": "star-center.png",
     "MaxDiff": 0.02
   },
   "克制": {
     "Name": "克制",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Size": [
-      47,
-      49
-    ],
+    "MainSize": [1280, 720],
+    "Size": [47, 49],
     "Type": "Dynamic",
     "Image": "克制.png",
     "MaxDiff": 0.1
   },
   "抵抗": {
     "Name": "抵抗",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Size": [
-      45,
-      50
-    ],
+    "MainSize": [1280, 720],
+    "Size": [45, 50],
     "Type": "Dynamic",
     "Image": "抵抗.png",
     "MaxDiff": 0.1
   },
   "滚动条-上": {
     "Name": "滚动条-上",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      16,
-      0
-    ],
-    "Size": [
-      32,
-      20
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [16, 0],
+    "Size": [32, 20],
     "Type": "Anchor",
     "Image": "滚动条-上.png"
   },
   "滚动条-下": {
     "Name": "滚动条-下",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      16,
-      20
-    ],
-    "Size": [
-      32,
-      20
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [16, 20],
+    "Size": [32, 20],
     "Type": "Anchor",
     "Image": "滚动条-下.png"
   },
   "羁绊-左": {
     "Name": "羁绊-左",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      80,
-      168
-    ],
-    "Size": [
-      100,
-      36
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [80, 168],
+    "Size": [100, 36],
     "Type": "Static",
     "Image": "羁绊-左.png"
   },
   "点击画面": {
     "Name": "点击画面",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      300,
-      600
-    ],
-    "Size": [
-      700,
-      100
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [300, 600],
+    "Size": [700, 100],
     "Type": "Static"
   },
   "获得经验": {
     "Name": "获得经验",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      650,
-      186
-    ],
-    "Size": [
-      180,
-      36
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [650, 186],
+    "Size": [180, 36],
     "Type": "Static",
     "Image": "获得经验.png"
   },
   "获得物品": {
     "Name": "获得物品",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      114,
-      73
-    ],
-    "Size": [
-      100,
-      36
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [114, 73],
+    "Size": [100, 36],
     "Type": "Static",
     "Image": "获得物品.png"
   },
   "最后登录": {
     "Name": "最后登录",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      -778,
-      -18
-    ],
-    "Size": [
-      98,
-      36
-    ],
-    "CropSize": [
-      1160,
-      200
-    ],
-    "SearchArea": [
-      [
-        830,
-        195
-      ],
-      [
-        930,
-        570
-      ]
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [-778, -18],
+    "Size": [98, 36],
+    "CropSize": [1160, 200],
+    "SearchArea": [[830, 195], [930, 570]],
     "Type": "Anchor",
     "Image": "最后登录.png"
   },
   "助战选择-从者-名称": {
     "Name": "助战选择-从者-名称",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      310,
-      100
-    ],
-    "Size": [
-      450,
-      28
-    ],
-    "Type": "Anchor",
-    "Image": null
+    "MainSize": [1280, 720],
+    "Offset": [310, 100],
+    "Size": [450, 28],
+    "Type": "Anchor"
   },
   "助战选择-从者-宝具": {
     "Name": "助战选择-从者-宝具",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      310,
-      136
-    ],
-    "Size": [
-      450,
-      28
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [310, 136],
+    "Size": [450, 28],
     "Type": "Anchor"
   },
   "助战选择-从者-礼装": {
     "Name": "助战选择-从者-礼装",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      3,
-      133
-    ],
-    "Size": [
-      160,
-      50
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [3, 133],
+    "Size": [160, 50],
     "Type": "Anchor"
   },
   "助战选择-从者-等级": {
     "Name": "助战选择-从者-等级",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      50,
-      10
-    ],
-    "Size": [
-      110,
-      30
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [50, 10],
+    "Size": [110, 30],
     "Type": "Anchor"
   },
   "助战选择-从者-职阶": {
     "Name": "助战选择-从者-职阶",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      0,
-      0
-    ],
-    "Size": [
-      50,
-      50
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [0, 0],
+    "Size": [50, 50],
     "Type": "Anchor"
   },
   "助战选择-从者-技能": {
     "Name": "助战选择-从者-技能",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      788,
-      116
-    ],
-    "Size": [
-      220,
-      60
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [788, 116],
+    "Size": [220, 60],
     "Type": "Anchor"
   },
   "羁绊加深": {
     "Name": "羁绊加深",
-    "MainSize": [
-      1280,
-      720
-    ],
-    "Offset": [
-      660,
-      350
-    ],
-    "Size": [
-      160,
-      40
-    ],
+    "MainSize": [1280, 720],
+    "Offset": [660, 350],
+    "Size": [160, 40],
     "Type": "Static",
     "Image": "羁绊加深.png"
   }
