@@ -1,10 +1,25 @@
 from urllib.parse import urlencode
 import base64
 
+import numpy as np
 import cv2.cv2 as cv
 import requests
 
 from config import config
+
+
+def contact_images(*images):
+    sep = 1
+    width = max([images.shape[1] for images in images])
+    height = sum([images.shape[0] + sep for images in images]) - sep
+    background = np.zeros((height, width, 3), dtype='uint8')
+    x = 0
+    y = 0
+    for image in images:
+        h, w = image.shape[:2]
+        background[y:y+h, x:x+w, :] = image
+        y += h + sep
+    return background
 
 
 class BaiduOCR:
@@ -20,7 +35,7 @@ class BaiduOCR:
         self.token = res.json()["access_token"]
         print("Token:", self.token)
 
-    def api_request(self, url, image, params=None):
+    def api_request(self, name, image, params=None):
         if self.token is None:
             self.get_token()
         if params is None:
@@ -33,16 +48,28 @@ class BaiduOCR:
         body = urlencode({
             "image": base64.encodebytes(data.tobytes())
         })
-        res = requests.post(url, params=params, headers=headers, data=body)
+        res = requests.post(
+            "https://aip.baidubce.com/rest/2.0/ocr/v1/"+name,
+            params=params, headers=headers, data=body, timeout=3)
         return res.json()
 
+    def parse_result(self, res):
+        res = [item["words"] for item in res["words_result"]]
+        if len(res) == 1:
+            res = res[0]
+        return res
+
     def image2numbers(self, image):
-        info = self.api_request("https://aip.baidubce.com/rest/2.0/ocr/v1/numbers", image)
-        return info["words_result"][0]["words"]
+        info = self.api_request("numbers", image)
+        return self.parse_result(info)
 
     def image2text(self, image):
-        info = self.api_request("https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic", image)
-        return info["words_result"][0]["words"]
+        info = self.api_request("general_basic", image)
+        return self.parse_result(info)
+
+    def image2text_accurate(self, image):
+        info = self.api_request("accurate_basic", image)
+        return self.parse_result(info)
 
 
 if __name__ == "__main__":
