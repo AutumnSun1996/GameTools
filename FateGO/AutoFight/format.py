@@ -1,119 +1,6 @@
+import os
+import shutil
 import json
-
-
-d = {
-    "角色1技能1": {
-        "Name": "角色1技能1",
-        "MainSize": [
-            1280,
-            720
-        ],
-        "Offset": [
-            38,
-            546
-        ],
-        "Size": [
-            64,
-            64
-        ],
-        "Type": "Static"
-    },
-    "角色1技能2": {
-        "Name": "角色1技能2",
-        "MainSize": [
-            1280,
-            720
-        ],
-        "Offset": [
-            132,
-            546
-        ],
-        "Size": [
-            64,
-            64
-        ],
-        "Type": "Static"
-    },
-    "退役-白色舰娘": {
-        "Name": "退役-白色舰娘",
-        "MainSize": [
-            1920,
-            1080
-        ],
-        "ClickOffset": [
-            -67,
-            99
-        ],
-        "ClickSize": [
-            20,
-            20
-        ],
-        "Positions": [
-            [
-                217,
-                109
-            ],
-            [
-                217,
-                457
-            ],
-            [
-                472,
-                109
-            ],
-            [
-                472,
-                457
-            ],
-            [
-                727,
-                109
-            ],
-            [
-                727,
-                457
-            ],
-            [
-                982,
-                109
-            ],
-            [
-                982,
-                457
-            ],
-            [
-                1237,
-                109
-            ],
-            [
-                1237,
-                457
-            ],
-            [
-                1492,
-                109
-            ],
-            [
-                1492,
-                457
-            ],
-            [
-                1747,
-                109
-            ],
-            [
-                1747,
-                457
-            ]
-        ],
-        "Size": [
-            60,
-            10
-        ],
-        "Type": "MultiStatic",
-        "Image": "白色舰娘.png"
-    },
-}
 
 
 def text_width(text):
@@ -155,8 +42,19 @@ def encode(obj, prefix, level):
     return result
 
 
-# print(encode(d, '', 0))
-with open(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\scenes.bak.json', 'r', -1, "UTF-8") as fl:
-    text = encode(json.load(fl), '', 0)
-with open(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\scenes.json', 'w', -1, "UTF-8") as fl:
-    fl.write(text)
+def jsonformat(path, backup=True):
+    path = os.path.realpath(path)
+    if backup:
+        basename, ext = os.path.splitext(path)
+        shutil.copy2(path, basename + '.bak' + ext)
+    with open(path, "r", -1, "UTF-8") as fl:
+        text = encode(json.load(fl), '', 0)
+    with open(path, "w", -1, "UTF-8") as fl:
+        fl.write(text)
+    print(path, "Reformated.")
+
+if __name__ == "__main__":
+    jsonformat('config/resources.json')
+    jsonformat('config/scenes.json')
+    jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\resources.json')
+    jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\scenes.json')
