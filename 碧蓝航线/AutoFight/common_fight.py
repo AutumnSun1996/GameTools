@@ -15,7 +15,7 @@ class CommonMap(FightMap):
 
     def __init__(self, map_name=None):
         super().__init__(map_name)
-        self.virtual_fight_index = 7
+        self.virtual_fight_index = 4
         self.reset_map_data()
 
     def parse_fight_condition(self, condition):
@@ -359,8 +359,8 @@ class CommonMap(FightMap):
 if __name__ == "__main__":
     logger.setLevel("DEBUG")
     s = CommonMap("围剿斯佩伯爵SP3")
+    logger.info('FinghtIndex: %d', s.parse_fight_condition(['FightIndex']))
     start_index = s.get_fight_index()
-    # s.reset_fight_index()
     while True:
         s.check_scene()
         if s.current_scene["Name"] == "外部地图":
