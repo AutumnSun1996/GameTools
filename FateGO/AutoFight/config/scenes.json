@@ -29,9 +29,7 @@
   "加载关卡": {
     "Name": "加载关卡",
     "Condition": "加载提示",
-    "Actions": [
-      {"Type": "Wait", "Time": 1}
-    ],
+    "Actions": [{"Type": "Wait", "Time": 1}],
     "Next": ["选择技能"]
   },
   "选择技能": {
