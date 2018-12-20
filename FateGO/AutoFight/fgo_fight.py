@@ -6,9 +6,75 @@ from image_tools import cv_crop, extract_text, get_all_match, get_match
 from win32_tools import rand_click, drag
 from baidu_ocr import ocr
 from simulator import SimulatorControl
+try:
+    __builtin__ = __builtins__
+except NameError:
+    pass
 
 
-class Servant:
+def parse_condtion(cond, obj):
+    """通用条件解析"""
+    if isinstance(cond, list) and cond:
+        # 仅对非空的list进行解析
+        if cond[0] in {"$sum", "$all", "$any", "$max", "$min"}:
+            cmd = getattr(__builtin__, cond[0][1:])
+            cond = cmd((parse_condtion(sub, obj) for sub in cond[1:]))
+        elif cond[0] in {"$chr", "$bool", "$int", "$float", "$ord", "$len"}:
+            cmd = getattr(__builtin__, cond[0][1:])
+            cond = cmd(parse_condtion(cond[1], obj))
+        elif cond[0] in {"$eq", "$gt", "$ge", "$ne", "$lt", "$le"}:
+            cmd = getattr(parse_condtion(cond[1], obj), "__%s__" % cond[0][1:])
+            cond = cmd(parse_condtion(cond[2], obj))
+        elif cond[0] == "$not":
+            cond = not parse_condtion(cond[1], obj)
+        elif cond[0] == "$attr":
+            if len(cond) == 2:
+                cond = getattr(obj, parse_condtion(cond[1], obj))
+            else:
+                cond = getattr(parse_condtion(cond[1], obj), parse_condtion(cond[2], obj))
+        elif cond[0] == "$val":
+            if len(cond) == 2:
+                cond = obj[parse_condtion(cond[1], obj)]
+            else:
+                cond = obj[parse_condtion(cond[1], obj), parse_condtion(cond[2], obj)]
+    return cond
+
+
+def contact_images(*images, sep=1):
+    """将多张图片纵向拼接
+
+    用于一次性识别多个字段
+    """
+    width = max([images.shape[1] for images in images])
+    height = sum([images.shape[0] + sep for images in images]) - sep
+    background = np.zeros((height, width, 3), dtype='uint8')
+    x = 0
+    y = 0
+    for image in images:
+        h, w = image.shape[:2]
+        background[y:y+h, x:x+w, :] = image
+        y += h + sep
+    return background
+
+
+class AssistServant:
+    def __init__(self, control, offset):
+        self.s = control
+        self.offset = offset
+        self.info = {}
+
+    def update_from_select(self, image, offset):
+        self.offset = offset
+        sub_image = {}
+        for name in ['礼装', '等级', '职阶', '宝具', '技能']:
+            sub_image[name] = cv_crop(image, self.s.get_resource_rect('助战选择-从者-%s' % name))
+        info = {}
+
+    def update_from_combat(self, info):
+        self.info.update(info)
+
+
+class CombatServant:
     def __init__(self, control: SimulatorControl):
         self.s = control
         self.info = {}
@@ -55,17 +121,26 @@ class FateGrandOrder(SimulatorControl):
         middle = (top + bottom) // 2
         drag(self.hwnd, (x, middle), (x, 0), 30)
 
-    def choose_servant(self):
+    def crop_resource(self, name, offset=None, image=None):
+        if offset is None:
+            dx, dy = 0, 0
+        else:
+            dx, dy = offset
+        if image is None:
+            image = self.screen
+        x, y, x1, y1 = self.get_resource_rect(name)
+        return cv_crop(image, (x+dx, y+dy, x1+dx, y1+dy))
+
+    def choose_assist_servant(self, wanted_score):
         for target in self.best_equips:
-            ret, rect = self.equipment_check(target)
-            if ret:
+            score, rect = self.assist_score(target)
+            if score > wanted_score:
                 rand_click(self.hwnd, rect)
                 return
         self.servant_scroll_to_top()
         ret, pos = self.resource_in_screen("最后登录")
-        
 
-    def equipment_check(self, target):
+    def assist_score(self, target):
         res = self.resources['最后登录']
         equip = self.resources['助战选择-从者-礼装']
         w, h = equip['Size']
@@ -84,20 +159,12 @@ class FateGrandOrder(SimulatorControl):
                 return True, [sx, sy, sx+w, sy+h]
         return False, None
 
-    def get_servant_info(self):
-        pass
-
     def extract_combat_info(self):
-        battle = cv_crop(self.screen, self.get_resource_rect("战斗轮次"))
-        now, total = extract_text(battle, 22, '12345/').split('/')
-        self.combat_info['BattleNow'] = int(now)
-        self.combat_info['BattleTotal'] = int(total)
-
-        enemies = cv_crop(self.screen, self.get_resource_rect("剩余敌人"))
-        self.combat_info['EnemyLeft'] = int(extract_text(enemies, 22))
-
-        turn = cv_crop(self.screen, self.get_resource_rect("回合数"))
-        self.combat_info['Turn'] = int(extract_text(turn, 22))
+        info = ocr.image2text(contact_images(
+            self.crop_resource("战斗轮次"),
+            self.crop_resource("剩余敌人"),
+            self.crop_resource("回合数"),
+        ))
 
     def choose_skill(self):
         self.extract_combat_info()

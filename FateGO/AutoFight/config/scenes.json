@@ -30,7 +30,7 @@
     "Name": "加载关卡",
     "Condition": "加载提示",
     "Actions": [{"Type": "Wait", "Time": 1}],
-    "Next": ["选择技能"]
+    "Next": ["加载关卡", "选择技能"]
   },
   "选择技能": {
     "Name": "选择技能",
@@ -41,7 +41,7 @@
       {"Type": "Click", "Target": "Attack"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["选择技能", "选择指令卡"]
+    "Next": ["选择指令卡"]
   },
   "选择指令卡": {
     "Name": "选择指令卡",

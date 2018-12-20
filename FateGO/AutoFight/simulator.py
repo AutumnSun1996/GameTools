@@ -57,7 +57,7 @@ class SimulatorControl:
         self.screen = get_window_shot(self.hwnd)
         return self.screen
 
-    def resource_in_screen(self, name, reshot=True):
+    def resource_in_image(self, image, name, reshot=True):
         """判断资源是否存在于画面内
 
         未找到时返回False. 找到时根据资源类型, 返回不同的结果.
@@ -75,7 +75,7 @@ class SimulatorControl:
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
             target = info['ImageData']
-            cropped = cv_crop(self.screen, rect)
+            cropped = cv_crop(image, rect)
             diff = get_diff(cropped, target)
             # 有位置限制, 可以使用较为宽松的阈值
             ret = diff <= info.get('MaxDiff', 0.06)
@@ -85,7 +85,7 @@ class SimulatorControl:
                 pos = []
         elif info["Type"] in {"Dynamic", "Anchor"}:
             target = info['ImageData']
-            diff, pos = get_match(self.screen, target)
+            diff, pos = get_match(image, target)
             if diff > info.get('MaxDiff', 0.02):
                 ret = False
                 pos = []
@@ -97,20 +97,35 @@ class SimulatorControl:
             pos = []
             ret = False
             for x, y in info["Positions"]:
-                cropped = cv_crop(self.screen, (x, y, x+w, y+h))
+                cropped = cv_crop(image, (x, y, x+w, y+h))
                 diff = get_diff(cropped, target)
                 if diff <= info.get('MaxDiff', 0.03):
                     pos.append((x, y))
                     ret = True
         elif info["Type"] == "MultiDynamic":
             target = info['ImageData']
-            match = get_all_match(self.screen, target)
-            pos = list(zip(*np.where(match < 0.02)))
+            if "SearchArea" in info:
+                xy, wh = info["SearchArea"]
+                x, y = xy
+                w, h = wh
+                part = cv_crop(image, (x, y, x+w, y+h))
+            else:
+                x = y = 0
+                part = image
+            match = get_all_match(part, target)
+            pos = [[x+dx, y+dy] for dy, dx in zip(*np.where(match < info.get("MaxDiff", 0.02)))]
             ret = bool(pos)
         else:
             self.critical("Invalid Type %s", info['Type'])
         logger.debug("Check Resource(reshot=%s): %s=%s", reshot, name, pos)
         return ret, pos
+
+    def resource_in_screen(self, name, reshot=True):
+        """判断资源是否存在于画面内
+
+        未找到时返回False. 找到时根据资源类型, 返回不同的结果.
+        """
+        return self.resource_in_image(self.screen, name, reshot)
 
     def wait(self, dt):
         time.sleep(dt)

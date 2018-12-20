@@ -56,5 +56,8 @@ def jsonformat(path, backup=True):
 if __name__ == "__main__":
     jsonformat('config/resources.json')
     jsonformat('config/scenes.json')
+    jsonformat('config/fightConfig.json')
     jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\resources.json')
     jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\scenes.json')
+    jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\maps\圣诞活动SP3.json')
+    
