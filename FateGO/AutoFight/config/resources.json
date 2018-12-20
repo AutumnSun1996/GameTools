@@ -7,88 +7,26 @@
     "Type": "Static",
     "Image": "战斗菜单.png"
   },
-  "角色1技能1": {
-    "Name": "角色1技能1",
+  "AP不足": {
+    "Name": "AP不足",
     "MainSize": [1280, 720],
-    "Offset": [38, 546],
-    "Size": [64, 64],
+    "Offset": [540, 36],
+    "Size": [200, 60],
+    "Type": "Static",
+    "Image": "AP不足.png"
+  },
+  "金苹果": {
+    "Name": "金苹果",
+    "MainSize": [1280, 720],
+    "Offset": [330, 270],
+    "Size": [600, 100],
     "Type": "Static"
   },
-  "角色1技能2": {
-    "Name": "角色1技能2",
+  "银苹果": {
+    "Name": "银苹果",
     "MainSize": [1280, 720],
-    "Offset": [132, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色1技能3": {
-    "Name": "角色1技能3",
-    "MainSize": [1280, 720],
-    "Offset": [226, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色2技能1": {
-    "Name": "角色2技能1",
-    "MainSize": [1280, 720],
-    "Offset": [356, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色2技能2": {
-    "Name": "角色2技能2",
-    "MainSize": [1280, 720],
-    "Offset": [450, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色2技能3": {
-    "Name": "角色2技能3",
-    "MainSize": [1280, 720],
-    "Offset": [544, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色3技能1": {
-    "Name": "角色3技能1",
-    "MainSize": [1280, 720],
-    "Offset": [674, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色3技能2": {
-    "Name": "角色3技能2",
-    "MainSize": [1280, 720],
-    "Offset": [768, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色3技能3": {
-    "Name": "角色3技能3",
-    "MainSize": [1280, 720],
-    "Offset": [862, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "御主技能1": {
-    "Name": "御主技能1",
-    "MainSize": [1280, 720],
-    "Offset": [874, 280],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "御主技能2": {
-    "Name": "御主技能2",
-    "MainSize": [1280, 720],
-    "Offset": [963, 280],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "御主技能3": {
-    "Name": "御主技能3",
-    "MainSize": [1280, 720],
-    "Offset": [1052, 280],
-    "Size": [64, 64],
+    "Offset": [330, 420],
+    "Size": [600, 100],
     "Type": "Static"
   },
   "队伍确认": {
