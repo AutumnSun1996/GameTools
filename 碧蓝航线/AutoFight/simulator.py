@@ -256,9 +256,10 @@ class SimulatorControl:
 
     def update_current_scene(self, candidates=None, interval=1, repeat=5):
         """等待指定的场景或全局场景"""
-        if repeat == 0:
+        if repeat <= 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
             # 若选择忽略错误，则返回“无匹配场景”
+            self.scene_history.append(self.fallback_scene)
             return self.fallback_scene
 
         if candidates is None:
