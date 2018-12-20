@@ -22,7 +22,7 @@ class CommonMap(FightMap):
         if isinstance(condition, list):
             if condition[0] == 'FightIndex':
                 fidx = self.get_fight_index() + self.virtual_fight_index
-                mod = fidx % 6
+                mod = fidx % self.data["FightCount"]
                 logger.debug("FightIndex %d(%d)", fidx, mod)
                 return mod
             if condition[0] == 'not':
@@ -77,7 +77,7 @@ class CommonMap(FightMap):
         # self.virtual_fight_index = 0
         self.reset_map_data()
         fight_idx = self.get_fight_index() + self.virtual_fight_index
-        mod = fight_idx % 6
+        mod = fight_idx % self.data["FightCount"]
         logger.warning("Current Fight Index: %d (%d)", fight_idx, mod)
         if mod != 0:
             self.virtual_fight_index += 6-mod
@@ -357,6 +357,7 @@ class CommonMap(FightMap):
 
 
 if __name__ == "__main__":
+    import datetime
     logger.setLevel("DEBUG")
     s = CommonMap("围剿斯佩伯爵SP3")
     logger.info('FinghtIndex: %d', s.parse_fight_condition(['FightIndex']))
@@ -364,7 +365,10 @@ if __name__ == "__main__":
     while True:
         s.check_scene()
         if s.current_scene["Name"] == "外部地图":
+            now = datetime.datetime.now()
             new_fight = s.get_fight_index() - start_index
             logger.info("战斗次数:%d(%d)", s.get_fight_index(), new_fight)
             if new_fight > 6*10:
+                exit(0)
+            if now.hour >= 22:
                 exit(0)
