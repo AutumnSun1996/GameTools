@@ -19,6 +19,47 @@ from config import logger, config
 from image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, \
     cv_save, load_scenes, load_resources, load_image
 from win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
+try:
+    __builtin__ = __builtins__
+except NameError:
+    pass
+
+def parse_condition(cond, obj, extra=None):
+    """通用条件解析"""
+    logger.debug("Parse: %s", cond)
+    use_extra = False
+    if isinstance(cond, list) and cond:
+        # 仅对非空的list进行解析
+        if cond[0] in {"$sum", "$all", "$any", "$max", "$min"}:
+            cmd = getattr(__builtin__, cond[0][1:])
+            cond = cmd((parse_condition(sub, obj, extra) for sub in cond[1:]))
+        elif cond[0] in {"$chr", "$bool", "$int", "$float", "$ord", "$len"}:
+            cmd = getattr(__builtin__, cond[0][1:])
+            cond = cmd(parse_condition(cond[1], obj, extra))
+        elif cond[0] in {"$eq", "$gt", "$ge", "$ne", "$lt", "$le"}:
+            cmd = getattr(parse_condition(cond[1], obj, extra), "__%s__" % cond[0][1:])
+            cond = cmd(parse_condition(cond[2], obj, extra))
+        elif cond[0] == "$not":
+            cond = not parse_condition(cond[1], obj, extra)
+        elif cond[0] == "$attr":
+            if len(cond) == 2:
+                cond = getattr(obj, parse_condition(cond[1], obj, extra))
+            else:
+                cond = getattr(parse_condition(cond[1], obj, extra), parse_condition(cond[2], obj, extra))
+        elif cond[0] == "$val":
+            if len(cond) == 2:
+                cond = obj[parse_condition(cond[1], obj, extra)]
+            else:
+                cond = parse_condition(cond[1], obj, extra)[parse_condition(cond[2], obj, extra)]
+        else:
+            use_extra = True
+    else:
+        use_extra = True
+    if extra and use_extra:
+        logger.debug("ExtraParse: %s", cond)
+        cond = extra(cond)
+    logger.debug("ParseResult: %s", cond)
+    return cond
 
 
 class SimulatorControl:
@@ -26,8 +67,8 @@ class SimulatorControl:
     """
     fallback_scene = {
         "Name": "无匹配场景",
-        "Compare": [],
-        "Actions": [{"Type": "Wait", "Time": 1}, ]
+        "Condition": True,
+        "Actions": [{"Type": "Wait", "Time": 1}]
     }
 
     def __init__(self):
@@ -57,13 +98,11 @@ class SimulatorControl:
         self.screen = get_window_shot(self.hwnd)
         return self.screen
 
-    def resource_in_image(self, image, name, reshot=True):
+    def resource_in_image(self, image, name):
         """判断资源是否存在于画面内
 
         未找到时返回False. 找到时根据资源类型, 返回不同的结果.
         """
-        if reshot:
-            self.make_screen_shot()
         if name not in self.resources:
             logger.warning("No resource: %s", name)
             return False, []
@@ -117,17 +156,26 @@ class SimulatorControl:
             ret = bool(pos)
         else:
             self.critical("Invalid Type %s", info['Type'])
-        logger.debug("Check Resource(reshot=%s): %s=%s", reshot, name, pos)
+        logger.debug("Check Resource: %s=%s", name, pos)
         return ret, pos
 
-    def resource_in_screen(self, name, reshot=True):
+    def search_resource(self, name):
         """判断资源是否存在于画面内
 
         未找到时返回False. 找到时根据资源类型, 返回不同的结果.
         """
-        return self.resource_in_image(self.screen, name, reshot)
+        return self.resource_in_image(self.screen, name)
+
+    def resource_in_screen(self, name):
+        """判断资源是否存在于画面内. 仅返回bool判断
+        """
+        return self.search_resource(name)[0]
 
     def wait(self, dt):
+        """等待固定时间
+
+        """
+        # TODO: 加入随机延时
         time.sleep(dt)
 
     def wait_resource(self, name, interval=1, repeat=5):
@@ -135,7 +183,7 @@ class SimulatorControl:
         if repeat < 0:
             self.error("Can't find resource %s" % name)
             return False
-        if self.resource_in_screen(name)[0]:
+        if self.resource_in_screen(name):
             return True
         self.wait(interval)
         return self.wait_resource(name, interval, repeat-1)
@@ -149,7 +197,7 @@ class SimulatorControl:
             Timer(delay, self.delayed_click, [name, condition]).start()
             return
         if condition is not None:
-            if not self.parse_condition(condition):
+            if not parse_condition(condition, None, self.resource_in_screen):
                 logger.warning("%s=False, 取消点击%s", condition, name)
                 return
         self.click_at_resource(name)
@@ -170,7 +218,7 @@ class SimulatorControl:
         if repeat < 0:
             self.error("Can't find resource %s" % condition)
             return False
-        if self.parse_condition(condition):
+        if parse_condition(condition, None, self.resource_in_screen):
             return True
         time.sleep(interval)
         return self.wait_till(condition, interval, repeat-1)
@@ -184,29 +232,13 @@ class SimulatorControl:
         """检查场景是否与画面一致
         """
         logger.debug("Check scene: %s", scene)
-        res = self.parse_condition(scene["Condition"], reshot)
+        if reshot:
+            self.make_screen_shot()
+        res = parse_condition(scene["Condition"], None, self.resource_in_screen)
         if res:
             logger.debug("Scene Matched: %s", scene)
             self.scene_history.append(scene)
         return res
-
-    def parse_condition(self, condition, reshot=True):
-        """检查condition是否被满足
-        """
-        result = False
-        if isinstance(condition, str):
-            result, _ = self.resource_in_screen(condition, reshot)
-        elif not isinstance(condition, (list, tuple)):
-            self.error("Invalid Condition: %s" % condition)
-        elif condition[0] == "All":
-            result = all([self.parse_condition(sub, reshot) for sub in condition[1:]])
-        elif condition[0] == "Any":
-            result = any([self.parse_condition(sub, reshot) for sub in condition[1:]])
-        elif condition[0] == "Not":
-            result = not self.parse_condition(condition[1], reshot)
-        else:
-            self.error("Invalid Condition: %s" % condition)
-        return result
 
     def go_top(self):
         """使模拟器窗口前置"""

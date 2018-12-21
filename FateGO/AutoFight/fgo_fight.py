@@ -6,38 +6,6 @@ from image_tools import cv_crop, extract_text, get_all_match, get_match
 from win32_tools import rand_click, drag
 from baidu_ocr import ocr
 from simulator import SimulatorControl
-try:
-    __builtin__ = __builtins__
-except NameError:
-    pass
-
-
-def parse_condtion(cond, obj):
-    """通用条件解析"""
-    if isinstance(cond, list) and cond:
-        # 仅对非空的list进行解析
-        if cond[0] in {"$sum", "$all", "$any", "$max", "$min"}:
-            cmd = getattr(__builtin__, cond[0][1:])
-            cond = cmd((parse_condtion(sub, obj) for sub in cond[1:]))
-        elif cond[0] in {"$chr", "$bool", "$int", "$float", "$ord", "$len"}:
-            cmd = getattr(__builtin__, cond[0][1:])
-            cond = cmd(parse_condtion(cond[1], obj))
-        elif cond[0] in {"$eq", "$gt", "$ge", "$ne", "$lt", "$le"}:
-            cmd = getattr(parse_condtion(cond[1], obj), "__%s__" % cond[0][1:])
-            cond = cmd(parse_condtion(cond[2], obj))
-        elif cond[0] == "$not":
-            cond = not parse_condtion(cond[1], obj)
-        elif cond[0] == "$attr":
-            if len(cond) == 2:
-                cond = getattr(obj, parse_condtion(cond[1], obj))
-            else:
-                cond = getattr(parse_condtion(cond[1], obj), parse_condtion(cond[2], obj))
-        elif cond[0] == "$val":
-            if len(cond) == 2:
-                cond = obj[parse_condtion(cond[1], obj)]
-            else:
-                cond = obj[parse_condtion(cond[1], obj), parse_condtion(cond[2], obj)]
-    return cond
 
 
 def contact_images(*images, sep=1):
@@ -102,8 +70,8 @@ class FateGrandOrder(SimulatorControl):
         self.best_equips = []
 
     def servant_scroll(self, line):
-        _, top_xy = self.resource_in_screen("滚动条-上")
-        _, bot_xy = self.resource_in_screen("滚动条-下")
+        _, top_xy = self.search_resource("滚动条-上")
+        _, bot_xy = self.search_resource("滚动条-下")
         top = top_xy[1]
         bottom = bot_xy[1]
         x = (top_xy[0] + bot_xy[0]) // 2
@@ -113,8 +81,8 @@ class FateGrandOrder(SimulatorControl):
         drag(self.hwnd, (x, middle), (x, middle + dy), 30)
 
     def servant_scroll_to_top(self):
-        _, top_xy = self.resource_in_screen("滚动条-上")
-        _, bot_xy = self.resource_in_screen("滚动条-下")
+        _, top_xy = self.search_resource("滚动条-上")
+        _, bot_xy = self.search_resource("滚动条-下")
         top = top_xy[1]
         bottom = bot_xy[1]
         x = (top_xy[0] + bot_xy[0]) // 2
@@ -138,7 +106,7 @@ class FateGrandOrder(SimulatorControl):
                 rand_click(self.hwnd, rect)
                 return
         self.servant_scroll_to_top()
-        ret, pos = self.resource_in_screen("最后登录")
+        ret, pos = self.search_resource("最后登录")
 
     def assist_score(self, target):
         res = self.resources['最后登录']
