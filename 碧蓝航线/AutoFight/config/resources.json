@@ -509,5 +509,13 @@
     "Size": [40, 10],
     "Type": "Static",
     "Image": "加载进度条.png"
+  },
+  "Lv-Smaller": {
+    "Name": "Lv-Smaller",
+    "MainSize": [1280, 720],
+    "Offset": [0, -20],
+    "Size": [20, 18],
+    "Type": "Anchor",
+    "Image": "Lv-Smaller.png"
   }
 }
