@@ -15,7 +15,7 @@ class CommonMap(FightMap):
 
     def __init__(self, map_name=None):
         super().__init__(map_name)
-        self.virtual_fight_index = 4
+        self.virtual_fight_index = 6
         self.reset_map_data()
 
     def parse_fight_condition(self, condition):
@@ -47,6 +47,7 @@ class CommonMap(FightMap):
         self.boss = []
         self.other_fleet = None
         self.current_fleet = None
+        self.submarine = []
         self.resource_points = []
         self.enemies = set()
         self.pos = {}
@@ -61,6 +62,8 @@ class CommonMap(FightMap):
                     self.boss.append(name)
                 if cell_type == '?':
                     self.resource_points.append(name)
+                if cell_type == 'S':
+                    self.submarine.append(name)
                 if i > 0:
                     left = chr(ord('A')+i-1) + str(j+1)
                     if self.g.nodes.get(left, {}).get('cell_type', 'O') != 'O':
@@ -69,6 +72,8 @@ class CommonMap(FightMap):
                     top = chr(ord('A')+i) + str(j)
                     if self.g.nodes.get(top, {}).get('cell_type', 'O') != 'O':
                         self.g.add_edge(name, top)
+        if len(self.submarine) == 1:
+            self.submarine = self.submarine[0]
         for node in self.g:
             if self.g.nodes[node]['cell_type'] == 'E':
                 self.set_enemy(node, 'Possible')
@@ -245,7 +250,9 @@ class CommonMap(FightMap):
             self.notice("Not in 战斗地图")
             return
 
-        enemies = self.find_on_map(anchor_name, anchor_pos, 'Lv', False)
+        enemies1 = self.find_on_map(anchor_name, anchor_pos, 'Lv', False)
+        enemies2 = self.find_on_map(anchor_name, anchor_pos, 'Lv-Smaller', False)
+        enemies = set(enemies1).union(enemies2)
         for enemy in enemies:
             self.set_enemy(enemy)
         logger.info("找到敌人: %s", enemies)
@@ -266,6 +273,15 @@ class CommonMap(FightMap):
         logger.info("找到舰队: %s", fleets)
         if self.current_fleet in fleets:
             fleets.discard(self.current_fleet)
+        if isinstance(self.submarine, list):
+            # 未确定潜艇位置
+            both = fleets.intersection(self.submarine)
+            if both:
+                self.submarine = list(both)[0]
+                logger.info("找到潜艇: %s", self.submarine)
+                fleets.discard(self.submarine)
+        else:
+            fleets.discard(self.submarine)
         if len(fleets) == 1:
             self.other_fleet = list(fleets)[0]
             logger.info("找到另一舰队: %s", self.other_fleet)
@@ -359,7 +375,7 @@ class CommonMap(FightMap):
 if __name__ == "__main__":
     import datetime
     logger.setLevel("DEBUG")
-    s = CommonMap("围剿斯佩伯爵SP3")
+    s = CommonMap("斯图尔特的硝烟SP3")
     logger.info('FinghtIndex: %d', s.parse_fight_condition(['FightIndex']))
     start_index = s.get_fight_index()
     while True:
