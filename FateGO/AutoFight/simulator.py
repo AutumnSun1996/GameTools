@@ -33,10 +33,10 @@ def parse_condition(cond, obj, extra=None):
         if cond[0] in {"$sum", "$all", "$any", "$max", "$min"}:
             cmd = getattr(__builtin__, cond[0][1:])
             cond = cmd((parse_condition(sub, obj, extra) for sub in cond[1:]))
-        elif cond[0] in {"$chr", "$bool", "$int", "$float", "$ord", "$len"}:
+        elif cond[0] in {"$chr", "$bool", "$int", "$float", "$ord", "$len", "$abs"}:
             cmd = getattr(__builtin__, cond[0][1:])
             cond = cmd(parse_condition(cond[1], obj, extra))
-        elif cond[0] in {"$eq", "$gt", "$ge", "$ne", "$lt", "$le"}:
+        elif cond[0] in {"$eq", "$gt", "$ge", "$ne", "$lt", "$le", "$add", "$sub", "$mul", "$truediv", "$mod", "$divmod"}:
             cmd = getattr(parse_condition(cond[1], obj, extra), "__%s__" % cond[0][1:])
             cond = cmd(parse_condition(cond[2], obj, extra))
         elif cond[0] == "$not":
