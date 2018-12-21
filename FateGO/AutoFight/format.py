@@ -59,5 +59,6 @@ if __name__ == "__main__":
     jsonformat('config/fightConfig.json')
     jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\resources.json')
     jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\config\scenes.json')
-    jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\maps\圣诞活动SP3.json')
+    jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\maps\斯图尔特的硝烟SP3.json')
+    jsonformat(r'D:\QiuShiyang\Document\GameRoutes\碧蓝航线\AutoFight\maps\围剿斯佩伯爵SP3.json')
     
