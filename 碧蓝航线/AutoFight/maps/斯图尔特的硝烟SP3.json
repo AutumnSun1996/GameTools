@@ -1,0 +1,72 @@
+{
+  "Name": "斯图尔特的硝烟SP3",
+  "FightCount": 6,
+  "Map": [
+    "OEEEEEEOO",
+    "EEEEOEEOO",
+    "EESEEEEEF",
+    "OOOEEEEOE",
+    "EEEEEOEEE",
+    "EEEEFOEEE"
+  ],
+  "ViewPort": ["D2", "D5", "F5", "F2"],
+  "Strategy": [
+    {
+      "Condition": ["in", ["FightIndex"], [0, 1, 2, 3, 4]],
+      "Actions": [{"Type": "InnerCall", "Target": "normal_fight"}]
+    },
+    {
+      "Condition": ["==", ["FightIndex"], 5],
+      "Actions": [
+        {"Type": "Click", "Target": "切换舰队"},
+        {"Type": "Wait", "Time": 2},
+        {"Type": "InnerCall", "Target": "search_for_boss"}
+      ]
+    }
+  ],
+  "Scenes": {
+    "外部地图": {
+      "Name": "外部地图",
+      "Condition": "斯图尔特的硝烟SP2",
+      "Actions": [
+        {"Type": "Click", "Target": "斯图尔特的硝烟SP3"},
+        {"Type": "Wait", "Time": 0.5}
+      ],
+      "Next": ["进入地图确认"]
+    },
+    "舰队选择": {
+      "Name": "舰队选择",
+      "Condition": "舰队选择-立刻前往",
+      "Actions": [
+        {"Type": "InnerCall", "Target": "mood_detect"},
+        {"Type": "Click", "Target": "舰队选择-立刻前往"},
+        {"Type": "InnerCall", "Target": "reset_fight_index"},
+        {"Type": "Wait", "Time": 4}
+      ]
+    }
+  },
+  "Resources": {
+    "斯图尔特的硝烟SP3": {
+      "Name": "斯图尔特的硝烟SP3",
+      "MainSize": [1280, 720],
+      "Offset": [800, 380],
+      "Size": [50, 30],
+      "Type": "Static"
+    },
+    "斯图尔特的硝烟SP2": {
+      "Name": "斯图尔特的硝烟SP2",
+      "MainSize": [1280, 720],
+      "Offset": [70, 50],
+      "Size": [70, 50],
+      "Type": "Static",
+      "Image": "Clear.png"
+    }
+  },
+  "Anchors": {
+    "斯图尔特的硝烟SP3-A4": {"Name": "斯图尔特的硝烟SP3-A4", "MainSize": [1280, 720], "Offset": [36, 25], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-A4.png"},
+    "斯图尔特的硝烟SP3-C4": {"Name": "斯图尔特的硝烟SP3-C4", "MainSize": [1280, 720], "Offset": [46, 25], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-C4.png"},
+    "斯图尔特的硝烟SP3-E2": {"Name": "斯图尔特的硝烟SP3-E2", "MainSize": [1280, 720], "Offset": [36, 25], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-E2.png"},
+    "斯图尔特的硝烟SP3-F5": {"Name": "斯图尔特的硝烟SP3-F5", "MainSize": [1280, 720], "Offset": [32, 20], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-F5.png"},
+    "斯图尔特的硝烟SP3-H2": {"Name": "斯图尔特的硝烟SP3-H2", "MainSize": [1280, 720], "Offset": [40, 35], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-H2.png"}
+  }
+}
