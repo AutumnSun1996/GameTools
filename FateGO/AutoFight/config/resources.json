@@ -138,13 +138,12 @@
     "Size": [140, 180],
     "Type": "Static"
   },
-  "star-center": {
-    "Name": "star-center",
+  "礼装满破": {
+    "Name": "礼装满破",
     "MainSize": [1280, 720],
-    "Offset": [-60, -10],
     "Size": [8, 7],
-    "Type": "Anchor",
-    "Image": "star-center.png",
+    "Type": "Dynamic",
+    "Image": "Star-center.png",
     "MaxDiff": 0.02
   },
   "克制": {
@@ -354,5 +353,12 @@
     "Offset": [160, 275],
     "Size": [120, 20],
     "Type": "Static"
+  },
+  "来自奇境": {
+    "Name": "来自奇境",
+    "MainSize": [1280, 720],
+    "Size": [120, 30],
+    "Type": "Dynamic",
+    "Image": "来自奇境.png"
   }
 }
