@@ -1,11 +1,12 @@
-import numpy as np
+import json
 
+import numpy as np
 
 from config import config
 from image_tools import cv_crop, extract_text, get_all_match, get_match
 from win32_tools import rand_click, drag
 from baidu_ocr import ocr
-from simulator import SimulatorControl
+from simulator import SimulatorControl, parse_condition
 
 
 def contact_images(*images, sep=1):
@@ -59,7 +60,7 @@ class CombatServant:
 
 
 class FateGrandOrder(SimulatorControl):
-    def __init__(self):
+    def __init__(self, strategy="fightConfig"):
         super().__init__()
         self.combat_info = {
             "BattleNow": None,
@@ -68,6 +69,8 @@ class FateGrandOrder(SimulatorControl):
             "Turn": None
         }
         self.best_equips = []
+        with open("config/%s.json" % strategy, "r", -1, "UTF-8") as fl:
+            self.strategy = json.load(fl)
 
     def servant_scroll(self, line):
         _, top_xy = self.search_resource("滚动条-上")
@@ -99,7 +102,7 @@ class FateGrandOrder(SimulatorControl):
         x, y, x1, y1 = self.get_resource_rect(name)
         return cv_crop(image, (x+dx, y+dy, x1+dx, y1+dy))
 
-    def choose_assist_servant(self, wanted_score):
+    def choose_assist_servant(self):
         for target in self.best_equips:
             score, rect = self.assist_score(target)
             if score > wanted_score:
