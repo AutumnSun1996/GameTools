@@ -3,7 +3,7 @@
   "FightCount": 6,
   "Map": [
     "OEEEEEEOO",
-    "EEEEOEEOO",
+    "BEEEOEEOO",
     "EESEEEEEF",
     "OOOEEEEOE",
     "EEEEEOEEE",
@@ -27,7 +27,7 @@
   "Scenes": {
     "外部地图": {
       "Name": "外部地图",
-      "Condition": "斯图尔特的硝烟SP2",
+      "Condition": "斯图尔特的硝烟-Clear",
       "Actions": [
         {"Type": "Click", "Target": "斯图尔特的硝烟SP3"},
         {"Type": "Wait", "Time": 0.5}
@@ -53,20 +53,68 @@
       "Size": [50, 30],
       "Type": "Static"
     },
-    "斯图尔特的硝烟SP2": {
-      "Name": "斯图尔特的硝烟SP2",
+    "斯图尔特的硝烟-Clear": {
+      "Name": "斯图尔特的硝烟-Clear",
       "MainSize": [1280, 720],
-      "Offset": [70, 50],
+      "Offset": [343, 511],
       "Size": [70, 50],
       "Type": "Static",
       "Image": "Clear.png"
+    },
+    "大获全胜-左上角": {
+      "Name": "大获全胜-左上角",
+      "MainSize": [1920, 1080],
+      "Offset": [292, 40],
+      "Size": [444, 123],
+      "Image": "斯图尔特的硝烟SP3-大获全胜.png",
+      "Type": "Static"
     }
   },
   "Anchors": {
-    "斯图尔特的硝烟SP3-A4": {"Name": "斯图尔特的硝烟SP3-A4", "MainSize": [1280, 720], "Offset": [36, 25], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-A4.png"},
-    "斯图尔特的硝烟SP3-C4": {"Name": "斯图尔特的硝烟SP3-C4", "MainSize": [1280, 720], "Offset": [46, 25], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-C4.png"},
-    "斯图尔特的硝烟SP3-E2": {"Name": "斯图尔特的硝烟SP3-E2", "MainSize": [1280, 720], "Offset": [36, 25], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-E2.png"},
-    "斯图尔特的硝烟SP3-F5": {"Name": "斯图尔特的硝烟SP3-F5", "MainSize": [1280, 720], "Offset": [32, 20], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-F5.png"},
-    "斯图尔特的硝烟SP3-H2": {"Name": "斯图尔特的硝烟SP3-H2", "MainSize": [1280, 720], "Offset": [40, 35], "Size": [80, 60], "Type": "Anchor", "Image": "斯图尔特的硝烟SP3-H2.png"}
+    "斯图尔特的硝烟SP3-A4": {
+      "Name": "斯图尔特的硝烟SP3-A4",
+      "OnMap": "A4",
+      "MainSize": [1280, 720],
+      "Offset": [36, 25],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "Image": "斯图尔特的硝烟SP3-A4.png"
+    },
+    "斯图尔特的硝烟SP3-C4": {
+      "Name": "斯图尔特的硝烟SP3-C4",
+      "OnMap": "C4",
+      "MainSize": [1280, 720],
+      "Offset": [46, 25],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "Image": "斯图尔特的硝烟SP3-C4.png"
+    },
+    "斯图尔特的硝烟SP3-E2": {
+      "Name": "斯图尔特的硝烟SP3-E2",
+      "OnMap": "E2",
+      "MainSize": [1280, 720],
+      "Offset": [36, 25],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "Image": "斯图尔特的硝烟SP3-E2.png"
+    },
+    "斯图尔特的硝烟SP3-F5": {
+      "Name": "斯图尔特的硝烟SP3-F5",
+      "OnMap": "F5",
+      "MainSize": [1280, 720],
+      "Offset": [32, 20],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "Image": "斯图尔特的硝烟SP3-F5.png"
+    },
+    "斯图尔特的硝烟SP3-H2": {
+      "Name": "斯图尔特的硝烟SP3-H2",
+      "OnMap": "H2",
+      "MainSize": [1280, 720],
+      "Offset": [40, 35],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "Image": "斯图尔特的硝烟SP3-H2.png"
+    }
   }
 }
