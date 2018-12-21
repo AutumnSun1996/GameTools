@@ -152,7 +152,7 @@ class FightMap(AzurLaneControl):
 
         match = get_all_match(self.screen, target['ImageData'])
         result = set()
-        for y, x in zip(*np.where(match < 0.1)):
+        for y, x in zip(*np.where(match < target.get("MaxDiff", 0.1))):
             pos = np.add(target['Offset'], [x, y])
             offset = image2square(pos) - anchor_pos_s
             dx, dy = np.round(offset / 100).reshape((2)).astype('int')
