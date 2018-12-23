@@ -82,8 +82,6 @@ def load_map(name):
         items = json.load(fl)
     for val in items["Resources"].values():
         update_resource(val)
-    for val in items["Anchors"].values():
-        update_resource(val)
     return items
 
 
@@ -110,6 +108,25 @@ def get_all_match(image, needle):
     else:
         match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
     return match
+
+def get_multi_match(image, needle, thresh):
+    """在image中搜索多个needle的位置
+    
+    重合的部分返回重合部分中心对应的坐标
+    """
+    match = get_all_match(image, needle)
+    # 模拟用背景图片
+    draw = np.zeros(image.shape[:2], dtype='uint8')
+    h, w = needle.shape[:2]
+    for y, x in zip(*np.where(match < thresh)):
+        cv.rectangle(draw, (x, y), (x+w, y+h), 255, -1)
+    # 连通域分析
+    _, _, _, centroids = cv.connectedComponentsWithStats(draw)
+    # 中心坐标转化为左上角坐标
+    centroids[:, 0] -= w / 2
+    centroids[:, 1] -= h / 2
+    # 删去背景连通域并将数值转化为int型
+    return centroids[1:, :].astype('int')
 
 
 def get_match(image, needle):

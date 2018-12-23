@@ -2,8 +2,8 @@ import json
 
 import numpy as np
 
-from config import config
-from image_tools import cv_crop, extract_text, get_all_match, get_match
+from config import config, logger
+from image_tools import cv_crop, extract_text, get_multi_match, get_match, load_map
 from win32_tools import rand_click, drag
 from baidu_ocr import ocr
 from simulator import SimulatorControl, parse_condition
@@ -60,7 +60,7 @@ class CombatServant:
 
 
 class FateGrandOrder(SimulatorControl):
-    def __init__(self, strategy="fightConfig"):
+    def __init__(self, map_name="CommonConfig"):
         super().__init__()
         self.combat_info = {
             "BattleNow": None,
@@ -69,9 +69,18 @@ class FateGrandOrder(SimulatorControl):
             "Turn": None
         }
         self.best_equips = []
-        with open("config/%s.json" % strategy, "r", -1, "UTF-8") as fl:
-            self.strategy = json.load(fl)
+        self.data = load_map(map_name)
+        logger.info("Update Resources %s", self.data['Resources'].keys())
+        self.resources.update(self.data['Resources'])
+        logger.info("Update Scenes %s", self.data['Scenes'].keys())
+        self.scenes.update(self.data['Scenes'])
 
+    def refresh_assist(self):
+        self.click_at_resource("助战更新")
+        self.wait(0.8)
+        self.click_at_resource("助战-确认更新")
+        self.wait(3)
+        
     def servant_scroll(self, line):
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
@@ -105,7 +114,7 @@ class FateGrandOrder(SimulatorControl):
     def choose_assist_servant(self):
         for target in self.best_equips:
             score, rect = self.assist_score(target)
-            if score > wanted_score:
+            if score > self.data["AssistLimit"]:
                 rand_click(self.hwnd, rect)
                 return
         self.servant_scroll_to_top()
@@ -118,8 +127,7 @@ class FateGrandOrder(SimulatorControl):
         dx, dy = res['Offset']
         ex, ey = equip['Offset']
         lt, rb = res['SearchArea']
-        match = get_all_match(self.screen, res['ImageData'])
-        for y, x in zip(*np.where(match < res.get("MaxDiff", 0.05))):
+        for x, y in get_multi_match(self.screen, res['ImageData'], res.get("MaxDiff", 0.05)):
             if not (lt[0] < x < rb[0] and lt[1] < y < rb[1]):
                 continue
             sx = x+dx+ex
@@ -137,13 +145,8 @@ class FateGrandOrder(SimulatorControl):
             self.crop_resource("回合数"),
         ))
 
-    def choose_skill(self):
-        self.extract_combat_info()
-        if self.combat_info['Turn'] == 1:
-            for c, s in [(1, 1), (1, 2), (2, 1), (2, 2), (2, 3)]:
-                self.click_at_resource("角色%d技能%d" % (c, s))
-                self.wait_till_scene("选择技能")
-                self.wait(0.2)
+    def choose_skills(self):
+        self.click_at_resource("Attack")
 
     def update_background(self):
         """保存当前画面为宝具背景, 供之后的分析使用
@@ -168,7 +171,7 @@ class FateGrandOrder(SimulatorControl):
         for cards in ['Buster', 'Arts', 'Quick']:
             pass
 
-    def choose_card(self):
+    def choose_cards(self):
         pass
 
 
@@ -178,3 +181,4 @@ if __name__ == "__main__":
     print(fgo.resources['战斗速度']['ImageData'].shape)
     fgo.update_current_scene()
     print(fgo.scene_history)
+    
