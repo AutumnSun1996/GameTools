@@ -1,6 +1,7 @@
 """
 碧蓝航线战斗棋盘地图分析和定位
 """
+import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -15,7 +16,7 @@ class CommonMap(FightMap):
 
     def __init__(self, map_name=None):
         super().__init__(map_name)
-        self.virtual_fight_index = 6
+        self.virtual_fight_index = 1
         self.reset_map_data()
 
     def parse_fight_condition(self, condition):
@@ -86,7 +87,8 @@ class CommonMap(FightMap):
         logger.warning("Current Fight Index: %d (%d)", fight_idx, mod)
         if mod != 0:
             self.virtual_fight_index += 6-mod
-            logger.info("Reset Fight Index From %d To %d", fight_idx, fight_idx+6-mod)
+            logger.info("Reset Fight Index From %d To %d",
+                        fight_idx, fight_idx+6-mod)
 
     def enemies_on_path(self, path):
         enemies = []
@@ -113,7 +115,8 @@ class CommonMap(FightMap):
     def set_enemy(self, cell, status="Exist"):
         info = self.g.nodes[cell]
         if info['cell_type'] == 'O':
-            raise ValueError("%s为不可通过区域" % cell)
+            self.notice("%s为不可通过区域" % cell)
+            return
         if info['cell_type'] == 'B' and status == 'Exist':
             status = 'Boss'
         if status == 'Boss':
@@ -141,7 +144,8 @@ class CommonMap(FightMap):
         ax = cf.gca()
         ax.set_axis_off()
         nodes = list(self.g.nodes)
-        nx.draw_networkx_nodes(self.g, pos=self.pos, nodelist=nodes, node_color=[self.get_color(key) for key in nodes])
+        nx.draw_networkx_nodes(self.g, pos=self.pos, nodelist=nodes, node_color=[
+                               self.get_color(key) for key in nodes])
         nx.draw_networkx_edges(self.g, pos=self.pos)
         nx.draw_networkx_labels(self.g, pos=self.pos, font_color='white')
 
@@ -150,7 +154,8 @@ class CommonMap(FightMap):
         for i in range(1, len(path)):
             self.g[path[i-1]][path[i]]['InPath'] = True
             edges.append((path[i-1], path[i]))
-        nx.draw_networkx_edges(self.g.to_directed(), pos=self.pos, edgelist=edges, edge_color='r')
+        nx.draw_networkx_edges(self.g.to_directed(),
+                               pos=self.pos, edgelist=edges, edge_color='r')
 
     def shortest_path(self, start, target, weight='weight'):
         return nx.shortest_path(self.g, start, target, weight)
@@ -211,37 +216,47 @@ class CommonMap(FightMap):
 
         distance = []
         for enemy in self.enemies:
-            distance.append([self.shortest_path_length(self.current_fleet, enemy), enemy])
+            distance.append([self.shortest_path_length(
+                self.current_fleet, enemy), enemy])
         distance.sort()
         logger.info("选择最近的敌人: %s", distance[0][1])
         return distance[0][1]
 
-    def search_for_boss(self, repeat=0):
-        logger.info("搜索Boss%d", repeat)
-        if repeat >= 5:
+    def search_for_boss(self, repeat=0, idx=0):
+        logger.info("搜索Boss(%d)", repeat)
+            
+        if idx is not None:
+            target = self.data['ViewPort'][idx]
+            logger.info("检查区域%s", target)
+            self.move_map_to(*self.locate_target(target)[1])
+        if repeat > 5:
             self.critical("Boss搜索失败")
-
-        if len(self.boss) > 1:
-            ret, pos = self.resource_in_screen('Boss')
-            if not ret:
-                ret, pos = self.resource_in_screen('Boss-Bigger')
-            if not ret:
-                self.recheck_full_map()
-                self.search_for_boss(repeat+1)
-                return
-            logger.info("找到Boss %s", pos)
-            x, y = pos
-            x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
-            if x < x_min or x > x_max or y < y_min or y > y_max:
-                logger.debug("目标不在中间区域")
-                self.move_map_to(x, y)
-                self.search_for_boss(repeat+1)
-                return
-            w, h = self.resources['Boss']['Size']
-            rand_click(self.hwnd, (x, y, x+w, y+h))
-            self.wait(6)
+        
+        ret, pos = self.resource_in_screen('Boss')
+        if not ret:
+            ret, pos = self.resource_in_screen('Boss-Bigger')
+        if not ret:
+            self.search_for_boss(repeat, idx+1)
             return
-        self.click_at_map(self.boss[0])
+        logger.info("找到Boss %s", pos)
+        x, y = pos
+        x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
+        if x < x_min or x > x_max or y < y_min or y > y_max:
+            logger.debug("目标不在中间区域")
+            self.move_map_to(x, y)
+            self.search_for_boss(repeat+1, None)
+            return
+        x, y = np.add(self.resources['Boss']['ClickOffset'], pos)
+        w, h = self.resources['Boss']['ClickSize']
+        logger.debug("点击: (%d, %d)+(%d, %d)", x, y, w, h)
+        rand_click(self.hwnd, (x, y, x+w, y+h))
+        self.wait(6)
+        return
+
+    def find_on_map(self, anchor_name, anchor_pos, target_name, reshot=True):
+        results = FightMap.find_on_map(
+            self, anchor_name, anchor_pos, target_name, reshot)
+        return results.intersection(self.g.nodes)
 
     def check_map(self):
         self.make_screen_shot()
@@ -251,29 +266,35 @@ class CommonMap(FightMap):
             return
 
         enemies1 = self.find_on_map(anchor_name, anchor_pos, 'Lv', False)
-        enemies2 = self.find_on_map(anchor_name, anchor_pos, 'Lv-Smaller', False)
+        enemies2 = self.find_on_map(
+            anchor_name, anchor_pos, 'Lv-Smaller', False)
         enemies = set(enemies1).union(enemies2)
+        logger.info("找到敌人: %s", enemies)
         for enemy in enemies:
             self.set_enemy(enemy)
-        logger.info("找到敌人: %s", enemies)
 
-        boss = self.find_on_map(anchor_name, anchor_pos, 'Boss', False)
-        if len(boss) != 1:
-            boss = self.find_on_map(anchor_name, anchor_pos, 'Boss-Bigger', False)
-        if len(boss) == 1:
-            self.boss = list(boss)
-            logger.info("找到Boss: %s", boss)
-
-        pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer', False)
-        if pointer:
-            self.current_fleet = list(pointer)[0]
-            logger.info("找到当前舰队: %s", self.current_fleet)
+        # boss = self.find_on_map(anchor_name, anchor_pos, 'Boss', False)
+        # if len(boss) != 1:
+            # boss = self.find_on_map(
+                # anchor_name, anchor_pos, 'Boss-Bigger', False)
+        # if len(boss) == 1:
+            # self.boss = list(boss)
+            # logger.info("找到Boss: %s", boss)
+        
+        if self.current_fleet is None:
+            pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer', False)
+            if pointer:
+                self.current_fleet = list(pointer)[0]
+                logger.info("找到当前舰队: %s", self.current_fleet)
 
         fleets = self.find_on_map(anchor_name, anchor_pos, 'Ammo', False)
         logger.info("找到舰队: %s", fleets)
         if self.current_fleet in fleets:
             fleets.discard(self.current_fleet)
-        if isinstance(self.submarine, list):
+        if not self.submarine:
+            # 无潜艇
+            pass
+        elif isinstance(self.submarine, list):
             # 未确定潜艇位置
             both = fleets.intersection(self.submarine)
             if both:
@@ -294,8 +315,10 @@ class CommonMap(FightMap):
     def recheck_full_map(self):
         logger.warning("地图信息更新")
         for target in self.data['ViewPort']:
-            logger.info("移动到%s", target)
+            logger.info("查看%s周围信息", target)
+            self.wait(1)
             self.move_map_to(*self.locate_target(target)[1])
+            self.wait(1)
             self.check_map()
 
     def after_bonus(self):
@@ -374,7 +397,7 @@ class CommonMap(FightMap):
 
 if __name__ == "__main__":
     import datetime
-    logger.setLevel("DEBUG")
+    # logger.setLevel("DEBUG")
     s = CommonMap("斯图尔特的硝烟SP3")
     logger.info('FinghtIndex: %d', s.parse_fight_condition(['FightIndex']))
     start_index = s.get_fight_index()
