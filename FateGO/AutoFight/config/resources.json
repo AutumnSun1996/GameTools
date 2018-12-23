@@ -65,28 +65,28 @@
     "MainSize": [1280, 720],
     "Offset": [850, 10],
     "Size": [100, 30],
-    "Type": "Virtual"
+    "Type": "Static"
   },
   "剩余敌人": {
     "Name": "剩余敌人",
     "MainSize": [1280, 720],
     "Offset": [850, 46],
     "Size": [130, 30],
-    "Type": "Virtual"
+    "Type": "Static"
   },
   "回合数": {
     "Name": "回合数",
     "MainSize": [1280, 720],
     "Offset": [850, 82],
     "Size": [130, 30],
-    "Type": "Virtual"
+    "Type": "Static"
   },
   "Attack": {
     "Name": "Attack",
     "MainSize": [1280, 720],
     "Offset": [1070, 540],
     "Size": [130, 130],
-    "Type": "Virtual"
+    "Type": "Static"
   },
   "战斗速度": {
     "Name": "战斗速度",
@@ -281,14 +281,7 @@
     "Size": [200, 100],
     "Type": "Static"
   },
-  "羁绊加深": {
-    "Name": "羁绊加深",
-    "MainSize": [1280, 720],
-    "Offset": [660, 350],
-    "Size": [160, 40],
-    "Type": "Static",
-    "Image": "羁绊加深.png"
-  },
+  "羁绊加深": {"Name": "羁绊加深", "MainSize": [1280, 720], "Offset": [660, 323], "Size": [160, 40], "Type": "Static", "Image": "羁绊加深.png"},
   "助战-职阶选择": {
     "Name": "助战-职阶选择",
     "MainSize": [1280, 720],
@@ -321,6 +314,8 @@
     "Name": "战斗-敌人位置",
     "MainSize": [1280, 720],
     "Positions": [[8, 0], [249, 0], [488, 0]],
+    "ClickOffset": [10, 10],
+    "ClickSize": [200, 50],
     "Type": "MultiStatic"
   },
   "战斗-从者位置": {
@@ -368,11 +363,11 @@
     "Name": "从者NP",
     "MainSize": [1280, 720],
     "Positions": [
-      [30, 355],
-      [285, 355],
-      [540, 355],
-      [800, 355],
-      [1065, 355]
+      [30, 360],
+      [285, 360],
+      [540, 360],
+      [800, 360],
+      [1065, 360]
     ],
     "Size": [200, 270],
     "ClickOffset": [30, 60],
@@ -382,8 +377,8 @@
   "右侧空白区域": {
     "Name": "右侧空白区域",
     "MainSize": [1280, 720],
-    "Offset": [80, 165],
-    "Size": [100, 36],
+    "Offset": [1240, 230],
+    "Size": [40, 50],
     "Type": "Static"
   },
   "与从者的羁绊": {
@@ -417,5 +412,89 @@
     "Size": [190, 50],
     "Type": "Static",
     "Image": "助战-确认更新.png"
+  },
+  "角色1技能1": {
+    "Name": "角色1技能1",
+    "MainSize": [1280, 720],
+    "Offset": [38, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色1技能2": {
+    "Name": "角色1技能2",
+    "MainSize": [1280, 720],
+    "Offset": [132, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色1技能3": {
+    "Name": "角色1技能3",
+    "MainSize": [1280, 720],
+    "Offset": [226, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色2技能1": {
+    "Name": "角色2技能1",
+    "MainSize": [1280, 720],
+    "Offset": [356, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色2技能2": {
+    "Name": "角色2技能2",
+    "MainSize": [1280, 720],
+    "Offset": [450, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色2技能3": {
+    "Name": "角色2技能3",
+    "MainSize": [1280, 720],
+    "Offset": [544, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色3技能1": {
+    "Name": "角色3技能1",
+    "MainSize": [1280, 720],
+    "Offset": [674, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色3技能2": {
+    "Name": "角色3技能2",
+    "MainSize": [1280, 720],
+    "Offset": [768, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "角色3技能3": {
+    "Name": "角色3技能3",
+    "MainSize": [1280, 720],
+    "Offset": [862, 546],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "御主技能1": {
+    "Name": "御主技能1",
+    "MainSize": [1280, 720],
+    "Offset": [874, 280],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "御主技能2": {
+    "Name": "御主技能2",
+    "MainSize": [1280, 720],
+    "Offset": [963, 280],
+    "Size": [64, 64],
+    "Type": "Static"
+  },
+  "御主技能3": {
+    "Name": "御主技能3",
+    "MainSize": [1280, 720],
+    "Offset": [1052, 280],
+    "Size": [64, 64],
+    "Type": "Static"
   }
 }
