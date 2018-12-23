@@ -70,12 +70,13 @@ class SimulatorControl:
         if not info.get("Image"):
             self.error("No ImageData for %s" % info)
             return False, []
-
+        logger.debug("Search %s(%s)", info["Name"], info["Type"])
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
             target = info['ImageData']
             cropped = cv_crop(self.screen, rect)
             diff = get_diff(cropped, target)
+            logger.debug("diff=%.3f", diff)
             # 有位置限制, 可以使用较为宽松的阈值
             ret = diff <= info.get('MaxDiff', 0.06)
             if ret:
@@ -85,6 +86,7 @@ class SimulatorControl:
         elif info["Type"] in {"Dynamic", "Anchor"}:
             target = info['ImageData']
             diff, pos = get_match(self.screen, target)
+            logger.debug("diff=%.3f, pos=%s", diff, pos)
             if diff > info.get('MaxDiff', 0.02):
                 ret = False
                 pos = []
@@ -98,13 +100,15 @@ class SimulatorControl:
             for x, y in info["Positions"]:
                 cropped = cv_crop(self.screen, (x, y, x+w, y+h))
                 diff = get_diff(cropped, target)
+                logger.debug("diff=%.3f, pos=%s", diff, (x, y))
                 if diff <= info.get('MaxDiff', 0.03):
                     pos.append((x, y))
                     ret = True
         elif info["Type"] == "MultiDynamic":
             target = info['ImageData']
             match = get_all_match(self.screen, target)
-            pos = list(zip(*np.where(match < 0.02)))
+            pos = list(zip(*np.where(match < info.get('MaxDiff', 0.02))))
+            logger.debug("pos=%s", pos)
             ret = bool(pos)
         else:
             self.critical("Invalid Type %s", info['Type'])
