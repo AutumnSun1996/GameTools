@@ -215,18 +215,20 @@ class SimulatorControl:
             rect = self.get_resource_rect(name)
             rand_click(self.hwnd, rect)
         elif res['Type'] == 'Dynamic':
-            diff, pos = self.search_resource(name)
+            _, pos = self.search_resource(name)
             x, y = pos
             dx, dy = res.get("ClickOffset", res.get("Offset", (0,0)))
             cw, ch = res.get("ClickSize", res["Size"])
             rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
-            
+        else:
+            self.error("Want to click at %s resource: %s", res["Type"], name)
             
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
         if repeat < 0:
             self.error("Can't find resource %s" % condition)
             return False
+        self.make_screen_shot()
         if parse_condition(condition, None, self.resource_in_screen):
             return True
         time.sleep(interval)
@@ -326,11 +328,12 @@ class SimulatorControl:
         self.scene_history.append(self.fallback_scene)
         return self.fallback_scene
 
-    def update_current_scene(self, candidates=None, interval=1, repeat=5):
+    def update_current_scene(self, candidates=None, interval=1, repeat=60):
         """等待指定的场景或全局场景"""
         if repeat == 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
             # 若选择忽略错误，则返回“无匹配场景”
+            self.scene_history.append(self.fallback_scene)
             return self.fallback_scene
 
         if candidates is None:
