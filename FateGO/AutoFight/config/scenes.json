@@ -6,13 +6,25 @@
       {"Type": "InnerCall", "Target": "choose_target"},
       {"Type": "Wait", "Time": 1}
     ],
+    "Next": ["助战选择", "AP不足"]
+  },
+  "AP不足": {
+  
+    "Name": "AP不足",
+    "Condition": "AP不足",
+    "Actions": [
+      {"Type": "Click", "Target": "银苹果"},
+      {"Type": "Wait", "Time": 1},
+      {"Type": "Click", "Target": "补充AP-决定"},
+      {"Type": "Wait", "Time": 1}
+    ],
     "Next": ["助战选择"]
   },
   "助战选择": {
     "Name": "助战选择",
     "Condition": "助战选择",
     "Actions": [
-      {"Type": "InnerCall", "Target": "choose_help"},
+      {"Type": "InnerCall", "Target": "choose_assist_servant"},
       {"Type": "Wait", "Time": 1}
     ],
     "Next": ["队伍确认"]
@@ -59,7 +71,7 @@
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["获得经验值", "羁绊加深"]
+    "Next": ["获得羁绊", "获得经验", "羁绊加深"]
   },
   "羁绊加深": {
     "Name": "羁绊加深",
@@ -68,24 +80,24 @@
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["获得经验值"]
+    "Next": ["羁绊加深", "获得经验"]
   },
-  "获得经验值": {
-    "Name": "获得经验值",
-    "Condition": "获得经验值",
+  "获得经验": {
+    "Name": "获得经验",
+    "Condition": "获得经验",
     "Actions": [
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["获得物品"]
+    "Next": ["获得经验", "获得物品"]
   },
   "获得物品": {
     "Name": "获得物品",
-    "Condition": "获得的战利品",
+    "Condition": "获得物品",
     "Actions": [
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["关卡选择"]
+    "Next": ["获得物品", "关卡选择"]
   }
 }
