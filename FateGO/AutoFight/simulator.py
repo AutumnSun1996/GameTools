@@ -210,9 +210,18 @@ class SimulatorControl:
         if wait:
             if not self.wait_resource(name, 1, wait):
                 return
-        rect = self.get_resource_rect(name)
-        rand_click(self.hwnd, rect)
-
+        res = self.resources[name]
+        if res['Type'] == 'Static':
+            rect = self.get_resource_rect(name)
+            rand_click(self.hwnd, rect)
+        elif res['Type'] == 'Dynamic':
+            diff, pos = self.search_resource(name)
+            x, y = pos
+            dx, dy = res.get("ClickOffset", res.get("Offset", (0,0)))
+            cw, ch = res.get("ClickSize", res["Size"])
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+            
+            
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
         if repeat < 0:
