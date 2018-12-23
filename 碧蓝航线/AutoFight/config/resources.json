@@ -454,17 +454,17 @@
     "Name": "Ammo",
     "MainSize": [1280, 720],
     "Offset": [-20, 160],
-    "Size": [36, 36],
+    "Size": [34, 34],
     "Type": "Anchor",
     "Image": "Ammo.png",
-    "MaxDiff": 0.06
+    "MaxDiff": 0.08
   },
   "Pointer": {
     "Name": "Pointer",
     "MainSize": [1280, 720],
     "Offset": [45, 200],
-    "Size": [91, 56],
-    "Type": "Anchor",
+    "Size": [82, 50],
+    "Type": "Dynamic",
     "Image": "Pointer.png",
     "MaxDiff": 0.06
   },
@@ -473,7 +473,7 @@
     "MainSize": [1280, 720],
     "Offset": [30, 70],
     "Size": [60, 40],
-    "Type": "Anchor",
+    "Type": "MultiDynamic",
     "Image": "问号点.png"
   },
   "Boss": {
@@ -481,7 +481,9 @@
     "MainSize": [1280, 720],
     "Offset": [30, 20],
     "Size": [46, 26],
-    "Type": "Anchor",
+    "ClickOffset": [0, 0],
+    "ClickSize": [46, 26],
+    "Type": "Dynamic",
     "Image": "Boss.png",
     "MaxDiff": 0.06
   },
@@ -490,7 +492,9 @@
     "MainSize": [1280, 720],
     "Offset": [30, 20],
     "Size": [56, 32],
-    "Type": "Anchor",
+    "ClickOffset": [0, 0],
+    "ClickSize": [56, 32],
+    "Type": "Dynamic",
     "Image": "Boss.png",
     "MaxDiff": 0.06
   },
@@ -515,7 +519,34 @@
     "MainSize": [1280, 720],
     "Offset": [0, -20],
     "Size": [20, 18],
-    "Type": "Anchor",
+    "Type": "MultiDynamic",
     "Image": "Lv-Smaller.png"
+  },
+  "地图区域": {
+    "Name": "地图区域",
+    "MainSize": [1280, 720],
+    "Type": "Static",
+    "Points": [
+      [118, 720],
+      [580, 720],
+      [580, 650],
+      [870, 635],
+      [900, 605],
+      [1280, 605],
+      [1280, 420],
+      [1235, 420],
+      [1235, 320],
+      [1280, 320],
+      [1280, 200],
+      [1240, 200],
+      [1240, 95],
+      [1280, 95],
+      [1280, 60],
+      [620, 60],
+      [620, 102],
+      [404, 102],
+      [404, 174],
+      [118, 174]
+    ]
   }
 }
