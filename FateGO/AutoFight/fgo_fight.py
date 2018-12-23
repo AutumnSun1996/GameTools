@@ -144,9 +144,10 @@ class FateGrandOrder(SimulatorControl):
             self.crop_resource("剩余敌人"),
             self.crop_resource("回合数"),
         ))
+        return info
 
     def choose_skills(self):
-        self.click_at_resource("Attack")
+        pass
 
     def update_background(self):
         """保存当前画面为宝具背景, 供之后的分析使用
@@ -181,4 +182,3 @@ if __name__ == "__main__":
     print(fgo.resources['战斗速度']['ImageData'].shape)
     fgo.update_current_scene()
     print(fgo.scene_history)
-    
