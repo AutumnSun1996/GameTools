@@ -36,12 +36,26 @@
   "CardStrategies": [
     {
       "Condition": ["$eq", "turn", 1],
-      "ResultWeight": {"Damage": 1, "NP": 1, "OverNP": 0, "Stars": 1},
+      "ResultWeight": {
+        "Damage": 1,
+        "NP": 1,
+        "OverNP": 0,
+        "Stars": 1
+      },
       "UseNp": [true, false, false]
     },
     {
-      "Condition": ["$all", ["$gt", "turn", 1], ["$lt", "stage", 1]],
-      "ResultWeight": {"Damage": 1, "NP": 1, "OverNP": 0.5, "Stars": 1},
+      "Condition": [
+        "$all",
+        ["$gt", "turn", 1],
+        ["$lt", "stage", 1]
+      ],
+      "ResultWeight": {
+        "Damage": 1,
+        "NP": 1,
+        "OverNP": 0.5,
+        "Stars": 1
+      },
       "UseNp": [true, false, false]
     },
     {
@@ -50,12 +64,22 @@
         ["$le", "stageLeft", 1],
         ["$le", "enemyLeft", 3]
       ],
-      "ResultWeight": {"Damage": 3, "NP": 1, "OverNP": 0, "Stars": 1},
+      "ResultWeight": {
+        "Damage": 3,
+        "NP": 1,
+        "OverNP": 0,
+        "Stars": 1
+      },
       "UseNp": [true, false, false]
     },
     {
       "Condition": true,
-      "ResultWeight": {"Damage": 1, "NP": 1, "OverNP": 0, "Stars": 1},
+      "ResultWeight": {
+        "Damage": 1,
+        "NP": 1,
+        "OverNP": 0,
+        "Stars": 1
+      },
       "UseNp": [false, false, false]
     }
   ]
