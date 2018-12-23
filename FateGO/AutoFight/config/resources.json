@@ -363,5 +363,59 @@
     "Offset": [160, 275],
     "Size": [120, 20],
     "Type": "Static"
+  },
+  "Cards": {
+    "Name": "从者NP",
+    "MainSize": [1280, 720],
+    "Positions": [
+      [30, 355],
+      [285, 355],
+      [540, 355],
+      [800, 355],
+      [1065, 355]
+    ],
+    "Size": [200, 270],
+    "ClickOffset": [30, 60],
+    "ClickSize": [130, 180],
+    "Type": "MultiStatic"
+  },
+  "右侧空白区域": {
+    "Name": "右侧空白区域",
+    "MainSize": [1280, 720],
+    "Offset": [80, 165],
+    "Size": [100, 36],
+    "Type": "Static"
+  },
+  "与从者的羁绊": {
+    "Name": "与从者的羁绊",
+    "MainSize": [1280, 720],
+    "Offset": [80, 168],
+    "Size": [100, 36],
+    "Type": "Static",
+    "Image": "羁绊-左.png"
+  },
+  "下一步": {
+    "Name": "下一步",
+    "MainSize": [1280, 720],
+    "Offset": [1010, 650],
+    "Size": [200, 50],
+    "Type": "Static",
+    "Image": "下一步.png"
+  },
+  "助战更新": {
+    "Name": "助战更新",
+    "MainSize": [1280, 720],
+    "Offset": [790, 105],
+    "Size": [90, 50],
+    "Type": "Static",
+    "Image": "助战更新.png"
+  },
+  "助战-确认更新": {
+    "Name": "助战-确认更新",
+    "MainSize": [1280, 720],
+    "Offset": [740, 540],
+    "Size": [190, 50],
+    "Type": "Static",
+    "Image": "助战-确认更新.png"
   }
 }
