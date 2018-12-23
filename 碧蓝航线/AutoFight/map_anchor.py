@@ -6,7 +6,7 @@ import time
 import numpy as np
 
 from config import logger, config
-from image_tools import get_match, cv, get_all_match, load_map
+from image_tools import get_match, cv, get_all_match, get_multi_match, load_map
 from win32_tools import drag, click_at
 
 from azurlane import AzurLaneControl
@@ -15,33 +15,10 @@ from azurlane import AzurLaneControl
 trans_matrix = np.mat([[0.9973946527568224, 0.3603604397038424, -26.031979896145074],
                        [0.0003077413569570231, 1.6993955643161198, -11.85941523333576],
                        [1.341898625115588e-06, 0.0005934941602383196, 1.0]])
-ret, inv_trans = cv.invert(trans_matrix)
-
-
-def image2square(image_pos):
-    """根据透视变换矩阵将像素坐标变换到棋盘坐标"""
-    image_pos = np.array([image_pos], dtype='float32').reshape((1, 1, 2))
-    return cv.perspectiveTransform(image_pos, trans_matrix).reshape((2))
-
-
-def square2image(square_pos):
-    """根据透视变换矩阵将棋盘坐标变换到像素坐标"""
-    square_pos = np.array([square_pos], dtype='float32').reshape((1, 1, 2))
-    return cv.perspectiveTransform(square_pos, inv_trans).reshape((2))
-
-
-def get_map_pos(anchor_name, anchor_pos, target_name):
-    """根据锚点的像素坐标、锚点的棋盘坐标、目标点的棋盘坐标，计算目标点的像素坐标"""
-    dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
-    dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
-    virtual_anchor_pos = image2square(anchor_pos)
-    virtual_target_pos = np.add(virtual_anchor_pos, [dx, dy])
-    target_pos = square2image(virtual_target_pos)
-    return target_pos
 
 
 def ord_distance(anchor_name, target_name):
-    """计算2个棋盘坐标的实际距离. 该值大致反映了定位的误差大小"""
+    """计算2个棋盘坐标的距离. 该值大致反映了定位的误差大小"""
     dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
     dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
     return np.linalg.norm([dx, dy])
@@ -53,14 +30,43 @@ class FightMap(AzurLaneControl):
 
     def __init__(self, map_name=None):
         super().__init__()
-        if map_name is not None:
-            self.map_name = map_name
+        if map_name is None:
+            return
+        self.map_name = map_name
         self.data = load_map(self.map_name)
         logger.info("Update Resources %s", self.data['Resources'].keys())
         self.resources.update(self.data['Resources'])
         logger.info("Update Scenes %s", self.data['Scenes'].keys())
         self.scenes.update(self.data['Scenes'])
+        
+        if "TransMatrix" in self.data:
+            self.trans_matrix = np.mat(self.data['TransMatrix'])
+        else:
+            self.trans_matrix = trans_matrix
+            
+        _, self.inv_trans = cv.invert(self.trans_matrix)
 
+    def image2square(self, image_pos):
+        """根据透视变换矩阵将像素坐标变换到棋盘坐标"""
+        image_pos = np.array([image_pos], dtype='float32').reshape((1, 1, 2))
+        return cv.perspectiveTransform(image_pos, self.trans_matrix).reshape((2))
+
+
+    def square2image(self, square_pos):
+        """根据透视变换矩阵将棋盘坐标变换到像素坐标"""
+        square_pos = np.array([square_pos], dtype='float32').reshape((1, 1, 2))
+        return cv.perspectiveTransform(square_pos, self.inv_trans).reshape((2))
+
+
+    def get_map_pos(self, anchor_name, anchor_pos, target_name):
+        """根据锚点的像素坐标、锚点的棋盘坐标、目标点的棋盘坐标，计算目标点的像素坐标"""
+        dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
+        dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
+        virtual_anchor_pos = self.image2square(anchor_pos)
+        virtual_target_pos = np.add(virtual_anchor_pos, [dx, dy])
+        target_pos = self.square2image(virtual_target_pos)
+        return target_pos
+        
     def move_map_to(self, x, y):
         """移动战斗棋盘使目标点趋近中心位置"""
         x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
@@ -93,7 +99,7 @@ class FightMap(AzurLaneControl):
                 map_anchor = anchor_pos + np.array(anchor['Offset'])
                 logger.debug("找到%s(%.3f): %s. 坐标%s:%s",
                              anchor['Name'], diff, anchor_pos, anchor['OnMap'], map_anchor)
-                return True, get_map_pos(anchor['OnMap'], map_anchor, target)
+                return True, self.get_map_pos(anchor['OnMap'], map_anchor, target)
             logger.debug("未找到%s. 最优结果%.3f.", anchor['Name'], diff)
         return False, None
 
@@ -145,16 +151,19 @@ class FightMap(AzurLaneControl):
         """在屏幕上搜索并返回指定的anchor出现的所有棋盘坐标"""
         if reshot:
             self.make_screen_shot()
-        anchor_pos_s = image2square(anchor_pos)
+        anchor_pos_s = self.image2square(anchor_pos)
         logger.debug("find_on_map %s by %s at %s", target_name, anchor_name, anchor_pos)
         target = self.resources[target_name]
         name_x, name_y = anchor_name
-
-        match = get_all_match(self.screen, target['ImageData'])
+        
+        points = np.array(self.resources["地图区域"]["Points"]).reshape((1, -1, 2))
         result = set()
-        for y, x in zip(*np.where(match < target.get("MaxDiff", 0.1))):
+        for x, y in get_multi_match(self.screen, target['ImageData'], target.get("MaxDiff", 0.1)):
+            if cv.pointPolygonTest(points, (x, y), False) < 0:
+                # 不在地图区域内, 忽略
+                continue
             pos = np.add(target['Offset'], [x, y])
-            offset = image2square(pos) - anchor_pos_s
+            offset = self.image2square(pos) - anchor_pos_s
             dx, dy = np.round(offset / 100).reshape((2)).astype('int')
             name = chr(ord(name_x) + dx) + chr(ord(name_y) + dy)
             result.add(name)

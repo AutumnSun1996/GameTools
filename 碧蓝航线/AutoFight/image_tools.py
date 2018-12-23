@@ -112,11 +112,29 @@ def get_all_match(image, needle):
 
 
 def get_match(image, needle):
-    """在image中搜索needle"""
+    """在image中搜索needle的最佳匹配"""
     match = get_all_match(image, needle)
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, np.array(min_loc)
 
+def get_multi_match(image, needle, thresh):
+    """在image中搜索多个needle的位置
+    
+    重合的部分返回重合部分中心对应的坐标
+    """
+    match = get_all_match(image, needle)
+    # 模拟用背景图片
+    draw = np.zeros(image.shape[:2], dtype='uint8')
+    h, w = needle.shape[:2]
+    for y, x in zip(*np.where(match < thresh)):
+        cv.rectangle(draw, (x, y), (x+w, y+h), 255, -1)
+    # 连通域分析
+    _, _, _, centroids = cv.connectedComponentsWithStats(draw)
+    # 中心坐标转化为左上角坐标
+    centroids[:, 0] -= w / 2
+    centroids[:, 1] -= h / 2
+    # 删去背景连通域并将数值转化为int型
+    return centroids[1:, :].astype('int')
 
 def get_diff(a, b):
     """比较图片差异"""
