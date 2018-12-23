@@ -9,7 +9,7 @@ from configparser import ConfigParser
 logging.config.fileConfig("logging.conf")
 logger = logging.getLogger()
 
-config_file = "config-Company.ini"
+config_file = "config-1280x720.ini"
 
 class Config(ConfigParser):
     def save(self):
