@@ -48,7 +48,7 @@
     "Condition": "战斗菜单",
     "Actions": [
       {"Type": "InnerCall", "Target": "choose_skills"},
-      {"Type": "Wait", "Time": 2},
+      {"Type": "Wait", "Time": 1},
       {"Type": "Click", "Target": "Attack"},
       {"Type": "Wait", "Time": 1}
     ],
@@ -67,7 +67,7 @@
     "Name": "获得羁绊",
     "Condition": "与从者的羁绊",
     "Actions": [
-      {"Type": "Click", "Target": "右侧空白区域"},
+      {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
     ],
     "Next": ["获得羁绊", "获得经验", "羁绊加深"]
@@ -76,7 +76,7 @@
     "Name": "羁绊加深",
     "Condition": "羁绊加深",
     "Actions": [
-      {"Type": "Click", "Target": "右侧空白区域"},
+      {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
     ],
     "Next": ["羁绊加深", "获得经验"]
@@ -85,7 +85,7 @@
     "Name": "获得经验",
     "Condition": "获得经验",
     "Actions": [
-      {"Type": "Click", "Target": "右侧空白区域"},
+      {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
     ],
     "Next": ["获得经验", "获得物品"]
