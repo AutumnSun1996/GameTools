@@ -108,7 +108,7 @@
     "MainSize": [1280, 720],
     "Size": [146, 81],
     "Type": "Dynamic",
-    "Image": "Buster.png"
+    "Image": "Arts.png"
   },
   "Quick": {
     "Name": "Quick",
@@ -281,7 +281,14 @@
     "Size": [200, 100],
     "Type": "Static"
   },
-  "羁绊加深": {"Name": "羁绊加深", "MainSize": [1280, 720], "Offset": [660, 323], "Size": [160, 40], "Type": "Static", "Image": "羁绊加深.png"},
+  "羁绊加深": {
+    "Name": "羁绊加深",
+    "MainSize": [1280, 720],
+    "Offset": [660, 323],
+    "Size": [160, 40],
+    "Type": "Static",
+    "Image": "羁绊加深.png"
+  },
   "助战-职阶选择": {
     "Name": "助战-职阶选择",
     "MainSize": [1280, 720],
@@ -297,17 +304,7 @@
       [544, 108],
       [612, 108]
     ],
-    "Names": [
-      "全部",
-      "剑",
-      "弓",
-      "枪",
-      "骑",
-      "术",
-      "杀",
-      "狂",
-      "特殊"
-    ],
+    "Names": ["全部", "剑", "弓", "枪", "骑", "术", "杀", "狂", "特殊"],
     "Type": "MultiStatic"
   },
   "战斗-敌人位置": {
@@ -394,8 +391,7 @@
     "MainSize": [1280, 720],
     "Offset": [1010, 650],
     "Size": [200, 50],
-    "Type": "Static",
-    "Image": "下一步.png"
+    "Type": "Static"
   },
   "助战更新": {
     "Name": "助战更新",
