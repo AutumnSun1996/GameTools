@@ -74,7 +74,6 @@ def get_window_hwnd(title):
 
 
 def heartbeat():
-    
     info = win32api.GetLastInputInfo()
     tick = win32api.GetTickCount()
     if tick - info > 30000:

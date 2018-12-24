@@ -10,11 +10,18 @@ dist
 build
 
 # jupyter
-.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+*.ipynb
 
 # 碧蓝航线资源文件
 碧蓝航线/Data
-碧蓝航线/.ipynb_checkpoints/
-碧蓝航线/dump
 
-FateGO/dump/
+
+**/dump/
+**/logs/
+
+**/resources/*.json
+*.bak.json
+
+
+WarFrame/image_based/

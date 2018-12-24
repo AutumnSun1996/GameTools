@@ -108,7 +108,7 @@
     "MainSize": [1280, 720],
     "Size": [146, 81],
     "Type": "Dynamic",
-    "Image": "Buster.png"
+    "Image": "Arts.png"
   },
   "Quick": {
     "Name": "Quick",
@@ -281,7 +281,14 @@
     "Size": [200, 100],
     "Type": "Static"
   },
-  "羁绊加深": {"Name": "羁绊加深", "MainSize": [1280, 720], "Offset": [660, 323], "Size": [160, 40], "Type": "Static", "Image": "羁绊加深.png"},
+  "羁绊加深": {
+    "Name": "羁绊加深",
+    "MainSize": [1280, 720],
+    "Offset": [660, 323],
+    "Size": [160, 40],
+    "Type": "Static",
+    "Image": "羁绊加深.png"
+  },
   "助战-职阶选择": {
     "Name": "助战-职阶选择",
     "MainSize": [1280, 720],
@@ -297,17 +304,7 @@
       [544, 108],
       [612, 108]
     ],
-    "Names": [
-      "全部",
-      "剑",
-      "弓",
-      "枪",
-      "骑",
-      "术",
-      "杀",
-      "狂",
-      "特殊"
-    ],
+    "Names": ["全部", "剑", "弓", "枪", "骑", "术", "杀", "狂", "特殊"],
     "Type": "MultiStatic"
   },
   "战斗-敌人位置": {
@@ -363,15 +360,15 @@
     "Name": "从者NP",
     "MainSize": [1280, 720],
     "Positions": [
-      [30, 360],
-      [285, 360],
-      [540, 360],
-      [800, 360],
-      [1065, 360]
+      [35, 355],
+      [290, 355],
+      [545, 355],
+      [805, 355],
+      [1065, 355]
     ],
     "Size": [200, 270],
-    "ClickOffset": [30, 60],
-    "ClickSize": [130, 180],
+    "ClickOffset": [30, 65],
+    "ClickSize": [130, 160],
     "Type": "MultiStatic"
   },
   "右侧空白区域": {
@@ -394,8 +391,7 @@
     "MainSize": [1280, 720],
     "Offset": [1010, 650],
     "Size": [200, 50],
-    "Type": "Static",
-    "Image": "下一步.png"
+    "Type": "Static"
   },
   "助战更新": {
     "Name": "助战更新",
@@ -496,5 +492,29 @@
     "Offset": [1052, 280],
     "Size": [64, 64],
     "Type": "Static"
+  },
+  "申请好友": {
+    "Name": "申请好友",
+    "MainSize": [1280, 720],
+    "Offset": [850, 585],
+    "Size": [200, 60],
+    "Type": "Static",
+    "Image": "申请.png"
+  },
+  "关闭": {
+    "Name": "关闭",
+    "MainSize": [1280, 720],
+    "Offset": [540, 540],
+    "Size": [200, 45],
+    "Type": "Static",
+    "Image": "关闭.png"
+  },
+  "补充AP-决定": {
+    "Name": "补充AP-决定",
+    "MainSize": [1280, 720],
+    "Offset": [740, 540],
+    "Size": [200, 50],
+    "Type": "Static",
+    "Image": "决定.png"
   }
 }

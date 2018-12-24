@@ -1,13 +1,11 @@
 {
   "Name": "圣诞",
   "Strategy": {
+    "SkillsOnTurn1": [[1, 1], [1, 3], [2, 1], [3, 1], [3, 2], [3, 3]],
     "CardChoice": [
-      ["B+", "B0", "A+", "Q+", "B-", "A0", "Q0", "A-", "Q-"],
-      ["B+", "A+", "Q+", "B0", "A0", "Q0", "B-", "A-", "Q-"],
-      ["B+", "A+", "Q+", "B0", "A0", "Q0", "B-", "A-", "Q-"]
-    ],
-    "SkillsOnTurn1": [
-      [1, 1], [1, 3], [2, 1], [3, 2]
+      [0, ["B+", "B0", "B-", "A+", "Q+", "A0", "Q0", "A-", "Q-"]],
+      [2, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]],
+      [1, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]]
     ]
   },
   "Scenes": {
@@ -18,27 +16,33 @@
         {"Type": "Click", "Target": "圣诞-初级"},
         {"Type": "Wait", "Time": 1}
       ],
-      "Next": ["助战选择"]
+      "Next": ["助战选择", "AP不足"]
+    },
+    "获得物品": {
+      "Name": "获得物品",
+      "Condition": "获得物品",
+      "Actions": [
+        {"Type": "InnerCall", "Target": "save_screen"},
+        {"Type": "Click", "Target": "下一步"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["获得物品", "关卡选择", "申请好友"]
     }
   },
   "Resources": {
+    "助战1": {
+      "Name": "最后登录",
+      "MainSize": [1280, 720],
+      "Size": [98, 38],
+      "Type": "Dynamic",
+      "Image": "最后登录.png"
+    },
     "圣诞-初级": {
       "Name": "圣诞-初级",
       "MainSize": [1280, 720],
-      "Offset": [860, 330],
-      "Size": [150, 30],
-      "ClickOffset": [-200, 0],
-      "ClickSize": [400, 120],
+      "Size": [150, 40],
       "Type": "Dynamic",
       "Image": "圣诞-初级.png"
-    },
-    "助战1": {
-      "Name": "助战1",
-      "MainSize": [1280, 720],
-      "Offset": [826, 411],
-      "Size": [98, 38],
-      "Type": "Static",
-      "Image": "最后登录.png"
     }
   }
 }
