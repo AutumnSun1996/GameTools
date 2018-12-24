@@ -1,0 +1,44 @@
+{
+  "Name": "圣诞",
+  "Strategy": {
+    "CardChoice": [
+      ["B+", "B0", "A+", "Q+", "B-", "A0", "Q0", "A-", "Q-"],
+      ["B+", "A+", "Q+", "B0", "A0", "Q0", "B-", "A-", "Q-"],
+      ["B+", "A+", "Q+", "B0", "A0", "Q0", "B-", "A-", "Q-"]
+    ],
+    "SkillsOnTurn1": [
+      [1, 1], [1, 3], [2, 1], [3, 2]
+    ]
+  },
+  "Scenes": {
+    "关卡选择": {
+      "Name": "关卡选择",
+      "Condition": "圣诞-初级",
+      "Actions": [
+        {"Type": "Click", "Target": "圣诞-初级"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["助战选择"]
+    }
+  },
+  "Resources": {
+    "圣诞-初级": {
+      "Name": "圣诞-初级",
+      "MainSize": [1280, 720],
+      "Offset": [860, 330],
+      "Size": [150, 30],
+      "ClickOffset": [-200, 0],
+      "ClickSize": [400, 120],
+      "Type": "Dynamic",
+      "Image": "圣诞-初级.png"
+    },
+    "助战1": {
+      "Name": "助战1",
+      "MainSize": [1280, 720],
+      "Offset": [826, 411],
+      "Size": [98, 38],
+      "Type": "Static",
+      "Image": "最后登录.png"
+    }
+  }
+}
