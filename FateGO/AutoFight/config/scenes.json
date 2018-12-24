@@ -9,7 +9,6 @@
     "Next": ["助战选择", "AP不足"]
   },
   "AP不足": {
-  
     "Name": "AP不足",
     "Condition": "AP不足",
     "Actions": [
