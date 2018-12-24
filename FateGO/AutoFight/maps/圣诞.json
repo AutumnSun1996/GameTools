@@ -17,6 +17,16 @@
         {"Type": "Wait", "Time": 1}
       ],
       "Next": ["助战选择", "AP不足"]
+    },
+    "获得物品": {
+      "Name": "获得物品",
+      "Condition": "获得物品",
+      "Actions": [
+        {"Type": "InnerCall", "Target": "save_screen"},
+        {"Type": "Click", "Target": "下一步"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["获得物品", "关卡选择", "申请好友"]
     }
   },
   "Resources": {
