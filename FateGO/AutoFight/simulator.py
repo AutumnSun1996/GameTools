@@ -107,7 +107,7 @@ class SimulatorControl:
             logger.warning("No resource: %s", name)
             return False, []
         info = self.resources[name]
-        if not info.get("Image"):
+        if info.get("ImageData") is None:
             self.error("No ImageData for %s" % info)
             return False, []
 
