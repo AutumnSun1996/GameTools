@@ -36,13 +36,17 @@ class SimpleFight(FateGrandOrder):
         self.click_at_resource("助战1")
 
     def choose_skills(self):
+        if not self.first_turn:
+            self.wait(3)
+        else:
+            self.wait(6)
+        self.make_screen_shot()
         for i in [1, 2, 3]:
             name = "宝具背景%d" % i
             self.resources[name]["ImageData"] = self.crop_resource(name)
 
         if not self.first_turn:
             return
-        self.wait(6)
         self.first_turn = False
         for serv_idx, skill_idx in self.data['Strategy']['SkillsOnTurn1']:
             target = "角色%d技能%d" % (serv_idx, skill_idx)
@@ -76,7 +80,6 @@ class SimpleFight(FateGrandOrder):
         return result
 
     def choose_cards(self):
-        self.make_screen_shot()
         # 选择中间的敌人
         self.wait(1)
         res = self.resources["战斗-敌人位置"]
@@ -84,6 +87,8 @@ class SimpleFight(FateGrandOrder):
         dx, dy = res["ClickOffset"]
         dw, dh = res["ClickSize"]
         rand_click(self.hwnd, (x+dx, y+dy, x+dx+dw, y+dy+dh))
+        self.make_screen_shot()
+        self.wait(0.8)
 
         cards = self.resources["Cards"]
         w, h = cards["Size"]
@@ -119,8 +124,17 @@ class SimpleFight(FateGrandOrder):
             self.wait(0.8)
 
 
-if __name__ == "__main__":
-    import datetime
+def main():
     control = SimpleFight("圣诞")
+    fightcount = 0
     while True:
         control.check_scene()
+        if control.current_scene["Name"] == "关卡选择":
+            fightcount += 1
+            logger.info("关卡选择 %d", fightcount)
+            if fightcount > 10:
+                return
+
+
+if __name__ == "__main__":
+    main()
