@@ -5,8 +5,9 @@ import json
 
 from config import logger, config
 from win32_tools import rand_click
-from image_tools import load_map, cv_crop, get_match
+from image_tools import load_map, cv_crop, get_match, get_diff
 from fgo_fight import FateGrandOrder
+
 
 def choose_match(cards, items):
     for name in items:
@@ -23,8 +24,10 @@ class SimpleFight(FateGrandOrder):
 
     def choose_assist_servant(self):
         idx = 0
+        self.make_screen_shot()
         while not self.resource_in_screen("助战1"):
             self.refresh_assist()
+            self.make_screen_shot()
             idx += 1
             if idx > 5:
                 self.error("无助战")
@@ -33,26 +36,23 @@ class SimpleFight(FateGrandOrder):
         self.click_at_resource("助战1")
 
     def choose_skills(self):
-        self.wait(1)
-        res = self.resources["战斗-敌人位置"]
-        x, y = res["Positions"][1]
-        dx, dy = res["ClickOffset"]
-        dw, dh = res["ClickSize"]
-        rand_click(self.hwnd, (x+dx, y+dy, x+dx+dw, y+dy+dh))
+        for i in [1, 2, 3]:
+            name = "宝具背景%d" % i
+            self.resources[name]["ImageData"] = self.crop_resource(name)
+
         if not self.first_turn:
             return
-        self.wait(2)
-        # self.click_at_resource("敌人2")
+        self.wait(6)
         self.first_turn = False
         for serv_idx, skill_idx in self.data['Strategy']['SkillsOnTurn1']:
             target = "角色%d技能%d" % (serv_idx, skill_idx)
             logger.info("Use Skill: %s", target)
             self.click_at_resource(target)
-            self.wait(0.8)
+            self.wait(0.4)
             self.make_screen_shot()
             self.click_at_resource("右侧空白区域")
             self.wait_till_scene("选择技能", 1, 20)
-            self.wait(0.8)
+            self.wait(0.5)
 
     def extract_card_info(self, image):
         best_diff = 1
@@ -62,7 +62,7 @@ class SimpleFight(FateGrandOrder):
             if diff < best_diff:
                 best_diff = diff
                 color = name[0]
-        
+
         relation = None
         for name in ["克制", "抵抗"]:
             res = self.resources[name]
@@ -77,7 +77,14 @@ class SimpleFight(FateGrandOrder):
 
     def choose_cards(self):
         self.make_screen_shot()
-        self.wait(2)
+        # 选择中间的敌人
+        self.wait(1)
+        res = self.resources["战斗-敌人位置"]
+        x, y = res["Positions"][1]
+        dx, dy = res["ClickOffset"]
+        dw, dh = res["ClickSize"]
+        rand_click(self.hwnd, (x+dx, y+dy, x+dx+dw, y+dy+dh))
+
         cards = self.resources["Cards"]
         w, h = cards["Size"]
         cx, cy = cards.get("ClickOffset", (0, 0))
@@ -88,15 +95,29 @@ class SimpleFight(FateGrandOrder):
             card_info = self.extract_card_info(image)
             click_rect = (x+cx, y+cy, x+cx+cw, y+cy+ch)
             checker.append([click_rect, card_info])
-            
+
+        self.make_screen_shot()
         for i in [1, 2, 3]:
-            self.click_at_resource("宝具背景%d" % i)
-            self.wait(0.8)
-            
-        for items in self.data["Strategy"]["CardChoice"]:
+            name = "宝具背景%d" % i
+            last = self.resources[name]['ImageData']
+            current = self.crop_resource(name)
+            diff = get_diff(last, current)
+            logger.info("Diff %s=%.3f", name, diff)
+            if diff > 0.8:
+                self.click_at_resource(name)
+                self.wait(0.8)
+
+        use_cards = [None, None, None]
+        card_names = ["", "", ""]
+        for idx, items in self.data["Strategy"]["CardChoice"]:
             choice = choose_match(checker, items)
-            rand_click(self.hwnd, choice[0])
+            use_cards[idx] = choice[0]
+            card_names[idx] = choice[1]
+        logger.info("选择指令卡%s", card_names)
+        for card in use_cards:
+            rand_click(self.hwnd, card)
             self.wait(0.8)
+
 
 if __name__ == "__main__":
     import datetime
