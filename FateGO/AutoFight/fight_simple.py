@@ -5,7 +5,7 @@ import json
 
 from config import logger, config
 from win32_tools import rand_click
-from image_tools import load_map, cv_crop, get_match, get_diff
+from image_tools import cv_save, load_map, cv_crop, get_match, get_diff
 from fgo_fight import FateGrandOrder
 
 
@@ -87,8 +87,8 @@ class SimpleFight(FateGrandOrder):
         dx, dy = res["ClickOffset"]
         dw, dh = res["ClickSize"]
         rand_click(self.hwnd, (x+dx, y+dy, x+dx+dw, y+dy+dh))
+        self.wait(1)
         self.make_screen_shot()
-        self.wait(0.8)
 
         cards = self.resources["Cards"]
         w, h = cards["Size"]
@@ -101,7 +101,6 @@ class SimpleFight(FateGrandOrder):
             click_rect = (x+cx, y+cy, x+cx+cw, y+cy+ch)
             checker.append([click_rect, card_info])
 
-        self.make_screen_shot()
         for i in [1, 2, 3]:
             name = "宝具背景%d" % i
             last = self.resources[name]['ImageData']
@@ -123,6 +122,11 @@ class SimpleFight(FateGrandOrder):
             rand_click(self.hwnd, card)
             self.wait(0.8)
 
+    def save_screen(self):
+        import datetime
+        now = datetime.datetime.now()
+        name = "Save-{}-{:%Y-%m-%d_%H%M%S}.png".format(self.current_scene["Name"], now)
+        cv_save(name, self.screen)
 
 def main():
     control = SimpleFight("圣诞")
@@ -132,7 +136,8 @@ def main():
         if control.current_scene["Name"] == "关卡选择":
             fightcount += 1
             logger.info("关卡选择 %d", fightcount)
-            if fightcount > 10:
+            if fightcount > 5:
+                control.notice("5次战斗完成")
                 return
 
 
