@@ -97,6 +97,24 @@
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["获得物品", "关卡选择"]
+    "Next": ["获得物品", "关卡选择", "申请好友"]
+  },
+  "申请好友": {
+    "Name": "申请好友",
+    "Condition": "申请好友",
+    "Actions": [
+      {"Type": "Click", "Target": "申请好友"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["好友申请失败", "关卡选择"]
+  },
+  "好友申请失败": {
+    "Name": "好友申请失败",
+    "Condition": "关闭",
+    "Actions": [
+      {"Type": "Click", "Target": "关闭"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["关卡选择"]
   }
 }

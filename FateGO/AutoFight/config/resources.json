@@ -492,5 +492,21 @@
     "Offset": [1052, 280],
     "Size": [64, 64],
     "Type": "Static"
+  },
+  "申请好友": {
+    "Name": "申请好友",
+    "MainSize": [1280, 720],
+    "Offset": [850, 585],
+    "Size": [200, 60],
+    "Type": "Static",
+    "Image": "申请.png"
+  },
+  "关闭": {
+    "Name": "关闭",
+    "MainSize": [1280, 720],
+    "Offset": [540, 540],
+    "Size": [200, 45],
+    "Type": "Static",
+    "Image": "关闭.png"
   }
 }
