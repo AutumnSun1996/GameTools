@@ -22,18 +22,19 @@ class SimpleFight(FateGrandOrder):
         FateGrandOrder.__init__(self, map_name)
         self.first_turn = True
 
-    def choose_assist_servant(self):
-        idx = 0
-        self.make_screen_shot()
-        while not self.resource_in_screen("助战1"):
-            self.refresh_assist()
-            self.make_screen_shot()
-            idx += 1
-            if idx > 5:
-                self.error("无助战")
-
+    def choose_assist_servant(self, idx=5):
         self.first_turn = True
-        self.click_at_resource("助战1")
+        if idx <= 0:
+            self.error("无助战")
+
+        self.make_screen_shot()
+        for name in self.data['Strategy']['Assist']:
+            if self.resource_in_screen(name):
+                logger.info("选择助战: %s", name)
+                self.click_at_resource(name)
+                return
+        self.refresh_assist()
+        self.choose_assist_servant(idx-1)
 
     def choose_skills(self):
         if not self.first_turn:
@@ -127,6 +128,7 @@ class SimpleFight(FateGrandOrder):
         now = datetime.datetime.now()
         name = "Save-{}-{:%Y-%m-%d_%H%M%S}.png".format(self.current_scene["Name"], now)
         cv_save(name, self.screen)
+
 
 def main():
     control = SimpleFight("圣诞")
