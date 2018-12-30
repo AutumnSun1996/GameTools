@@ -6,7 +6,8 @@
       [0, ["B+", "B0", "B-", "A+", "Q+", "A0", "Q0", "A-", "Q-"]],
       [2, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]],
       [1, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]]
-    ]
+    ],
+    "Assist": ["Lagenore", "助战1"]
   },
   "Scenes": {
     "关卡选择": {
@@ -36,6 +37,13 @@
       "Size": [98, 38],
       "Type": "Dynamic",
       "Image": "最后登录.png"
+    },
+    "Lagenore": {
+      "Name": "Lagenore",
+      "MainSize": [1280, 720],
+      "Size": [300, 60],
+      "Type": "Dynamic",
+      "Image": "Lagenore.png"
     },
     "圣诞-初级": {
       "Name": "圣诞-初级",
