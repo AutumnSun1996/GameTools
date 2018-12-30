@@ -24,6 +24,7 @@ try:
 except NameError:
     pass
 
+
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
     logger.debug("Parse: %s", cond)
@@ -211,18 +212,19 @@ class SimulatorControl:
             if not self.wait_resource(name, 1, wait):
                 return
         res = self.resources[name]
+        logger.info("Click at <%s> resource: %s", res["Type"], name)
         if res['Type'] == 'Static':
             rect = self.get_resource_rect(name)
             rand_click(self.hwnd, rect)
         elif res['Type'] == 'Dynamic':
             _, pos = self.search_resource(name)
             x, y = pos
-            dx, dy = res.get("ClickOffset", res.get("Offset", (0,0)))
+            dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res["Size"])
             rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
         else:
-            self.error("Want to click at %s resource: %s", res["Type"], name)
-            
+            self.error("Want to click at <%s> resource: %s", res["Type"], name)
+
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
         if repeat < 0:
@@ -330,6 +332,7 @@ class SimulatorControl:
 
     def update_current_scene(self, candidates=None, interval=1, repeat=60):
         """等待指定的场景或全局场景"""
+        logger.info("update_current_scene(%d) in %s", repeat, candidates)
         if repeat == 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
             # 若选择忽略错误，则返回“无匹配场景”
@@ -338,6 +341,7 @@ class SimulatorControl:
 
         if candidates is None:
             if self.current_scene is None or self.current_scene.get("Next") is None:
+                logger.info("update candidates to full list")
                 candidates = list(self.scenes.keys())
             else:
                 candidates = self.current_scene["Next"]
@@ -345,7 +349,7 @@ class SimulatorControl:
                     interval = candidates.get("Interval", interval)
                     repeat = candidates.get("Repeat", repeat)
                     candidates = candidates["Candidates"]
-                logger.info("Next for %s: %s", self.current_scene["Name"], candidates)
+                logger.info("update candidates: Next for %s: %s", self.current_scene["Name"], candidates)
 
         self.make_screen_shot()
         for key in candidates:
@@ -405,6 +409,7 @@ class SimulatorControl:
     def check_scene(self):
         """判断当前场景, 执行对应的操作"""
         scene = self.update_current_scene()
+        logger.info("Current Scene: %s", scene)
         heartbeat()
         now = time.time()
         nochange = "" if self.last_scene != scene else "(No Change)"
