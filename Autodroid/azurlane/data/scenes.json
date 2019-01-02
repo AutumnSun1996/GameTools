@@ -25,11 +25,9 @@
     "Condition": "潜艇数量1",
     "Actions": [
       {
-        "Type": "DelayedClick",
-        "Target": "潜艇按钮",
-        "Delay": 15,
-        "Recheck": "潜艇数量1",
-        "FirstOnly": true
+        "Type": "Click",
+        "Condition": ["$ge", ["$attr", "since_last_change"], 15],
+        "Target": "潜艇按钮"
       },
       {"Type": "Wait", "Time": 3}
     ],
