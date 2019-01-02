@@ -8,7 +8,7 @@ import win32gui
 import win32com.client
 import numpy as np
 
-from config import logger, config
+from config_loader import logger, config
 
 
 def rescale_point(hwnd, point):

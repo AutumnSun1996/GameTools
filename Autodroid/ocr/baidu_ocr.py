@@ -5,7 +5,7 @@ import numpy as np
 import cv2.cv2 as cv
 import requests
 
-from config import config
+from config_loader import config
 
 
 def contact_images(*images):
@@ -72,10 +72,8 @@ class BaiduOCR:
         return self.parse_result(info)
 
 
+ocr = BaiduOCR()
 if __name__ == "__main__":
-    from image_tools import cv_imread
+    from simulator.image_tools import cv_imread
     image = cv_imread('ocrtest.png')
-    ocr = BaiduOCR()
     print(ocr.image2numbers(image))
-else:
-    ocr = BaiduOCR()

@@ -1,16 +1,16 @@
-import os
 import ctypes
+import os
 import json
 
+from PIL import Image, ImageFont, ImageDraw
 import cv2.cv2 as cv
 import numpy as np
 import win32con
 import win32gui
 import win32ui
 
-from config import logger, config
+from config_loader import logger, config
 
-from PIL import Image, ImageFont, ImageDraw
 
 def cv_imread(file_path):
     """读取图片
@@ -45,7 +45,7 @@ def rescale_item(item, rx, ry):
     raise ValueError("Invalid Item %s" % item)
 
 
-def update_resource(resource):
+def update_resource(resource, section):
     """根据当前配置更新资源属性, 加载图片并进行缩放"""
     dw = config.getint("Device", "MainWidth")
     dh = config.getint("Device", "MainHeight")
@@ -54,34 +54,34 @@ def update_resource(resource):
         if isinstance(resource[key], list):
             resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
     if resource.get("Image"):
-        load_image(resource)
+        load_image(resource, section)
 
 
-def load_image(resource):
-    img_path = os.path.join(config.get("Path", "ResourcesFolder"), resource["Image"])
+def load_image(resource, section):
+    img_path = os.path.join(config.get(section, "ResourcesFolder"), resource["Image"])
     resource["ImageData"] = cv.resize(cv_imread(img_path), resource["Size"], cv.INTER_CUBIC)
     return resource["ImageData"]
 
 
-def load_scenes():
-    with open(config.get("Path", "Scenes"), "r", -1, "UTF-8") as fl:
+def load_scenes(section):
+    with open(config.get(section, "Scenes"), "r", -1, "UTF-8") as fl:
         items = json.load(fl)
     return items
 
 
-def load_resources():
-    with open(config.get("Path", "Resources"), "r", -1, "UTF-8") as fl:
+def load_resources(section):
+    with open(config.get(section, "Resources"), "r", -1, "UTF-8") as fl:
         items = json.load(fl)
     for resource in items.values():
-        update_resource(resource)
+        update_resource(resource, section)
     return items
 
 
-def load_map(name):
-    with open("maps/%s.json" % name, "r", -1, "UTF-8") as fl:
+def load_map(name, section):
+    with open("%s/maps/%s.json" % (section,  name), "r", -1, "UTF-8") as fl:
         items = json.load(fl)
     for val in items["Resources"].values():
-        update_resource(val)
+        update_resource(val, section)
     return items
 
 
@@ -109,9 +109,10 @@ def get_all_match(image, needle):
         match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
     return match
 
+
 def get_multi_match(image, needle, thresh):
     """在image中搜索多个needle的位置
-    
+
     重合的部分返回重合部分中心对应的坐标
     """
     match = get_all_match(image, needle)

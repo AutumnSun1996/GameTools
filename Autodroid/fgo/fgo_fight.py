@@ -2,11 +2,11 @@ import json
 
 import numpy as np
 
-from config import config, logger
-from image_tools import cv_crop, extract_text, get_multi_match, get_match, load_map
-from win32_tools import rand_click, drag
-from baidu_ocr import ocr
+from config_loader import config, logger
 from simulator import SimulatorControl, parse_condition
+from simulator.image_tools import cv_crop, cv_save, load_map, load_resources, load_scenes, get_multi_match, get_match
+from simulator.win32_tools import drag, rand_click
+from ocr import ocr
 
 
 def contact_images(*images, sep=1):
