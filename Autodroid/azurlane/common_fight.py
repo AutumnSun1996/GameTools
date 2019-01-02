@@ -5,9 +5,10 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
-from win32_tools import rand_click
-from config import logger
-from map_anchor import FightMap
+from config_loader import logger
+from simulator.win32_tools import rand_click
+from simulator import parse_condition
+from .map_anchor import FightMap
 
 
 class CommonMap(FightMap):
@@ -16,29 +17,12 @@ class CommonMap(FightMap):
 
     def __init__(self, map_name=None):
         super().__init__(map_name)
-        self.virtual_fight_index = 1
         self.reset_map_data()
 
     def parse_fight_condition(self, condition):
-        if isinstance(condition, list):
-            if condition[0] == 'FightIndex':
-                fidx = self.get_fight_index() + self.virtual_fight_index
-                mod = fidx % self.data["FightCount"]
-                logger.debug("FightIndex %d(%d)", fidx, mod)
-                return mod
-            if condition[0] == 'not':
-                return not self.parse_fight_condition(condition[1])
-            if condition[0] == '==':
-                return self.parse_fight_condition(condition[1]) == self.parse_fight_condition(condition[2])
-            if condition[0] == 'in':
-                return self.parse_fight_condition(condition[1]) in self.parse_fight_condition(condition[2])
-            if condition[0] == '>=':
-                return self.parse_fight_condition(condition[1]) >= self.parse_fight_condition(condition[2])
-            if condition[0] == '<=':
-                return self.parse_fight_condition(condition[1]) <= self.parse_fight_condition(condition[2])
-            if condition[0] == '!=':
-                return self.parse_fight_condition(condition[1]) != self.parse_fight_condition(condition[2])
-        return condition
+        status = self.get_fight_status()
+        status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
+        return parse_condition(condition, status)
 
     def reset_map_data(self):
         """进入战场，重置虚拟战斗次数，使下一次战斗正常开始
@@ -82,13 +66,14 @@ class CommonMap(FightMap):
     def reset_fight_index(self):
         # self.virtual_fight_index = 0
         self.reset_map_data()
-        fight_idx = self.get_fight_index() + self.virtual_fight_index
-        mod = fight_idx % self.data["FightCount"]
-        logger.warning("Current Fight Index: %d (%d)", fight_idx, mod)
+        status = self.get_fight_status()
+        mod = status["FightIndex"] % self.data["FightCount"]
+        logger.warning("Current Fight Index: %d (%d)", status["FightIndex"], mod)
         if mod != 0:
-            self.virtual_fight_index += 6-mod
+            status["VirtualFightIndex"] += 6 - mod
+            self.seve_fight_status(status)
             logger.info("Reset Fight Index From %d To %d",
-                        fight_idx, fight_idx+6-mod)
+                        status["FightIndex"], status["FightIndex"]+6-mod)
 
     def enemies_on_path(self, path):
         enemies = []
@@ -224,17 +209,17 @@ class CommonMap(FightMap):
 
     def search_for_boss(self, repeat=0, idx=0):
         logger.info("搜索Boss(%d)", repeat)
-            
+
         if idx is not None:
             target = self.data['ViewPort'][idx]
             logger.info("检查区域%s", target)
             self.move_map_to(*self.locate_target(target)[1])
         if repeat > 5:
             self.critical("Boss搜索失败")
-        
-        ret, pos = self.resource_in_screen('Boss')
+
+        ret, pos = self.search_resource('Boss')
         if not ret:
-            ret, pos = self.resource_in_screen('Boss-Bigger')
+            ret, pos = self.search_resource('Boss-Bigger')
         if not ret:
             self.search_for_boss(repeat, idx+1)
             return
@@ -276,11 +261,11 @@ class CommonMap(FightMap):
         # boss = self.find_on_map(anchor_name, anchor_pos, 'Boss', False)
         # if len(boss) != 1:
             # boss = self.find_on_map(
-                # anchor_name, anchor_pos, 'Boss-Bigger', False)
+            # anchor_name, anchor_pos, 'Boss-Bigger', False)
         # if len(boss) == 1:
             # self.boss = list(boss)
             # logger.info("找到Boss: %s", boss)
-        
+
         if self.current_fleet is None:
             pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer', False)
             if pointer:
