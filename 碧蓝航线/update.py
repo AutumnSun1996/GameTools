@@ -195,7 +195,7 @@ def update_drop_info():
     update_file("DropList.js", new_content)
 
 
-pre_html = """
+html_equip = """
 <style>
     .noresize {
         width: 1170;
@@ -213,16 +213,29 @@ def update_equipment_info():
     pq = get_wiki('装备一图榜')("#mw-content-text")
     for rm in ['#toc', 'div.bread', 'center']:
         pq(rm).remove()
-    new_content = pre_html % (pq.html())
+    new_content = html_equip % (pq.html(pretty_print=True))
     new_content = re.sub('(?s)<!--.*?-->', '', new_content)
     update_file("装备一图榜.html", new_content)
 
+
+html_pve = """
+<style>
+    #MainContent {
+        width: 1170;
+        margin: auto;
+    }
+</style>
+<meta charset="UTF-8" />
+<div id="MainContent">
+%s
+</div>
+""".strip()
 
 def update_pve_rank():
     pq = get_wiki('PVE用舰船综合性能强度榜')("#mw-content-text")
     for rm in ['#toc', 'div.bread', 'center']:
         pq(rm).remove()
-    new_content = pre_html % (pq.html())
+    new_content = html_pve % (pq.html(pretty_print=True))
     new_content = re.sub('(?s)<!--.*?-->', '', new_content)
     update_file("PVE强度榜.html", new_content)
 
