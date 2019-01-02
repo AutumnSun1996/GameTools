@@ -1,17 +1,17 @@
 {
-    "Name": "10-2",
-    "Map": [
-        "ENEENOEB",
-        "NOONEOEE",
-        "NFOOSEEO",
-        "NFOONEEO",
-        "NOONEOEE",
-        "NEEENOEB"
-    ],
-    "Strategy": {
-        "Type": "Search",
-        "FightBeforeBoss": 6,
-        "FleetForBoss": 2
-    },
-    "Anchors": {}
+  "Name": "10-2",
+  "Map": [
+    "ENEENOEB",
+    "NOONEOEE",
+    "NFOOSEEO",
+    "NFOONEEO",
+    "NOONEOEE",
+    "NEEENOEB"
+  ],
+  "Strategy": {
+    "Type": "Search",
+    "FightBeforeBoss": 6,
+    "FleetForBoss": 2
+  },
+  "Anchors": {}
 }

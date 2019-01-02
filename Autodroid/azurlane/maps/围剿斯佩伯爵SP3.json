@@ -13,12 +13,18 @@
   "Strategy": [
     {
       "Condition": ["in", ["FightIndex"], [0, 1, 2, 4]],
-      "Actions": [{"Type": "InnerCall", "Target": "normal_fight"}]
+      "Actions": [
+        {"Type": "InnerCall", "Target": "normal_fight"}
+      ]
     },
     {
       "Condition": ["==", ["FightIndex"], 3],
       "Actions": [
-        {"Type": "InnerCall", "Target": "click_at_map", "args": ["I2"]},
+        {
+          "Type": "InnerCall",
+          "Target": "click_at_map",
+          "args": ["I2"]
+        },
         {"Type": "InnerCall", "Target": "after_bonus"},
         {"Type": "InnerCall", "Target": "normal_fight"}
       ]
