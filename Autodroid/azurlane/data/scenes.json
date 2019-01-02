@@ -1,7 +1,7 @@
 {
   "船坞已满": {
     "Name": "船坞已满",
-    "Condition": ["All", "船坞已满-整理", "信息-标题"],
+    "Condition": ["$all", "船坞已满-整理", "信息-标题"],
     "Actions": [
       {"Type": "Click", "Target": "船坞已满-整理"},
       {"Type": "Wait", "Time": 2},
@@ -126,7 +126,7 @@
   },
   "消息": {
     "Name": "消息",
-    "Condition": ["All", "信息-标题", "信息-确定"],
+    "Condition": ["$all", "信息-标题", "信息-确定"],
     "Actions": [
       {"Type": "Click", "Target": "信息-确定"},
       {"Type": "Wait", "Time": 0.5}
@@ -161,10 +161,10 @@
   "正常战斗中": {
     "Name": "正常战斗中",
     "Condition": [
-      "All",
+      "$all",
       "暂停",
-      ["Not", "潜艇数量1"],
-      ["Not", "自律战斗"]
+      ["$not", "潜艇数量1"],
+      ["$not", "自律战斗"]
     ],
     "Actions": [{"Type": "Wait", "Time": 3}],
     "Next": ["正常战斗中", "S胜", "A胜"]
