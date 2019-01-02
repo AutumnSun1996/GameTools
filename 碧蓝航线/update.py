@@ -30,7 +30,6 @@ def get_wiki(name):
 
 
 def get_build_info():
-    print("更新建造表...")
     pq = get_wiki("建造模拟器")
     res = pq(".LotusRoot")
 
@@ -54,7 +53,6 @@ def get_build_info():
 
 
 def update_ship_info():
-    print("更新舰娘列表")
     pq_trans = get_wiki("重樱船名称对照表")
     pq_trans("#FlourPackage tr").eq(0).remove()
     name_trans = {item("td").eq(1).text(): item("td").eq(0)("rb").text()[
@@ -144,7 +142,7 @@ def update_ship_info():
 
     new_content = re.sub(
         reg_info, "var shipOwnInfo = `\n{}\n`".format(ship_info), content)
-    
+
     if new_content == content:
         print("common.js 已是最新.")
         return
@@ -168,9 +166,13 @@ def get_drop(name):
     print("关卡{}获取成功.".format(name))
     return drop
 
+
 def update_file(file_name, new_content):
-    with open(file_name, "r", -1, "UTF-8") as fl:
-        content = fl.read()
+    try:
+        with open(file_name, "r", -1, "UTF-8") as fl:
+            content = fl.read()
+    except FileNotFoundError:
+        content = None
 
     if content == new_content:
         print("{}已是最新.".format(file_name))
@@ -182,7 +184,6 @@ def update_file(file_name, new_content):
 
 
 def update_drop_info():
-    print("更新掉落表...")
     drop_list = []
     for chap in range(1, 13):
         for node in range(1, 5):
@@ -192,6 +193,7 @@ def update_drop_info():
     new_content = "var dropList=" + json.dumps(drop_list,
                                                indent="  ", ensure_ascii=False) + ";"
     update_file("DropList.js", new_content)
+
 
 pre_html = """
 <style>
@@ -206,14 +208,23 @@ pre_html = """
 </div>
 """.strip()
 
+
 def update_equipment_info():
-    print("更新装备一图榜...")
     pq = get_wiki('装备一图榜')("#mw-content-text")
     for rm in ['#toc', 'div.bread', 'center']:
         pq(rm).remove()
     new_content = pre_html % (pq.html())
     new_content = re.sub('(?s)<!--.*?-->', '', new_content)
     update_file("装备一图榜.html", new_content)
+
+
+def update_pve_rank():
+    pq = get_wiki('PVE用舰船综合性能强度榜')("#mw-content-text")
+    for rm in ['#toc', 'div.bread', 'center']:
+        pq(rm).remove()
+    new_content = pre_html % (pq.html())
+    new_content = re.sub('(?s)<!--.*?-->', '', new_content)
+    update_file("PVE强度榜.html", new_content)
 
 
 def main():
@@ -223,10 +234,12 @@ def main():
         ["更新舰娘列表", update_ship_info],
         ["更新建造表", get_build_info],
         ["更新装备一图榜", update_equipment_info],
+        ["更新PVE强度榜", update_pve_rank],
     ]
     for idx, item in enumerate(functions):
         print("{0:2d}: {1[0]}".format(idx, item))
     choice = int(input("选择:"))
+    print("%s..." % functions[choice][0])
     functions[choice][1]()
 
 
