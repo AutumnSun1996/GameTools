@@ -4,38 +4,41 @@
 By AutumnSun
 """
 import time
+import json
 
-from config import logger
-from win32_tools import rand_click
+from config_loader import logger, config
 from simulator import SimulatorControl
-
+from simulator.win32_tools import rand_click
+from collections import defaultdict
 
 class AzurLaneControl(SimulatorControl):
     """碧蓝航线通用控制
     """
+    section = "AzurLane"
+    status_path = "%s/data/fightStatus.json" % section
     retire_choices = ["退役-白色舰娘", "退役-蓝色舰娘"]
 
-    @staticmethod
-    def get_fight_index():
+    def get_fight_status(self):
         """战斗次数计数"""
-        with open('fightIndex.txt', 'r') as fl:
-            fight_idx = int(fl.read())
-        return fight_idx
+        try:
+            with open(self.status_path, 'r') as fl:
+                status = json.load(fl)
+            status["FightIndex"] = status["VirtualFightIndex"] + status["TrueFightIndex"]
+        except FileNotFoundError:
+            status = defaultdict(lambda: 0)
+        return status
 
-    @staticmethod
-    def inc_fight_index():
+    def inc_fight_index(self):
         """增加战斗次数"""
-        with open('fightIndex.txt', 'r') as fl:
-            fight_idx = int(fl.read())
-        logger.debug("增加Fight Index: %d -> %d", fight_idx, fight_idx+1)
-        with open('fightIndex.txt', 'w') as fl:
-            fl.write("%d" % (fight_idx + 1))
+        status = self.get_fight_status()
+        logger.debug("增加Fight Index: %d -> %d", status["FightIndex"], status["FightIndex"]+1)
+        status["FightIndex"] += 1
+        self.seve_fight_status(status)
 
-    @staticmethod
-    def set_fight_index(index=0):
+    def seve_fight_status(self, status):
         """设置战斗次数"""
-        with open('fightIndex.txt', 'w') as fl:
-            fl.write("%d" % index)
+        with open(self.status_path, 'w') as fl:
+            json.dump(status, fl, ensure_ascii=False)
 
     def fight(self):
         """处理战斗内容. 随每个地图变化"""
@@ -57,7 +60,7 @@ class AzurLaneControl(SimulatorControl):
             action = "继续战斗"
         for color in colors:
             name = "{0}-{1[0]}脸".format(self.current_scene['Name'], color)
-            if self.resource_in_screen(name)[0]:
+            if self.resource_in_screen(name):
                 color[1](
                     "舰娘心情值低(%s)" % (name),
                     "舰娘心情值", action)
@@ -71,14 +74,14 @@ class AzurLaneControl(SimulatorControl):
         for name in self.retire_choices:
             dx, dy = self.resources[name].get("ClickOffset", (-10, -10))
             w, h = self.resources[name].get("ClickSize", (20, 20))
-            for x, y in self.resource_in_screen(name)[1]:
+            for x, y in self.search_resource(name)[1]:
                 targets.append((x+dx, y+dy, x+dx+w, y+dy+h))
         logger.info("select_ships: %s", targets)
         return targets[:10]
 
     def retire(self):
         """执行退役操作"""
-        if self.resource_in_screen("降序")[0]:
+        if self.resource_in_screen("降序"):
             logger.debug("切换倒序显示")
             self.click_at_resource("降序")
             time.sleep(1)
