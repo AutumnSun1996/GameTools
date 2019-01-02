@@ -25,14 +25,14 @@ class AzurLaneControl(SimulatorControl):
                 status = json.load(fl)
             status["FightIndex"] = status["VirtualFightIndex"] + status["TrueFightIndex"]
         except FileNotFoundError:
-            status = defaultdict(lambda: 0)
+            status = {"VirtualFightIndex": 0, "TrueFightIndex": 0, "FightIndex": 0}
         return status
 
     def inc_fight_index(self):
         """增加战斗次数"""
         status = self.get_fight_status()
-        logger.debug("增加Fight Index: %d -> %d", status["FightIndex"], status["FightIndex"]+1)
-        status["FightIndex"] += 1
+        logger.debug("增加Fight Index: %d -> %d", status["TrueFightIndex"], status["TrueFightIndex"]+1)
+        status["TrueFightIndex"] += 1
         self.seve_fight_status(status)
 
     def seve_fight_status(self, status):
