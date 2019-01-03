@@ -16,7 +16,7 @@ import win32con
 import win32api
 
 from config_loader import logger, config
-from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, \
+from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
     cv_save, load_scenes, load_resources, load_image
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
@@ -151,9 +151,8 @@ class SimulatorControl:
             else:
                 x = y = 0
                 part = image
-            match = get_all_match(part, target)
-            pos = [[x+dx, y+dy] for dy, dx in zip(*np.where(match < info.get("MaxDiff", 0.02)))]
-            ret = bool(pos)
+            pos = get_multi_match(part, target, info.get("MaxDiff", 0.02))
+            ret = len(pos) > 0
         else:
             self.critical("Invalid Type %s", info['Type'])
         logger.debug("Check Resource: %s=%s", name, pos)
@@ -210,6 +209,19 @@ class SimulatorControl:
             rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
         else:
             self.error("Want to click at <%s> resource: %s", res["Type"], name)
+
+    def crop_resource(self, name, offset=None, image=None):
+        """截取资源所在位置的当前截图"""
+        if offset is None:
+            dx, dy = 0, 0
+        else:
+            dx, dy = offset
+        if image is None:
+            image = self.screen
+        res = self.resources[name]
+        x, y = res.get("CropOffset", res.get("Offset", (0, 0)))
+        w, h = res.get("CropSize", res["Size"])
+        return cv_crop(image, (x+dx, y+dy, x+w+dx, y+h+dy))
 
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
