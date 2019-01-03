@@ -1,0 +1,36 @@
+{
+  "Name": "通用地图",
+  "Map": [],
+  "Strategy": {},
+  "Anchors": {},
+  "Resources": {
+    "Lv": {
+      "Name": "Lv",
+      "MainSize": [1280, 720],
+      "Offset": [-8, -25],
+      "Size": [29, 26],
+      "Type": "MultiDynamic",
+      "Image": "lv_label.png",
+      "MaxDiff": 0.1
+    },
+    "CellOffset": {
+      "Name": "Enemy1",
+      "MainSize": [1280, 720],
+      "Offset": [-8, -25],
+      "Size": [29, 26],
+      "Type": "MultiDynamic",
+      "Image": "Enemy1.png",
+      "MaxDiff": 0.1
+    },
+    "Pointer": {
+      "Name": "Pointer",
+      "MainSize": [1280, 720],
+      "Offset": [45, 200],
+      "Size": [75, 46],
+      "Type": "Dynamic",
+      "Image": "Pointer.png",
+      "MaxDiff": 0.06
+    }
+  },
+  "Scenes": {}
+}

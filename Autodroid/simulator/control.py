@@ -16,7 +16,7 @@ import win32con
 import win32api
 
 from config_loader import logger, config
-from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_all_match, \
+from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
     cv_save, load_scenes, load_resources, load_image
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
@@ -94,6 +94,11 @@ class SimulatorControl:
             self.scene_history.append(self.fallback_scene)
         return self.scene_history[-1]
 
+    @property
+    def scene_changed(self):
+        """最近检测出的场景"""
+        return self.current_scene != self.last_scene
+
     def make_screen_shot(self):
         """获取窗口截图"""
         self.screen = get_window_shot(self.hwnd)
@@ -152,9 +157,8 @@ class SimulatorControl:
             else:
                 x = y = 0
                 part = image
-            match = get_all_match(part, target)
-            pos = [[x+dx, y+dy] for dy, dx in zip(*np.where(match < info.get("MaxDiff", 0.02)))]
-            ret = bool(pos)
+            pos = get_multi_match(part, target, info.get("MaxDiff", 0.02))
+            ret = len(pos) > 0
         else:
             self.critical("Invalid Type %s", info['Type'])
         logger.debug("Check Resource: %s=%s", name, pos)
@@ -212,6 +216,19 @@ class SimulatorControl:
         else:
             self.error("Want to click at <%s> resource: %s", res["Type"], name)
 
+    def crop_resource(self, name, offset=None, image=None):
+        """截取资源所在位置的当前截图"""
+        if offset is None:
+            dx, dy = 0, 0
+        else:
+            dx, dy = offset
+        if image is None:
+            image = self.screen
+        res = self.resources[name]
+        x, y = res.get("CropOffset", res.get("Offset", (0, 0)))
+        w, h = res.get("CropSize", res["Size"])
+        return cv_crop(image, (x+dx, y+dy, x+w+dx, y+h+dy))
+
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
         if repeat < 0:
@@ -245,11 +262,21 @@ class SimulatorControl:
         """使模拟器窗口前置"""
         make_foreground(self.hwnd)
 
+    def save_record(self, prefix=None, area=None):
+        if prefix is None:
+            prefix = "Shot"
+        if area is None:
+            image = self.screen
+        else:
+            image = self.crop_resource(area)
+            prefix += '-%s' % area
+        name = "logs/{}-{:%Y-%m-%d_%H%M%S}.png".format(prefix, datetime.datetime.now())
+        cv_save(name, image)
+
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
         logger.critical(message)
-        name = "logs/Critical-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
-        cv_save(name, self.screen)
+        self.save_record("Critical")
 
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
@@ -263,8 +290,7 @@ class SimulatorControl:
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
         logger.error(message)
-        name = "logs/Error-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
-        cv_save(name, self.screen)
+        self.save_record("Error")
 
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
@@ -355,9 +381,6 @@ class SimulatorControl:
     def do_actions(self, actions):
         """执行指定的操作"""
         for action in actions:
-            if action.get('FirstOnly') and self.last_scene == self.current_scene:
-                continue
-
             if "Condition" in action and not parse_condition(action["Condition"], self):
                 continue
 

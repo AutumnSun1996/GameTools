@@ -13,8 +13,6 @@ from .map_anchor import FightMap
 
 class CommonMap(FightMap):
     """地图操作"""
-    map_name = None
-
     def __init__(self, map_name=None):
         super().__init__(map_name)
         self.reset_map_data()
@@ -246,7 +244,7 @@ class CommonMap(FightMap):
     def check_map(self):
         self.make_screen_shot()
         anchor_name, anchor_pos = self.get_best_anchor()
-        if not self.parse_condition(self.scenes['战斗地图']['Condition']):
+        if not parse_condition(self.scenes['战斗地图']['Condition'], None, self.resource_in_screen):
             self.notice("Not in 战斗地图")
             return
 
@@ -312,14 +310,14 @@ class CommonMap(FightMap):
         if scene['Name'] == '获得道具':
             self.do_actions(scene['Actions'])
             self.wait(1)
-            if self.resource_in_screen('收起右侧菜单')[0]:
+            if self.resource_in_screen('收起右侧菜单'):
                 self.click_at_resource('收起右侧菜单')
             self.update_current_scene(['战斗地图'])
 
     def search_for_bonus(self, repeat=0):
         if repeat >= 5:
             self.critical("问号点搜索失败")
-        ret, pos = self.resource_in_screen('问号点')
+        ret, pos = self.search_resource('问号点')
         if not ret:
             self.wait_mannual("未找到问号点")
             self.recheck_full_map()
