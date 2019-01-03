@@ -46,15 +46,15 @@ def encode(obj, prefix, level):
 
 def jsonformat(path, backup=True):
     # path = os.path.realpath(path)
-    if backup:
-        basename, ext = os.path.splitext(path)
-        shutil.copy2(path, basename + '.bak' + ext)
     with open(path, "r", -1, "UTF-8") as fl:
         content = fl.read()
     new_content = encode(json.loads(content), '', 0)
     if content == new_content:
         print("No Change: ", path)
         return
+    if backup:
+        basename, ext = os.path.splitext(path)
+        shutil.copy2(path, basename + '.bak' + ext)
     with open(path, "w", -1, "UTF-8") as fl:
         fl.write(new_content)
     print("Reformated:", path)
