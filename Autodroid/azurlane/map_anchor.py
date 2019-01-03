@@ -155,7 +155,7 @@ class FightMap(AzurLaneControl):
         logger.debug("find_on_map %s by %s at %s", target_name, anchor_name, anchor_pos)
         target = self.resources[target_name]
         name_x, name_y = anchor_name
-        
+
         points = np.array(self.resources["地图区域"]["Points"]).reshape((1, -1, 2))
         result = set()
         for x, y in get_multi_match(self.screen, target['ImageData'], target.get("MaxDiff", 0.1)):
