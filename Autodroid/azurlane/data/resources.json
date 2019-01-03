@@ -4,7 +4,7 @@
     "MainSize": [1920, 1080],
     "Offset": [60, 70],
     "Size": [130, 95],
-    "Type": "Anchor",
+    "Type": "Dynamic",
     "OnMap": "A2",
     "Image": "3-5-A2.png",
     "MapName": "3-5"
@@ -14,7 +14,7 @@
     "MainSize": [1920, 1080],
     "Offset": [75, 200],
     "Size": [110, 190],
-    "Type": "Anchor",
+    "Type": "Dynamic",
     "OnMap": "G3",
     "Image": "3-5-G3.png",
     "MapName": "3-5"
@@ -447,7 +447,7 @@
     "MainSize": [1280, 720],
     "Offset": [-8, -25],
     "Size": [20, 20],
-    "Type": "Anchor",
+    "Type": "MultiDynamic",
     "Image": "Lv.png"
   },
   "Ammo": {
@@ -455,7 +455,7 @@
     "MainSize": [1280, 720],
     "Offset": [-20, 160],
     "Size": [34, 34],
-    "Type": "Anchor",
+    "Type": "MultiDynamic",
     "Image": "Ammo.png",
     "MaxDiff": 0.08
   },

@@ -26,7 +26,11 @@
     "Actions": [
       {
         "Type": "Click",
-        "Condition": ["$ge", ["$attr", "since_last_change"], 15],
+        "Condition": [
+          "$ge",
+          ["$attr", "since_last_change"],
+          15
+        ],
         "Target": "潜艇按钮"
       },
       {"Type": "Wait", "Time": 3}
