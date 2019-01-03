@@ -6,6 +6,7 @@ import hashlib
 import logging
 import logging.config
 from configparser import ConfigParser
+import concurrent_log_handler
 
 logging.config.fileConfig("config/logging.conf")
 logger = logging.getLogger()
@@ -25,3 +26,4 @@ if not os.path.exists(name):
     raise FileNotFoundError("No Config File For This Device!")
 
 config.read(name, encoding="UTF-8")
+logging.handlers.RotatingFileHandler
