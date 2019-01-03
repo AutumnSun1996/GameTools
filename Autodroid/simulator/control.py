@@ -50,6 +50,10 @@ def parse_condition(cond, obj, extra=None):
                 cond = obj[key]
             else:
                 cond = parse_condition(cond[1], obj, extra)[key]
+        elif cond[0] == "$call":
+            func = getattr(obj, cond[1])
+            args = cond[2:]
+            cond = func(*args)
         else:
             use_extra = True
     else:
@@ -174,6 +178,11 @@ class SimulatorControl:
     def resource_in_screen(self, name):
         """判断资源是否存在于画面内. 仅返回bool判断
         """
+        if not isinstance(name, str):
+            return name
+        if name not in self.resources:
+            logger.warning("resource_in_screen Ignore %s", name)
+            return name
         return self.search_resource(name)[0]
 
     def wait(self, dt):
@@ -327,7 +336,7 @@ class SimulatorControl:
         """等待指定的场景或全局场景"""
         if repeat is None:
             repeat = self.scene_check_max_repeat
-        logger.info("update_current_scene(%d) in %s", repeat, candidates)
+        logger.debug("update_current_scene(%d) in %s", repeat, candidates)
         if repeat == 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
             # 若选择忽略错误，则返回“无匹配场景”
@@ -336,7 +345,7 @@ class SimulatorControl:
 
         if candidates is None:
             if self.current_scene is None or self.current_scene.get("Next") is None:
-                logger.info("update candidates to full list")
+                logger.debug("update candidates to full list")
                 candidates = list(self.scenes.keys())
             else:
                 candidates = self.current_scene["Next"]
@@ -344,7 +353,7 @@ class SimulatorControl:
                     interval = candidates.get("Interval", interval)
                     repeat = candidates.get("Repeat", repeat)
                     candidates = candidates["Candidates"]
-                logger.info("update candidates: Next for %s: %s", self.current_scene["Name"], candidates)
+                logger.debug("update candidates: Next for %s: %s", self.current_scene["Name"], candidates)
 
         self.make_screen_shot()
         for key in candidates:
@@ -409,7 +418,7 @@ class SimulatorControl:
         scene = self.update_current_scene()
         heartbeat()
         now = time.time()
-        if self.last_scene != scene:
+        if self.scene_changed:
             nochange = ""
             self.last_change = now
         else:

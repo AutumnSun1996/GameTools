@@ -32,5 +32,40 @@
       "MaxDiff": 0.06
     }
   },
-  "Scenes": {}
+  "Scenes": {
+    "正常战斗中": {
+      "Name": "正常战斗中",
+      "Condition": ["$all", ["$not", "自律战斗"], "暂停"],
+      "Actions": [
+        {
+          "Type": "Click",
+          "Condition": [
+            "$all",
+            ["$ge", ["$attr", "since_last_change"], 15],
+            ["$call", "resource_in_screen", "潜艇数量1"]
+          ],
+          "Target": "潜艇按钮"
+        },
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["正常战斗中", "S胜", "A胜"]
+    },
+    "非自律战斗中": {
+      "Name": "非自律战斗中",
+      "Condition": "自律战斗",
+      "Actions": [
+        {"Type": "Click", "Target": "自律战斗"},
+        {"Type": "Wait", "Time": 0.5},
+        {"Type": "Click", "Target": "右侧空白区域"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["非自律战斗中", "潜艇未出击", "正常战斗中"]
+    },
+    "潜艇未出击": {
+      "Name": "潜艇未出击",
+      "Condition": false,
+      "Actions": [{"Type": "Wait", "Time": 3}],
+      "Next": ["非自律战斗中", "潜艇未出击", "正常战斗中"]
+    }
+  }
 }
