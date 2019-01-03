@@ -256,11 +256,21 @@ class SimulatorControl:
         """使模拟器窗口前置"""
         make_foreground(self.hwnd)
 
+    def save_record(self, prefix=None, area=None):
+        if prefix is None:
+            prefix = "Shot"
+        if area is None:
+            image = self.screen
+        else:
+            image = self.crop_resource(area)
+            prefix += '-%s' % area
+        name = "logs/{}-{:%Y-%m-%d_%H%M%S}.png".format(prefix, datetime.datetime.now())
+        cv_save(name, image)
+
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
         logger.critical(message)
-        name = "logs/Critical-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
-        cv_save(name, self.screen)
+        self.save_record("Critical")
 
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
@@ -274,8 +284,7 @@ class SimulatorControl:
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
         logger.error(message)
-        name = "logs/Error-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now())
-        cv_save(name, self.screen)
+        self.save_record("Error")
 
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
