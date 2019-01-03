@@ -81,6 +81,7 @@ class AzurLaneControl(SimulatorControl):
 
     def retire(self):
         """执行退役操作"""
+        self.make_screen_shot()
         if self.resource_in_screen("降序"):
             logger.debug("切换倒序显示")
             self.click_at_resource("降序")
