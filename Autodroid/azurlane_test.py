@@ -1,15 +1,15 @@
 import win32api
 
-from azurlane.map_anchor import FightMap
+from azurlane.common_fight import CommonMap
 
 try:
     __builtin__ = __builtins__
 except NameError:
     pass
 
-class MannalFight(FightMap):
+class MannalFight(CommonMap):
     def __init__(self):
-        super().__init__()
+        CommonMap.__init__(self, "通用地图")
         self.scenes.update({
             "进入档案确认": {
                 "Name": "进入档案确认",
