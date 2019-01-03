@@ -93,6 +93,11 @@ class SimulatorControl:
             self.scene_history.append(self.fallback_scene)
         return self.scene_history[-1]
 
+    @property
+    def scene_changed(self):
+        """最近检测出的场景"""
+        return self.current_scene != self.last_scene
+
     def make_screen_shot(self):
         """获取窗口截图"""
         self.screen = get_window_shot(self.hwnd)
@@ -394,9 +399,6 @@ class SimulatorControl:
     def do_actions(self, actions):
         """执行指定的操作"""
         for action in actions:
-            if action.get('FirstOnly') and self.last_scene == self.current_scene:
-                continue
-
             if "Condition" in action and not parse_condition(action["Condition"], self):
                 continue
 
