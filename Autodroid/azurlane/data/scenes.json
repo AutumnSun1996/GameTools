@@ -109,7 +109,7 @@
       {
         "Type": "InnerCall",
         "Target": "inc_fight_index",
-        "Condition": ["$attr", "scene_chenged"]
+        "Condition": ["$attr", "scene_changed"]
       },
       {"Type": "Wait", "Time": 5}
     ]
