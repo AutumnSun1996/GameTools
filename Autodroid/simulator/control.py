@@ -70,6 +70,7 @@ class SimulatorControl:
         "Actions": [{"Type": "Wait", "Time": 1}]
     }
     section = None
+    scene_check_max_repeat = 5
 
     def __init__(self):
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
@@ -296,29 +297,10 @@ class SimulatorControl:
             self.go_top()
             exit(0)
 
-    def update_current_scene_old(self, candidates=None):
-        """判断当前场景"""
-        if candidates is None:
-            if self.current_scene is None or self.current_scene.get("Next") is None:
-                candidates = list(self.scenes.keys())
-            else:
-                candidates = self.current_scene["Next"]
-                logger.info("Next for %s: %s", self.current_scene["Name"], candidates)
-
-        self.make_screen_shot()
-        for key in candidates:
-            scene = self.scenes[key]
-            passed = self.scene_match_check(scene, False)
-
-            logger.debug("Check Scene %s: %s=%s", scene["Name"], scene["Condition"], passed)
-            if passed:
-                return scene
-
-        self.scene_history.append(self.fallback_scene)
-        return self.fallback_scene
-
-    def update_current_scene(self, candidates=None, interval=1, repeat=60):
+    def update_current_scene(self, candidates=None, interval=1, repeat=None):
         """等待指定的场景或全局场景"""
+        if repeat is None:
+            repeat = self.scene_check_max_repeat
         logger.info("update_current_scene(%d) in %s", repeat, candidates)
         if repeat == 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
