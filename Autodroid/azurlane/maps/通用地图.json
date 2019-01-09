@@ -30,6 +30,14 @@
       "Type": "Dynamic",
       "Image": "Pointer.png",
       "MaxDiff": 0.06
+    },
+    "外部地图-出击": {
+      "Name": "外部地图-出击",
+      "MainSize": [1280, 720],
+      "Offset": [120, 0],
+      "Size": [160, 44],
+      "Type": "Static",
+      "Image": "外部地图-出击.png"
     }
   },
   "Scenes": {
@@ -66,6 +74,15 @@
       "Condition": false,
       "Actions": [{"Type": "Wait", "Time": 3}],
       "Next": ["非自律战斗中", "潜艇未出击", "正常战斗中"]
+    },
+    "外部地图": {
+      "Name": "外部地图",
+      "Condition": "外部地图-出击",
+      "Actions": [
+        {"Type": "InnerCall", "Target": "fight"},
+        {"Type": "Wait", "Time": 2}
+      ],
+      "Next": ["外部地图", "进入地图确认"]
     }
   }
 }
