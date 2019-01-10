@@ -42,14 +42,12 @@ def get_build_info():
         result.append(name)
         result.append(info.outer_html())
 
-    with open("建造.html", "r", -1, "UTF-8") as fin:
+    with open("建造.tpl.html", "r", -1, "UTF-8") as fin:
         source = pyquery.PyQuery(fin.read())
 
     source("div.LotusRoot").html("\n".join(result))
-
-    with open("建造.html", "w", -1, "UTF-8") as fl:
-        fl.write(source.outer_html())
-    print("建造.html已更新.")
+    new_content = re.sub('(<span style="display:inline-block">)', r'\n\1', source.outer_html())
+    update_file("建造.html", new_content)
 
 
 def update_ship_info():

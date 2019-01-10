@@ -1,0 +1,69 @@
+<div><p>已拥有的舰娘: </p>
+<div style="height: 300px; overflow-y:scroll;border: 1px solid blue;margin: 20px"><pre id="ship"></pre></div>
+<link rel="stylesheet" href="common.css">
+<meta charset="UTF-8">
+<div class="LotusRoot"></div>
+
+</div><script src="common.js"></script>
+<script>
+    function init() {
+        var ship_own = getShipOwned("ship");
+        console.log(ship_own);
+        for (var item of document.getElementsByClassName("xtb-image")) {
+            var name = item.innerText.trim();
+            if (ship_own.contains(name)) {
+                // console.log("Have:" + name);
+                item.classList.add("owned");
+            } else {
+                console.log("Not Have:" + name);
+            }
+            if (buildNotOpen.contains(name)){
+                item.classList.add("disabled");
+            }
+        }
+        
+        for(var table of document.getElementsByTagName("table")){
+            var total_table = 0;
+            var owned_table = 0;
+            var chance_table = 0;
+            var possibilities = []
+            var ths = table.getElementsByTagName("th");
+            for(var th of ths){
+                possibilities.push(parseFloat(RegExp("\\d+").exec(th.innerText)[0]));
+            }
+            console.log(possibilities);
+            var tds = table.getElementsByClassName("BuildingList");
+            for(var i=0; i<tds.length; i++){
+                console.log(tds[i]);
+                var total_td = 0;
+                var owned_td = 0;
+                for(var span of tds[i].getElementsByClassName("xtb-image")){
+                    if (span.classList.contains("disabled")){
+                        console.log("Skip", span)
+                        continue;
+                    }
+                    total_td++;
+                    if(span.classList.contains("owned")){
+                        // console.log(span.innerText);
+                        owned_td++;
+                    }
+                // 	console.log(span.innerText);
+                }
+                var chance_td = possibilities[i] * (total_td - owned_td) / total_td;
+                if (owned_td < total_td){
+                    var chance = parseInt(100*chance_td) / 100;
+                    ths[i].innerText += '(共{0},已有{1},还差{2}){3}%几率获取新舰娘'.format(total_td, owned_td, total_td - owned_td, chance);
+                }else{
+                    ths[i].innerText += '(共{0},已有{1})无新舰娘'.format(total_td, owned_td);
+                }
+                owned_table += owned_td;
+                total_table += total_td;
+                chance_table += chance_td;
+            }
+            var left_table = total_table - owned_table;
+            var chance_table = parseInt(100*chance_table) / 100;
+            table.parentNode.previousElementSibling.innerText += '(共{0},已有{1},还差{2}){3}%几率获取新舰娘'.format(total_table, owned_table, left_table, chance_table);
+        }
+    }
+    init();
+</script></div>
