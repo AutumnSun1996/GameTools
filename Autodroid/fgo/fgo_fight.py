@@ -60,7 +60,8 @@ class CombatServant:
 
 
 class FateGrandOrder(SimulatorControl):
-    def __init__(self, map_name="CommonConfig"):
+    section = "FGO"
+    def __init__(self, map_name):
         super().__init__()
         self.combat_info = {
             "BattleNow": None,
@@ -69,7 +70,7 @@ class FateGrandOrder(SimulatorControl):
             "Turn": None
         }
         self.best_equips = []
-        self.data = load_map(map_name)
+        self.data = load_map(map_name, self.section)
         logger.info("Update Resources %s", self.data['Resources'].keys())
         self.resources.update(self.data['Resources'])
         logger.info("Update Scenes %s", self.data['Scenes'].keys())
@@ -177,7 +178,7 @@ class FateGrandOrder(SimulatorControl):
 
 
 if __name__ == "__main__":
-    fgo = FateGrandOrder()
+    fgo = FateGrandOrder("通用配置")
     print(fgo.resources.keys())
     print(fgo.resources['战斗速度']['ImageData'].shape)
     fgo.update_current_scene()
