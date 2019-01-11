@@ -23,7 +23,7 @@ from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
-    logger.debug("Parse: %s", cond)
+    cond_in = str(cond)
     use_extra = False
     if isinstance(cond, list) and cond:
         # 仅对非空的list进行解析
@@ -61,7 +61,7 @@ def parse_condition(cond, obj, extra=None):
     if extra and use_extra:
         logger.debug("ExtraParse: %s", cond)
         cond = extra(cond)
-    logger.debug("ParseResult: %s", cond)
+    logger.debug("Parse: %s=%s", cond_in, cond)
     return cond
 
 
