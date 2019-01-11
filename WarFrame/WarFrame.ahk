@@ -59,6 +59,10 @@ UpdateGameStatus(Status){
 }
 
 #IfWinActive Warframe
+PrintScreen::
+ShowTip("ScreenShot")
+RunWait, pythonw screenAnalyse.py fromAHK, .\scripts
+Return
 
 *XButton1::
 If (KeepUpOn) {
