@@ -60,6 +60,8 @@ class CombatServant:
 
 
 class FateGrandOrder(SimulatorControl):
+    scene_check_max_repeat = 60
+    section = "fgo"
     def __init__(self, map_name="CommonConfig"):
         super().__init__()
         self.combat_info = {
@@ -69,7 +71,7 @@ class FateGrandOrder(SimulatorControl):
             "Turn": None
         }
         self.best_equips = []
-        self.data = load_map(map_name)
+        self.data = load_map(map_name, self.section)
         logger.info("Update Resources %s", self.data['Resources'].keys())
         self.resources.update(self.data['Resources'])
         logger.info("Update Scenes %s", self.data['Scenes'].keys())
