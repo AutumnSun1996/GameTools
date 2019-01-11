@@ -179,7 +179,7 @@ class FateGrandOrder(SimulatorControl):
 
 
 if __name__ == "__main__":
-    fgo = FateGrandOrder()
+    fgo = FateGrandOrder("通用配置")
     print(fgo.resources.keys())
     print(fgo.resources['战斗速度']['ImageData'].shape)
     fgo.update_current_scene()

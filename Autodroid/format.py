@@ -62,7 +62,7 @@ def jsonformat(path, backup=True):
 
 def do_format(folder, max_width=80):
     config["MaxLineWidth"] = max_width
-    for root, folders, files in os.walk(folder):
+    for root, _, files in os.walk(folder):
         if "resources" in root:
             continue
         for name in files:

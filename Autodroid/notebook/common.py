@@ -1,11 +1,26 @@
 from PIL import Image
 from PIL import ImageDraw, ImageFont
 import matplotlib.pyplot as plt
+import win32clipboard
 
 from simulator.win32_tools import *
 from simulator.image_tools import *
 
 const = {"s": None, "section": None}
+
+
+def get_clip():
+    win32clipboard.OpenClipboard()
+    text = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+    win32clipboard.CloseClipboard()
+    return text
+
+
+def set_clip(text):
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
+    win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text.encode("UTF-16-LE") + b"\x00")
+    win32clipboard.CloseClipboard()
 
 
 def show(img):
@@ -65,7 +80,9 @@ def save_crop(name, cropped, offset):
             "Type": "Static",
             "Image": name + '.png'
         }, fl, ensure_ascii=False)
-    cv_save("%s/resources/%s.png" % (section, name), cropped)
+    path = "%s/resources/%s.png" % (section, name)
+    cv_save(path, cropped)
+    logger.info("%s,json Saved.", os.path.realpath(path))
 
 
 def show_anchor(x, y, w, h, dx, dy, img=None):

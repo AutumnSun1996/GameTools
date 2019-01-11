@@ -79,10 +79,35 @@
       "Name": "外部地图",
       "Condition": "外部地图-出击",
       "Actions": [
-        {"Type": "InnerCall", "Target": "fight"},
+        {
+          "Type": "InnerCall",
+          "Condition": [
+            "$any",
+            ["$attr", "scene_changed"],
+            ["$ge", ["$attr", "since_last_manual"], 30]
+          ],
+          "Target": "manual"
+        },
         {"Type": "Wait", "Time": 2}
       ],
       "Next": ["外部地图", "进入地图确认"]
+    },
+    "战斗地图": {
+      "Name": "战斗地图",
+      "Condition": "迎击",
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Condition": [
+            "$any",
+            ["$attr", "scene_changed"],
+            ["$ge", ["$attr", "since_last_manual"], 30]
+          ],
+          "Target": "manual"
+        },
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["战斗准备", "战斗地图", "获得道具"]
     }
   }
 }
