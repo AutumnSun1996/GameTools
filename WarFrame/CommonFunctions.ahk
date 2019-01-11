@@ -25,6 +25,7 @@ Return
 
 ^q::
 ShowTip("Exit:" . A_ScriptName)
+Sleep, 1000
 ExitApp
 Return
 
