@@ -45,7 +45,7 @@
   "Scenes": {
     "外部地图": {
       "Name": "外部地图",
-      "Condition": "Clear@第7章",
+      "Condition": ["Clear@第7章"],
       "Actions": [
         {"Type": "Click", "Target": "7-2"},
         {"Type": "Wait", "Time": 0.5}
@@ -54,7 +54,7 @@
     },
     "舰队选择": {
       "Name": "舰队选择",
-      "Condition": "舰队选择-立刻前往",
+      "Condition": ["舰队选择-立刻前往"],
       "Actions": [
         {"Type": "InnerCall", "Target": "mood_detect"},
         {"Type": "Click", "Target": "舰队选择-立刻前往"},

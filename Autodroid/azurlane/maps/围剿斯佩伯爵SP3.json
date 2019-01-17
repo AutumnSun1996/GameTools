@@ -41,7 +41,7 @@
   "Scenes": {
     "外部地图": {
       "Name": "外部地图",
-      "Condition": "围剿斯佩伯爵SP3",
+      "Condition": ["围剿斯佩伯爵SP3"],
       "Actions": [
         {"Type": "Click", "Target": "围剿斯佩伯爵SP3"},
         {"Type": "Wait", "Time": 0.5}
@@ -50,7 +50,7 @@
     },
     "舰队选择": {
       "Name": "舰队选择",
-      "Condition": "舰队选择-立刻前往",
+      "Condition": ["舰队选择-立刻前往"],
       "Actions": [
         {"Type": "InnerCall", "Target": "mood_detect"},
         {"Type": "Click", "Target": "舰队选择-立刻前往"},

@@ -34,7 +34,7 @@
   "Scenes": {
     "外部地图": {
       "Name": "外部地图",
-      "Condition": "斯图尔特的硝烟-Clear",
+      "Condition": ["斯图尔特的硝烟-Clear"],
       "Actions": [
         {"Type": "Click", "Target": "斯图尔特的硝烟SP3"},
         {"Type": "Wait", "Time": 0.5}
@@ -43,7 +43,7 @@
     },
     "舰队选择": {
       "Name": "舰队选择",
-      "Condition": "舰队选择-立刻前往",
+      "Condition": ["舰队选择-立刻前往"],
       "Actions": [
         {"Type": "InnerCall", "Target": "mood_detect"},
         {"Type": "Click", "Target": "舰队选择-立刻前往"},

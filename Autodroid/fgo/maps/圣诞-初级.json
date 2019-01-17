@@ -1,12 +1,20 @@
 {
-  "Name": "通用配置",
-  "Strategy": {"SkillsOnTurn1": [], "CardChoice": [], "Assist": []},
+  "Name": "圣诞-初级",
+  "Strategy": {
+    "SkillsOnTurn1": [[1, 1], [1, 3], [2, 1], [3, 1], [3, 2], [3, 3]],
+    "CardChoice": [
+      [0, ["B+", "B0", "B-", "A+", "Q+", "A0", "Q0", "A-", "Q-"]],
+      [2, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]],
+      [1, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]]
+    ],
+    "Assist": ["Lagenore", "助战1"]
+  },
   "Scenes": {
     "关卡选择": {
       "Name": "关卡选择",
-      "Condition": ["关卡选择"],
+      "Condition": ["圣诞-初级"],
       "Actions": [
-        {"Type": "Click", "Target": "mannual"},
+        {"Type": "Click", "Target": "圣诞-初级"},
         {"Type": "Wait", "Time": 1}
       ],
       "Next": ["助战选择", "AP不足"]

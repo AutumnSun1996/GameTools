@@ -36,14 +36,13 @@
   "Scenes": {
     "外部地图": {
       "Name": "外部地图",
-      "Condition": "围剿斯佩伯爵SP3",
+      "Condition": ["月光下的序曲SP3"],
       "Actions": [
-        {"Type": "Click", "Target": "围剿斯佩伯爵SP3"},
+        {"Type": "Click", "Target": "月光下的序曲SP3"},
         {"Type": "Wait", "Time": 0.5}
       ],
       "Next": ["进入地图确认"]
     }
   },
-  "Anchors": {
-  }
+  "Anchors": {}
 }

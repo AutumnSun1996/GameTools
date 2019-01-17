@@ -1,7 +1,7 @@
 {
   "关卡选择": {
     "Name": "关卡选择",
-    "Condition": "职阶倾向",
+    "Condition": ["职阶倾向"],
     "Actions": [
       {"Type": "InnerCall", "Target": "choose_target"},
       {"Type": "Wait", "Time": 1}
@@ -10,7 +10,7 @@
   },
   "AP不足": {
     "Name": "AP不足",
-    "Condition": "AP不足",
+    "Condition": ["AP不足"],
     "Actions": [
       {"Type": "Click", "Target": "银苹果"},
       {"Type": "Wait", "Time": 1},
@@ -21,7 +21,7 @@
   },
   "助战选择": {
     "Name": "助战选择",
-    "Condition": "助战选择",
+    "Condition": ["助战选择"],
     "Actions": [
       {"Type": "InnerCall", "Target": "choose_assist_servant"},
       {"Type": "Wait", "Time": 1}
@@ -30,7 +30,7 @@
   },
   "队伍确认": {
     "Name": "队伍确认",
-    "Condition": "队伍确认",
+    "Condition": ["队伍确认"],
     "Actions": [
       {"Type": "Click", "Target": "开始任务"},
       {"Type": "Wait", "Time": 1}
@@ -39,14 +39,15 @@
   },
   "加载关卡": {
     "Name": "加载关卡",
-    "Condition": "加载提示",
+    "Condition": ["加载提示"],
     "Actions": [{"Type": "Wait", "Time": 1}],
     "Next": ["加载关卡", "选择技能"]
   },
   "选择技能": {
     "Name": "选择技能",
-    "Condition": "战斗菜单",
+    "Condition": ["战斗菜单"],
     "Actions": [
+      {"Type": "InnerCall", "Target": "extract_combat_info"},
       {"Type": "InnerCall", "Target": "choose_skills"},
       {"Type": "Wait", "Time": 1},
       {"Type": "Click", "Target": "Attack"},
@@ -56,7 +57,7 @@
   },
   "选择指令卡": {
     "Name": "选择指令卡",
-    "Condition": "战斗速度",
+    "Condition": ["战斗速度"],
     "Actions": [
       {"Type": "InnerCall", "Target": "choose_cards"},
       {"Type": "Wait", "Time": 5}
@@ -65,7 +66,7 @@
   },
   "获得羁绊": {
     "Name": "获得羁绊",
-    "Condition": "与从者的羁绊",
+    "Condition": ["与从者的羁绊"],
     "Actions": [
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 0.5}
@@ -74,7 +75,7 @@
   },
   "羁绊加深": {
     "Name": "羁绊加深",
-    "Condition": "羁绊加深",
+    "Condition": ["羁绊加深"],
     "Actions": [
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 0.5}
@@ -83,7 +84,7 @@
   },
   "获得经验": {
     "Name": "获得经验",
-    "Condition": "获得经验",
+    "Condition": ["获得经验"],
     "Actions": [
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 0.5}
@@ -92,7 +93,7 @@
   },
   "获得物品": {
     "Name": "获得物品",
-    "Condition": "获得物品",
+    "Condition": ["获得物品"],
     "Actions": [
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
@@ -101,7 +102,7 @@
   },
   "申请好友": {
     "Name": "申请好友",
-    "Condition": "申请好友",
+    "Condition": ["申请好友"],
     "Actions": [
       {"Type": "Click", "Target": "申请好友"},
       {"Type": "Wait", "Time": 1}
@@ -110,7 +111,7 @@
   },
   "好友申请失败": {
     "Name": "好友申请失败",
-    "Condition": "关闭",
+    "Condition": ["关闭"],
     "Actions": [
       {"Type": "Click", "Target": "关闭"},
       {"Type": "Wait", "Time": 1}

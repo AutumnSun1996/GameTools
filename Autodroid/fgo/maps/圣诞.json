@@ -12,7 +12,7 @@
   "Scenes": {
     "关卡选择": {
       "Name": "关卡选择",
-      "Condition": "圣诞-初级",
+      "Condition": ["圣诞-初级"],
       "Actions": [
         {"Type": "Click", "Target": "圣诞-初级"},
         {"Type": "Wait", "Time": 1}
@@ -21,7 +21,7 @@
     },
     "获得物品": {
       "Name": "获得物品",
-      "Condition": "获得物品",
+      "Condition": ["获得物品"],
       "Actions": [
         {"Type": "InnerCall", "Target": "save_screen"},
         {"Type": "Click", "Target": "下一步"},
