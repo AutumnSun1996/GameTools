@@ -21,7 +21,8 @@
       "Name": "关卡选择",
       "Condition": ["$any", ["种火"],["种火-已获取"]],
       "Actions": [
-        {"Type": "Click", "Target": "种火"},
+        {"Type": "Click", "Condition": ["$call", "resource_in_screen", "种火"], "Target": "种火"},
+        {"Type": "Click", "Condition": ["$call", "resource_in_screen", "种火-已获取"], "Target": "种火-已获取"},
         {"Type": "Wait", "Time": 1}
       ],
       "Next": ["助战选择", "AP不足"]
