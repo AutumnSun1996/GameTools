@@ -1,3 +1,4 @@
+import re
 import json
 
 import numpy as np
@@ -61,7 +62,8 @@ class CombatServant:
 
 class FateGrandOrder(SimulatorControl):
     scene_check_max_repeat = 60
-    section = "fgo"
+    section = "FGO"
+
     def __init__(self, map_name="CommonConfig"):
         super().__init__()
         self.combat_info = {
@@ -82,7 +84,7 @@ class FateGrandOrder(SimulatorControl):
         self.wait(0.8)
         self.click_at_resource("助战-确认更新")
         self.wait(3)
-        
+
     def servant_scroll(self, line):
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
@@ -141,12 +143,23 @@ class FateGrandOrder(SimulatorControl):
         return False, None
 
     def extract_combat_info(self):
+        if not self.scene_changed:
+            return
         info = ocr.image2text(contact_images(
             self.crop_resource("战斗轮次"),
             self.crop_resource("剩余敌人"),
             self.crop_resource("回合数"),
         ))
-        return info
+        logger.debug("Get Combat Info %s", info)
+        now, total = info[0].split("/")
+        left = re.search("\d+", info[1]).group(0)
+        turn = re.search("\d+", info[2]).group(0)
+        self.combat_info = {
+            "BattleNow": int(now),
+            "BattleTotal": int(total),
+            "EnemyLeft": int(left),
+            "Turn": int(turn)
+        }
 
     def choose_skills(self):
         pass
@@ -170,9 +183,26 @@ class FateGrandOrder(SimulatorControl):
                 best = name
         return best_diff, best
 
-    def extract_card_info(self):
-        for cards in ['Buster', 'Arts', 'Quick']:
-            pass
+    def extract_card_info(self, image):
+        best_diff = 1
+        color = ""
+        for name in ["Buster", "Arts", "Quick"]:
+            diff, _ = get_match(image, self.resources[name]["ImageData"])
+            if diff < best_diff:
+                best_diff = diff
+                color = name[0]
+
+        relation = None
+        for name in ["克制", "抵抗"]:
+            res = self.resources[name]
+            diff, _ = get_match(image, res["ImageData"])
+            if diff < res.get("MaxDiff", 0.02):
+                relation = name
+                break
+        relation = {"克制": "+", "抵抗": "-"}.get(relation, "0")
+        result = color + relation
+        logger.info("Found Card: %s", result)
+        return result
 
     def choose_cards(self):
         pass
