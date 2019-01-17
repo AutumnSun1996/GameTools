@@ -85,7 +85,23 @@ class FateGrandOrder(SimulatorControl):
         self.click_at_resource("助战-确认更新")
         self.wait(3)
 
+    @property
+    def scroll_pos(self):
+        _, top_xy = self.search_resource("滚动条-上")
+        _, bot_xy = self.search_resource("滚动条-下")
+        top = top_xy[1]
+        bottom = bot_xy[1]
+        cross = bottom - top
+        top0 = self.resources["滚动条范围"]["Offset"][1]
+        total = self.resources["滚动条范围"]["Size"][1]
+        return (bottom - top0 - cross) / (total - cross)
+
     def servant_scroll(self, line):
+        if line < 3:
+            mid_x = config.getint("Device", "MainWidth") / 2
+            mid_y = config.getint("Device", "MainHeight") / 2
+            drag(self.hwnd, (mid_x, mid_y), (mid_x, mid_y - mid_y * line * 0.5), 30)
+            return
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
         top = top_xy[1]
