@@ -3,11 +3,11 @@
   "Strategy": {
     "Skills": [
       {
-        "Condition": ["$eq", ["Turn"], 1],
+        "Condition": ["$eq", ["BattleNow"], 1],
         "Targets": [[2, 2], [2, 3], [1, 3, 2]]
       },
-      {"Condition": ["$eq", ["Turn"], 2], "Targets": [[1, 1], [1, 2]]},
-      {"Condition": ["$eq", ["Turn"], 3], "Targets": [[3, 2], [3, 3]]}
+      {"Condition": ["$eq", ["BattleNow"], 2], "Targets": [[1, 1], [1, 2]]},
+      {"Condition": ["$eq", ["BattleNow"], 3], "Targets": [[3, 2], [3, 3]]}
     ],
     "CardChoice": [
       [0, ["B+", "B0", "B-", "A+", "Q+", "A0", "Q0", "A-", "Q-"]],
