@@ -41,6 +41,18 @@
     }
   },
   "Scenes": {
+    "船坞已满": {
+      "Name": "船坞已满",
+      "Condition": ["$all", "船坞已满-整理", "信息-标题"],
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Target": "manual"
+        },
+        {"Type": "Wait", "Time": 2}
+      ],
+      "Next": [["History", 1], ["History", 2]]
+    },
     "正常战斗中": {
       "Name": "正常战斗中",
       "Condition": ["$all", ["$not", "自律战斗"], "暂停"],
@@ -81,11 +93,6 @@
       "Actions": [
         {
           "Type": "InnerCall",
-          "Condition": [
-            "$any",
-            ["$attr", "scene_changed"],
-            ["$ge", ["$attr", "since_last_manual"], 30]
-          ],
           "Target": "manual"
         },
         {"Type": "Wait", "Time": 2}
@@ -98,11 +105,6 @@
       "Actions": [
         {
           "Type": "InnerCall",
-          "Condition": [
-            "$any",
-            ["$attr", "scene_changed"],
-            ["$ge", ["$attr", "since_last_manual"], 30]
-          ],
           "Target": "manual"
         },
         {"Type": "Wait", "Time": 1}
