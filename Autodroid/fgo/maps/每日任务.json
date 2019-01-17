@@ -1,7 +1,14 @@
 {
   "Name": "通用配置",
   "Strategy": {
-    "Skills": [],
+    "Skills": [
+      {
+        "Condition": ["$eq", ["Turn"], 1],
+        "Targets": [[2, 2], [2, 3], [1, 3, 2]]
+      },
+      {"Condition": ["$eq", ["Turn"], 2], "Targets": [[1, 2]]},
+      {"Condition": ["$eq", ["Turn"], 3], "Targets": [[3, 2]]}
+    ],
     "CardChoice": [
       [0, ["B+", "B0", "B-", "A+", "Q+", "A0", "Q0", "A-", "Q-"]],
       [2, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]],
@@ -12,9 +19,9 @@
   "Scenes": {
     "关卡选择": {
       "Name": "关卡选择",
-      "Condition": false,
+      "Condition": ["$any", ["种火"],["种火-已获取"]],
       "Actions": [
-        {"Type": "Click", "Target": "圣诞-初级"},
+        {"Type": "Click", "Target": "种火"},
         {"Type": "Wait", "Time": 1}
       ],
       "Next": ["助战选择", "AP不足"]
@@ -28,56 +35,6 @@
         {"Type": "Wait", "Time": 1}
       ],
       "Next": ["获得物品", "关卡选择", "申请好友"]
-    },
-    "选择技能": {
-      "Name": "选择技能",
-      "Condition": ["战斗菜单"],
-      "Actions": [
-        {"Type": "InnerCall", "Target": "extract_combat_info"},
-        {
-          "Type": "InnerCall",
-          "Target": "use_skills",
-          "Condition": [
-            "$eq",
-            "Turn",
-            1
-          ],
-          "args": [[2, 2], [2, 3], [1, 3, 2]]
-        },
-        {
-          "Type": "InnerCall",
-          "Target": "use_skills",
-          "Condition": [
-            "$eq",
-            ["$val", ["$attr", "combat_info"], "Turn"],
-            2
-          ],
-          "args": [[1, 2]]
-        },
-        {
-          "Type": "InnerCall",
-          "Target": "use_skills",
-          "Condition": [
-            "$eq",
-            ["$val", ["$attr", "combat_info"], "Turn"],
-            3
-          ],
-          "args": [[3, 2]]
-        },
-        {"Type": "Wait", "Time": 1},
-        {"Type": "Click", "Target": "Attack"},
-        {"Type": "Wait", "Time": 1}
-      ],
-      "Next": ["选择指令卡"]
-    },
-    "选择指令卡": {
-      "Name": "选择指令卡",
-      "Condition": ["战斗速度"],
-      "Actions": [
-        {"Type": "InnerCall", "Target": "choose_cards"},
-        {"Type": "Wait", "Time": 5}
-      ],
-      "Next": ["选择技能", "获得羁绊"]
     }
   },
   "Resources": {
@@ -87,6 +44,13 @@
       "Size": [90, 100],
       "Type": "Dynamic",
       "Image": "种火.png"
+    },
+    "种火-已获取": {
+      "Name": "种火-已获取",
+      "MainSize": [1280, 720],
+      "Size": [90, 100],
+      "Type": "Dynamic",
+      "Image": "种火-已获取.png"
     }
   }
 }
