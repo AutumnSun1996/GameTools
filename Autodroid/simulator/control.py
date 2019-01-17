@@ -54,13 +54,9 @@ def parse_condition(cond, obj, extra=None):
             func = getattr(obj, cond[1])
             args = cond[2:]
             cond = func(*args)
-        else:
-            use_extra = True
-    else:
-        use_extra = True
-    if extra and use_extra:
-        logger.debug("ExtraParse: %s", cond)
-        cond = extra(cond)
+        elif extra:
+            logger.debug("ExtraParse: %s", cond)
+            cond = extra(*cond)
     logger.debug("Parse: %s=%s", cond_in, cond)
     return cond
 
@@ -290,7 +286,7 @@ class SimulatorControl:
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        title = "碧蓝航线自动脚本 - %s错误" % title
+        title = "自动脚本 - %s错误" % title
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDYES:
             self.go_top()
@@ -304,7 +300,7 @@ class SimulatorControl:
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
-        title = "碧蓝航线自动脚本 - %s警告" % title
+        title = "自动脚本 - %s警告" % title
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDNO:
             self.go_top()
@@ -317,7 +313,7 @@ class SimulatorControl:
         info = "等待手动指令:\n%s" % message
         flag = win32con.MB_ICONINFORMATION | win32con.MB_OK | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        title = "碧蓝航线自动脚本 - 等待手动指令"
+        title = "自动脚本 - 等待手动指令"
         res = win32api.MessageBox(0, info, title, flag)
 
     def notice(self, message=None, title="", action="继续"):
@@ -325,7 +321,7 @@ class SimulatorControl:
         logger.warning(message)
         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
-        title = "碧蓝航线自动脚本 - %s提醒" % title
+        title = "自动脚本 - %s提醒" % title
         res = ctypes.windll.user32.MessageBoxTimeoutA(
             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
         if res == win32con.IDNO:
