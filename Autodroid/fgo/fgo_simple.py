@@ -61,11 +61,11 @@ class FGOSimple(FateGrandOrder):
 
     def choose_cards(self):
         self.wait(4)
-        if self.combat_info["Turn"] == 1:
+        if self.combat_info["BattleNow"] == 1:
             self.click_at_resource("宝具背景2")
-        elif self.combat_info["Turn"] == 2:
+        elif self.combat_info["BattleNow"] == 2:
             self.click_at_resource("宝具背景1")
-        elif self.combat_info["Turn"] == 3:
+        elif self.combat_info["BattleNow"] == 3:
             self.click_at_resource("宝具背景3")
 
         self.wait(1)
