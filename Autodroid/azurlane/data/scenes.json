@@ -1,7 +1,7 @@
 {
   "船坞已满": {
     "Name": "船坞已满",
-    "Condition": ["$all", "船坞已满-整理", "信息-标题"],
+    "Condition": ["$all", ["船坞已满-整理"], ["信息-标题"]],
     "Actions": [
       {"Type": "Click", "Target": "船坞已满-整理"},
       {"Type": "Wait", "Time": 2},
@@ -11,7 +11,7 @@
   },
   "非自律战斗中": {
     "Name": "非自律战斗中",
-    "Condition": "自律战斗",
+    "Condition": ["自律战斗"],
     "Actions": [
       {"Type": "Click", "Target": "自律战斗"},
       {"Type": "Wait", "Time": 0.5},
@@ -22,7 +22,7 @@
   },
   "潜艇未出击": {
     "Name": "潜艇未出击",
-    "Condition": "潜艇数量1",
+    "Condition": ["潜艇数量1"],
     "Actions": [
       {
         "Type": "Click",
@@ -39,7 +39,7 @@
   },
   "战斗准备": {
     "Name": "战斗准备",
-    "Condition": "出击",
+    "Condition": ["出击"],
     "Actions": [
       {"Type": "InnerCall", "Target": "mood_detect"},
       {"Type": "Click", "Target": "出击"},
@@ -49,7 +49,7 @@
   },
   "加载中": {
     "Name": "加载中",
-    "Condition": "加载进度条",
+    "Condition": ["加载进度条"],
     "Actions": [{"Type": "Wait", "Time": 1}],
     "Next": [
       "加载中",
@@ -60,7 +60,7 @@
   },
   "S胜": {
     "Name": "S胜",
-    "Condition": "大获全胜",
+    "Condition": ["大获全胜"],
     "Actions": [
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 0.5}
@@ -68,7 +68,7 @@
   },
   "A胜": {
     "Name": "A胜",
-    "Condition": "战术碾压",
+    "Condition": ["战术碾压"],
     "Actions": [
       {"Type": "Click", "Target": "右侧空白区域"},
       {
@@ -81,7 +81,7 @@
   },
   "获得舰娘": {
     "Name": "获得舰娘",
-    "Condition": "性能",
+    "Condition": ["性能"],
     "Actions": [
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 0.5}
@@ -89,7 +89,7 @@
   },
   "获得道具": {
     "Name": "获得道具",
-    "Condition": "获得道具",
+    "Condition": ["获得道具"],
     "Actions": [
       {
         "Type": "InnerCall",
@@ -103,7 +103,7 @@
   },
   "确认经验": {
     "Name": "确认经验",
-    "Condition": "确认经验",
+    "Condition": ["确认经验"],
     "Actions": [
       {"Type": "Click", "Target": "确认经验"},
       {
@@ -116,7 +116,7 @@
   },
   "获得经验-S胜": {
     "Name": "获得经验-S胜",
-    "Condition": "大获全胜-左上角",
+    "Condition": ["大获全胜-左上角"],
     "Actions": [
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 0.5}
@@ -125,7 +125,7 @@
   },
   "获得经验-A胜": {
     "Name": "获得经验-A胜",
-    "Condition": "战术碾压-左上角",
+    "Condition": ["战术碾压-左上角"],
     "Actions": [
       {"Type": "Click", "Target": "右侧空白区域"},
       {"Type": "Wait", "Time": 0.5}
@@ -134,7 +134,7 @@
   },
   "消息": {
     "Name": "消息",
-    "Condition": ["$all", "信息-标题", "信息-确定"],
+    "Condition": ["$all", ["信息-标题"], ["信息-确定"]],
     "Actions": [
       {"Type": "Click", "Target": "信息-确定"},
       {"Type": "Wait", "Time": 0.5}
@@ -142,7 +142,7 @@
   },
   "进入地图确认": {
     "Name": "进入地图确认",
-    "Condition": "进入地图-立刻前往",
+    "Condition": ["进入地图-立刻前往"],
     "Actions": [
       {"Type": "Click", "Target": "进入地图-立刻前往"},
       {"Type": "Wait", "Time": 0.5}
@@ -150,7 +150,7 @@
   },
   "舰队选择": {
     "Name": "舰队选择",
-    "Condition": "舰队选择-立刻前往",
+    "Condition": ["舰队选择-立刻前往"],
     "Actions": [
       {"Type": "InnerCall", "Target": "mood_detect"},
       {"Type": "Click", "Target": "舰队选择-立刻前往"},
@@ -159,7 +159,7 @@
   },
   "战斗地图": {
     "Name": "战斗地图",
-    "Condition": "迎击",
+    "Condition": ["迎击"],
     "Actions": [
       {"Type": "InnerCall", "Target": "fight"},
       {"Type": "Wait", "Time": 1}
