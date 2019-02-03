@@ -1,0 +1,183 @@
+{
+  "Name": "通用地图",
+  "MapClass": "azurlane.fight_event.EventFight",
+  "Map": [
+    "NNNEOOENNNN",
+    "ENBEOOENBNE",
+    "NENSNEOEONN",
+    "OOONNNONNNE",
+    "EENEONNNNEE",
+    "NNBNNNNNEOO",
+    "FNONEONNNBO",
+    "FFNNEOEEOOO"
+  ],
+  "ViewPort": ["D3", "D6", "H6", "G3"],
+  "Strategy": [
+    {
+      "Condition": [
+        "$and",
+        ["$eq", ["FightIndex"], 0],
+        ["$call", "resource_in_screen", "队伍0"]
+      ],
+      "Actions": [
+        {"Type": "Click", "Target": "切换舰队"},
+        {"Type": "Wait", "Time": 2}
+      ]
+    },
+    {
+      "Condition": ["$in", ["FightIndex"], [0, 1, 2, 3]],
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Target": "toggle_on_map",
+          "args": ["G6"]
+        }
+      ]
+    },
+    {
+      "Condition": ["$eq", ["FightIndex"], 4],
+      "Actions": [
+        {"Type": "Click", "Target": "切换舰队"},
+        {"Type": "Wait", "Time": 2},
+        {"Type": "InnerCall", "Target": "normal_fight"}
+      ]
+    },
+    {
+      "Condition": ["$eq", ["FightIndex"], 5],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "search_for_boss"}
+      ]
+    }
+  ],
+  "Resources": {
+    "Lv": {
+      "Name": "Lv",
+      "MainSize": [1280, 720],
+      "Offset": [-8, -25],
+      "Size": [29, 26],
+      "Type": "MultiDynamic",
+      "Image": "lv_label.png",
+      "MaxDiff": 0.1
+    },
+    "CellOffset": {
+      "Name": "Enemy1",
+      "MainSize": [1280, 720],
+      "Offset": [-8, -25],
+      "Size": [29, 26],
+      "Type": "MultiDynamic",
+      "Image": "Enemy1.png",
+      "MaxDiff": 0.1
+    },
+    "Pointer": {
+      "Name": "Pointer",
+      "MainSize": [1280, 720],
+      "Offset": [45, 200],
+      "Size": [75, 46],
+      "Type": "Dynamic",
+      "Image": "Pointer.png",
+      "MaxDiff": 0.06
+    },
+    "外部地图-出击": {
+      "Name": "外部地图-出击",
+      "MainSize": [1280, 720],
+      "Offset": [120, 0],
+      "Size": [160, 44],
+      "Type": "Static",
+      "Image": "外部地图-出击.png"
+    }
+  },
+  "Scenes": {
+    "外部地图": {
+      "Name": "外部地图",
+      "Condition": ["外部地图-出击"],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "manual"},
+        {"Type": "Wait", "Time": 2}
+      ],
+      "Next": ["外部地图", "进入地图确认"]
+    },
+    "战斗地图": {
+      "Name": "战斗地图",
+      "Condition": ["迎击"],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "manual"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["战斗准备", "战斗地图", "获得道具"]
+    }
+  },
+  "Anchors": {
+    "凛冬D3-C7": {
+      "Name": "凛冬D3-C7",
+      "MainSize": [1280, 720],
+      "Offset": [60, 40],
+      "Size": [120, 80],
+      "Type": "Anchor",
+      "OnMap": "C7",
+      "Image": "凛冬D3-C7.png"
+    },
+    "凛冬D3-F8": {
+      "Name": "凛冬D3-F8",
+      "MainSize": [1280, 720],
+      "Offset": [40, 50],
+      "Size": [100, 80],
+      "Type": "Anchor",
+      "OnMap": "F8",
+      "Image": "凛冬D3-F8.png"
+    },
+    "凛冬D3-E5": {
+      "Name": "凛冬D3-E5",
+      "MainSize": [1280, 720],
+      "Offset": [50, 40],
+      "Size": [100, 70],
+      "Type": "Anchor",
+      "OnMap": "E5",
+      "Image": "凛冬D3-E5.png"
+    },
+    "凛冬D3-C4": {
+      "Name": "凛冬D3-C4",
+      "MainSize": [1280, 720],
+      "Offset": [50, 40],
+      "Size": [100, 60],
+      "Type": "Anchor",
+      "OnMap": "C4",
+      "Image": "凛冬D3-C4.png"
+    },
+    "凛冬D3-G3": {
+      "Name": "凛冬D3-G3",
+      "MainSize": [1280, 720],
+      "Offset": [30, 30],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "OnMap": "G3",
+      "Image": "凛冬D3-G3.png"
+    },
+    "凛冬D3-G4": {
+      "Name": "凛冬D3-G4",
+      "MainSize": [1280, 720],
+      "Offset": [50, 40],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "OnMap": "G4",
+      "Image": "凛冬D3-G4.png"
+    },
+    "凛冬D3-I3": {
+      "Name": "凛冬D3-I3",
+      "MainSize": [1280, 720],
+      "Offset": [40, 30],
+      "Size": [80, 60],
+      "Type": "Anchor",
+      "OnMap": "I3",
+      "Image": "凛冬D3-I3.png"
+    },
+    "凛冬D3-F7": {
+      "Name": "凛冬D3-F7",
+      "MainSize": [1280, 720],
+      "Offset": [60, 40],
+      "Size": [100, 80],
+      "Type": "Anchor",
+      "OnMap": "F7",
+      "Image": "凛冬D3-F7.png"
+    }
+  }
+}
