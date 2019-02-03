@@ -71,48 +71,76 @@ def show_crop(x, y, w, h, img=None, show_full=False):
 def save_crop(name, cropped, offset):
     h, w = cropped.shape[:2]
     section = const["section"]
-    with open("%s/resources/%s.json" % (section, name), 'w', -1, "UTF-8") as fl:
-        json.dump({
-            "Name": name,
-            "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
-            "Offset": offset,
-            "Size": [w, h],
-            "Type": "Static",
-            "Image": name + '.png'
-        }, fl, ensure_ascii=False)
+    info = {
+        "Name": name,
+        "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
+        "Offset": offset,
+        "Size": [w, h],
+        "Type": "Static",
+        "Image": name + '.png'
+    }
+    
+    js_text = json.dumps(info, ensure_ascii=False)
+    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
+    
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
-    logger.info("%s,json Saved.", os.path.realpath(path))
+    logger.info("%s Saved.", os.path.realpath(path))
 
 
-def show_anchor(x, y, w, h, dx, dy, img=None):
+def show_anchor(x, y, w, h, dx, dy, img=None, show_full=True):
     if img is None:
         img = const["s"].screen
     cropped = cv_crop(img, (x, y, x+w, y+h))
     h, w = cropped.shape[:2]
     show(cropped)
-
-    draw = img.copy()
-    cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 2)
-    cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
-    cv.circle(draw, (x+dx, y+dy), 3, (0, 0, 0), -1)
-    show(draw)
+    if show_full:
+        draw = img.copy()
+        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 2)
+        cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
+        cv.circle(draw, (x+dx, y+dy), 3, (0, 0, 0), -1)
+        show(draw)
     return cropped, (dx, dy)
 
 
 def save_anchor(name, cropped, offset):
     h, w = cropped.shape[:2]
     section = const["section"]
-    with open("%s/resources/%s.json" % (section, name), 'w', -1, "UTF-8") as fl:
-        json.dump({
-            "Name": name,
-            "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
-            "Offset": offset,
-            "Size": [w, h],
-            "Type": "Anchor",
-            "Image": name + '.png'
-        }, fl, ensure_ascii=False)
-    cv_save("%s/resources/%s.png" % (section, name), cropped)
+    anchor = {
+        "Name": name,
+        "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
+        "Offset": offset,
+        "Size": [w, h],
+        "Type": "Anchor",
+        "Image": name + '.png'
+    }
+    js_text = json.dumps(anchor, ensure_ascii=False)
+    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
+    
+    path = "%s/resources/%s.png" % (section, name)
+    cv_save(path, cropped)
+    logger.info("%s Saved.", os.path.realpath(path))
+
+
+def save_map_anchor(map_name, on_map, cropped, offset):
+    h, w = cropped.shape[:2]
+    section = const["section"]
+    name = map_name + "-" + on_map
+    anchor = {
+        "Name": name,
+        "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
+        "Offset": offset,
+        "Size": (w, h),
+        "Type": "Anchor",
+        "OnMap": on_map,
+        "Image": name + '.png'
+    }
+    js_text = json.dumps(anchor, ensure_ascii=False)
+    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
+    
+    path = "%s/resources/%s.png" % (section, name)
+    cv_save(path, cropped)
+    logger.info("%s Saved.", os.path.realpath(path))
 
 
 def check_anchor(name):
