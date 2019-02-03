@@ -1,6 +1,6 @@
 from .common import *
 
-from azurlane.common_fight import FightMap
+from azurlane.common_fight import CommonMap
 
 const["section"] = "azurlane"
 
@@ -9,6 +9,8 @@ def check_map_anchor(anchor):
     s = const["s"]
     if isinstance(anchor, str):
         anchor = s.data["Anchors"][anchor]
+    if 'ImageData' not in anchor:
+        load_image(anchor, s.section)
     diff, pos = get_match(s.screen, anchor['ImageData'])
     print(diff, pos)
     x, y = pos
@@ -24,6 +26,6 @@ def check_map_anchor(anchor):
 
 
 def init_map(name):
-    const["s"] = FightMap(name)
+    const["s"] = CommonMap(name)
     const["s"].make_screen_shot()
     return const["s"]
