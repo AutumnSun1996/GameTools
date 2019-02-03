@@ -79,7 +79,7 @@ class SimulatorControl:
         self.screen = None
         self.scenes = load_scenes(self.section)
         self.resources = load_resources(self.section)
-
+    
     @property
     def last_scene(self):
         """上一次检测出的场景"""
@@ -88,11 +88,21 @@ class SimulatorControl:
         return self.scene_history[-2]
 
     @property
+    def last_scene_name(self):
+        """上一次检测出的场景名称"""
+        return self.last_scene["Name"]
+        
+    @property
     def current_scene(self):
         """最近检测出的场景"""
         if not self.scene_history:
             self.scene_history.append(self.fallback_scene)
         return self.scene_history[-1]
+
+    @property
+    def current_scene_name(self):
+        """最近检测出的场景名称"""
+        return self.current_scene["Name"]
 
     @property
     def scene_changed(self):
@@ -389,6 +399,11 @@ class SimulatorControl:
             if "Condition" in action and not parse_condition(action["Condition"], self):
                 continue
 
+            if 'WaitCondition' in action:
+                self.wait_till(action['WaitCondition'])
+            elif 'WaitScene' in action:
+                self.wait_till_scene(action['WaitScene'])
+
             if action['Type'] == 'Wait':
                 self.wait(action['Time'])
             elif action['Type'] == 'InnerCall':
@@ -401,8 +416,10 @@ class SimulatorControl:
                     self.critical(traceback.format_exc(), "程序")
             elif action['Type'] == 'Click':
                 self.click_at_resource(action['Target'], action.get("Wait", False))
+            elif action['Type'] == 'MultiActions':
+                self.do_actions(action['Actions'])
             else:
-                self.critical("Invalid Type %s" % action["Type"])
+                self.critical("Invalid Action %s" % action)
 
     @property
     def since_last_change(self):
