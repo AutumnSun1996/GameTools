@@ -9,38 +9,20 @@
     ],
     "Next": [["History", 1], ["History", 2]]
   },
-  "非自律战斗中": {
-    "Name": "非自律战斗中",
-    "Condition": ["自律战斗"],
-    "Actions": [
-      {"Type": "Click", "Target": "自律战斗"},
-      {"Type": "Wait", "Time": 0.5},
-      {"Type": "Click", "Target": "右侧空白区域"},
-      {"Type": "Wait", "Time": 1}
-    ],
-    "Next": ["非自律战斗中", "潜艇未出击", "正常战斗中"]
-  },
-  "潜艇未出击": {
-    "Name": "潜艇未出击",
-    "Condition": ["潜艇数量1"],
-    "Actions": [
-      {
-        "Type": "Click",
-        "Condition": [
-          "$ge",
-          ["$attr", "since_last_change"],
-          15
-        ],
-        "Target": "潜艇按钮"
-      },
-      {"Type": "Wait", "Time": 3}
-    ],
-    "Next": ["非自律战斗中", "潜艇未出击", "正常战斗中"]
-  },
   "战斗准备": {
     "Name": "战斗准备",
     "Condition": ["出击"],
     "Actions": [
+      {
+        "Type": "InnerCall",
+        "Condition": [
+          "$ne",
+          ["$attr", "last_scene_name"],
+          "遭遇伏击"
+        ],
+        "Target": "inc_fight_index",
+        "args": [-1]
+      },
       {"Type": "InnerCall", "Target": "mood_detect"},
       {"Type": "Click", "Target": "出击"},
       {"Type": "Wait", "Time": 1}
@@ -51,12 +33,7 @@
     "Name": "加载中",
     "Condition": ["加载进度条"],
     "Actions": [{"Type": "Wait", "Time": 1}],
-    "Next": [
-      "加载中",
-      "非自律战斗中",
-      "潜艇未出击",
-      "正常战斗中"
-    ]
+    "Next": ["加载中", "非自律战斗中", "正常战斗中"]
   },
   "S胜": {
     "Name": "S胜",
@@ -164,17 +141,43 @@
       {"Type": "InnerCall", "Target": "fight"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["战斗准备", "战斗地图", "获得道具"]
+    "Next": ["战斗准备", "遭遇伏击", "战斗地图", "获得道具"]
+  },
+  "遭遇伏击": {
+    "Name": "遭遇伏击",
+    "Condition": ["伏击-规避"],
+    "Actions": [
+      {"Type": "Click", "Target": "伏击-规避"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["战斗准备", "战斗地图"]
   },
   "正常战斗中": {
     "Name": "正常战斗中",
-    "Condition": [
-      "$all",
-      "暂停",
-      ["$not", "潜艇数量1"],
-      ["$not", "自律战斗"]
+    "Condition": ["$all", ["$not", ["自律战斗"]], ["暂停"]],
+    "Actions": [
+      {
+        "Type": "Click",
+        "Condition": [
+          "$all",
+          ["$ge", ["$attr", "since_last_change"], 5],
+          ["$call", "resource_in_screen", "潜艇数量1"]
+        ],
+        "Target": "潜艇按钮"
+      },
+      {"Type": "Wait", "Time": 1}
     ],
-    "Actions": [{"Type": "Wait", "Time": 1}],
-    "Next": ["正常战斗中", "S胜", "A胜"]
+    "Next": ["正常战斗中", "非自律战斗中", "S胜", "A胜"]
+  },
+  "非自律战斗中": {
+    "Name": "非自律战斗中",
+    "Condition": ["自律战斗"],
+    "Actions": [
+      {"Type": "Click", "Target": "自律战斗"},
+      {"Type": "Wait", "Time": 0.5},
+      {"Type": "Click", "Target": "右侧空白区域"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["正常战斗中"]
   }
 }
