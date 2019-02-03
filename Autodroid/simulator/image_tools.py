@@ -59,7 +59,7 @@ def update_resource(resource, section):
 
 def load_image(resource, section):
     img_path = os.path.join(config.get(section, "ResourcesFolder"), resource["Image"])
-    resource["ImageData"] = cv.resize(cv_imread(img_path), resource["Size"], cv.INTER_CUBIC)
+    resource["ImageData"] = cv.resize(cv_imread(img_path), tuple(resource["Size"]), cv.INTER_CUBIC)
     return resource["ImageData"]
 
 
