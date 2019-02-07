@@ -209,7 +209,7 @@ class SimulatorControl:
         self.wait(interval)
         return self.wait_resource(name, interval, repeat-1)
 
-    def click_at_resource(self, name, wait=False):
+    def click_at_resource(self, name, wait=False, index=None):
         """点击资源
 
         wait 为等待资源出现的时间
@@ -226,7 +226,13 @@ class SimulatorControl:
             _, pos = self.search_resource(name)
             x, y = pos
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
-            cw, ch = res.get("ClickSize", res["Size"])
+            cw, ch = res.get("ClickSize", res.get("Size"))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+        elif res['Type'] == 'MultiStatic':
+            logger.info("index=%s", index)
+            x, y = res['Positions'][index]
+            dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
+            cw, ch = res.get("ClickSize", res.get("Size"))
             rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
         else:
             self.error("Want to click at <%s> resource: %s", res["Type"], name)
