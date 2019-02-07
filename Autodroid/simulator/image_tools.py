@@ -58,7 +58,7 @@ def update_resource(resource, section):
 
 
 def load_image(resource, section):
-    img_path = os.path.join(config.get(section, "ResourcesFolder"), resource["Image"])
+    img_path = os.path.join(config.get(section, "ResourcesFolder"), "Resources", resource["Image"])
     resource["ImageData"] = cv.resize(cv_imread(img_path), tuple(resource["Size"]), cv.INTER_CUBIC)
     return resource["ImageData"]
 
@@ -78,7 +78,7 @@ def load_resources(section):
 
 
 def load_map(name, section):
-    with open("%s/maps/%s.json" % (section,  name), "r", -1, "UTF-8") as fl:
+    with open(os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".json"), "r", -1, "UTF-8") as fl:
         items = json.load(fl)
     for val in items["Resources"].values():
         update_resource(val, section)
