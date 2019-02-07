@@ -71,9 +71,12 @@ def do_format(folder, max_width=80):
             if not name.endswith(".json"):
                 continue
             target = os.path.join(root, name)
-            jsonformat(target)
-
+            try:
+                jsonformat(target)
+            except Exception as err:
+                print(target, err)
 
 if __name__ == "__main__":
     do_format("fgo", 80)
     do_format("azurlane", 70)
+        
