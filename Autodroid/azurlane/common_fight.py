@@ -20,7 +20,8 @@ class CommonMap(FightMap):
     def parse_fight_condition(self, condition):
         status = self.get_fight_status()
         status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
-        return parse_condition(condition, status)
+        status["FleetId"] = self.fleet_id
+        return parse_condition(condition, self, status.get)
 
     def reset_map_data(self):
         """进入战场，重置虚拟战斗次数，使下一次战斗正常开始
@@ -30,6 +31,7 @@ class CommonMap(FightMap):
         self.boss = []
         self.other_fleet = None
         self.current_fleet = None
+        self.fleet_id = 1
         self.submarine = []
         self.resource_points = []
         self.enemies = set()
@@ -39,13 +41,13 @@ class CommonMap(FightMap):
                 name = chr(ord('A')+i) + str(j+1)
                 self.g.add_node(name, cell_type=cell_type)
                 self.pos[name] = i, -j
-                if cell_type == "O":
+                if cell_type == "O": # 障碍
                     continue
-                if cell_type == 'B':
+                if cell_type == 'B': # Boss
                     self.boss.append(name)
-                if cell_type == '?':
+                if cell_type == '?': # 问号点
                     self.resource_points.append(name)
-                if cell_type == 'S':
+                if cell_type == 'S': # 潜艇
                     self.submarine.append(name)
                 if i > 0:
                     left = chr(ord('A')+i-1) + str(j+1)
@@ -58,7 +60,7 @@ class CommonMap(FightMap):
         if len(self.submarine) == 1:
             self.submarine = self.submarine[0]
         for node in self.g:
-            if self.g.nodes[node]['cell_type'] == 'E':
+            if self.g.nodes[node]['cell_type'] == 'E': # 可能出现敌人的地点
                 self.set_enemy(node, 'Possible')
 
     def reset_fight_index(self):
