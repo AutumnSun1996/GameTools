@@ -4,7 +4,7 @@
   "Scenes": {
     "关卡选择": {
       "Name": "关卡选择",
-      "Condition": true,
+      "Condition": ["$all", ["右下-菜单"], ["左上-关闭"]],
       "Actions": [
         {"Type": "InnerCall", "Target": "manual"},
         {"Type": "Wait", "Time": 1}
@@ -15,7 +15,9 @@
       "Name": "获得物品",
       "Condition": ["获得物品"],
       "Actions": [
-        {"Type": "InnerCall", "Target": "save_screen"},
+        {"Type": "Wait", "Time": 1},
+        {"Type": "InnerCall", "Target": "make_screen_shot"},
+        {"Type": "InnerCall", "Target": "save_record"},
         {"Type": "Click", "Target": "下一步"},
         {"Type": "Wait", "Time": 1}
       ],
@@ -37,7 +39,7 @@
         {"Type": "InnerCall", "Target": "manual"},
         {"Type": "Wait", "Time": 1}
       ],
-      "Next": ["选择技能", "选择指令卡"]
+      "Next": ["选择技能", "选择指令卡", "获得羁绊"]
     },
     "选择指令卡": {
       "Name": "选择指令卡",
