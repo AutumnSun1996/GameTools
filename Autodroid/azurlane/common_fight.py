@@ -20,8 +20,8 @@ class CommonMap(FightMap):
     def parse_fight_condition(self, condition):
         status = self.get_fight_status()
         status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
-        status["FleetId"] = self.fleet_id
-        return parse_condition(condition, self, status.get)
+        status["FleetId"] = self.fleet_id            
+        return parse_condition(condition, self, status.__getitem__)
 
     def reset_map_data(self):
         """进入战场，重置虚拟战斗次数，使下一次战斗正常开始
@@ -63,17 +63,17 @@ class CommonMap(FightMap):
             if self.g.nodes[node]['cell_type'] == 'E': # 可能出现敌人的地点
                 self.set_enemy(node, 'Possible')
 
-    def reset_fight_index(self):
+    def reset_fight_index(self, target_mod=0):
         # self.virtual_fight_index = 0
         self.reset_map_data()
         status = self.get_fight_status()
         mod = status["FightIndex"] % self.data["FightCount"]
         logger.warning("Current Fight Index: %d (%d)", status["FightIndex"], mod)
-        if mod != 0:
-            status["VirtualFightIndex"] += 6 - mod
-            self.seve_fight_status(status)
-            logger.info("Reset Fight Index From %d To %d",
-                        status["FightIndex"], status["FightIndex"]+6-mod)
+        if mod != target_mod:
+            status["VirtualFightIndex"] += target_mod - mod
+            self.save_fight_status(status)
+            logger.info("Reset Fight Index From Mod %d To %d",
+                        mod, target_mod)
 
     def enemies_on_path(self, path):
         enemies = []
@@ -250,10 +250,11 @@ class CommonMap(FightMap):
             self.notice("Not in 战斗地图")
             return
 
-        enemies1 = self.find_on_map(anchor_name, anchor_pos, 'Lv', False)
-        enemies2 = self.find_on_map(
-            anchor_name, anchor_pos, 'Lv-Smaller', False)
-        enemies = set(enemies1).union(enemies2)
+        enemies = set(self.find_on_map(anchor_name, anchor_pos, 'Lv', False))
+        if 'Lv2' in self.resources:
+            enemies = enemies.union(self.find_on_map(anchor_name, anchor_pos, 'Lv2', False))
+        if 'Lv3' in self.resources:
+            enemies = enemies.union(self.find_on_map(anchor_name, anchor_pos, 'Lv3', False))
         logger.info("找到敌人: %s", enemies)
         for enemy in enemies:
             self.set_enemy(enemy)
@@ -268,6 +269,10 @@ class CommonMap(FightMap):
 
         if self.current_fleet is None:
             pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer', False)
+            if not pointer and "Pointer2" in self.resources:
+                pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer2', False)
+            if not pointer and "Pointer3" in self.resources:
+                pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer3', False)
             if pointer:
                 self.current_fleet = list(pointer)[0]
                 logger.info("找到当前舰队: %s", self.current_fleet)
@@ -341,11 +346,13 @@ class CommonMap(FightMap):
         self.wait(6)
         self.after_bonus()
         return
-
+        
+    def get_fight_index(self):
+        return self.get_fight_status()["FightIndex"]
+        
     def fight(self):
-        fight_idx = self.get_fight_index() + self.virtual_fight_index
-        mod = fight_idx % 6
-        logger.info("战斗轮次%d(%d)", fight_idx, mod)
+        status = self.get_fight_status()
+        logger.info("战斗%s", status)
         self.check_map()
         for item in self.data['Strategy']:
             if self.parse_fight_condition(item['Condition']):
