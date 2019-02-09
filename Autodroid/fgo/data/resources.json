@@ -91,8 +91,8 @@
   "战斗速度": {
     "Name": "战斗速度",
     "MainSize": [1280, 720],
-    "Offset": [1055, 30],
-    "Size": [160, 70],
+    "Offset": [1086, 76],
+    "Size": [98, 24],
     "Type": "Static",
     "Image": "战斗速度.png"
   },
@@ -594,5 +594,39 @@
     "Size": [180, 50],
     "Type": "Static",
     "Image": "AP不足-关闭.png"
+  },
+  "右下-菜单": {
+    "Name": "右下-菜单",
+    "MainSize": [1280, 720],
+    "Offset": [1130, 670],
+    "Size": [110, 40],
+    "Type": "Static",
+    "Image": "右下-菜单.png"
+  },
+  "御主技能": {
+    "Name": "御主技能",
+    "MainSize": [1280, 720],
+    "Offset": [1164, 286],
+    "Size": [60, 60],
+    "Type": "Static",
+    "Image": "御主技能.png"
+  },
+  "左上-关闭": {
+    "Name": "左上-关闭",
+    "MainSize": [1280, 720],
+    "Offset": [80, 28],
+    "Size": [60, 30],
+    "Type": "Static",
+    "Image": "左上-关闭.png"
+  },
+  "请点击画面": {
+    "Name": "请点击画面",
+    "MainSize": [1280, 720],
+    "ClickOffset": [-500, -600],
+    "ClickSize": [600, 600],
+    "Offset": [540, 622],
+    "Size": [200, 50],
+    "Type": "Static",
+    "Image": "请点击画面.png"
   }
 }
