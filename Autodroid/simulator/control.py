@@ -10,6 +10,7 @@ import json
 import traceback
 from collections import deque
 from threading import Timer
+import operator
 
 import numpy as np
 import win32con
@@ -27,36 +28,38 @@ def parse_condition(cond, obj, extra=None):
     use_extra = False
     if isinstance(cond, list) and cond:
         # 仅对非空的list进行解析
-        if cond[0] in {"$sum", "$all", "$any", "$max", "$min"}:
-            cmd = eval(cond[0][1:])
-            cond = cmd((parse_condition(sub, obj, extra) for sub in cond[1:]))
-        elif cond[0] in {"$chr", "$bool", "$int", "$float", "$ord", "$len", "$abs"}:
-            cmd = eval(cond[0][1:])
-            cond = cmd(parse_condition(cond[1], obj, extra))
-        elif cond[0] in {"$eq", "$gt", "$ge", "$ne", "$lt", "$le", "$add", "$sub", "$mul", "$truediv", "$mod", "$divmod"}:
-            cmd = getattr(parse_condition(cond[1], obj, extra), "__%s__" % cond[0][1:])
-            cond = cmd(parse_condition(cond[2], obj, extra))
-        elif cond[0] == "$not":
-            cond = not parse_condition(cond[1], obj, extra)
-        elif cond[0] == "$attr":
-            key = parse_condition(cond[-1], obj, extra)
-            if len(cond) == 2:
-                cond = getattr(obj, key)
+        need_extra = False
+        if isinstance(cond[0], str) and cond[0].startswith("$"):
+            if cond == ["$"]:
+                cond = obj
+            elif cond[0][1:] in dir(operator):
+                cmd = getattr(operator, cond[0][1:])
+                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
+                logger.debug("Parse: args=%s", args)
+                cond = cmd(*args)
+            elif cond[0][1:] in dir(__builtin__):
+                cmd = getattr(__builtin__, cond[0][1:])
+                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
+                logger.debug("Parse: args=%s", args)
+                cond = cmd(*args)
+            elif cond[0] == "$method":
+                cmd = getattr(obj, parse_condition(cond[1], obj, extra))
+                args = [parse_condition(sub, obj, extra) for sub in cond[2:]]
+                cond = cmd(*args)
+            elif cond[0] == "$call":
+                cmd = parse_condition(cond[1], obj, extra)
+                args = [parse_condition(sub, obj, extra) for sub in cond[2:]]
+                cond = cmd(*args)
             else:
-                cond = getattr(parse_condition(cond[1], obj, extra), key)
-        elif cond[0] == "$val":
-            key = parse_condition(cond[-1], obj, extra)
-            if len(cond) == 2:
-                cond = obj[key]
-            else:
-                cond = parse_condition(cond[1], obj, extra)[key]
-        elif cond[0] == "$call":
-            func = getattr(obj, cond[1])
-            args = cond[2:]
-            cond = func(*args)
-        elif extra:
-            logger.debug("ExtraParse: %s", cond)
-            cond = extra(*cond)
+                need_extra = True
+        else:
+            need_extra = True
+        if need_extra and extra:
+            try:
+                cond = extra(*cond)
+                logger.debug("ExtraParse: %s %s=%s", extra, cond_in, cond)
+            except TypeError:
+                pass
     logger.debug("Parse: %s=%s", cond_in, cond)
     return cond
 
@@ -79,6 +82,17 @@ class SimulatorControl:
         self.screen = None
         self.scenes = load_scenes(self.section)
         self.resources = load_resources(self.section)
+        self.last_manual = 0
+
+    @property
+    def since_last_manual(self):
+        return time.time() - self.last_manual
+
+    def manual(self):
+        if self.scene_changed or self.since_last_manual > 30:
+            self.go_top()
+            win32api.MessageBeep()
+            self.last_manual = time.time()
     
     @property
     def last_scene(self):
