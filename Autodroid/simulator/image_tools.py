@@ -82,6 +82,9 @@ def load_map(name, section):
         items = json.load(fl)
     for val in items["Resources"].values():
         update_resource(val, section)
+    if "Anchors" in items:
+        for val in items["Anchors"].values():
+            update_resource(val, section)
     return items
 
 
