@@ -1,6 +1,6 @@
 from .common import *
 
-from azurlane.common_fight import CommonMap
+from azurlane.fight_event import EventFight as AzurLane
 
 const["section"] = "azurlane"
 
@@ -26,6 +26,6 @@ def check_map_anchor(anchor):
 
 
 def init_map(name):
-    const["s"] = CommonMap(name)
+    const["s"] = AzurLane(name)
     const["s"].make_screen_shot()
     return const["s"]
