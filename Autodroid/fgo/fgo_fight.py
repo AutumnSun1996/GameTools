@@ -70,7 +70,8 @@ class FateGrandOrder(SimulatorControl):
             "BattleNow": None,
             "BattleTotal": None,
             "EnemyLeft": None,
-            "Turn": None
+            "Turn": None,
+            "TurnOfBattle": None, 
         }
         self.best_equips = []
         self.data = load_map(map_name, self.section)
@@ -121,16 +122,6 @@ class FateGrandOrder(SimulatorControl):
         middle = (top + bottom) // 2
         drag(self.hwnd, (x, middle), (x, 0), 30)
 
-    def crop_resource(self, name, offset=None, image=None):
-        if offset is None:
-            dx, dy = 0, 0
-        else:
-            dx, dy = offset
-        if image is None:
-            image = self.screen
-        x, y, x1, y1 = self.get_resource_rect(name)
-        return cv_crop(image, (x+dx, y+dy, x1+dx, y1+dy))
-
     def choose_assist_servant(self):
         for target in self.best_equips:
             score, rect = self.assist_score(target)
@@ -158,24 +149,44 @@ class FateGrandOrder(SimulatorControl):
                 return True, [sx, sy, sx+w, sy+h]
         return False, None
 
-    def extract_combat_info(self):
+    def extract_combat_info(self, repeat=0):
         if not self.scene_changed:
             return
-        info = ocr.image2text(contact_images(
-            self.crop_resource("战斗轮次"),
-            self.crop_resource("剩余敌人"),
-            self.crop_resource("回合数"),
-        ))
-        logger.debug("Get Combat Info %s", info)
-        now, total = info[0].split("/")
-        left = re.search("\d+", info[1]).group(0)
-        turn = re.search("\d+", info[2]).group(0)
-        self.combat_info = {
-            "BattleNow": int(now),
-            "BattleTotal": int(total),
-            "EnemyLeft": int(left),
-            "Turn": int(turn)
-        }
+        if repeat > 5:
+            self.error("OCR Failed")
+            return
+        try:
+            img  = contact_images(
+                self.crop_resource("战斗轮次"),
+                self.crop_resource("剩余敌人"),
+                self.crop_resource("回合数"),
+            )
+            if repeat > 2:
+                info = ocr.image2text_accurate(img)
+            else:
+                info = ocr.image2text(img)
+            logger.info("Get Combat Info %s(%d)", info, repeat)
+            now, total = info[0].split("/")
+            left = re.search("\d+", info[1]).group(0)
+            turn = re.search("\d+", info[2]).group(0)
+            new_info = {
+                "BattleNow": int(now),
+                "BattleTotal": int(total),
+                "EnemyLeft": int(left),
+                "Turn": int(turn)
+            }
+            if self.combat_info["BattleNow"] != new_info["BattleNow"]:
+                new_info["TurnOfBattle"] = 1
+            else:
+                new_info["TurnOfBattle"] = self.combat_info["TurnOfBattle"] + 1
+
+            self.combat_info.update(new_info)
+            
+            
+        except (AttributeError, IndexError):
+            self.wait(1)
+            self.make_screen_shot()
+            self.extract_combat_info(repeat+1)
 
     def choose_skills(self):
         pass
