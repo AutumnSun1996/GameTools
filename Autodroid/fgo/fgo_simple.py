@@ -30,6 +30,7 @@ class FGOSimple(FateGrandOrder):
             self.make_screen_shot()
 
         self.refresh_assist()
+        self.make_screen_shot()
         self.choose_assist_servant(idx-1)
 
     def choose_skills(self):
