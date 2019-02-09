@@ -69,7 +69,6 @@ class FGOSimple(FGOBase):
         elif self.combat_info["BattleNow"] == 3 and self.combat_info["TurnOfBattle"] == 1:
             self.click_at_resource("宝具背景3")
 
-        
         self.wait(1)
         cards = self.resources["Cards"]
         w, h = cards["Size"]
@@ -104,6 +103,6 @@ if __name__ == "__main__":
     fgo = FGOSimple("刷材料")
     while 1:
         fgo.check_scene()
-        # print(fgo.current_scene_name)
-        # if fgo.current_scene_name == "获得物品":
-            # break
+        print(fgo.current_scene_name)
+        if fgo.current_scene_name == "获得物品":
+            break
