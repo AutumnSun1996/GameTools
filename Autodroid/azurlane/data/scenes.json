@@ -161,7 +161,7 @@
         "Condition": [
           "$all",
           ["$ge", ["$attr", "since_last_change"], 5],
-          ["$call", "resource_in_screen", "潜艇数量1"]
+          ["$method", "resource_in_screen", "潜艇数量1"]
         ],
         "Target": "潜艇按钮"
       },
