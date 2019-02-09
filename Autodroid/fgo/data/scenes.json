@@ -26,7 +26,7 @@
       {"Type": "InnerCall", "Target": "choose_assist_servant"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["队伍确认"]
+    "Next": ["队伍确认", "助战选择"]
   },
   "队伍确认": {
     "Name": "队伍确认",
@@ -35,7 +35,7 @@
       {"Type": "Click", "Target": "开始任务"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["加载关卡", "选择技能"]
+    "Next": ["加载关卡", "选择技能", "队伍确认"]
   },
   "加载关卡": {
     "Name": "加载关卡",
@@ -47,6 +47,7 @@
     "Name": "选择技能",
     "Condition": ["战斗菜单"],
     "Actions": [
+      {"Type": "Wait", "Time": 3},
       {"Type": "InnerCall", "Target": "extract_combat_info"},
       {"Type": "InnerCall", "Target": "choose_skills"},
       {"Type": "Wait", "Time": 1},
@@ -114,6 +115,15 @@
     "Condition": ["关闭"],
     "Actions": [
       {"Type": "Click", "Target": "关闭"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["关卡选择"]
+  },
+  "任务奖励": {
+    "Name": "任务奖励",
+    "Condition": ["请点击画面"],
+    "Actions": [
+      {"Type": "Click", "Target": "请点击画面"},
       {"Type": "Wait", "Time": 1}
     ],
     "Next": ["关卡选择"]

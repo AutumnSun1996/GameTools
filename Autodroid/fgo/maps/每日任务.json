@@ -3,43 +3,35 @@
   "Strategy": {
     "Skills": [
       {
-        "Condition": ["$eq", ["BattleNow"], 1],
-        "Targets": [[2, 2], [2, 3], [1, 3, 2]]
+        "Condition": ["$eq", ["Turn"], 1],
+        "Targets": [[2, 1], [2, 2], [1, 1], [1, 2], [3, 1], [3, 2]]
       },
-      {"Condition": ["$eq", ["BattleNow"], 2], "Targets": [[1, 1], [1, 2]]},
-      {"Condition": ["$eq", ["BattleNow"], 3], "Targets": [[3, 2], [3, 3]]}
+      {"Condition": ["$eq", ["Turn"], 7], "Targets": [[3, 1], [3, 3]]},
+      {
+        "Condition": ["$eq", ["Turn"], 8],
+        "Targets": [[1, 1], [2, 1], [3, 2]]
+      },
+      {
+        "Condition": [
+          "$all",
+          ["$eq", ["TurnOfBattle"], 6],
+          ["$eq", ["BattleNow"], 3]
+        ],
+        "Targets": [[0, 3, 3], [0, 1, 3]]
+      }
     ],
     "CardChoice": [
       [0, ["B+", "B0", "B-", "A+", "Q+", "A0", "Q0", "A-", "Q-"]],
       [2, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]],
       [1, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]]
-    ],
-    "Assist": ["虚树", "锤锤锤子", "毛玉", "藤丸立香"]
+    ]
   },
   "Scenes": {
-    "AP不足": {
-      "Name": "AP不足",
-      "Condition": ["AP不足"],
-      "Actions": [
-        {"Type": "Click", "Target": "AP不足-关闭"},
-        {"Type": "Wait", "Time": 300}
-      ],
-      "Next": ["关卡选择"]
-    },
     "关卡选择": {
       "Name": "关卡选择",
-      "Condition": ["$any", ["种火"], ["种火-已获取"]],
+      "Condition": ["$all", ["右下-菜单"], ["左上-关闭"]],
       "Actions": [
-        {
-          "Type": "Click",
-          "Condition": ["$call", "resource_in_screen", "种火"],
-          "Target": "种火"
-        },
-        {
-          "Type": "Click",
-          "Condition": ["$call", "resource_in_screen", "种火-已获取"],
-          "Target": "种火-已获取"
-        },
+        {"Type": "Click", "Target": "关卡1"},
         {"Type": "Wait", "Time": 1}
       ],
       "Next": ["助战选择", "AP不足"]
@@ -48,7 +40,9 @@
       "Name": "获得物品",
       "Condition": ["获得物品"],
       "Actions": [
-        {"Type": "InnerCall", "Target": "save_screen"},
+        {"Type": "Wait", "Time": 1},
+        {"Type": "InnerCall", "Target": "make_screen_shot"},
+        {"Type": "InnerCall", "Target": "save_record"},
         {"Type": "Click", "Target": "下一步"},
         {"Type": "Wait", "Time": 1}
       ],
@@ -59,44 +53,27 @@
     "种火": {
       "Name": "种火",
       "MainSize": [1280, 720],
-      "Size": [90, 100],
+      "Size": [110, 50],
+      "ClickOffset": [-400, 5],
+      "ClickSize": [400, 120],
       "Type": "Dynamic",
       "Image": "种火.png"
     },
-    "种火-已获取": {
-      "Name": "种火-已获取",
+    "关卡1": {
+      "Name": "关卡1",
       "MainSize": [1280, 720],
-      "Size": [90, 100],
-      "Type": "Dynamic",
-      "Image": "种火-已获取.png"
+      "Offset": [700, 120],
+      "Size": [400, 120],
+      "Type": "Static",
+      "Image": "关卡1.png"
     },
-    "虚树": {
-      "Name": "虚树",
+    "花叶二重奏": {
+      "Name": "花叶二重奏",
       "MainSize": [1280, 720],
+      "ClickSize": [400, 160],
       "Size": [300, 35],
       "Type": "Dynamic",
-      "Image": "虚树.png"
-    },
-    "毛玉": {
-      "Name": "毛玉",
-      "MainSize": [1280, 720],
-      "Size": [300, 35],
-      "Type": "Dynamic",
-      "Image": "毛玉.png"
-    },
-    "藤丸立香": {
-      "Name": "藤丸立香",
-      "MainSize": [1280, 720],
-      "Size": [300, 35],
-      "Type": "Dynamic",
-      "Image": "藤丸立香.png"
-    },
-    "锤锤锤子": {
-      "Name": "锤锤锤子",
-      "MainSize": [1280, 720],
-      "Size": [300, 35],
-      "Type": "Dynamic",
-      "Image": "锤锤锤子.png"
+      "Image": "花叶二重奏.png"
     }
   }
 }
