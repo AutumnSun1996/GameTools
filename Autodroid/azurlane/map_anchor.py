@@ -57,7 +57,6 @@ class FightMap(AzurLaneControl):
         square_pos = np.array([square_pos], dtype='float32').reshape((1, 1, 2))
         return cv.perspectiveTransform(square_pos, self.inv_trans).reshape((2))
 
-
     def get_map_pos(self, anchor_name, anchor_pos, target_name):
         """根据锚点的像素坐标、锚点的棋盘坐标、目标点的棋盘坐标，计算目标点的像素坐标"""
         dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
@@ -158,7 +157,7 @@ class FightMap(AzurLaneControl):
 
         points = np.array(self.resources["地图区域"]["Points"]).reshape((1, -1, 2))
         result = set()
-        for x, y in get_multi_match(self.screen, target['ImageData'], target.get("MaxDiff", 0.1)):
+        for x, y in np.reshape(self.search_resource(target_name)[1], (-1, 2)):
             if cv.pointPolygonTest(points, (x, y), False) < 0:
                 # 不在地图区域内, 忽略
                 continue
@@ -167,4 +166,5 @@ class FightMap(AzurLaneControl):
             dx, dy = np.round(offset / 100).reshape((2)).astype('int')
             name = chr(ord(name_x) + dx) + chr(ord(name_y) + dy)
             result.add(name)
+        logger.debug("find_on_map %s by %s at %s: %s", target_name, anchor_name, anchor_pos, result)
         return result
