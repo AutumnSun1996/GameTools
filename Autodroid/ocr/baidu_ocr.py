@@ -5,11 +5,10 @@ import numpy as np
 import cv2.cv2 as cv
 import requests
 
-from config_loader import config
+from config_loader import config, logger
 
 
-def contact_images(*images):
-    sep = 1
+def contact_images(*images, sep=1):
     width = max([images.shape[1] for images in images])
     height = sum([images.shape[0] + sep for images in images]) - sep
     background = np.zeros((height, width, 3), dtype='uint8')
@@ -66,6 +65,25 @@ class BaiduOCR:
     def image2text(self, image):
         info = self.api_request("general_basic", image)
         return self.parse_result(info)
+
+    def images2text(self, *images):
+        image = contact_images(*images)
+        info = self.api_request("general_basic", image)
+        result = self.parse_result(info)
+        if len(result) == len(images):
+            return result
+        
+        logger.info("Count Not Match(Get %d for %d). Check each one.", len(result), len(images))
+        result = []
+        for image in images:
+            text = self.image2text(image)
+            if not text:
+                text = self.image2text_accurate(image)
+                logger.info("Use accurate ocr: %s", text)
+            if isinstance(text, list):
+                text = '\n'.join(text)
+            result.append(text)
+        return result
 
     def image2text_accurate(self, image):
         info = self.api_request("accurate_basic", image)

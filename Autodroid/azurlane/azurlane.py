@@ -124,16 +124,15 @@ class AzurLaneControl(SimulatorControl):
         for x, y in retire["Positions"]:
             images.append(self.crop_resource("退役选择", offset=(x, y)))
             clicks.append((x+dx, y+dy, x+dx+dw, y+dy+dh))
-        
-        name_image = contact_images(*images)
-        names = ocr.image2text(name_image)
-        if len(names) != len(images):
-            cv_save("logs/OCR-Error.png", name_image)
-            names = ocr.image2text_accurate(name_image)
-            self.notice("OCR Results %s Do Not Match Input Image. Retry with accurate ocr." % names, "OCR-Error")
-            if len(names) != len(images):
-                self.error("Accurate OCR Results %s Do Not Match Input Image." % names, "OCR-Error")
-                return []
+
+        names = ocr.images2text(*images)
+        # if len(names) != len(images):
+            # cv_save("logs/OCR-Error.png", name_image)
+            # names = ocr.image2text_accurate(name_image)
+            # self.notice("OCR Results %s Do Not Match Input Image. Retry with accurate ocr." % names, "OCR-Error")
+            # if len(names) != len(images):
+                # self.error("Accurate OCR Results %s Do Not Match Input Image." % names, "OCR-Error")
+                # return []
 
         results = []
         for idx in range(len(names)):
