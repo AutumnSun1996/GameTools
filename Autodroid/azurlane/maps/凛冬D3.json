@@ -5,7 +5,7 @@
   "FightCount": 7,
   "Map": [
     "NNNEOOENNNN",
-    "ENBEOOENBNE",
+    "ENBOOOENBNE",
     "NENSNEOEONN",
     "OOONNNONNNE",
     "EENEONNNNEE",
@@ -15,7 +15,11 @@
   ],
   "TransMatrix": [
     [0.9977869860668839, 0.4292397529118465, -7.877735131888047],
-    [0.0023214316942341178, 1.6872268282407719, -98.10048933039897],
+    [
+      0.0023214316942341178,
+      1.6872268282407719,
+      -98.10048933039897
+    ],
     [2.3174036311582526e-06, 0.00068045495413973, 1.0]
   ],
   "ViewPort": ["D3", "D6", "H6", "G3"],
@@ -24,26 +28,39 @@
       "Condition": [
         "$any",
         [
-          "$all",
-          ["$le", ["FightIndexMod"], 4],
           [
-            "$not_",
-            ["$method", "resource_in_screen", "道中队伍"]
+            "$all",
+            [
+              ["$le", ["FightIndexMod"], 4],
+              [
+                "$not_",
+                [
+                  "$method",
+                  "resource_in_screen",
+                  "道中队伍"
+                ]
+              ]
+            ]
+          ],
+          [
+            "$all",
+            [
+              ["$ge", ["FightIndexMod"], 5],
+              [
+                "$method",
+                "resource_in_screen",
+                "道中队伍"
+              ]
+            ]
           ]
-        ],
-        [
-          "$all",
-          ["$ge", ["FightIndexMod"], 5],
-          ["$method", "resource_in_screen", "道中队伍"]
         ]
       ],
       "Actions": [
-        {"Type": "Click", "Target": "切换舰队"},
-        {"Type": "Wait", "Time": 2}
+        {"Type": "InnerCall", "Target": "toggle_fleet"}
       ]
     },
     {
-      "Condition": ["$in", ["FightIndexMod"], [0, 1, 2]],
+      "Condition": ["$contains", [0, 1, 2], ["FightIndexMod"]],
       "Actions": [
         {
           "Type": "InnerCall",
@@ -53,13 +70,13 @@
       ]
     },
     {
-      "Condition": ["$in", ["FightIndexMod"], [3, 4, 5]],
+      "Condition": ["$contains", [3, 4, 5], ["FightIndexMod"]],
       "Actions": [
         {"Type": "InnerCall", "Target": "normal_fight"}
       ]
     },
     {
-      "Condition": ["$eq", ["FightIndexMod"], 6],
+      "Condition": ["$ge", ["FightIndexMod"], 6],
       "Actions": [
         {"Type": "InnerCall", "Target": "search_for_boss"}
       ]
@@ -146,80 +163,153 @@
         {"Type": "Wait", "Time": 2}
       ],
       "Next": ["外部地图", "进入地图确认"]
+    },
+    "战斗准备": {
+      "Name": "战斗准备",
+      "Condition": ["出击"],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "mood_detect"},
+        {"Type": "Click", "Target": "出击"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["加载中", "船坞已满"]
+    },
+    "战斗地图": {
+      "Name": "战斗地图",
+      "Condition": ["迎击"],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "fight"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["战斗准备", "战斗地图", "获得道具"]
     }
   },
   "Anchors": {
-    "凛冬D3-C7": {
-      "Name": "凛冬D3-C7",
-      "MainSize": [1280, 720],
-      "Offset": [60, 40],
-      "Size": [120, 80],
+    "凛冬D3-A4": {
+      "Name": "凛冬D3-A4",
       "Type": "Anchor",
-      "OnMap": "C7",
-      "Image": "凛冬D3-C7.png"
+      "MainSize": [1280, 720],
+      "Size": [75, 57],
+      "Offset": [33, 29],
+      "Image": "凛冬D3-A4.png",
+      "OnMap": "A4"
     },
-    "凛冬D3-F8": {
-      "Name": "凛冬D3-F8",
-      "MainSize": [1280, 720],
-      "Offset": [40, 50],
-      "Size": [100, 80],
+    "凛冬D3-F2": {
+      "Name": "凛冬D3-F2",
       "Type": "Anchor",
-      "OnMap": "F8",
-      "Image": "凛冬D3-F8.png"
-    },
-    "凛冬D3-E5": {
-      "Name": "凛冬D3-E5",
       "MainSize": [1280, 720],
-      "Offset": [50, 40],
-      "Size": [100, 70],
-      "Type": "Anchor",
-      "OnMap": "E5",
-      "Image": "凛冬D3-E5.png"
+      "Size": [76, 45],
+      "Offset": [40, 24],
+      "Image": "凛冬D3-F2.png",
+      "OnMap": "F2"
     },
     "凛冬D3-C4": {
       "Name": "凛冬D3-C4",
-      "MainSize": [1280, 720],
-      "Offset": [50, 40],
-      "Size": [100, 60],
       "Type": "Anchor",
-      "OnMap": "C4",
-      "Image": "凛冬D3-C4.png"
+      "MainSize": [1280, 720],
+      "Size": [78, 59],
+      "Offset": [46, 31],
+      "Image": "凛冬D3-C4.png",
+      "OnMap": "C4"
+    },
+    "凛冬D3-E5": {
+      "Name": "凛冬D3-E5",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "Size": [87, 71],
+      "Offset": [40, 35],
+      "Image": "凛冬D3-E5.png",
+      "OnMap": "E5"
     },
     "凛冬D3-G3": {
       "Name": "凛冬D3-G3",
-      "MainSize": [1280, 720],
-      "Offset": [30, 30],
-      "Size": [80, 60],
       "Type": "Anchor",
-      "OnMap": "G3",
-      "Image": "凛冬D3-G3.png"
+      "MainSize": [1280, 720],
+      "Size": [58, 54],
+      "Offset": [11, 26],
+      "Image": "凛冬D3-G3.png",
+      "OnMap": "G3"
     },
     "凛冬D3-G4": {
       "Name": "凛冬D3-G4",
-      "MainSize": [1280, 720],
-      "Offset": [50, 40],
-      "Size": [80, 60],
       "Type": "Anchor",
-      "OnMap": "G4",
-      "Image": "凛冬D3-G4.png"
+      "MainSize": [1280, 720],
+      "Size": [72, 60],
+      "Offset": [42, 30],
+      "Image": "凛冬D3-G4.png",
+      "OnMap": "G4"
     },
-    "凛冬D3-I3": {
-      "Name": "凛冬D3-I3",
-      "MainSize": [1280, 720],
-      "Offset": [40, 30],
-      "Size": [80, 60],
+    "凛冬D3-C7": {
+      "Name": "凛冬D3-C7",
       "Type": "Anchor",
-      "OnMap": "I3",
-      "Image": "凛冬D3-I3.png"
+      "MainSize": [1280, 720],
+      "OnMap": "C7",
+      "Size": [82, 69],
+      "Offset": [41, 27],
+      "Image": "凛冬D3-C7.png"
     },
     "凛冬D3-F7": {
       "Name": "凛冬D3-F7",
-      "MainSize": [1280, 720],
-      "Offset": [60, 40],
-      "Size": [100, 80],
       "Type": "Anchor",
+      "MainSize": [1280, 720],
       "OnMap": "F7",
+      "Size": [80, 70],
+      "Offset": [25, 29],
       "Image": "凛冬D3-F7.png"
+    },
+    "凛冬D3-F8": {
+      "Name": "凛冬D3-F8",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "F8",
+      "Size": [99, 80],
+      "Offset": [51, 44],
+      "Image": "凛冬D3-F8.png"
+    },
+    "凛冬D3-I8": {
+      "Name": "凛冬D3-I8",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "I8",
+      "Size": [104, 87],
+      "Offset": [40, 35],
+      "Image": "凛冬D3-I8.png"
+    },
+    "凛冬D3-J6": {
+      "Name": "凛冬D3-J6",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "J6",
+      "Size": [74, 67],
+      "Offset": [22, 40],
+      "Image": "凛冬D3-J6.png"
+    },
+    "凛冬D3-K8": {
+      "Name": "凛冬D3-K8",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "K8",
+      "Size": [99, 76],
+      "Offset": [50, 36],
+      "Image": "凛冬D3-K8.png"
+    },
+    "凛冬D3-K6": {
+      "Name": "凛冬D3-K6",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "K6",
+      "Size": [107, 78],
+      "Offset": [53, 37],
+      "Image": "凛冬D3-K6.png"
+    },
+    "凛冬D3-I3": {
+      "Name": "凛冬D3-I3",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "I3",
+      "Size": [84, 57],
+      "Offset": [39, 28],
+      "Image": "凛冬D3-I3.png"
     }
   }
 }
