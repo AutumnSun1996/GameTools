@@ -29,6 +29,14 @@
     "Size": [600, 100],
     "Type": "Static"
   },
+  "银苹果不足": {
+    "Name": "银苹果不足",
+    "MainSize": [1280, 720],
+    "Offset": [330, 420],
+    "Size": [640, 50],
+    "Type": "Static",
+    "Image": "银苹果不足.png"
+  },
   "队伍确认": {
     "Name": "队伍确认",
     "MainSize": [1280, 720],
@@ -628,5 +636,34 @@
     "Size": [200, 50],
     "Type": "Static",
     "Image": "请点击画面.png"
+  },
+  "万华镜奶光": {
+    "Name": "万华镜奶光",
+    "MainSize": [1280, 720],
+    "ClickSize": [500, 140],
+    "Size": [150, 140],
+    "Type": "Dynamic",
+    "Image": "万华镜奶光.png"
+  },
+  "从者1-NP": {
+    "Name": "从者1-NP",
+    "MainSize": [1280, 720],
+    "Offset": [220, 654],
+    "Size": [80, 22],
+    "Type": "Static"
+  },
+  "从者2-NP": {
+    "Name": "从者2-NP",
+    "MainSize": [1280, 720],
+    "Offset": [539, 654],
+    "Size": [80, 22],
+    "Type": "Static"
+  },
+  "从者3-NP": {
+    "Name": "从者3-NP",
+    "MainSize": [1280, 720],
+    "Offset": [858, 654],
+    "Size": [80, 22],
+    "Type": "Static"
   }
 }
