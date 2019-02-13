@@ -2,7 +2,9 @@
 碧蓝航线战斗棋盘地图分析和定位
 """
 import time
+import itertools
 
+from shapely import geometry
 import numpy as np
 
 from config_loader import logger, config
@@ -23,6 +25,64 @@ def ord_distance(anchor_name, target_name):
     dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
     return np.linalg.norm([dx, dy])
 
+def get_anchors(self):
+    """在屏幕上搜索匹配的锚点
+    """
+    res = []
+    for anchor in self.data['Anchors'].values():
+        logger.debug("Check Anchor %s", anchor['Name'])
+        diff, pos = get_match(self.screen, anchor['ImageData'])
+        pos = np.add(pos, anchor['Offset'])
+        if diff < anchor.get("MaxDiff", 0.03):
+            res.append([pos, anchor['OnMap']])
+    return res
+
+def get_max_convex(anchors, count=4):
+    if len(anchors) < count:
+        raise ValueError("Need At Least %d anchors, got %d" % (count, len(anchors)))
+    best = None
+    best_area = 0
+    for idx in itertools.combinations(range(len(anchors)), count):
+        poly = geometry.Polygon([anchors[i][0] for i in idx]).convex_hull
+        area = poly.area
+        if best_area < area:
+#             print("Update")
+#             print([anchors[i][1] for i in idx])
+#             print(area)
+#             display(poly)
+            best_area = area
+            best = idx
+    return [anchors[i] for i in best]
+
+def on_map_offset(name):
+    x = 100 * (ord(name[0]) - ord("A"))
+    y = 100 * (ord(name[1]) - ord("1"))
+    return [x, y]
+
+def get_perspective_transform(anchors):
+    src = []
+    dst = []
+    for anchor in anchors:
+        src.append(anchor[0])
+        dst.append(on_map_offset(anchor[1]))
+    src = np.reshape(src, (-1, 2)).astype("float32")
+    dst = np.reshape(dst, (-1, 2)).astype("float32")
+    return cv.getPerspectiveTransform(src, dst)
+
+def name2pos(name, matrix):
+    inv = np.linalg.inv(trans_matrix)
+    inv /= inv[2, 2]
+    src = on_map_offset(name)
+    src = np.reshape(src, (1, -1, 2)).astype("float32")
+    return cv.perspectiveTransform(src, inv).reshape(2)
+
+def pos2name(pos, matrix):
+    src = np.reshape(pos, (1, -1, 2)).astype("float32")
+    x, y = cv.perspectiveTransform(src, matrix).reshape(2)
+    x = chr(int(np.round(ord("A") + x/100)))
+    y = chr(int(np.round(ord("1") + y/100)))
+    return x+y
+
 
 class FightMap(AzurLaneControl):
     """地图操作"""
@@ -38,14 +98,41 @@ class FightMap(AzurLaneControl):
         self.resources.update(self.data['Resources'])
         logger.info("Update Scenes %s", self.data['Scenes'].keys())
         self.scenes.update(self.data['Scenes'])
-        
-        if "TransMatrix" in self.data:
-            self.trans_matrix = np.mat(self.data['TransMatrix'])
+        self._trans_matrix = None
+        self._inv_trans = None
+    
+    def update_trans_matrix(self):
+        anchors = get_anchors(self)
+        if len(anchors) < 4:
+            if "TransMatrix" in self.data:
+                logger.info("Update Trans Matrix With Map Defined Matrix")
+                self._trans_matrix = np.mat(self.data["TransMatrix"])
+            else:
+                logger.info("Update Trans Matrix With Global Matrix")
+                self._trans_matrix = trans_matrix
         else:
-            self.trans_matrix = trans_matrix
-            
-        _, self.inv_trans = cv.invert(self.trans_matrix)
+            logger.info("Update Trans Matrix With %d Anchors", len(anchors))
+            anchors4 = get_max_convex(anchors)
+            self._trans_matrix = get_perspective_transform(anchors4)
+        _, self._inv_trans = cv.invert(self._trans_matrix)
 
+    @property
+    def trans_matrix(self):
+        if self._trans_matrix is None:
+            self.update_trans_matrix()
+        return self._trans_matrix
+
+    @property
+    def inv_trans(self):
+        if self._inv_trans is None:
+            self.update_trans_matrix()
+        return self._inv_trans
+    
+    def make_screen_shot(self):
+        self._trans_matrix = None
+        self._inv_trans = None
+        return super().make_screen_shot()
+    
     def image2square(self, image_pos):
         """根据透视变换矩阵将像素坐标变换到棋盘坐标"""
         image_pos = np.array([image_pos], dtype='float32').reshape((1, 1, 2))
