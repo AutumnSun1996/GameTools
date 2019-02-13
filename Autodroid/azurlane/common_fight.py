@@ -20,7 +20,6 @@ class CommonMap(FightMap):
     def parse_fight_condition(self, condition):
         status = self.get_fight_status()
         status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
-        status["FleetId"] = self.fleet_id            
         return parse_condition(condition, self, status.__getitem__)
 
     def reset_map_data(self):
@@ -62,6 +61,8 @@ class CommonMap(FightMap):
         for node in self.g:
             if self.g.nodes[node]['cell_type'] == 'E': # 可能出现敌人的地点
                 self.set_enemy(node, 'Possible')
+        if len(self.boss) == 1:
+            self.boss = self.boss[0]
 
     def reset_fight_index(self, target_mod=0):
         # self.virtual_fight_index = 0
@@ -75,6 +76,11 @@ class CommonMap(FightMap):
             logger.info("Reset Fight Index From Mod %d To %d",
                         mod, target_mod)
 
+    def toggle_fleet(self):
+        self.click_at_resource("切换舰队")
+        self.current_fleet, self.other_fleet = self.other_fleet, self.current_fleet
+        self.wait(2)
+    
     def enemies_on_path(self, path):
         enemies = []
         for cell in path:
