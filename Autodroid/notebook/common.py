@@ -6,6 +6,8 @@ import win32clipboard
 from simulator.win32_tools import *
 from simulator.image_tools import *
 
+from IPython.display import display
+
 const = {"s": None, "section": None}
 
 
