@@ -66,13 +66,18 @@ class BaiduOCR:
         info = self.api_request("general_basic", image)
         return self.parse_result(info)
 
+    def image2text_accurate(self, image):
+        info = self.api_request("accurate_basic", image)
+        return self.parse_result(info)
+
     def images2text(self, *images):
         image = contact_images(*images)
-        info = self.api_request("general_basic", image)
-        result = self.parse_result(info)
-        if len(result) == len(images):
+        result = self.image2text(image)
+        if not (isinstance(result, list) and len(result) == len(images)):
+            result = self.image2text_accurate(image)
+        if isinstance(result, list) and len(result) == len(images):
             return result
-        
+
         logger.info("Count Not Match(Get %d for %d). Check each one.", len(result), len(images))
         result = []
         for image in images:
@@ -85,13 +90,8 @@ class BaiduOCR:
             result.append(text)
         return result
 
-    def image2text_accurate(self, image):
-        info = self.api_request("accurate_basic", image)
-        return self.parse_result(info)
-
-
 ocr = BaiduOCR()
 if __name__ == "__main__":
     from simulator.image_tools import cv_imread
     image = cv_imread('ocrtest.png')
-    print(ocr.image2numbers(image))
+    print(ocr.image2text(image))
