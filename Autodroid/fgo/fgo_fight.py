@@ -1,4 +1,5 @@
 import re
+from collections import defaultdict
 import json
 
 import numpy as np
@@ -10,74 +11,18 @@ from simulator.win32_tools import drag, rand_click
 from ocr import ocr
 
 
-def contact_images(*images, sep=1):
-    """将多张图片纵向拼接
-
-    用于一次性识别多个字段
-    """
-    width = max([images.shape[1] for images in images])
-    height = sum([images.shape[0] + sep for images in images]) - sep
-    background = np.zeros((height, width, 3), dtype='uint8')
-    x = 0
-    y = 0
-    for image in images:
-        h, w = image.shape[:2]
-        background[y:y+h, x:x+w, :] = image
-        y += h + sep
-    return background
-
-
-class AssistServant:
-    def __init__(self, control, offset):
-        self.s = control
-        self.offset = offset
-        self.info = {}
-
-    def update_from_select(self, image, offset):
-        self.offset = offset
-        sub_image = {}
-        for name in ['礼装', '等级', '职阶', '宝具', '技能']:
-            sub_image[name] = cv_crop(image, self.s.get_resource_rect('助战选择-从者-%s' % name))
-        info = {}
-
-    def update_from_combat(self, info):
-        self.info.update(info)
-
-
-class CombatServant:
-    def __init__(self, control: SimulatorControl):
-        self.s = control
-        self.info = {}
-
-    def update_from_select(self, image, offset):
-        self.offset = offset
-        sub_image = {}
-        for name in ['礼装', '等级', '职阶', '宝具', '技能']:
-            sub_image[name] = cv_crop(image, self.s.get_resource_rect('助战选择-从者-%s' % name))
-        info = {}
-
-    def update_from_combat(self, info):
-        self.info.update(info)
-
-
 class FateGrandOrder(SimulatorControl):
     scene_check_max_repeat = 60
     section = "FGO"
 
     def __init__(self, map_name="CommonConfig"):
         super().__init__()
-        self.combat_info = {
-            "BattleNow": None,
-            "BattleTotal": None,
-            "EnemyLeft": None,
-            "Turn": None,
-            "TurnOfBattle": None, 
-        }
+        self.combat_info = defaultdict(lambda: None)
         self.best_equips = []
         self.data = load_map(map_name, self.section)
-        logger.info("Update Resources %s", self.data['Resources'].keys())
+        logger.info("Update Resources %s", list(self.data['Resources'].keys()))
         self.resources.update(self.data['Resources'])
-        logger.info("Update Scenes %s", self.data['Scenes'].keys())
+        logger.info("Update Scenes %s", list(self.data['Scenes'].keys()))
         self.scenes.update(self.data['Scenes'])
 
     def refresh_assist(self):
@@ -88,6 +33,7 @@ class FateGrandOrder(SimulatorControl):
 
     @property
     def scroll_pos(self):
+        self.wait_till(["$all", [["滚动条-上"], ["滚动条-下"]]])
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
         top = top_xy[1]
@@ -152,38 +98,62 @@ class FateGrandOrder(SimulatorControl):
     def extract_combat_info(self, repeat=0):
         if not self.scene_changed:
             return
-        if repeat > 5:
-            self.error("OCR Failed")
+        if repeat > 3:
+            self.notice("extract_combat_info Failed")
             return
+        imgs  = [
+            self.crop_resource("战斗轮次"),
+            self.crop_resource("剩余敌人"),
+            self.crop_resource("回合数"),
+            self.crop_resource("从者1-NP"),
+            self.crop_resource("从者2-NP"),
+            self.crop_resource("从者3-NP"),
+        ]
+        info = ocr.images2text(*imgs)
+        logger.info("Get Combat Info %s(%d)", info, repeat)
+        errors = []
         try:
-            img  = contact_images(
-                self.crop_resource("战斗轮次"),
-                self.crop_resource("剩余敌人"),
-                self.crop_resource("回合数"),
-            )
-            if repeat > 2:
-                info = ocr.image2text_accurate(img)
+            now, total = [int(t) for t in re.search(r"^(\d).*?(\d)$", info[0]).groups()]
+            if self.combat_info["BattleNow"] != now:
+                self.combat_info["TurnOfBattle"] = 1
             else:
-                info = ocr.image2text(img)
-            logger.info("Get Combat Info %s(%d)", info, repeat)
-            now, total = info[0].split("/")
-            left = re.search("\d+", info[1]).group(0)
-            turn = re.search("\d+", info[2]).group(0)
-            new_info = {
-                "BattleNow": int(now),
-                "BattleTotal": int(total),
-                "EnemyLeft": int(left),
-                "Turn": int(turn)
-            }
-            if self.combat_info["BattleNow"] != new_info["BattleNow"]:
-                new_info["TurnOfBattle"] = 1
-            else:
-                new_info["TurnOfBattle"] = self.combat_info["TurnOfBattle"] + 1
+                self.combat_info["TurnOfBattle"] += 1
+            self.combat_info["BattleNow"] = now
+            self.combat_info["BattleTotal"] = total - now
+            self.combat_info["BattleLeft"] = total - now
+            
+        except (AttributeError, IndexError, ValueError) as err:
+            errors.append(err)
 
-            self.combat_info.update(new_info)
-            
-            
-        except (AttributeError, IndexError):
+        try:
+            match = re.search(r"(\d+)", info[1])
+            if match:
+                self.combat_info["EnemyLeft"] = int(match.group(1))
+        except (AttributeError, IndexError, ValueError) as err:
+            errors.append(err)
+
+        try:
+            match = re.search(r"(\d+)", info[2])
+            if match:
+                self.combat_info["Turn"] = int(match.group(1))
+        except (AttributeError, IndexError, ValueError) as err:
+            if self.combat_info["Turn"] is None:
+                self.combat_info["Turn"] = 1
+            else:
+                self.combat_info["Turn"] += 1
+            errors.append(err)
+
+        try:
+            self.combat_info["NP"] = [0, 0, 0]
+            for i in range(3):
+                match = re.findall(r"(\d+)", info[i+3])
+                if match:
+                    self.combat_info["NP"][i] = int(''.join(match))
+        except (AttributeError, IndexError, ValueError) as err:
+            errors.append(err)
+
+        if errors:
+            self.notice("OCR Errors %s" % errors)
             self.wait(1)
             self.make_screen_shot()
             self.extract_combat_info(repeat+1)
@@ -195,22 +165,23 @@ class FateGrandOrder(SimulatorControl):
         """保存当前画面为宝具背景, 供之后的分析使用
         """
         for i in range(3):
-            name = '宝具背景%d' % (i+1)
-            rect = self.get_resource_rect(name)
-            self.resources[name]['ImageData'] = cv_crop(self.screen, rect).copy()
+            name = '宝具%d' % (i+1)
+            self.resources[name]['ImageData'] = self.crop_resource(name)
 
     def choose_match(self, image, candidates):
         best = None
         best_diff = 1
         for name in candidates:
-            data = self.resources[name]
-            diff, _ = get_match(image, data['ImageData'])
+            diff, _ = get_match(image, self.resources[name]['ImageData'])
             if diff < best_diff:
                 best_diff = diff
                 best = name
         return best_diff, best
 
     def extract_card_info(self, image):
+        # if self.resource_in_image(image, "眩晕"):
+            # result = "--"
+        # else:
         best_diff = 1
         color = ""
         for name in ["Buster", "Arts", "Quick"]:
@@ -235,9 +206,9 @@ class FateGrandOrder(SimulatorControl):
         pass
 
 
-if __name__ == "__main__":
-    fgo = FateGrandOrder("通用配置")
-    print(fgo.resources.keys())
-    print(fgo.resources['战斗速度']['ImageData'].shape)
-    fgo.update_current_scene()
-    print(fgo.scene_history)
+# if __name__ == "__main__":
+    # fgo = FateGrandOrder("通用配置")
+    # print(fgo.resources.keys())
+    # print(fgo.resources['战斗速度']['ImageData'].shape)
+    # fgo.update_current_scene()
+    # print(fgo.scene_history)
