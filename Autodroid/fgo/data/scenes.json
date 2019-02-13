@@ -1,18 +1,30 @@
 {
   "关卡选择": {
     "Name": "关卡选择",
-    "Condition": ["职阶倾向"],
+    "Condition": ["$all", [["右下-菜单"], ["左上-关闭"]]],
     "Actions": [
-      {"Type": "InnerCall", "Target": "choose_target"},
+      {"Type": "Click", "Target": "默认关卡"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["助战选择", "AP不足"]
+    "Next": ["助战选择", "AP不足", "关卡选择"]
   },
   "AP不足": {
     "Name": "AP不足",
     "Condition": ["AP不足"],
     "Actions": [
-      {"Type": "Click", "Target": "银苹果"},
+      {
+        "Type": "Click",
+        "Condition": ["$method", "resource_in_screen", "银苹果不足"],
+        "Target": "金苹果"
+      },
+      {
+        "Type": "Click",
+        "Condition": [
+          "$not_",
+          ["$method", "resource_in_screen", "银苹果不足"]
+        ],
+        "Target": "银苹果"
+      },
       {"Type": "Wait", "Time": 1},
       {"Type": "Click", "Target": "补充AP-决定"},
       {"Type": "Wait", "Time": 1}
@@ -90,16 +102,28 @@
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 0.5}
     ],
+    "Next": ["获得经验", "获得物品", "御主等级上升"]
+  },
+  "御主等级上升": {
+    "Name": "御主等级上升",
+    "Condition": ["御主等级"],
+    "Actions": [
+      {"Type": "Click", "Target": "下一步"},
+      {"Type": "Wait", "Time": 0.5}
+    ],
     "Next": ["获得经验", "获得物品"]
   },
   "获得物品": {
     "Name": "获得物品",
     "Condition": ["获得物品"],
     "Actions": [
+      {"Type": "Wait", "Time": 1},
+      {"Type": "InnerCall", "Target": "make_screen_shot"},
+      {"Type": "InnerCall", "Target": "save_record"},
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["获得物品", "关卡选择", "申请好友"]
+    "Next": ["获得物品", "关卡选择", "任务奖励", "申请好友"]
   },
   "申请好友": {
     "Name": "申请好友",
@@ -108,7 +132,7 @@
       {"Type": "Click", "Target": "申请好友"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["好友申请失败", "关卡选择"]
+    "Next": ["好友申请失败", "关卡选择", "任务奖励"]
   },
   "好友申请失败": {
     "Name": "好友申请失败",
@@ -117,13 +141,13 @@
       {"Type": "Click", "Target": "关闭"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["关卡选择"]
+    "Next": ["关卡选择", "任务奖励"]
   },
   "任务奖励": {
     "Name": "任务奖励",
-    "Condition": ["请点击画面"],
+    "Condition": ["任务奖励"],
     "Actions": [
-      {"Type": "Click", "Target": "请点击画面"},
+      {"Type": "Click", "Target": "任务奖励"},
       {"Type": "Wait", "Time": 1}
     ],
     "Next": ["关卡选择"]
