@@ -125,22 +125,22 @@
     "Type": "Dynamic",
     "Image": "Quick.png"
   },
-  "宝具背景1": {
-    "Name": "宝具背景1",
+  "宝具1": {
+    "Name": "宝具1",
     "MainSize": [1280, 720],
     "Offset": [340, 120],
     "Size": [140, 180],
     "Type": "Static"
   },
-  "宝具背景2": {
-    "Name": "宝具背景2",
+  "宝具2": {
+    "Name": "宝具2",
     "MainSize": [1280, 720],
     "Offset": [570, 120],
     "Size": [140, 180],
     "Type": "Static"
   },
-  "宝具背景3": {
-    "Name": "宝具背景3",
+  "宝具3": {
+    "Name": "宝具3",
     "MainSize": [1280, 720],
     "Offset": [800, 120],
     "Size": [140, 180],
@@ -627,16 +627,6 @@
     "Type": "Static",
     "Image": "左上-关闭.png"
   },
-  "请点击画面": {
-    "Name": "请点击画面",
-    "MainSize": [1280, 720],
-    "ClickOffset": [-500, -600],
-    "ClickSize": [600, 600],
-    "Offset": [540, 622],
-    "Size": [200, 50],
-    "Type": "Static",
-    "Image": "请点击画面.png"
-  },
   "万华镜奶光": {
     "Name": "万华镜奶光",
     "MainSize": [1280, 720],
@@ -648,22 +638,51 @@
   "从者1-NP": {
     "Name": "从者1-NP",
     "MainSize": [1280, 720],
-    "Offset": [220, 654],
-    "Size": [80, 22],
+    "Offset": [230, 654],
+    "Size": [42, 22],
     "Type": "Static"
   },
   "从者2-NP": {
     "Name": "从者2-NP",
     "MainSize": [1280, 720],
-    "Offset": [539, 654],
-    "Size": [80, 22],
+    "Offset": [548, 654],
+    "Size": [42, 22],
     "Type": "Static"
   },
   "从者3-NP": {
     "Name": "从者3-NP",
     "MainSize": [1280, 720],
-    "Offset": [858, 654],
-    "Size": [80, 22],
+    "Offset": [866, 654],
+    "Size": [42, 22],
+    "Type": "Static"
+  },
+  "敌人充能完成": {
+    "Name": "敌人充能完成",
+    "MainSize": [1280, 720],
+    "Size": [40, 16],
+    "Type": "Dynamic",
+    "Image": "敌人充能完成.png"
+  },
+  "御主等级": {
+    "Name": "御主等级",
+    "MainSize": [1280, 720],
+    "Offset": [700, 266],
+    "Size": [160, 40],
+    "Type": "Static",
+    "Image": "御主等级.png"
+  },
+  "任务奖励": {
+    "Name": "任务奖励",
+    "MainSize": [1280, 720],
+    "Size": [800, 160],
+    "Type": "Dynamic",
+    "Image": "任务奖励.png"
+  },
+  "默认关卡": {
+    "Name": "默认关卡",
+    "MainSize": [1280, 720],
+    "Offset": [700, 120],
+    "Size": [400, 120],
     "Type": "Static"
   }
 }
