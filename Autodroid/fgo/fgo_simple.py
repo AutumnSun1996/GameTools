@@ -25,7 +25,7 @@ class FGOSimple(FateGrandOrder):
                     logger.info("选择助战: %s", name)
                     self.click_at_resource(name)
                     return
-            self.servant_scroll(1.5)
+            self.servant_scroll(1)
             self.wait(1)
             self.make_screen_shot()
 
@@ -35,7 +35,7 @@ class FGOSimple(FateGrandOrder):
 
     def choose_skills(self):
         for item in self.data["Strategy"]["Skills"]:
-            if parse_condition(item["Condition"], self, self.combat_info.get):
+            if parse_condition(item["Condition"], self, self.combat_info.__getitem__):
                 self.use_skills(item["Targets"])
 
     def use_skills(self, skills):
@@ -55,19 +55,22 @@ class FGOSimple(FateGrandOrder):
                 self.wait(1)
                 self.click_at_resource("目标%d-4" % skill[3])
                 self.wait(1)
+
+            self.wait(3)
             self.make_screen_shot()
-            self.click_at_resource("右侧空白区域")
+            if not parse_condition(self.scenes["选择技能"]["Condition"], self, self.resource_in_screen):
+                self.click_at_resource("右侧空白区域")
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(0.5)
 
     def choose_cards(self):
         self.wait(4)
         if self.combat_info["BattleNow"] == 1:
-            self.click_at_resource("宝具背景2")
+            self.click_at_resource("宝具2")
         elif self.combat_info["BattleNow"] == 2:
-            self.click_at_resource("宝具背景1")
+            self.click_at_resource("宝具1")
         elif self.combat_info["BattleNow"] == 3:
-            self.click_at_resource("宝具背景3")
+            self.click_at_resource("宝具3")
 
         self.wait(1)
         cards = self.resources["Cards"]
@@ -81,7 +84,7 @@ class FGOSimple(FateGrandOrder):
             self.wait(1)
 
 
-if __name__ == "__main__":
-    fgo = FGOSimple("每日任务")
-    while 1:
-        fgo.check_scene()
+# if __name__ == "__main__":
+    # fgo = FGOSimple("每日任务")
+    # while 1:
+        # fgo.check_scene()
