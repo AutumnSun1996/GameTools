@@ -23,7 +23,6 @@ class FGOSimple(FGOBase):
             if parse_condition(item["Condition"], self, self.combat_info.__getitem__):
                 logger.info("Skill Strategy Passed: %s", item)
                 self.do_actions(item["Actions"])
-        self.enemy_attack = None
 
     def use_skills(self, *skills):
         for skill in skills:
@@ -44,8 +43,13 @@ class FGOSimple(FGOBase):
                 self.wait(1)
                 self.click_at_resource("目标%d-4" % skill[3])
                 self.wait(1)
+
+            self.wait(2)
             self.make_screen_shot()
-            self.click_at_resource("右侧空白区域")
+            if not parse_condition(self.scenes["选择技能"]["Condition"], self, self.resource_in_screen):
+                self.click_at_resource("右侧空白区域")
+                self.wait(0.5)
+                
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(0.5)
 
@@ -92,22 +96,9 @@ class FGOSimple(FGOBase):
         for idx in range(3):
             check = self.data["Strategy"]["UseNP"][idx]
             if self.combat_info["NP"][idx] >= 100 and parse_condition(check["Condition"], self, self.combat_info.__getitem__):
-                name = "宝具背景%s" % (check["Target"])
+                name = "宝具%s" % (check["Target"])
                 logger.info("使用宝具: %s", name)
                 choice.append(self.get_resource_rect(name))
-
-        # if self.combat_info["Turn"] == 1:
-            # self.click_at_resource("宝具背景3")
-        # elif self.combat_info["BattleNow"] == 2 and self.combat_info["TurnOfBattle"] == 1:
-            # self.click_at_resource("宝具背景1")
-            # self.wait(0.5)
-            # self.click_at_resource("宝具背景3")
-        # elif self.combat_info["BattleNow"] == 3:
-            # self.click_at_resource("宝具背景1")
-            # self.wait(0.5)
-            # self.click_at_resource("宝具背景2")
-            # self.wait(0.5)
-            # self.click_at_resource("宝具背景3")
 
         self.wait(1)
         cards = self.resources["Cards"]
