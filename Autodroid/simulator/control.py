@@ -11,6 +11,7 @@ import traceback
 from collections import deque
 from threading import Timer
 import operator
+import builtins
 
 import numpy as np
 import win32con
@@ -27,32 +28,33 @@ def parse_condition(cond, obj, extra=None):
     cond_in = str(cond)
     use_extra = False
     if isinstance(cond, list) and cond:
+        cond = [parse_condition(sub, obj, extra) for sub in cond]
+        cond_in = str(cond)
         # 仅对非空的list进行解析
         need_extra = False
         if isinstance(cond[0], str) and cond[0].startswith("$"):
-            if cond == ["$"]:
+            if cond[0] == "$":
+                logger.debug("get obj")
                 cond = obj
             elif cond[0][1:] in dir(operator):
                 cmd = getattr(operator, cond[0][1:])
-                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
-                logger.debug("Parse: args=%s", args)
-                cond = cmd(*args)
-            elif cond[0][1:] in dir(__builtin__):
-                cmd = getattr(__builtin__, cond[0][1:])
-                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
-                logger.debug("Parse: args=%s", args)
-                cond = cmd(*args)
+                # logger.debug("operator %s", cmd)
+                cond = cmd(*cond[1:])
+            elif cond[0][1:] in dir(builtins):
+                cmd = getattr(builtins, cond[0][1:])
+                # logger.debug("builtin %s", cmd)
+                cond = cmd(*cond[1:])
             elif cond[0] == "$method":
                 cmd = getattr(obj, parse_condition(cond[1], obj, extra))
-                args = [parse_condition(sub, obj, extra) for sub in cond[2:]]
-                cond = cmd(*args)
+                cond = cmd(*cond[2:])
             elif cond[0] == "$call":
                 cmd = parse_condition(cond[1], obj, extra)
-                args = [parse_condition(sub, obj, extra) for sub in cond[2:]]
-                cond = cmd(*args)
+                cond = cmd(*cond[2:])
             else:
+                logger.info("no match: %s", cond[0])
                 need_extra = True
         else:
+            logger.debug("no $: %s", cond)
             need_extra = True
         if need_extra and extra:
             try:
@@ -270,7 +272,7 @@ class SimulatorControl:
             self.error("Can't find resource %s" % condition)
             return False
         self.make_screen_shot()
-        if parse_condition(condition, None, self.resource_in_screen):
+        if parse_condition(condition, self, self.resource_in_screen):
             return True
         time.sleep(interval)
         return self.wait_till(condition, interval, repeat-1)
@@ -283,6 +285,9 @@ class SimulatorControl:
     def scene_match_check(self, scene, reshot):
         """检查场景是否与画面一致
         """
+        if isinstance(scene, str):
+            scene = self.scenes[scene]
+
         logger.debug("Check scene: %s", scene)
         if reshot:
             self.make_screen_shot()
@@ -305,7 +310,7 @@ class SimulatorControl:
         else:
             image = self.crop_resource(area)
             prefix += '-%s' % area
-        name = "logs/{}-{:%Y-%m-%d_%H%M%S}.png".format(prefix, datetime.datetime.now())
+        name = "{}/logs/{}-{:%Y-%m-%d_%H%M%S}.png".format(self.section, prefix, datetime.datetime.now())
         cv_save(name, image)
 
     def critical(self, message=None, title="", action=None):
