@@ -79,4 +79,3 @@ def do_format(folder, max_width=80):
 if __name__ == "__main__":
     do_format("fgo", 80)
     do_format("azurlane", 70)
-        
