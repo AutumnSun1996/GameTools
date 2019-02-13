@@ -1,7 +1,7 @@
 {
   "船坞已满": {
     "Name": "船坞已满",
-    "Condition": ["$all", ["船坞已满-整理"], ["信息-标题"]],
+    "Condition": ["$all", [["船坞已满-整理"], ["信息-标题"]]],
     "Actions": [
       {"Type": "Click", "Target": "船坞已满-整理"},
       {"Type": "Wait", "Time": 2},
@@ -17,7 +17,7 @@
         "Type": "InnerCall",
         "Condition": [
           "$ne",
-          ["$attr", "last_scene_name"],
+          ["$getattr", ["$"], "last_scene_name"],
           "遭遇伏击"
         ],
         "Target": "inc_fight_index",
@@ -71,7 +71,7 @@
       {
         "Type": "InnerCall",
         "Target": "save_record",
-        "Condition": ["$attr", "scene_changed"],
+        "Condition": ["$getattr", ["$"], "scene_changed"],
         "args": ["Save", "获得道具列表"]
       },
       {"Type": "Click", "Target": "右侧空白区域"},
@@ -86,7 +86,7 @@
       {
         "Type": "InnerCall",
         "Target": "inc_fight_index",
-        "Condition": ["$attr", "scene_changed"]
+        "Condition": ["$getattr", ["$"], "scene_changed"]
       },
       {"Type": "Wait", "Time": 5}
     ]
@@ -111,7 +111,7 @@
   },
   "消息": {
     "Name": "消息",
-    "Condition": ["$all", ["信息-标题"], ["信息-确定"]],
+    "Condition": ["$all", [["信息-标题"], ["信息-确定"]]],
     "Actions": [
       {"Type": "Click", "Target": "信息-确定"},
       {"Type": "Wait", "Time": 0.5}
@@ -131,6 +131,7 @@
     "Actions": [
       {"Type": "InnerCall", "Target": "mood_detect"},
       {"Type": "Click", "Target": "舰队选择-立刻前往"},
+      {"Type": "InnerCall", "Target": "reset_fight_index"},
       {"Type": "Wait", "Time": 1}
     ]
   },
@@ -154,14 +155,24 @@
   },
   "正常战斗中": {
     "Name": "正常战斗中",
-    "Condition": ["$all", ["$not", ["自律战斗"]], ["暂停"]],
+    "Condition": ["$all", [["$not_", ["自律战斗"]], ["暂停"]]],
     "Actions": [
       {
         "Type": "Click",
         "Condition": [
           "$all",
-          ["$ge", ["$attr", "since_last_change"], 5],
-          ["$method", "resource_in_screen", "潜艇数量1"]
+          [
+            [
+              "$ge",
+              ["$getattr", ["$"], "since_last_change"],
+              5
+            ],
+            [
+              "$method",
+              "resource_in_screen",
+              "潜艇数量1"
+            ]
+          ]
         ],
         "Target": "潜艇按钮"
       },
