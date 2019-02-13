@@ -42,11 +42,11 @@ def drag(hwnd, start, end, step=100):
     points[:, 1] = np.linspace(start[1], end[1], count)
     points = points.astype('int')
     for point in points:
+        time.sleep(0.05)
         target = win32api.MAKELONG(*point)
         win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
                              win32con.MK_LBUTTON, target)
-        time.sleep(0.05)
-
+    time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
 
