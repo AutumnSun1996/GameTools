@@ -64,11 +64,11 @@ class FGOSimple(FGOBase):
     def choose_cards(self):
         self.wait(4)
         if self.combat_info["Turn"] == 1:
-            self.click_at_resource("宝具背景3")
+            self.click_at_resource("宝具3")
         elif self.combat_info["BattleNow"] == 3:
-            self.click_at_resource("宝具背景2")
+            self.click_at_resource("宝具2")
             self.wait(0.5)
-            self.click_at_resource("宝具背景3")
+            self.click_at_resource("宝具3")
         
         
         self.wait(1)
