@@ -18,9 +18,11 @@ class FGOSimple(FateGrandOrder):
     def at_end(self):
         _, bot_xy = self.search_resource("滚动条-下")
 
-    def choose_assist_servant(self, idx=5):
-        if idx <= 0:
-            self.error("无助战")
+    def choose_assist_servant(self):
+        if [s["Name"] for s in self.scene_history].count("助战选择") == 5:
+            self.error("选择助战失败")
+            return
+
         while self.scroll_pos < self.data["Strategy"].get("AssistRange", 0.99):
             for name in self.data['Strategy']['Assist']:
                 if self.resource_in_screen(name):
@@ -29,11 +31,7 @@ class FGOSimple(FateGrandOrder):
                     return
             self.servant_scroll(1)
             self.wait(1)
-            self.make_screen_shot()
-
         self.refresh_assist()
-        self.make_screen_shot()
-        self.choose_assist_servant(idx-1)
 
     def choose_skills(self):
         for item in self.data["Strategy"]["Skills"]:
