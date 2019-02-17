@@ -29,6 +29,7 @@ class FateGrandOrder(SimulatorControl):
         self.scenes.update(self.data['Scenes'])
 
     def refresh_assist(self):
+        logger.info("更新助战列表")
         self.click_at_resource("助战更新")
         self.wait(0.8)
         self.click_at_resource("助战-确认更新")
