@@ -17,11 +17,13 @@ import numpy as np
 import win32con
 import win32api
 
-from config_loader import logger, config
+from config_loader import config
 from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
     cv_save, load_scenes, load_resources, load_image
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
+import logging
+logger = logging.getLogger(__name__)
 
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
@@ -79,7 +81,7 @@ class SimulatorControl:
 
     def __init__(self):
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
-        self.scene_history = deque(maxlen=10)
+        self.scene_history = deque(maxlen=50)
         self.last_change = time.time()
         self.screen = None
         self.scenes = load_scenes(self.section)
@@ -156,12 +158,21 @@ class SimulatorControl:
                 pos = []
         elif info["Type"] in {"Dynamic", "Anchor"}:
             target = info['ImageData']
-            diff, pos = get_match(image, target)
+            if "SearchArea" in info:
+                xy, wh = info["SearchArea"]
+                x, y = xy
+                w, h = wh
+                part = cv_crop(image, (x, y, x+w, y+h))
+            else:
+                x = y = 0
+                part = image
+            diff, pos = get_match(part, target)
             if diff > info.get('MaxDiff', 0.02):
                 ret = False
                 pos = []
             else:
                 ret = True
+                pos = np.add(pos, [x, y])
         elif info["Type"] == "MultiStatic":
             target = info['ImageData']
             w, h = info["Size"]
@@ -185,6 +196,7 @@ class SimulatorControl:
                 part = image
             pos = get_multi_match(part, target, info.get("MaxDiff", 0.02))
             ret = len(pos) > 0
+            pos = [np.add(item, [x, y]) for item in pos]
         else:
             self.critical("Invalid Type %s", info['Type'])
         logger.debug("Check Resource: %s=%s", name, pos)
@@ -265,14 +277,17 @@ class SimulatorControl:
         x, y = res.get("CropOffset", res.get("Offset", (0, 0)))
         w, h = res.get("CropSize", res["Size"])
         return cv_crop(image, (x+dx, y+dy, x+w+dx, y+h+dy))
-
+    
+    def parse_scene_condition(self, condition):
+        return parse_condition(condition, self, self.resource_in_screen)
+    
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
         if repeat < 0:
             self.error("Can't find resource %s" % condition)
             return False
         self.make_screen_shot()
-        if parse_condition(condition, self, self.resource_in_screen):
+        if self.parse_scene_condition(condition):
             return True
         time.sleep(interval)
         return self.wait_till(condition, interval, repeat-1)
@@ -292,7 +307,7 @@ class SimulatorControl:
         if reshot:
             self.make_screen_shot()
 
-        res = parse_condition(scene["Condition"], self, self.resource_in_screen)
+        res = self.parse_scene_condition(scene["Condition"])
         if res:
             logger.debug("Scene Matched: %s", scene)
             self.scene_history.append(scene)
@@ -440,7 +455,7 @@ class SimulatorControl:
                 except Exception:
                     self.critical(traceback.format_exc(), "程序")
             elif action['Type'] == 'Click':
-                self.click_at_resource(action['Target'], action.get("Wait", False))
+                self.click_at_resource(action['Target'], action.get("Wait", False), action.get("Index", None))
             elif action['Type'] == 'MultiActions':
                 self.do_actions(action['Actions'])
             else:
