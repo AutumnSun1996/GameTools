@@ -317,7 +317,8 @@
     "MainSize": [1280, 720],
     "Size": [320, 42],
     "Type": "Dynamic",
-    "Image": "羁绊加深.png"
+    "Image": "羁绊加深.png",
+    "MaxDiff": 0.03
   },
   "助战-职阶选择": {
     "Name": "助战-职阶选择",
