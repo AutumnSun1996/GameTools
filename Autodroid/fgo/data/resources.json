@@ -53,6 +53,22 @@
     "Type": "Static",
     "Image": "助战选择.png"
   },
+  "助战更新失败": {
+    "Name": "助战更新失败",
+    "MainSize": [1280, 720],
+    "Offset": [360, 300],
+    "Size": [550, 80],
+    "Type": "Static",
+    "Image": "助战更新失败.png"
+  },
+  "助战更新失败-关闭": {
+    "Name": "助战更新失败-关闭",
+    "MainSize": [1280, 720],
+    "Offset": [550, 540],
+    "Size": [180, 40],
+    "Type": "Static",
+    "Image": "助战更新失败-关闭.png"
+  },
   "开始任务": {
     "Name": "开始任务",
     "MainSize": [1280, 720],
@@ -299,9 +315,8 @@
   "羁绊加深": {
     "Name": "羁绊加深",
     "MainSize": [1280, 720],
-    "Offset": [660, 323],
-    "Size": [160, 40],
-    "Type": "Static",
+    "Size": [320, 42],
+    "Type": "Dynamic",
     "Image": "羁绊加深.png"
   },
   "助战-职阶选择": {
@@ -587,6 +602,14 @@
     "Type": "Static",
     "Image": "关闭.png"
   },
+  "好友申请失败-关闭": {
+    "Name": "好友申请失败-关闭",
+    "MainSize": [1280, 720],
+    "Offset": [540, 540],
+    "Size": [200, 45],
+    "Type": "Static",
+    "Image": "好友申请失败-关闭.png"
+  },
   "补充AP-决定": {
     "Name": "补充AP-决定",
     "MainSize": [1280, 720],
@@ -638,22 +661,22 @@
   "从者1-NP": {
     "Name": "从者1-NP",
     "MainSize": [1280, 720],
-    "Offset": [230, 654],
-    "Size": [42, 22],
+    "Offset": [162, 676],
+    "Size": [130, 3],
     "Type": "Static"
   },
   "从者2-NP": {
     "Name": "从者2-NP",
     "MainSize": [1280, 720],
-    "Offset": [548, 654],
-    "Size": [42, 22],
+    "Offset": [480, 676],
+    "Size": [130, 3],
     "Type": "Static"
   },
   "从者3-NP": {
     "Name": "从者3-NP",
     "MainSize": [1280, 720],
-    "Offset": [866, 654],
-    "Size": [42, 22],
+    "Offset": [798, 676],
+    "Size": [130, 3],
     "Type": "Static"
   },
   "敌人充能完成": {
@@ -681,8 +704,40 @@
   "默认关卡": {
     "Name": "默认关卡",
     "MainSize": [1280, 720],
-    "Offset": [700, 120],
-    "Size": [400, 120],
+    "Offset": [700, 180],
+    "Size": [400, 100],
     "Type": "Static"
+  },
+  "从者信息": {
+    "Name": "从者信息",
+    "MainSize": [1280, 720],
+    "Offset": [570, 80],
+    "Size": [180, 90],
+    "Type": "Static",
+    "Image": "从者信息.png"
+  },
+  "技能信息": {
+    "Name": "技能信息",
+    "MainSize": [1280, 720],
+    "Offset": [550, 160],
+    "Size": [180, 60],
+    "Type": "Static",
+    "Image": "技能信息.png"
+  },
+  "魔术礼装等级": {
+    "Name": "魔术礼装等级",
+    "MainSize": [1280, 720],
+    "Offset": [690, 250],
+    "Size": [240, 40],
+    "Type": "Static",
+    "Image": "魔术礼装等级.png"
+  },
+  "进行更替": {
+    "Name": "进行更替",
+    "MainSize": [1280, 720],
+    "Offset": [580, 608],
+    "Size": [130, 36],
+    "Type": "Static",
+    "Image": "进行更替.png"
   }
 }

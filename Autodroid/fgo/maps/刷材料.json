@@ -124,68 +124,8 @@
       "Eternita"
     ]
   },
-  "Scenes": {
-    "AP不足": {
-      "Name": "AP不足",
-      "Condition": ["AP不足"],
-      "Actions": [
-        {"Type": "Click", "Target": "AP不足-关闭"},
-        {"Type": "Wait", "Time": 200}
-      ],
-      "Next": ["关卡选择", "助战选择"]
-    },
-    "关卡选择": {
-      "Name": "关卡选择",
-      "Condition": ["$all", [["右下-菜单"], ["左上-关闭"]]],
-      "Actions": [
-        {"Type": "Click", "Target": "关卡1"},
-        {"Type": "Wait", "Time": 1}
-      ],
-      "Next": ["助战选择", "AP不足"]
-    },
-    "获得物品": {
-      "Name": "获得物品",
-      "Condition": ["获得物品"],
-      "Actions": [
-        {"Type": "Wait", "Time": 1},
-        {"Type": "InnerCall", "Target": "make_screen_shot"},
-        {"Type": "InnerCall", "Target": "save_record"},
-        {"Type": "Click", "Target": "下一步"},
-        {"Type": "Wait", "Time": 1}
-      ],
-      "Next": ["获得物品", "关卡选择", "申请好友"]
-    }
-  },
+  "Scenes": {},
   "Resources": {
-    "从者1-NP": {
-      "Name": "从者1-NP",
-      "MainSize": [1280, 720],
-      "Offset": [226, 654],
-      "Size": [66, 22],
-      "Type": "Static"
-    },
-    "从者2-NP": {
-      "Name": "从者2-NP",
-      "MainSize": [1280, 720],
-      "Offset": [545, 654],
-      "Size": [66, 22],
-      "Type": "Static"
-    },
-    "从者3-NP": {
-      "Name": "从者3-NP",
-      "MainSize": [1280, 720],
-      "Offset": [864, 654],
-      "Size": [66, 22],
-      "Type": "Static"
-    },
-    "关卡1": {
-      "Name": "关卡1",
-      "MainSize": [1280, 720],
-      "Offset": [700, 120],
-      "Size": [400, 120],
-      "Type": "Static",
-      "Image": "关卡1.png"
-    },
     "锤锤锤子": {
       "Name": "锤锤锤子",
       "MainSize": [1280, 720],
