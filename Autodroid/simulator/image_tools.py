@@ -9,7 +9,10 @@ import win32con
 import win32gui
 import win32ui
 
-from config_loader import logger, config
+from config_loader import config
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 def cv_imread(file_path):
