@@ -13,8 +13,9 @@ build
 **/.ipynb_checkpoints/
 *.ipynb
 
-# 碧蓝航线资源文件
+# 资源文件
 碧蓝航线/Data
+Autodroid/PlayerSimulate/
 
 
 **/dump/
