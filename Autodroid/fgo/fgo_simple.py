@@ -1,8 +1,10 @@
 
-from simulator.control import logger, parse_condition
+from simulator.control import parse_condition
 from simulator.win32_tools import rand_click
 from fgo.fgo_fight import FateGrandOrder
 
+import logging
+logger = logging.getLogger(__name__)
 
 def choose_match(cards, items):
     for name in items:
@@ -19,7 +21,7 @@ class FGOSimple(FateGrandOrder):
     def choose_assist_servant(self, idx=5):
         if idx <= 0:
             self.error("无助战")
-        while self.scroll_pos < 0.99:
+        while self.scroll_pos < self.data["Strategy"].get("AssistRange", 0.99):
             for name in self.data['Strategy']['Assist']:
                 if self.resource_in_screen(name):
                     logger.info("选择助战: %s", name)

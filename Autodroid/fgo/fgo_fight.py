@@ -3,13 +3,16 @@ from collections import defaultdict
 import json
 
 import numpy as np
+import requests
 
-from config_loader import config, logger
+from config_loader import config
 from simulator import SimulatorControl, parse_condition
 from simulator.image_tools import cv_crop, cv_save, load_map, load_resources, load_scenes, get_multi_match, get_match
-from simulator.win32_tools import drag, rand_click
+from simulator.win32_tools import drag, rand_click, rand_point
 from ocr import ocr
 
+import logging
+logger = logging.getLogger(__name__)
 
 class FateGrandOrder(SimulatorControl):
     scene_check_max_repeat = 60
@@ -17,7 +20,7 @@ class FateGrandOrder(SimulatorControl):
 
     def __init__(self, map_name="CommonConfig"):
         super().__init__()
-        self.combat_info = defaultdict(lambda: None)
+        self.combat_info = defaultdict(lambda: 0)
         self.best_equips = []
         self.data = load_map(map_name, self.section)
         logger.info("Update Resources %s", list(self.data['Resources'].keys()))
@@ -44,20 +47,26 @@ class FateGrandOrder(SimulatorControl):
         return (bottom - top0 - cross) / (total - cross)
 
     def servant_scroll(self, line):
-        if line < 3:
+        if not self.parse_scene_condition(["$all", [["滚动条-上"], ["滚动条-下"]]]):
+            self.notice("Can't Scroll")
+            return
+
+        if abs(line) < 3:
             mid_x = config.getint("Device", "MainWidth") / 2
             mid_y = config.getint("Device", "MainHeight") / 2
-            drag(self.hwnd, (mid_x, mid_y), (mid_x, mid_y - mid_y * line * 0.5), 30)
+            drag(self.hwnd, rand_point([mid_x, mid_y], [50, 10]), rand_point([mid_x, mid_y - mid_y * line * 0.5], [50, 10]), 30)
             return
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
+        width = self.resources["滚动条-上"]["Size"][0]
         top = top_xy[1]
         bottom = bot_xy[1]
-        x = (top_xy[0] + bot_xy[0]) // 2
+        x = top_xy[0] + width / 2
         middle = (top + bottom) // 2
         cross = bottom - top
         dy = line * cross * 0.37
-        drag(self.hwnd, (x, middle), (x, middle + dy), 30)
+        drag(self.hwnd, rand_point([x, middle], [width/6, cross / 6]), rand_point([x, middle + dy], [50, 10]), 30)
+        # drag(self.hwnd, [x, middle], [x, middle + dy], 30)
 
     def servant_scroll_to_top(self):
         _, top_xy = self.search_resource("滚动条-上")
@@ -95,6 +104,34 @@ class FateGrandOrder(SimulatorControl):
                 return True, [sx, sy, sx+w, sy+h]
         return False, None
 
+    def get_np(self, np_img):
+        gray = np_img.mean(axis=(0, 2))
+        length = len(gray)
+        light = []
+        for i in range(length):
+            if gray[i] > 110:
+                light.append((2, (i+1) / length))
+            elif gray[i] > 70:
+                light.append((1, (i+1) / length))
+            else:
+                light.append((0, (i+1) / length))
+        best = max(light)
+        if best[0] == 2:
+            return 100 + 100 * best[1]
+        if best[0] == 1:
+            return 100 * best[1]
+        if best[0] == 0:
+            return 0
+
+    def extract_np_info(self):
+        if self.current_scene_name == "选择指令卡":
+            multi = 1.4
+        else:
+            multi = 1
+        for i in range(3):
+            self.combat_info["NP%d" % (i+1)] = self.get_np(self.crop_resource("从者%d-NP" % (i+1)) * multi)
+
+
     def extract_combat_info(self, repeat=0):
         if not self.scene_changed:
             return
@@ -104,14 +141,16 @@ class FateGrandOrder(SimulatorControl):
         imgs  = [
             self.crop_resource("战斗轮次"),
             self.crop_resource("剩余敌人"),
-            self.crop_resource("回合数"),
-            self.crop_resource("从者1-NP"),
-            self.crop_resource("从者2-NP"),
-            self.crop_resource("从者3-NP"),
+            self.crop_resource("回合数")
         ]
-        info = ocr.images2text(*imgs)
-        logger.info("Get Combat Info %s(%d)", info, repeat)
         errors = []
+        try:
+            info = ocr.images2text(*imgs)
+            logger.info("Get Combat Info OCR: %s(%d)", info, repeat)
+        except (requests.HTTPError, requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout) as err:
+            info = []
+            errors.append(err)
+
         try:
             now, total = [int(t) for t in re.search(r"^(\d).*?(\d)$", info[0]).groups()]
             if self.combat_info["BattleNow"] != now:
@@ -121,7 +160,7 @@ class FateGrandOrder(SimulatorControl):
             self.combat_info["BattleNow"] = now
             self.combat_info["BattleTotal"] = total - now
             self.combat_info["BattleLeft"] = total - now
-            
+
         except (AttributeError, IndexError, ValueError) as err:
             errors.append(err)
 
@@ -142,21 +181,15 @@ class FateGrandOrder(SimulatorControl):
             else:
                 self.combat_info["Turn"] += 1
             errors.append(err)
-
-        try:
-            self.combat_info["NP"] = [0, 0, 0]
-            for i in range(3):
-                match = re.findall(r"(\d+)", info[i+3])
-                if match:
-                    self.combat_info["NP"][i] = int(''.join(match))
-        except (AttributeError, IndexError, ValueError) as err:
-            errors.append(err)
-
+        
+        self.extract_np_info()
         if errors:
             self.notice("OCR Errors %s" % errors)
             self.wait(1)
             self.make_screen_shot()
             self.extract_combat_info(repeat+1)
+            return
+        logger.info("CombatInfo: %s", self.combat_info)
 
     def choose_skills(self):
         pass
