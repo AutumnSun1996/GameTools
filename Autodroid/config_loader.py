@@ -3,13 +3,17 @@
 """
 import os
 import hashlib
+import yaml
 import logging
 import logging.config
 from configparser import ConfigParser
 import concurrent_log_handler
 
-logging.config.fileConfig("config/logging.conf")
-logger = logging.getLogger()
+with open("config/logging.yaml") as f:
+    conf = yaml.load(f)
+logging.config.dictConfig(conf)
+logger = logging.getLogger(__name__)
+logger.info("Loggin Inited...")
 
 config = ConfigParser()
 config.read("config/common.conf", encoding="UTF-8")
@@ -26,4 +30,3 @@ if not os.path.exists(name):
     raise FileNotFoundError("No Config File For This Device!")
 
 config.read(name, encoding="UTF-8")
-logging.handlers.RotatingFileHandler

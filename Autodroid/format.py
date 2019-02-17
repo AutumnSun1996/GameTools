@@ -2,6 +2,7 @@ import os
 import shutil
 import json
 
+
 config = {"MaxLineWidth": 80}
 
 
@@ -35,7 +36,7 @@ def encode(obj, prefix, level):
         for value in obj:
             key_str = ('  ' * level) + '  '
             lines.append(encode(value, key_str, level+1))
-            # print("For", key, "Get",)
+            # print("F，or", key, "Get",)
             # print(lines[-1])
         result = prefix + '[\n' + ',\n'.join(lines) + '\n' + ('  ' * level) + ']'
     else:

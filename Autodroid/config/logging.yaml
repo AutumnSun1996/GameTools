@@ -1,0 +1,54 @@
+version: 1
+formatters:
+    default:
+        format: '%(asctime)s - %(levelname)s - %(name)s - %(filename)s[%(lineno)d] - %(message)s'
+handlers:
+    console:
+        class : logging.StreamHandler
+        formatter: default
+        level   : INFO
+        stream  : ext://sys.stdout
+    main_file:
+        class : logging.handlers.ConcurrentRotatingFileHandler
+        formatter: default
+        level   : DEBUG
+        filename: logs/main.log
+        maxBytes: 10240000
+        backupCount: 10
+    azurlane_file:
+        class : logging.handlers.ConcurrentRotatingFileHandler
+        formatter: default
+        level   : DEBUG
+        filename: logs/azurlane.log
+        maxBytes: 10240000
+        backupCount: 10
+    fgo_file:
+        class : logging.handlers.ConcurrentRotatingFileHandler
+        formatter: default
+        level   : DEBUG
+        filename: logs/fgo.log
+        maxBytes: 10240000
+        backupCount: 10
+    error_file:
+        class : logging.handlers.ConcurrentRotatingFileHandler
+        formatter: default
+        level: WARNING
+        filename: logs/error.log
+        maxBytes: 10240000
+        backupCount: 10
+loggers:
+    __main__:
+        level   : DEBUG
+        handlers: [console, main_file, error_file]
+    config_loader:
+        level   : DEBUG
+        handlers: [console, main_file, error_file]
+    simulator:
+        level   : DEBUG
+        handlers: [console, main_file, error_file]
+    azurlane:
+        level   : DEBUG
+        handlers: [console, azurlane_file, error_file]
+    fgo:
+        level   : DEBUG
+        handlers: [console, fgo_file, error_file]
