@@ -8,7 +8,11 @@ import win32gui
 import win32com.client
 import numpy as np
 
-from config_loader import logger, config
+from config_loader import config
+
+import logging
+logger = logging.getLogger(__name__)
+
 
 
 def rescale_point(hwnd, point):
@@ -27,6 +31,45 @@ def click_at(hwnd, x, y, ):
                          win32con.MK_LBUTTON, pos)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
+def rand_point(p, diff=0.2):
+    if not isinstance(diff, (list, tuple)):
+        diff = [diff, diff]
+    
+    res = []
+    for i in range(2):
+        if isinstance(diff[i], float) and 0 < diff[i] < 2:
+            delta = p[i] * diff[i]
+        else:
+            delta = diff[i]
+        logger.debug("p[%d]=%.0f+-%.1f", i, p[i], delta)
+        if delta == 0:
+            res.append(delta)
+        else:
+            res.append(np.random.triangular(p[i] - delta, p[i], p[i] + delta))
+    logger.debug("Randomrize %s +- %s to %s", p, diff, res)
+    return res
+
+
+def rand_drag(hwnd, start, end, step=100):
+    start = rescale_point(hwnd, start)
+    end = rescale_point(hwnd, end)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
+                         win32con.MK_LBUTTON, win32api.MAKELONG(*start))
+
+    count = int(np.linalg.norm(np.array(start) - np.array(end)) / step)
+    # 最少需要2个坐标
+    count = max(count, 2)
+    points = np.zeros((count, 2))
+    points[:, 0] = np.linspace(start[0], end[0], count)
+    points[:, 1] = np.linspace(start[1], end[1], count)
+    points = points.astype('int')
+    for point in points:
+        time.sleep(0.05)
+        target = win32api.MAKELONG(*rand_point(point))
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
+                             win32con.MK_LBUTTON, target)
+    time.sleep(0.1)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
 def drag(hwnd, start, end, step=100):
     start = rescale_point(hwnd, start)
