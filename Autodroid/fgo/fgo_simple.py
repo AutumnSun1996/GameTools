@@ -19,7 +19,7 @@ class FGOSimple(FateGrandOrder):
         _, bot_xy = self.search_resource("滚动条-下")
 
     def choose_assist_servant(self):
-        if [s["Name"] for s in self.scene_history].count("助战选择") == 5:
+        if [s["Name"] for s in self.scene_history].count("助战选择") == 8:
             self.error("选择助战失败")
             return
 
@@ -31,6 +31,7 @@ class FGOSimple(FateGrandOrder):
                     return
             self.servant_scroll(1)
             self.wait(1)
+
         self.refresh_assist()
 
     def choose_skills(self):

@@ -37,7 +37,10 @@ class FateGrandOrder(SimulatorControl):
 
     @property
     def scroll_pos(self):
-        self.wait_till(["$all", [["滚动条-上"], ["滚动条-下"]]])
+        self.make_screen_shot()
+        if not self.parse_scene_condition(["$all", [["滚动条-上"], ["滚动条-下"]]]):
+            self.notice("No Scroll Bar")
+            return 1
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
         top = top_xy[1]
@@ -45,7 +48,9 @@ class FateGrandOrder(SimulatorControl):
         cross = bottom - top
         top0 = self.resources["滚动条范围"]["Offset"][1]
         total = self.resources["滚动条范围"]["Size"][1]
-        return (bottom - top0 - cross) / (total - cross)
+        ratio = (bottom - top0 - cross) / (total - cross)
+        logger.info("Scroll Ratio=%.3f", ratio)
+        return ratio
 
     def servant_scroll(self, line):
         if not self.parse_scene_condition(["$all", [["滚动条-上"], ["滚动条-下"]]]):
