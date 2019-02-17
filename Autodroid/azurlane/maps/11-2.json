@@ -1,0 +1,273 @@
+{
+  "Name": "11-2",
+  "Map": [
+    "OOONNONENEN",
+    "NNNENSEOOEN",
+    "FNONNEE?ONE",
+    "FNONeNOENBB",
+    "NOOOSEENOOO",
+    "NNENNONENNB"
+  ],
+  "FightCount": 7,
+  "ViewPort": ["D3", "D5", "H5", "H3"],
+  "Strategy": [
+    {
+      "Condition": [
+        "$any",
+        [
+          [
+            "$all",
+            [
+              ["$le", ["FightIndexMod"], 6],
+              [
+                "$not_",
+                [
+                  "$method",
+                  "resource_in_screen",
+                  "道中队伍"
+                ]
+              ]
+            ]
+          ],
+          [
+            "$all",
+            [
+              ["$gt", ["FightIndexMod"], 6],
+              [
+                "$method",
+                "resource_in_screen",
+                "道中队伍"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "toggle_fleet"},
+        {"Type": "Wait", "Time": 1}
+      ]
+    },
+    {
+      "Condition": ["$eq", ["FightIndexMod"], 5],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "search_for_bonus"}
+      ]
+    },
+    {
+      "Condition": ["$le", ["FightIndexMod"], 6],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "normal_fight"}
+      ]
+    },
+    {
+      "Condition": ["$gt", ["FightIndexMod"], 6],
+      "Actions": [
+        {"Type": "InnerCall", "Target": "search_for_boss"}
+      ]
+    }
+  ],
+  "Scenes": {
+    "战斗准备": {
+      "Name": "战斗准备",
+      "Condition": ["出击"],
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Condition": [
+            "$eq",
+            ["$getattr", ["$"], "last_scene_name"],
+            "遭遇伏击"
+          ],
+          "Target": "inc_fight_index",
+          "args": [-1]
+        },
+        {"Type": "InnerCall", "Target": "mood_detect"},
+        {"Type": "Click", "Target": "出击"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["加载中", "船坞已满"]
+    },
+    "外部地图": {
+      "Name": "外部地图",
+      "Condition": ["Clear@11-2"],
+      "Actions": [
+        {"Type": "Click", "Target": "Clear@11-2"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["外部地图", "进入地图确认"]
+    }
+  },
+  "Resources": {
+    "Lv": {
+      "Name": "Lv",
+      "MainSize": [1280, 720],
+      "Offset": [-8, -25],
+      "Size": [36, 32],
+      "Type": "MultiDynamic",
+      "Image": "lv_label.png",
+      "MaxDiff": 0.1
+    },
+    "Lv2": {
+      "Name": "Lv2",
+      "MainSize": [1280, 720],
+      "Offset": [-8, -25],
+      "Size": [27, 24],
+      "Type": "MultiDynamic",
+      "Image": "lv_label.png",
+      "MaxDiff": 0.1
+    },
+    "道中队伍": {
+      "Name": "道中队伍",
+      "MainSize": [1280, 720],
+      "Offset": [22, 102],
+      "Size": [80, 50],
+      "Type": "Static",
+      "Image": "君主.png"
+    },
+    "Clear@11-2": {
+      "Name": "Clear@11-2",
+      "MainSize": [1280, 720],
+      "Offset": [393, 491],
+      "Size": [70, 50],
+      "Type": "Static",
+      "Image": "Clear.png"
+    }
+  },
+  "Anchors": {
+    "11-2-C1": {
+      "Name": "11-2-C1",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "C1",
+      "Size": [82, 63],
+      "Offset": [42, 31],
+      "Image": "11-2-C1.png"
+    },
+    "11-2-A1": {
+      "Name": "11-2-A1",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "A1",
+      "Size": [122, 24],
+      "Offset": [44, 29],
+      "Image": "11-2-A1.png"
+    },
+    "11-2-F1": {
+      "Name": "11-2-F1",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "F1",
+      "Size": [82, 61],
+      "Offset": [40, 35],
+      "Image": "11-2-F1.png"
+    },
+    "11-2-G4": {
+      "Name": "11-2-G4",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "G4",
+      "Size": [105, 57],
+      "Offset": [50, 29],
+      "Image": "11-2-G4.png"
+    },
+    "11-2-C3": {
+      "Name": "11-2-C3",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "C3",
+      "Size": [94, 64],
+      "Offset": [47, 24],
+      "Image": "11-2-C3.png"
+    },
+    "11-2-C4": {
+      "Name": "11-2-C4",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "C4",
+      "Size": [91, 67],
+      "Offset": [48, 44],
+      "Image": "11-2-C4.png"
+    },
+    "11-2-B5": {
+      "Name": "11-2-B5",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "B5",
+      "Size": [106, 72],
+      "Offset": [40, 32],
+      "Image": "11-2-B5.png"
+    },
+    "11-2-C5": {
+      "Name": "11-2-C5",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "C5",
+      "Size": [119, 79],
+      "Offset": [57, 38],
+      "Image": "11-2-C5.png"
+    },
+    "11-2-D5": {
+      "Name": "11-2-D5",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "D5",
+      "Size": [112, 81],
+      "Offset": [62, 38],
+      "Image": "11-2-D5.png"
+    },
+    "11-2-F6": {
+      "Name": "11-2-F6",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "F6",
+      "Size": [116, 91],
+      "Offset": [56, 38],
+      "Image": "11-2-F6.png"
+    },
+    "11-2-H2": {
+      "Name": "11-2-H2",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "H2",
+      "Size": [84, 56],
+      "Offset": [3, 30],
+      "Image": "11-2-H2.png"
+    },
+    "11-2-I2": {
+      "Name": "11-2-I2",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "I2",
+      "Size": [100, 62],
+      "Offset": [51, 27],
+      "Image": "11-2-I2.png"
+    },
+    "11-2-I3": {
+      "Name": "11-2-I3",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "I3",
+      "Size": [102, 75],
+      "Offset": [52, 44],
+      "Image": "11-2-I3.png"
+    },
+    "11-2-I5": {
+      "Name": "11-2-I5",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "I5",
+      "Size": [126, 85],
+      "Offset": [62, 44],
+      "Image": "11-2-I5.png"
+    },
+    "11-2-K5": {
+      "Name": "11-2-K5",
+      "Type": "Anchor",
+      "MainSize": [1280, 720],
+      "OnMap": "K5",
+      "Size": [114, 87],
+      "Offset": [63, 41],
+      "Image": "11-2-K5.png"
+    }
+  }
+}
