@@ -83,7 +83,7 @@
     "牛角": {
       "Name": "牛角",
       "MainSize": [1280, 720],
-      "SearchArea": [[230, 200], [400, 520]],
+      "SearchArea": [[220, 180], [600, 440]],
       "Size": [300, 40],
       "ClickOffset": [10, 10],
       "ClickSize": [400, 140],
@@ -94,12 +94,45 @@
     "狗皇帝天下第一": {
       "Name": "狗皇帝天下第一",
       "MainSize": [1280, 720],
-      "SearchArea": [[230, 200], [400, 520]],
+      "SearchArea": [[220, 180], [600, 440]],
       "Size": [300, 40],
       "ClickOffset": [10, 10],
       "ClickSize": [400, 140],
       "Type": "Dynamic",
       "Image": "狗皇帝天下第一.png",
+      "MaxDiff": 0.04
+    },
+    "孔明+满破学者": {
+      "Name": "孔明+满破学者",
+      "MainSize": [1280, 720],
+      "SearchArea": [[40, 200], [180, 520]],
+      "Size": [150, 140],
+      "ClickOffset": [10, -10],
+      "ClickSize": [500, 140],
+      "Type": "Dynamic",
+      "Image": "孔明+满破学者.png",
+      "MaxDiff": 0.002
+    },
+    "孔明2+满破学者": {
+      "Name": "孔明2+满破学者",
+      "MainSize": [1280, 720],
+      "SearchArea": [[40, 200], [180, 520]],
+      "Size": [150, 140],
+      "ClickOffset": [10, -10],
+      "ClickSize": [500, 140],
+      "Type": "Dynamic",
+      "Image": "孔明2+满破学者.png",
+      "MaxDiff": 0.002
+    },
+    "孔明3+满破学者": {
+      "Name": "孔明3+满破学者",
+      "MainSize": [1280, 720],
+      "SearchArea": [[40, 200], [180, 520]],
+      "Size": [150, 140],
+      "ClickOffset": [10, -10],
+      "ClickSize": [500, 140],
+      "Type": "Dynamic",
+      "Image": "孔明3+满破学者.png",
       "MaxDiff": 0.04
     }
   }
