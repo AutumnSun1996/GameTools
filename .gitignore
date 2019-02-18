@@ -16,6 +16,7 @@ build
 # 资源文件
 碧蓝航线/Data
 Autodroid/PlayerSimulate/
+WarFrame/scripts/shot*.png
 
 
 **/dump/
