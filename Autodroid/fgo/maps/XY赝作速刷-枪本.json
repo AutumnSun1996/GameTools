@@ -1,0 +1,136 @@
+{
+  "Name": "XY赝作速刷-枪本",
+  "Description": "队伍: 全加成礼装; 北斋, 剑兰, 助战孔明",
+  "Scenes": {},
+  "Strategy": {
+    "Skills": [
+      {
+        "Condition": ["$eq", ["$mod", ["BattleNow"], 5], 1],
+        "Description": "北斋技能",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 1], [1, 2]]
+          }
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleNow"], 2], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "第二面第一回合",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 2], [3, 3], [2, 2], [2, 3]]
+          }
+        ]
+      },
+      {
+        "Condition": ["$eq", ["BattleLeft"], 0],
+        "Description": "第三面",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Description": "第三面第一回合",
+            "Condition": ["$eq", ["TurnOfBattle"], 1],
+            "Target": "use_skills",
+            "args": [[3, 1, 2], [1, 1], [1, 2]]
+          },
+          {"Type": "InnerCall", "Target": "extract_np_info"},
+          {
+            "Type": "InnerCall",
+            "Description": "北斋NP检查",
+            "Condition": [
+              "$ge",
+              [
+                "$getitem",
+                ["$getattr", ["$"], "combat_info"],
+                "NP1"
+              ],
+              100
+            ],
+            "Target": "use_skills",
+            "args": [[1, 3]]
+          }
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$le", ["BattleLeft"], 1], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "剑兰NP准备",
+        "Actions": [
+          {"Type": "InnerCall", "Target": "extract_np_info"},
+          {
+            "Type": "InnerCall",
+            "Condition": [
+              "$le",
+              [
+                "$getitem",
+                ["$getattr", ["$"], "combat_info"],
+                "NP2"
+              ],
+              100
+            ],
+            "Target": "use_skills",
+            "args": [[2, 1]]
+          }
+        ]
+      }
+    ],
+    "UseNP": [
+      {
+        "Target": 3,
+        "Description": "孔明宝具, 第三面后放",
+        "Condition": ["$le", ["BattleLeft"], 0]
+      },
+      {
+        "Target": 1,
+        "Description": "北斋宝具, 第三面后放",
+        "Condition": ["$le", ["BattleLeft"], 0]
+      },
+      {
+        "Target": 2,
+        "Description": "剑兰宝具, 第二面后放",
+        "Condition": ["$le", ["BattleLeft"], 1]
+      }
+    ],
+    "Notice": "下方出卡顺序已调整为蓝卡优先",
+    "CardChoice": [
+      [0, ["A+", "A0", "B+", "B0", "Q+", "Q0", "B-", "A-", "Q-"]],
+      [2, ["A+", "A0", "Q+", "B+", "B0", "Q0", "A-", "Q-", "B-"]],
+      [1, ["A+", "A0", "Q+", "B+", "B0", "Q0", "A-", "Q-", "B-"]]
+    ],
+    "Assist": ["孔明+满破学者", "孔明2+满破学者"],
+    "AssistRange": 0.5
+  },
+  "Resources": {
+    "孔明+满破学者": {
+      "Name": "孔明+满破学者",
+      "MainSize": [1280, 720],
+      "SearchArea": [[40, 200], [180, 520]],
+      "Size": [150, 140],
+      "ClickOffset": [10, -10],
+      "ClickSize": [500, 140],
+      "Type": "Dynamic",
+      "Image": "孔明+满破学者.png",
+      "MaxDiff": 0.04
+    },
+    "孔明2+满破学者": {
+      "Name": "孔明2+满破学者",
+      "MainSize": [1280, 720],
+      "SearchArea": [[40, 200], [180, 520]],
+      "Size": [150, 140],
+      "ClickOffset": [10, -10],
+      "ClickSize": [500, 140],
+      "Type": "Dynamic",
+      "Image": "孔明2+满破学者.png",
+      "MaxDiff": 0.04
+    }
+  }
+}
