@@ -1,6 +1,6 @@
 {
   "Name": "主号赝作速刷-骑本",
-  "Description": "队伍: 全加成礼装; 弗兰, 阿蒂拉, 助战-孔明",
+  "Description": "队伍: 全加成礼装; Assassin尼托, 机械伊丽亲, 狂弗兰",
   "Scenes-TMP": {
     "AP不足": {
       "Name": "AP不足",
@@ -16,13 +16,24 @@
   "Strategy": {
     "Skills": [
       {
+        "Condition": ["$eq", ["$mod", ["Turn"], 6], 1],
+        "Description": "定期释放: 6T",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 1]]
+          }
+        ]
+      },
+      {
         "Condition": ["$eq", ["$mod", ["Turn"], 7], 1],
         "Description": "定期释放: 7T",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 1], [2, 1], [2, 2], [1, 1]]
+            "args": [[2, 1], [2, 2], [1, 1]]
           }
         ]
       },
@@ -60,7 +71,7 @@
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 2]]
+            "args": [[3, 1]]
           }
         ]
       },
@@ -79,7 +90,6 @@
       },
       {
         "Condition": ["$eq", ["BattleLeft"], 0],
-        "Description": "伊丽亲宝具准备",
         "Actions": [
           {"Type": "InnerCall", "Target": "extract_np_info"},
           {
@@ -93,8 +103,24 @@
               ],
               100
             ],
+            "Description": "伊丽亲宝具准备",
             "Target": "use_skills",
             "args": [[2, 3], [0, 1, 2]]
+          },
+          {
+            "Type": "InnerCall",
+            "Condition": [
+              "$ge",
+              [
+                "$getitem",
+                ["$getattr", ["$"], "combat_info"],
+                "NP3"
+              ],
+              100
+            ],
+            "Description": "弗兰宝具准备",
+            "Target": "use_skills",
+            "args": [[3, 3]]
           }
         ]
       }
@@ -115,8 +141,8 @@
       },
       {
         "Target": 3,
-        "Description": "阿比宝具, 第二面后放",
-        "Condition": ["$le", ["BattleLeft"], 1]
+        "Description": "弗兰宝具, 第三面后放",
+        "Condition": ["$le", ["BattleLeft"], 0]
       }
     ],
     "CardChoice": [
@@ -125,7 +151,7 @@
       [1, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]]
     ],
     "Assist": ["迦勒底的学者"],
-    "AssistRange": 0.5
+    "AssistRange": 0.99
   },
   "Resources": {
     "迦勒底的学者": {
