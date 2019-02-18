@@ -32,7 +32,7 @@
       ],
       "Actions": [
         {"Type": "Click", "Target": "10连抽"},
-        {"Type": "Wait", "Time": 0.8}
+        {"Type": "Wait", "Time": 0.5}
       ],
       "Next": ["10连抽", "关卡选择", "结束", "重置奖品", "中间场景"]
     },
