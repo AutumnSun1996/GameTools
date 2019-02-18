@@ -65,7 +65,7 @@ class FGOSimple(FateGrandOrder):
             self.wait(0.5)
 
     def choose_cards(self):
-        self.wait(4)
+        self.wait(3)
         if self.combat_info["BattleNow"] == 1:
             self.click_at_resource("宝具2")
         elif self.combat_info["BattleNow"] == 2:
