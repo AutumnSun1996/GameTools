@@ -336,7 +336,7 @@ class SimulatorControl:
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        title = "自动脚本 - %s错误" % title
+        title = "自动脚本%s - %s错误" % (self.section, title)
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDYES:
             self.go_top()
@@ -350,7 +350,7 @@ class SimulatorControl:
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
-        title = "自动脚本 - %s警告" % title
+        title = "自动脚本%s - %s警告" % (self.section, title)
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDNO:
             self.go_top()
@@ -371,7 +371,7 @@ class SimulatorControl:
         logger.warning(message)
         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
-        title = "自动脚本 - %s提醒" % title
+        title = "自动脚本%s - %s提醒" % (self.section, title)
         res = ctypes.windll.user32.MessageBoxTimeoutA(
             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
         if res == win32con.IDNO:
