@@ -3,6 +3,7 @@
 
 By AutumnSun
 """
+import os
 import ctypes
 import time
 import datetime
@@ -17,7 +18,7 @@ import numpy as np
 import win32con
 import win32api
 
-from config_loader import config
+from config_loader import config, set_logging_dir
 from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
     cv_save, load_scenes, load_resources, load_image
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
@@ -76,11 +77,12 @@ class SimulatorControl:
         "Condition": True,
         "Actions": [{"Type": "Wait", "Time": 1}]
     }
-    section = None
+    section = "Main"
     scene_check_max_repeat = 5
 
     def __init__(self):
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
+        set_logging_dir(os.path.join(self.section, "logs"))
         self.scene_history = deque(maxlen=50)
         self.last_change = time.time()
         self.screen = None

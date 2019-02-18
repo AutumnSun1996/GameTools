@@ -9,9 +9,14 @@ import logging.config
 from configparser import ConfigParser
 import concurrent_log_handler
 
-with open("config/logging.yaml") as f:
-    conf = yaml.load(f)
-logging.config.dictConfig(conf)
+def set_logging_dir(log_dir="logs"):
+    with open("config/logging.yaml") as f:
+        content = f.read()
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    conf = yaml.load(content.format(base_log_dir=log_dir))
+    logging.config.dictConfig(conf)
+
 logger = logging.getLogger(__name__)
 logger.info("Loggin Inited...")
 

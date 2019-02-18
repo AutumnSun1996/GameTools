@@ -12,29 +12,15 @@ handlers:
         class : logging.handlers.ConcurrentRotatingFileHandler
         formatter: default
         level   : DEBUG
-        filename: logs/main.log
-        maxBytes: 10240000
-        backupCount: 10
-    azurlane_file:
-        class : logging.handlers.ConcurrentRotatingFileHandler
-        formatter: default
-        level   : DEBUG
-        filename: logs/azurlane.log
-        maxBytes: 10240000
-        backupCount: 10
-    fgo_file:
-        class : logging.handlers.ConcurrentRotatingFileHandler
-        formatter: default
-        level   : DEBUG
-        filename: logs/fgo.log
-        maxBytes: 10240000
+        filename: {base_log_dir}/main.log
+        maxBytes: 1024000
         backupCount: 10
     error_file:
         class : logging.handlers.ConcurrentRotatingFileHandler
         formatter: default
         level: WARNING
         filename: logs/error.log
-        maxBytes: 10240000
+        maxBytes: 1024000
         backupCount: 10
 loggers:
     __main__:
@@ -48,7 +34,7 @@ loggers:
         handlers: [console, main_file, error_file]
     azurlane:
         level   : DEBUG
-        handlers: [console, azurlane_file, error_file]
+        handlers: [console, main_file, error_file]
     fgo:
         level   : DEBUG
-        handlers: [console, fgo_file, error_file]
+        handlers: [console, main_file, error_file]
