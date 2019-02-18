@@ -22,7 +22,7 @@ class FGOSimple(FGOBase):
     def choose_skills(self):
         if self.combat_info["Turn"] == 1:
             self.wait_till_scene("选择技能", 1, 20)
-            self.wait(4)
+            self.wait(3)
         for item in self.data["Strategy"]["Skills"]:
             if parse_condition(item["Condition"], self, self.combat_info.__getitem__):
                 logger.info("Skill Strategy Passed: %s", item)
@@ -50,12 +50,12 @@ class FGOSimple(FGOBase):
                 self.click_at_resource("进行更替")
                 self.wait(3)
 
-            self.wait(2)
+            # self.wait(1)
             self.make_screen_shot()
-            self.wait_till_scene("选择技能", 1, 20)
+            self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
 
-            if parse_condition(["$any", [["从者信息"], ["技能信息"]]], self, self.resource_in_screen):
+            if self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"]]]):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
 
