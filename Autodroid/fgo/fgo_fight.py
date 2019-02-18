@@ -117,7 +117,7 @@ class FateGrandOrder(SimulatorControl):
         for i in range(length):
             if gray[i] > 110:
                 light.append((2, (i+1) / length))
-            elif gray[i] > 65:
+            elif gray[i] > 60:
                 light.append((1, (i+1) / length))
             else:
                 light.append((0, (i+1) / length))
@@ -164,7 +164,7 @@ class FateGrandOrder(SimulatorControl):
             else:
                 self.combat_info["TurnOfBattle"] += 1
             self.combat_info["BattleNow"] = now
-            self.combat_info["BattleTotal"] = total - now
+            self.combat_info["BattleTotal"] = total
             self.combat_info["BattleLeft"] = total - now
 
         except (AttributeError, IndexError, ValueError) as err:
@@ -195,7 +195,7 @@ class FateGrandOrder(SimulatorControl):
             self.make_screen_shot()
             self.extract_combat_info(repeat+1)
             return
-        logger.info("CombatInfo: %s", self.combat_info)
+        logger.info("extract_combat_info: %s", self.combat_info)
 
     def choose_skills(self):
         pass
