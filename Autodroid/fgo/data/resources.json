@@ -740,5 +740,12 @@
     "Size": [130, 36],
     "Type": "Static",
     "Image": "进行更替.png"
+  },
+  "无法行动": {
+    "Name": "无法行动",
+    "MainSize": [1280, 720],
+    "Size": [211, 58],
+    "Type": "Dynamic",
+    "Image": "无法行动.png"
   }
 }
