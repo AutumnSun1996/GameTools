@@ -16,24 +16,13 @@
   "Strategy": {
     "Skills": [
       {
-        "Condition": ["$eq", ["$mod", ["Turn"], 6], 1],
-        "Description": "定期释放: 6T",
-        "Actions": [
-          {
-            "Type": "InnerCall",
-            "Target": "use_skills",
-            "args": [[3, 1]]
-          }
-        ]
-      },
-      {
         "Condition": ["$eq", ["$mod", ["Turn"], 7], 1],
         "Description": "定期释放: 7T",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[2, 1], [2, 2], [1, 1]]
+            "args": [[3, 1], [2, 1], [2, 2], [1, 1]]
           }
         ]
       },
@@ -71,14 +60,14 @@
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 1]]
+            "args": [[3, 2]]
           }
         ]
       },
       {
         "Condition": [
           "$all",
-          [["$le", ["BattleLeft"], 1], ["$eq", ["TurnOfBattle"], 2]]
+          [["$le", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 2]]
         ],
         "Actions": [
           {
@@ -106,21 +95,6 @@
             "Description": "伊丽亲宝具准备",
             "Target": "use_skills",
             "args": [[2, 3], [0, 1, 2]]
-          },
-          {
-            "Type": "InnerCall",
-            "Condition": [
-              "$ge",
-              [
-                "$getitem",
-                ["$getattr", ["$"], "combat_info"],
-                "NP3"
-              ],
-              100
-            ],
-            "Description": "弗兰宝具准备",
-            "Target": "use_skills",
-            "args": [[3, 3]]
           }
         ]
       }
@@ -136,7 +110,7 @@
       },
       {
         "Target": 2,
-        "Description": "机械伊丽亲宝具, 第二面放",
+        "Description": "机械伊丽亲宝具, 第二面后放",
         "Condition": ["$le", ["BattleLeft"], 1]
       },
       {
