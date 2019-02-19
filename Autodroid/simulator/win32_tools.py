@@ -56,8 +56,10 @@ def rand_drag(hwnd, start, end, step=100):
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, win32api.MAKELONG(*start))
     
-    dist = np.linalg.norm(np.array(start) - np.array(end))
-    delta = [int(0.2*dist), int(0.2*dist)]
+    dx = abs(start[0]-end[0])
+    dy = abs(start[1]-end[1])
+    dist = np.sart(dx**2+dy**2)
+    delta = [max(5, int(0.2*dx)), max(5, int(0.2*dy))]
     # 最少需要2个坐标
     count = max(int(dist / step), 2)
     points = np.zeros((count, 2))
