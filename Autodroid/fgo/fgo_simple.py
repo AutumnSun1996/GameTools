@@ -17,18 +17,26 @@ def choose_match(cards, items):
 class FGOSimple(FateGrandOrder):
     def at_end(self):
         _, bot_xy = self.search_resource("滚动条-下")
-
+    
+    def check_assist(self):
+        self.make_screen_shot()
+        for name in self.data['Strategy']['Assist']:
+            if self.resource_in_screen(name):
+                logger.info("选择助战: %s", name)
+                self.click_at_resource(name)
+                return True
+        return False
+    
     def choose_assist_servant(self):
         if [s["Name"] for s in self.scene_history].count("助战选择") == 8:
             self.error("选择助战失败")
             return
 
-        while self.scroll_pos < self.data["Strategy"].get("AssistRange", 0.99):
-            for name in self.data['Strategy']['Assist']:
-                if self.resource_in_screen(name):
-                    logger.info("选择助战: %s", name)
-                    self.click_at_resource(name)
-                    return
+        while True:
+            if self.check_assist():
+                return
+            if self.scroll_pos >= self.data["Strategy"].get("AssistRange", 0.99):
+                break
             self.servant_scroll(1)
             self.wait(1)
 
