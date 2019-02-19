@@ -8,7 +8,7 @@ import requests
 from config_loader import config
 from simulator import SimulatorControl, parse_condition
 from simulator.image_tools import cv_crop, cv_save, load_map, load_resources, load_scenes, get_multi_match, get_match
-from simulator.win32_tools import drag, rand_click, rand_point
+from simulator.win32_tools import drag, rand_drag, rand_click, rand_point
 from ocr import ocr
 
 import logging
@@ -60,7 +60,7 @@ class FateGrandOrder(SimulatorControl):
         if abs(line) < 3:
             mid_x = config.getint("Device", "MainWidth") / 2
             mid_y = config.getint("Device", "MainHeight") / 2
-            drag(self.hwnd, rand_point([mid_x, mid_y], [50, 10]), rand_point([mid_x, mid_y - mid_y * line * 0.5], [50, 10]), 30)
+            rand_drag(self.hwnd, rand_point([mid_x, mid_y], [50, 10]), rand_point([mid_x, mid_y - mid_y * line * 0.5], [50, 10]), 30)
             return
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
@@ -71,7 +71,7 @@ class FateGrandOrder(SimulatorControl):
         middle = (top + bottom) // 2
         cross = bottom - top
         dy = line * cross * 0.37
-        drag(self.hwnd, rand_point([x, middle], [width/6, cross / 6]), rand_point([x, middle + dy], [50, 10]), 30)
+        rand_drag(self.hwnd, rand_point([x, middle], [width/6, cross / 6]), rand_point([x, middle + dy], [50, 10]), 30)
         # drag(self.hwnd, [x, middle], [x, middle + dy], 30)
 
     def servant_scroll_to_top(self):
@@ -81,7 +81,7 @@ class FateGrandOrder(SimulatorControl):
         bottom = bot_xy[1]
         x = (top_xy[0] + bot_xy[0]) // 2
         middle = (top + bottom) // 2
-        drag(self.hwnd, (x, middle), (x, 0), 30)
+        rand_drag(self.hwnd, (x, middle), (x, 0), 30)
 
     def choose_assist_servant(self):
         for target in self.best_equips:
