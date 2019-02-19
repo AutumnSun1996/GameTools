@@ -37,7 +37,7 @@ def rand_point(p, diff=0.2):
     
     res = []
     for i in range(2):
-        if isinstance(diff[i], float) and 0 < diff[i] < 2:
+        if isinstance(diff[i], float) and 0 < diff[i] <= 1:
             delta = p[i] * diff[i]
         else:
             delta = diff[i]
@@ -55,17 +55,18 @@ def rand_drag(hwnd, start, end, step=100):
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, win32api.MAKELONG(*start))
-
-    count = int(np.linalg.norm(np.array(start) - np.array(end)) / step)
+    
+    dist = np.linalg.norm(np.array(start) - np.array(end))
+    delta = [int(0.2*dist), int(0.2*dist)]
     # 最少需要2个坐标
-    count = max(count, 2)
+    count = max(int(dist / step), 2)
     points = np.zeros((count, 2))
     points[:, 0] = np.linspace(start[0], end[0], count)
     points[:, 1] = np.linspace(start[1], end[1], count)
     points = points.astype('int')
     for point in points:
         time.sleep(0.05)
-        target = win32api.MAKELONG(*rand_point(point))
+        target = win32api.MAKELONG(*rand_point(point, delta))
         win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
                              win32con.MK_LBUTTON, target)
     time.sleep(0.1)
