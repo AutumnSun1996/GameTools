@@ -14,6 +14,7 @@ from ocr import ocr
 import logging
 logger = logging.getLogger(__name__)
 
+
 class FateGrandOrder(SimulatorControl):
     scene_check_max_repeat = 60
     section = "FGO"
@@ -60,7 +61,8 @@ class FateGrandOrder(SimulatorControl):
         if abs(line) < 3:
             mid_x = config.getint("Device", "MainWidth") / 2
             mid_y = config.getint("Device", "MainHeight") / 2
-            rand_drag(self.hwnd, rand_point([mid_x, mid_y], [50, 10]), rand_point([mid_x, mid_y - mid_y * line * 0.5], [50, 10]), 30)
+            rand_drag(self.hwnd, rand_point([mid_x, mid_y], [50, 10]),
+                      rand_point([mid_x, mid_y - mid_y * line * 0.5], [50, 10]), 30)
             return
         _, top_xy = self.search_resource("滚动条-上")
         _, bot_xy = self.search_resource("滚动条-下")
@@ -137,14 +139,13 @@ class FateGrandOrder(SimulatorControl):
         for i in range(3):
             self.combat_info["NP%d" % (i+1)] = self.get_np(self.crop_resource("从者%d-NP" % (i+1)) * multi)
 
-
     def extract_combat_info(self, repeat=0):
         if not self.scene_changed:
             return
         if repeat > 3:
             self.notice("extract_combat_info Failed")
             return
-        imgs  = [
+        imgs = [
             self.crop_resource("战斗轮次"),
             self.crop_resource("剩余敌人"),
             self.crop_resource("回合数")
@@ -187,7 +188,7 @@ class FateGrandOrder(SimulatorControl):
             else:
                 self.combat_info["Turn"] += 1
             errors.append(err)
-        
+
         self.extract_np_info()
         if errors:
             self.notice("OCR Errors %s" % errors)
@@ -218,9 +219,11 @@ class FateGrandOrder(SimulatorControl):
         return best_diff, best
 
     def extract_card_info(self, image):
-        # if self.resource_in_image(image, "眩晕"):
-            # result = "--"
-        # else:
+        if self.resource_in_image(image, "无法行动"):
+            result = "无法行动"
+        else:
+            result = ""
+
         best_diff = 1
         color = ""
         for name in ["Buster", "Arts", "Quick"]:
@@ -228,16 +231,15 @@ class FateGrandOrder(SimulatorControl):
             if diff < best_diff:
                 best_diff = diff
                 color = name[0]
+        result += color
 
-        relation = None
-        for name in ["克制", "抵抗"]:
-            res = self.resources[name]
-            diff, _ = get_match(image, res["ImageData"])
-            if diff < res.get("MaxDiff", 0.02):
-                relation = name
-                break
-        relation = {"克制": "+", "抵抗": "-"}.get(relation, "0")
-        result = color + relation
+        if self.resource_in_image(image, "克制"):
+            relation = "+"
+        elif self.resource_in_image(image, "抵抗"):
+            relation = "-"
+        else:
+            relation = "0"
+        result += relation
         logger.info("Found Card: %s", result)
         return result
 
