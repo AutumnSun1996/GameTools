@@ -180,3 +180,41 @@ def check_scales(needle, scales, target=None, show_full=False):
             best = {"diff": diff, "scale": scale, "size": [w, h]}
         show_crop(*pos, w, h, img=target, show_full=show_full)
     print(best)
+
+def check_resource(name, image=None):
+    s = const["s"]
+    if image is None:
+        image = s.screen
+
+    draw = image.copy()
+    
+    info = s.resources[name]
+    
+    if 'ImageData' in info:
+        target = info['ImageData']
+        print("Target")
+        show(target)
+
+    if "SearchArea" in info:
+        xy, wh = info["SearchArea"]
+        x, y = xy
+        w, h = wh
+        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 0, 0), 1)
+
+    ret, offsets = s.search_resource(name, image)
+    print("search_resource:", ret, offsets)
+    for offset in np.reshape(offsets, (-1, 2)):
+        dx, dy = offset
+        w, h = info["Size"]
+        cv.rectangle(draw, (dx, dy), (dx+w, dy+h), (255, 255, 0), 1)
+
+        if "ClickOffset" in info or "ClickSize" in info:
+            x, y = info.get("ClickOffset", info.get("Offset", (0, 0)))
+            w, h = info.get("ClickSize", info["Size"])
+            cv.rectangle(draw, (x+dx, y+dy), (x+dx+w, y+dy+h), (0, 255, 0), 1)
+
+        if "CropOffset" in info or "CropSize" in info:
+            x, y = info.get("CropOffset", info.get("Offset", (0, 0)))
+            w, h = info.get("CropSize", info["Size"])
+            cv.rectangle(draw, (x+dx, y+dy), (x+dx+w, y+dy+h), (0, 0, 255), 1)
+    show(draw)
