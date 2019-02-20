@@ -1,29 +1,67 @@
 {
-  "Name": "小号赝作速刷",
-  "Description": "队伍: 全加成礼装; Ruler贞德, 北斋, 助战北斋",
+  "Name": "小号赝作速刷-枪本",
+  "Description": "队伍: 全加成礼装; Ruler贞德, 北斋, 助战阿蒂拉",
   "Strategy": {
     "Skills": [
       {
+        "Condition": ["$eq", ["$mod", ["Turn"], 6], 1],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 1], [2, 1], [2, 2], [3, 1], [3, 2]]
+            "args": [[3, 3]]
           }
         ]
       },
-      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
       {
-        "Condition": [
-          "$all",
-          [["$eq", ["BattleLeft"], 0], ["$ge", ["NP3"], 100]]
-        ],
-        "Description": "助战北斋宝具准备",
+        "Condition": ["$eq", ["$mod", ["Turn"], 7], 1],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 3], [0, 2, 3]]
+            "args": [[2, 1], [2, 2]]
+          }
+        ]
+      },
+      {
+        "Condition": ["$eq", ["$mod", ["Turn"], 8], 1],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 1]]
+          }
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "选择敌人",
+        "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 1},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Condition": ["$eq", ["BattleLeft"], 0],
+        "Description": "阿蒂拉宝具准备",
+        "Actions": [
+          {"Type": "InnerCall", "Target": "extract_np_info"},
+          {
+            "Type": "InnerCall",
+            "Condition": [
+              "$ge",
+              [
+                "$getitem",
+                ["$getattr", ["$"], "combat_info"],
+                "NP3"
+              ],
+              100
+            ],
+            "Target": "use_skills",
+            "args": [[3, 1], [0, 2, 3]]
           }
         ]
       }
@@ -44,7 +82,7 @@
       [2, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]],
       [1, ["B+", "A+", "Q+", "B0", "A0", "Q0", "A-", "Q-", "B-"]]
     ],
-    "Assist": ["花叶二重奏", "学者北斋"],
+    "Assist": ["五河士道"],
     "AssistRange": 0.5
   },
   "TMP-Scene": {
@@ -88,6 +126,15 @@
       "Size": [300, 35],
       "Type": "Dynamic",
       "Image": "花叶二重奏.png"
+    },
+    "五河士道": {
+      "Name": "五河士道",
+      "SearchArea": [[220, 180], [600, 440]],
+      "MainSize": [1280, 720],
+      "ClickSize": [400, 160],
+      "Size": [300, 35],
+      "Type": "Dynamic",
+      "Image": "五河士道.png"
     },
     "助战1": {
       "Name": "助战1",

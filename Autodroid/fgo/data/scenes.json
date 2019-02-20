@@ -1,4 +1,13 @@
 {
+  "地图选择": {
+    "Name": "地图选择",
+    "Condition": ["$all", [["右下-菜单"], ["左上-管理室"], ["下一个"]]],
+    "Actions": [
+      {"Type": "Click", "Target": "下一个"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["关卡选择"]
+  },
   "关卡选择": {
     "Name": "关卡选择",
     "Condition": ["$all", [["右下-菜单"], ["左上-关闭"]]],
@@ -31,6 +40,93 @@
     ],
     "Next": ["助战选择"]
   },
+  "获得物品": {
+    "Name": "获得物品",
+    "Condition": ["获得物品"],
+    "Actions": [
+      {"Type": "Wait", "Time": 1},
+      {"Type": "InnerCall", "Target": "make_screen_shot"},
+      {"Type": "InnerCall", "Target": "save_record"},
+      {"Type": "InnerCall", "Target": "reset_combat_info"},
+      {"Type": "Click", "Target": "下一步"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": [
+      "获得物品",
+      "地图选择",
+      "关卡选择",
+      "任务奖励",
+      "申请好友",
+      "剧情"
+    ]
+  },
+  "申请好友": {
+    "Name": "申请好友",
+    "Condition": ["申请好友"],
+    "Actions": [
+      {"Type": "Click", "Target": "申请好友"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": [
+      "好友申请失败",
+      "地图选择",
+      "关卡选择",
+      "任务奖励",
+      "剧情",
+      "申请好友"
+    ]
+  },
+  "好友申请失败": {
+    "Name": "好友申请失败",
+    "Condition": ["好友申请失败-关闭"],
+    "Actions": [
+      {"Type": "Click", "Target": "好友申请失败-关闭"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["地图选择", "关卡选择", "任务奖励", "剧情"]
+  },
+  "任务奖励": {
+    "Name": "任务奖励",
+    "Condition": ["任务奖励"],
+    "Actions": [
+      {"Type": "Click", "Target": "任务奖励"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["地图选择", "关卡选择", "任务奖励", "剧情"]
+  },
+  "队伍确认": {
+    "Name": "队伍确认",
+    "Condition": ["队伍确认"],
+    "Actions": [
+      {"Type": "Click", "Target": "开始任务"},
+      {"Type": "Wait", "Time": 1}
+    ],
+    "Next": ["加载关卡", "选择技能", "队伍确认", "剧情"]
+  },
+  "加载关卡": {
+    "Name": "加载关卡",
+    "Condition": ["加载提示"],
+    "Actions": [{"Type": "Wait", "Time": 1}],
+    "Next": ["加载关卡", "选择技能", "剧情"]
+  },
+  "剧情": {
+    "Name": "剧情",
+    "Condition": ["剧情-对话框"],
+    "Actions": [
+      {"Type": "Click", "Target": "剧情-跳过"},
+      {"Type": "Wait", "Time": 1},
+      {"Type": "Click", "Target": "剧情-确认跳过"},
+      {"Type": "Wait", "Time": 3}
+    ],
+    "Next": [
+      "加载关卡",
+      "选择技能",
+      "剧情",
+      "任务奖励",
+      "地图选择",
+      "关卡选择"
+    ]
+  },
   "助战选择": {
     "Name": "助战选择",
     "Condition": ["$all", [["助战选择"], ["$not_", ["助战更新失败"]]]],
@@ -48,21 +144,6 @@
       {"Type": "Wait", "Time": 5}
     ],
     "Next": ["助战选择"]
-  },
-  "队伍确认": {
-    "Name": "队伍确认",
-    "Condition": ["队伍确认"],
-    "Actions": [
-      {"Type": "Click", "Target": "开始任务"},
-      {"Type": "Wait", "Time": 1}
-    ],
-    "Next": ["加载关卡", "选择技能", "队伍确认"]
-  },
-  "加载关卡": {
-    "Name": "加载关卡",
-    "Condition": ["加载提示"],
-    "Actions": [{"Type": "Wait", "Time": 1}],
-    "Next": ["加载关卡", "选择技能"]
   },
   "选择技能": {
     "Name": "选择技能",
@@ -136,44 +217,5 @@
       {"Type": "Wait", "Time": 0.5}
     ],
     "Next": ["获得经验", "获得物品"]
-  },
-  "获得物品": {
-    "Name": "获得物品",
-    "Condition": ["获得物品"],
-    "Actions": [
-      {"Type": "Wait", "Time": 1},
-      {"Type": "InnerCall", "Target": "make_screen_shot"},
-      {"Type": "InnerCall", "Target": "save_record"},
-      {"Type": "Click", "Target": "下一步"},
-      {"Type": "Wait", "Time": 1}
-    ],
-    "Next": ["获得物品", "关卡选择", "任务奖励", "申请好友"]
-  },
-  "申请好友": {
-    "Name": "申请好友",
-    "Condition": ["申请好友"],
-    "Actions": [
-      {"Type": "Click", "Target": "申请好友"},
-      {"Type": "Wait", "Time": 1}
-    ],
-    "Next": ["好友申请失败", "关卡选择", "任务奖励", "申请好友"]
-  },
-  "好友申请失败": {
-    "Name": "好友申请失败",
-    "Condition": ["好友申请失败-关闭"],
-    "Actions": [
-      {"Type": "Click", "Target": "好友申请失败-关闭"},
-      {"Type": "Wait", "Time": 1}
-    ],
-    "Next": ["关卡选择", "任务奖励"]
-  },
-  "任务奖励": {
-    "Name": "任务奖励",
-    "Condition": ["任务奖励"],
-    "Actions": [
-      {"Type": "Click", "Target": "任务奖励"},
-      {"Type": "Wait", "Time": 1}
-    ],
-    "Next": ["关卡选择", "任务奖励"]
   }
 }

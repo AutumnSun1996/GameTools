@@ -243,7 +243,8 @@
   "助战从者定位": {
     "Name": "最后登录",
     "MainSize": [1280, 720],
-    "Offset": [-778, -18],
+    "CropOffset": [-780, -20],
+    "CropSize": [1040, 190],
     "Size": [98, 38],
     "SearchArea": [[820, 195], [130, 375]],
     "Type": "MultiDynamic",
@@ -361,10 +362,11 @@
   "从者技能-剩余": {
     "Name": "从者技能-剩余",
     "MainSize": [1280, 720],
-    "Positions": [[14, 218], [108, 218], [201, 218]],
+    "Offset": [3, 57],
     "Size": [18, 18],
     "Type": "Static",
-    "Image": "从者技能-剩余.png"
+    "Image": "从者技能-剩余.png",
+    "MaxDiff": 0.14
   },
   "从者职阶-文字": {
     "Name": "从者职阶-文字",
@@ -388,7 +390,7 @@
     "Type": "Static"
   },
   "Cards": {
-    "Name": "从者NP",
+    "Name": "Cards",
     "MainSize": [1280, 720],
     "Positions": [
       [35, 355],
@@ -440,152 +442,52 @@
     "Type": "Static",
     "Image": "助战-确认更新.png"
   },
-  "角色1技能1": {
-    "Name": "角色1技能1",
+  "从者技能列表": {
+    "Name": "从者技能列表",
     "MainSize": [1280, 720],
-    "Offset": [38, 546],
     "Size": [64, 64],
-    "Type": "Static"
+    "CropOffset": [-12, -5],
+    "CropSize": [80, 80],
+    "Type": "MultiStatic",
+    "Positions": [
+      [39, 546],
+      [132, 546],
+      [226, 546],
+      [356, 546],
+      [450, 546],
+      [543, 546],
+      [675, 546],
+      [769, 546],
+      [863, 546]
+    ]
   },
-  "角色1技能2": {
-    "Name": "角色1技能2",
+  "御主技能列表": {
+    "Name": "御主技能列表",
     "MainSize": [1280, 720],
-    "Offset": [132, 546],
     "Size": [64, 64],
-    "Type": "Static"
+    "Positions": [[874, 280], [963, 280], [1052, 280]],
+    "Type": "MultiStatic"
   },
-  "角色1技能3": {
-    "Name": "角色1技能3",
+  "技能目标列表": {
+    "Name": "技能目标列表",
     "MainSize": [1280, 720],
-    "Offset": [226, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色2技能1": {
-    "Name": "角色2技能1",
-    "MainSize": [1280, 720],
-    "Offset": [356, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色2技能2": {
-    "Name": "角色2技能2",
-    "MainSize": [1280, 720],
-    "Offset": [450, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色2技能3": {
-    "Name": "角色2技能3",
-    "MainSize": [1280, 720],
-    "Offset": [544, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色3技能1": {
-    "Name": "角色3技能1",
-    "MainSize": [1280, 720],
-    "Offset": [674, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色3技能2": {
-    "Name": "角色3技能2",
-    "MainSize": [1280, 720],
-    "Offset": [768, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "角色3技能3": {
-    "Name": "角色3技能3",
-    "MainSize": [1280, 720],
-    "Offset": [862, 546],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "御主技能1": {
-    "Name": "御主技能1",
-    "MainSize": [1280, 720],
-    "Offset": [874, 280],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "御主技能2": {
-    "Name": "御主技能2",
-    "MainSize": [1280, 720],
-    "Offset": [963, 280],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "御主技能3": {
-    "Name": "御主技能3",
-    "MainSize": [1280, 720],
-    "Offset": [1052, 280],
-    "Size": [64, 64],
-    "Type": "Static"
-  },
-  "目标1-3": {
-    "Name": "目标1-3",
-    "MainSize": [1280, 720],
-    "Offset": [220, 320],
     "Size": [200, 200],
-    "Type": "Static"
+    "Positions": [[220, 320], [540, 320], [860, 320]],
+    "Type": "MultiStatic"
   },
-  "目标2-3": {
-    "Name": "目标2-3",
+  "换人目标列表": {
+    "Name": "换人目标列表",
     "MainSize": [1280, 720],
-    "Offset": [540, 320],
-    "Size": [200, 200],
-    "Type": "Static"
-  },
-  "目标3-3": {
-    "Name": "目标3-3",
-    "MainSize": [1280, 720],
-    "Offset": [860, 320],
-    "Size": [200, 200],
-    "Type": "Static"
-  },
-  "目标1-4": {
-    "Name": "目标1-4",
-    "MainSize": [1280, 720],
-    "Offset": [60, 270],
     "Size": [150, 150],
-    "Type": "Static"
-  },
-  "目标2-4": {
-    "Name": "目标2-4",
-    "MainSize": [1280, 720],
-    "Offset": [260, 270],
-    "Size": [150, 150],
-    "Type": "Static"
-  },
-  "目标3-4": {
-    "Name": "目标3-4",
-    "MainSize": [1280, 720],
-    "Offset": [460, 270],
-    "Size": [150, 150],
-    "Type": "Static"
-  },
-  "目标4-4": {
-    "Name": "目标4-4",
-    "MainSize": [1280, 720],
-    "Offset": [660, 270],
-    "Size": [150, 150],
-    "Type": "Static"
-  },
-  "目标5-4": {
-    "Name": "目标5-4",
-    "MainSize": [1280, 720],
-    "Offset": [860, 270],
-    "Size": [150, 150],
-    "Type": "Static"
-  },
-  "目标6-4": {
-    "Name": "目标6-4",
-    "MainSize": [1280, 720],
-    "Offset": [1060, 270],
-    "Size": [150, 150],
-    "Type": "Static"
+    "Positions": [
+      [60, 270],
+      [260, 270],
+      [460, 270],
+      [660, 270],
+      [860, 270],
+      [1060, 270]
+    ],
+    "Type": "MultiStatic"
   },
   "申请好友": {
     "Name": "申请好友",
@@ -643,6 +545,14 @@
     "Type": "Static",
     "Image": "御主技能.png"
   },
+  "左上-管理室": {
+    "Name": "左上-管理室",
+    "MainSize": [1280, 720],
+    "Offset": [40, 20],
+    "Size": [120, 50],
+    "Type": "Static",
+    "Image": "左上-管理室.png"
+  },
   "左上-关闭": {
     "Name": "左上-关闭",
     "MainSize": [1280, 720],
@@ -650,6 +560,40 @@
     "Size": [60, 30],
     "Type": "Static",
     "Image": "左上-关闭.png"
+  },
+  "下一个": {
+    "Name": "下一个",
+    "MainSize": [1280, 720],
+    "ClickOffset": [5, 150],
+    "ClickSize": [100, 40],
+    "Size": [104, 66],
+    "Type": "Dynamic",
+    "Image": "下一个.png",
+    "MaxDiff": 0.08
+  },
+  "剧情-对话框": {
+    "Name": "剧情-对话框",
+    "MainSize": [1280, 720],
+    "Offset": [0, 490],
+    "Size": [500, 62],
+    "Type": "Static",
+    "Image": "剧情-对话框.png"
+  },
+  "剧情-跳过": {
+    "Name": "剧情-跳过",
+    "MainSize": [1280, 720],
+    "Offset": [1124, 10],
+    "Size": [146, 60],
+    "Type": "Static",
+    "Image": "剧情-跳过.png"
+  },
+  "剧情-确认跳过": {
+    "Name": "剧情-确认跳过",
+    "MainSize": [1280, 720],
+    "Offset": [720, 540],
+    "Size": [200, 40],
+    "Type": "Static",
+    "Image": "剧情-确认跳过.png"
   },
   "万华镜奶光": {
     "Name": "万华镜奶光",
@@ -744,8 +688,9 @@
   "无法行动": {
     "Name": "无法行动",
     "MainSize": [1280, 720],
-    "Size": [211, 58],
+    "Size": [126, 57],
     "Type": "Dynamic",
-    "Image": "无法行动.png"
+    "Image": "无法行动.png",
+    "MaxDiff": 0.04
   }
 }
