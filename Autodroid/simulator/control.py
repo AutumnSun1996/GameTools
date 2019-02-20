@@ -134,10 +134,12 @@ class SimulatorControl:
         self.screen = get_window_shot(self.hwnd)
         return self.screen
 
-    def resource_in_image(self, image, name):
+    def search_resource(self, name, image=None):
         """判断资源是否存在于画面内
 
-        未找到时返回False. 找到时根据资源类型, 返回不同的结果.
+        返回 found, pos
+        found: 是否找到
+        pos: 找到目标的左上角坐标
         """
         if name not in self.resources:
             logger.warning("No resource: %s", name)
@@ -146,6 +148,8 @@ class SimulatorControl:
         if info.get("ImageData") is None:
             self.error("No ImageData for %s" % info)
             return False, []
+        if image is None:
+            image = self.screen
 
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
@@ -197,19 +201,18 @@ class SimulatorControl:
                 x = y = 0
                 part = image
             pos = get_multi_match(part, target, info.get("MaxDiff", 0.02))
-            ret = len(pos) > 0
             pos = [np.add(item, [x, y]) for item in pos]
+            ret = bool(pos)
         else:
             self.critical("Invalid Type %s", info['Type'])
+            return False, []
         logger.debug("Check Resource: %s=%s", name, pos)
         return ret, pos
 
-    def search_resource(self, name):
-        """判断资源是否存在于画面内
-
-        未找到时返回False. 找到时根据资源类型, 返回不同的结果.
+    def resource_in_image(self, name, image):
+        """判断资源是否存在于给出的画面内. 仅返回bool判断
         """
-        return self.resource_in_image(self.screen, name)
+        return self.search_resource(name, image)[0]
 
     def resource_in_screen(self, name):
         """判断资源是否存在于画面内. 仅返回bool判断
@@ -267,18 +270,29 @@ class SimulatorControl:
         else:
             self.error("Want to click at <%s> resource: %s", res["Type"], name)
 
-    def crop_resource(self, name, offset=None, image=None):
+    def crop_resource(self, name, offset=None, image=None, index=0):
         """截取资源所在位置的当前截图"""
-        if offset is None:
-            dx, dy = 0, 0
-        else:
-            dx, dy = offset
         if image is None:
             image = self.screen
         res = self.resources[name]
-        x, y = res.get("CropOffset", res.get("Offset", (0, 0)))
+        if offset is None:
+            if res["Type"] == "MultiStatic":
+                x, y = res["Positions"][index]
+            elif res["Type"] == "MultiDynamic":
+                ret, pos = self.search_resource(name)
+                if not ret:
+                    raise ValueError("Resource[%s] not in Image" % name)
+                x, y = pos[index]
+            else:
+                x, y = 0, 0
+        else:
+            x, y = offset
+
+        dx, dy = res.get("CropOffset", res.get("Offset", (0, 0)))
         w, h = res.get("CropSize", res["Size"])
-        return cv_crop(image, (x+dx, y+dy, x+w+dx, y+h+dy))
+        bbox = (x+dx, y+dy, x+w+dx, y+h+dy)
+        logger.info("crop_resource<%s>[%s] %s", res["Type"], name, bbox)
+        return cv_crop(image, bbox)
     
     def parse_scene_condition(self, condition):
         return parse_condition(condition, self, self.resource_in_screen)
