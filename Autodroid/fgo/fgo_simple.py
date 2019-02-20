@@ -29,8 +29,7 @@ class FGOSimple(FateGrandOrder):
     
     def choose_assist_servant(self):
         if [s["Name"] for s in self.scene_history].count("助战选择") == 8:
-            self.error("选择助战失败")
-            return
+            self.notice("选择助战失败")
 
         while True:
             if self.check_assist():
