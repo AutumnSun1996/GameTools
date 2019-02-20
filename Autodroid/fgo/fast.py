@@ -24,7 +24,7 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(3)
         for item in self.data["Strategy"]["Skills"]:
-            if parse_condition(item["Condition"], self, self.combat_info.__getitem__):
+            if parse_condition(item.get("Condition", True), self, self.combat_info.__getitem__):
                 logger.info("Skill Strategy Passed: %s", item)
                 self.do_actions(item["Actions"])
 
@@ -33,19 +33,26 @@ class FGOSimple(FGOBase):
             if skill[0] == 0:
                 self.click_at_resource("御主技能")
                 self.wait(1)
-                fmt = "御主技能{1}"
+                target = "御主技能列表"
+                index = skill[1] - 1
             else:
-                fmt = "角色{0}技能{1}"
-            logger.debug("Use Skill %s %s", fmt, skill)
-            self.click_at_resource(fmt.format(*skill))
+                target = "从者技能列表"
+                index = (skill[0]-1) * 3 + (skill[1] - 1)
+                skill_img = self.crop_resource(target, index=index)
+                if self.resource_in_image("从者技能-剩余", skill_img):
+                    logger.debug("Ignore For CD: %s: %s %s", skill, target, index)
+                    continue
+
+            logger.debug("Use Skill %s: %s %s", skill, target, index)
+            self.click_at_resource(target, index=index)
             self.wait(1)
             if len(skill) == 3:
-                self.click_at_resource("目标%d-3" % skill[2])
+                self.click_at_resource("技能目标列表", index=skill[2]-1)
                 self.wait(1)
             elif len(skill) == 4:
-                self.click_at_resource("目标%d-4" % skill[2])
+                self.click_at_resource("换人目标列表", index=skill[2]-1)
                 self.wait(1)
-                self.click_at_resource("目标%d-4" % skill[3])
+                self.click_at_resource("换人目标列表", index=skill[3]-1)
                 self.wait(1)
                 self.click_at_resource("进行更替")
                 self.wait(3)
@@ -59,8 +66,8 @@ class FGOSimple(FGOBase):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
 
-
     def choose_card(self, card_names, card_rects, order):
+        idx = 0
         for item in order:
             if item in card_names:
                 idx = card_names.index(item)
@@ -69,8 +76,7 @@ class FGOSimple(FGOBase):
         card_names.remove(card_names[idx])
         card_rects.remove(card_rects[idx])
         return result
-    
-    
+
     def choose_cards(self):
         choice = []
         self.wait(3)
@@ -93,7 +99,7 @@ class FGOSimple(FGOBase):
         w, h = cards["Size"]
         cx, cy = cards.get("ClickOffset", (0, 0))
         cw, ch = cards.get("ClickSize", (w, h))
-        
+
         card_names = []
         card_rects = []
         for x, y in cards["Positions"]:
@@ -101,9 +107,9 @@ class FGOSimple(FGOBase):
             click_rect = (x+cx, y+cy, x+cx+cw, y+cy+ch)
             card_names.append(self.extract_card_info(card_img))
             card_rects.append(click_rect)
-        
+
         logger.info("Found Cards %s", card_names)
-        
+
         choice += [None, None, None]
         for idx, order in self.data["Strategy"]["CardChoice"]:
             if choice[idx] is None:
