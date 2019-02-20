@@ -68,7 +68,7 @@ def rand_drag(hwnd, start, end, step=100):
     points = points.astype('int')
     for point in points:
         time.sleep(0.05)
-        target = win32api.MAKELONG(*rand_point(point, delta))
+        target = win32api.MAKELONG(*[int(n) for n in rand_point(point, delta)])
         win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
                              win32con.MK_LBUTTON, target)
     time.sleep(0.1)
