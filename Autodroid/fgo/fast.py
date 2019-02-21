@@ -18,7 +18,30 @@ def choose_match(cards, items):
                 return card
 
 
+class AssistInfo(dict):
+    def __init__(self, fgo, offset):
+        super().__init__()
+        self.fgo = fgo
+        self.image = self.fgo.crop_resource("助战从者定位", offset=offset)
+
+    def check(self, name):
+        if name not in self:
+            self[name] = self.fgo.resource_in_image(name, self.image)
+        return self[name]
+
+
 class FGOSimple(FGOBase):
+    def check_assist(self):
+        self.make_screen_shot()
+        _, pos = self.search_resource("助战从者定位")
+        for offset in pos:
+            info = AssistInfo(self, offset)
+            if parse_condition(self.data['Strategy']['AssistCondition'], self, info.check):
+                logger.info("选择助战: %s", info)
+                self.click_at_resource("助战从者定位", offset=offset)
+                return True
+        return False
+
     def choose_skills(self):
         if self.combat_info["Turn"] == 1:
             self.wait_till_scene("选择技能", 1, 20)
@@ -67,11 +90,12 @@ class FGOSimple(FGOBase):
                 self.wait(0.5)
 
     def choose_card(self, card_names, card_rects, order):
+        """根据order中的顺序, 在card_names中搜索第一个匹配的指令卡"""
         idx = 0
         for item in order:
-            if item in card_names:
-                idx = card_names.index(item)
-                break
+            for idx, card in enumerate(card_names):
+                if re.search(item, card):
+                    break
         result = [card_names[idx], card_rects[idx]]
         card_names.remove(card_names[idx])
         card_rects.remove(card_rects[idx])
@@ -89,7 +113,8 @@ class FGOSimple(FGOBase):
 
         for check in self.data["Strategy"]["UseNP"]:
             idx = check["Target"]
-            if self.combat_info["NP%d" % idx] >= 100 and parse_condition(check["Condition"], self, self.combat_info.__getitem__):
+            if self.combat_info["NP%d" % idx] >= 100 and\
+                parse_condition(check["Condition"], self, self.combat_info.__getitem__):
                 name = "宝具%s" % (check["Target"])
                 logger.info("使用宝具: %s", name)
                 choice.append(self.get_resource_rect(name))
@@ -110,8 +135,13 @@ class FGOSimple(FGOBase):
 
         logger.info("Found Cards %s", card_names)
 
+        card_choice = []
+        for card_choice in self.data["Strategy"]["CardChoice"]:
+            if parse_condition(card_choice["Condition"], self, self.combat_info.__getitem__):
+                break
+
         choice += [None, None, None]
-        for idx, order in self.data["Strategy"]["CardChoice"]:
+        for idx, order in card_choice["Choice"]:
             if choice[idx] is None:
                 name, rect = self.choose_card(card_names, card_rects, order)
                 choice[idx] = rect
