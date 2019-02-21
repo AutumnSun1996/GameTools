@@ -1,58 +1,64 @@
 {
-  "Name": "小号赝作速刷-术本",
-  "Description": "队伍: 全加成礼装; Ruler贞德, 三藏, 助战C尼禄",
+  "Name": "XY赝作速刷-终本",
+  "Description": "队伍: 全加成礼装; 弓大王, 助战弓凛, 孔明",
   "Strategy": {
     "Skills": [
+      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
       {
-        "Condition": ["$le", ["BattleLeft"], 1],
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 1], ["$ge", ["NP1"], 66]]
+        ],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
             "args": [
-              [1, 1],
-              [2, 2],
-              [2, 3],
-              [3, 1, 2],
               [3, 2],
-              [3, 3]
+              [3, 3],
+              [1, 1, 1],
+              [1, 2, 1],
+              [2, 1],
+              [2, 3],
+              [0, 1]
             ]
           },
           {"Type": "InnerCall", "Target": "extract_np_info"}
         ]
       },
       {
-        "Condition": [
-          "$all",
-          [["$lt", ["NP2"], 60], ["$le", ["BattleLeft"], 1]]
-        ],
+        "Condition": ["$le", ["BattleLeft"], 0],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[2, 1]]
-          }
+            "args": [
+              [3, 2],
+              [3, 3],
+              [1, 1, 1],
+              [1, 2, 1],
+              [2, 1],
+              [2, 3]
+            ]
+          },
+          {"Type": "InnerCall", "Target": "extract_np_info"}
         ]
       },
-      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
       {
-        "Condition": [
-          "$all",
-          [["$le", ["BattleLeft"], 1], ["$ge", ["NP2"], 100]]
-        ],
+        "Condition": ["$le", ["BattleLeft"], 0],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[0, 2, 2]]
+            "args": [[3, 1, 2], [2, 2]]
           }
         ]
       }
     ],
     "UseNP": [
-      {"Target": 1, "Condition": true},
-      {"Target": 3, "Condition": ["$le", ["BattleLeft"], 1]},
-      {"Target": 2, "Condition": ["$le", ["BattleLeft"], 1]}
+      {"Target": 3, "Condition": ["$le", ["BattleLeft"], 0]},
+      {"Target": 1, "Condition": ["$le", ["BattleLeft"], 1]},
+      {"Target": 2, "Condition": ["$le", ["BattleLeft"], 0]}
     ],
     "CardChoice": [
       {
@@ -152,73 +158,18 @@
         ]
       }
     ],
-    "Assist": ["五河士道"],
-    "AssistCondition": [
-      "$all",
-      [
-        ["助战-孔明"],
-        ["助战-从者满破"],
-        ["$any", [["礼装-迦勒底的学者"], ["礼装-毒蛇一艺"]]],
-        ["助战-礼装满破"]
-      ]
-    ],
-    "AssistRange": 0.5
+    "AssistCondition": ["助战-一人御佐姬"],
+    "AssistRange": 0.6
   },
   "Scenes": {},
   "Resources": {
-    "礼装-迦勒底的学者": {
-      "Name": "礼装-迦勒底的学者",
+    "助战-一人御佐姬": {
+      "Name": "助战-一人御佐姬",
       "MainSize": [1280, 720],
-      "Offset": [5, 135],
-      "Size": [158, 45],
-      "Type": "Static",
-      "Image": "礼装-迦勒底的学者.png"
-    },
-    "助战-梅林": {
-      "Name": "助战-梅林",
-      "MainSize": [1280, 720],
-      "SearchArea": [[300, 60], [90, 120]],
-      "Size": [64, 32],
+      "SearchArea": [[170, 0], [320, 100]],
+      "Size": [300, 40],
       "Type": "Dynamic",
-      "Image": "助战-梅林.png"
-    },
-    "助战-海伦娜": {
-      "Name": "助战-海伦娜",
-      "MainSize": [1280, 720],
-      "SearchArea": [[300, 60], [240, 120]],
-      "Size": [220, 32],
-      "Type": "Dynamic",
-      "Image": "助战-海伦娜.png"
-    },
-    "助战-孔明": {
-      "Name": "助战-孔明",
-      "MainSize": [1280, 720],
-      "SearchArea": [[300, 60], [300, 120]],
-      "Size": [280, 32],
-      "Type": "Dynamic",
-      "Image": "助战-孔明.png"
-    },
-    "礼装-毒蛇一艺": {
-      "Name": "礼装-毒蛇一艺",
-      "MainSize": [1280, 720],
-      "Offset": [5, 135],
-      "Size": [158, 45],
-      "Type": "Static",
-      "Image": "礼装-毒蛇一艺.png"
-    },
-    "花叶二重奏": {
-      "Name": "花叶二重奏",
-      "MainSize": [1280, 720],
-      "Size": [300, 35],
-      "Type": "Dynamic",
-      "Image": "花叶二重奏.png"
-    },
-    "五河士道": {
-      "Name": "五河士道",
-      "MainSize": [1280, 720],
-      "Size": [300, 35],
-      "Type": "Dynamic",
-      "Image": "五河士道.png"
+      "Image": "助战-一人御佐姬.png"
     }
   }
 }

@@ -17,29 +17,31 @@
       "Condition": ["10连抽"],
       "Actions": [
         {"Type": "Click", "Target": "10连抽"},
-        {"Type": "Wait", "Time": 0.3}
+        {"Type": "Wait", "Time": 0.5}
       ],
-      "Next": ["中间场景", "10连抽"]
+      "Next": ["10连抽", "中间场景"]
     },
     "中间场景": {
       "Name": "中间场景",
-      "Condition": [
-        "$not_",
-        [
-          "$any",
-          [["右下-菜单"], ["左上-关闭"], ["10连抽"], ["10连抽-开始"]]
-        ]
-      ],
+      "Condition": true,
       "Actions": [
         {"Type": "Click", "Target": "10连抽"},
-        {"Type": "Wait", "Time": 0.3}
+        {"Type": "Wait", "Time": 0.5}
       ],
-      "Next": ["10连抽", "中间场景", "关卡选择", "结束", "重置奖品"]
+      "Next": [
+        "10连抽",
+        "关卡选择",
+        "结束",
+        "礼物盒已满",
+        "重置奖品",
+        "中间场景"
+      ]
     },
     "重置奖品": {
       "Name": "重置奖品",
       "Condition": ["剩余奖品0"],
       "Actions": [
+        {"Type": "Wait", "Time": 1},
         {"Type": "Click", "Target": "重置奖品"},
         {"Type": "Wait", "Time": 1},
         {"Type": "Click", "Target": "重置奖品-执行"},
@@ -47,7 +49,7 @@
         {"Type": "Click", "Target": "重置奖品-关闭"},
         {"Type": "Wait", "Time": 1}
       ],
-      "Next": ["中间场景", "关卡选择", "结束"]
+      "Next": ["关卡选择", "结束", "礼物盒已满", "中间场景"]
     },
     "结束": {
       "Name": "结束",
@@ -60,6 +62,11 @@
           ["$not_", ["剩余奖品0"]]
         ]
       ],
+      "Actions": []
+    },
+    "礼物盒已满": {
+      "Name": "礼物盒已满",
+      "Condition": ["礼物盒已满"],
       "Actions": []
     }
   },
@@ -111,6 +118,14 @@
       "Size": [210, 110],
       "Type": "Static",
       "Image": "10连抽.png"
+    },
+    "礼物盒已满": {
+      "Name": "礼物盒已满",
+      "MainSize": [1280, 720],
+      "Offset": [440, 200],
+      "Size": [400, 100],
+      "Type": "Static",
+      "Image": "礼物盒已满.png"
     },
     "10连抽": {
       "Name": "10连抽",

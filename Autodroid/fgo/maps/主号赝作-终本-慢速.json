@@ -1,0 +1,177 @@
+{
+  "Name": "主号赝作-终本-慢速",
+  "Description": [
+    "队伍: 全加成礼装; 阿拉什, 助战孔明, Berserker兰斯洛特, Caster尼禄, 梅林",
+    "第一面: 阿拉什 50NP + 自充 30 + 孔明23 20=100",
+    "第二面: 尼禄 30NP + 自充 50 + 梅林 20=100",
+    "第三面: 兰斯洛特 30NP + 孔明1 30 + 孔明23 20 + 梅林 20=100"
+  ],
+  "Strategy": {
+    "Skills": [
+      {
+        "Condition": ["$eq", ["BattleNow"], 1],
+        "Actions": [
+          {
+            "Description": "孔明23, 阿拉什3",
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[2, 2], [2, 3], [1, 3]]
+          }
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleNow"], 2], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Actions": [
+          {
+            "Description": "孔明1给狂兰, 孔明换梅林",
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[2, 1, 3], [0, 3, 2, 4]]
+          }
+        ]
+      },
+      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
+      {
+        "Condition": ["$le", ["BattleLeft"], 1],
+        "Actions": [
+          {
+            "Description": "尼禄12, 梅林1, 第二面后有就放",
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 1], [1, 2], [2, 1]]
+          },
+          {"Type": "InnerCall", "Target": "extract_np_info"}
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Actions": [
+          {
+            "Description": "第三面, 选择中间敌人",
+            "Type": "Click",
+            "Target": "战斗-敌人位置",
+            "Index": 1
+          },
+          {"Type": "Wait", "Time": 0.5},
+          {
+            "Description": "第三面, 礼装加攻击",
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[0, 1]]
+          }
+        ]
+      },
+      {
+        "Condition": ["$le", ["BattleLeft"], 0],
+        "Actions": [
+          {
+            "Description": "第三面, 尼禄3, 梅林23, 狂兰123, ",
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [
+              [1, 3, 3],
+              [2, 3, 3],
+              [2, 2],
+              [3, 1],
+              [3, 2],
+              [3, 3]
+            ]
+          }
+        ]
+      }
+    ],
+    "UseNP": [
+      {
+        "Description": "阿拉什/兰斯洛特",
+        "Target": 3,
+        "Condition": [
+          "$any",
+          [["$eq", ["BattleNow"], 1], ["$eq", ["BattleLeft"], 0]]
+        ]
+      },
+      {"Target": 1, "Condition": ["$le", ["BattleLeft"], 1]},
+      {"Target": 2, "Condition": ["$le", ["BattleLeft"], 0]}
+    ],
+    "CardChoice": [
+      {
+        "Condition": true,
+        "Description": "红卡优先",
+        "Choice": [
+          [
+            0,
+            [
+              "^B克制",
+              "^B0",
+              "^A克制",
+              "^A0",
+              "^Q克制",
+              "^Q0",
+              "^B抵抗",
+              "^A抵抗",
+              "^Q抵抗"
+            ]
+          ],
+          [
+            2,
+            [
+              "^B克制",
+              "^A克制",
+              "^Q克制",
+              "^B0",
+              "^A0",
+              "^Q0",
+              "^A抵抗",
+              "^Q抵抗",
+              "^B抵抗"
+            ]
+          ],
+          [
+            1,
+            [
+              "^B克制",
+              "^A克制",
+              "^Q克制",
+              "^B0",
+              "^A0",
+              "^Q0",
+              "^A抵抗",
+              "^Q抵抗",
+              "^B抵抗"
+            ]
+          ]
+        ]
+      }
+    ],
+    "AssistCondition": [
+      "$all",
+      [["助战-孔明"], ["礼装-迦勒底的学者"], ["助战-礼装满破"]]
+    ],
+    "AssistRange": 0.6
+  },
+  "Scenes": {},
+  "Resources": {
+    "助战-孔明": {
+      "Name": "助战-孔明",
+      "MainSize": [1280, 720],
+      "SearchArea": [[300, 60], [300, 120]],
+      "Size": [280, 32],
+      "Type": "Dynamic",
+      "Image": "助战-孔明.png",
+      "MaxDiff": 0.1
+    },
+    "礼装-迦勒底的学者": {
+      "Name": "礼装-迦勒底的学者",
+      "MainSize": [1280, 720],
+      "Offset": [5, 135],
+      "Size": [158, 45],
+      "Type": "Static",
+      "Image": "礼装-迦勒底的学者.png"
+    }
+  }
+}
