@@ -32,7 +32,7 @@ loggers:
         level   : DEBUG
         handlers: [console, main_file, error_file]
     simulator:
-        level   : DEBUG
+        level   : INFO
         handlers: [console, main_file, error_file]
     azurlane:
         level   : DEBUG
