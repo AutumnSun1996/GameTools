@@ -141,7 +141,7 @@
     "Condition": ["助战更新失败"],
     "Actions": [
       {"Type": "Click", "Target": "助战更新失败-关闭"},
-      {"Type": "Wait", "Time": 5}
+      {"Type": "Wait", "Time": 2}
     ],
     "Next": ["助战选择"]
   },
