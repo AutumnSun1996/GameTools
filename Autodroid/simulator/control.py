@@ -89,6 +89,7 @@ class SimulatorControl:
         self.scenes = load_scenes(self.section)
         self.resources = load_resources(self.section)
         self.last_manual = 0
+        self.resource_pos_buffer = {}
 
     @property
     def since_last_manual(self):
@@ -131,6 +132,7 @@ class SimulatorControl:
 
     def make_screen_shot(self):
         """获取窗口截图"""
+        self.resource_pos_buffer = {}
         self.screen = get_window_shot(self.hwnd)
         return self.screen
 
@@ -150,6 +152,13 @@ class SimulatorControl:
             return False, []
         if image is None:
             image = self.screen
+            use_buffer = True
+        else:
+            use_buffer = False
+
+        if use_buffer and name in self.resource_pos_buffer:
+            logger.debug("Check Resource With Buffer: %s=%s", name, self.resource_pos_buffer[name])
+            return self.resource_pos_buffer[name]
 
         if info["Type"] == "Static":
             rect = self.get_resource_rect(name)
@@ -166,6 +175,7 @@ class SimulatorControl:
             target = info['ImageData']
             if "SearchArea" in info:
                 xy, wh = info["SearchArea"]
+                logger.debug("Search in %s+%s", xy, wh)
                 x, y = xy
                 w, h = wh
                 part = cv_crop(image, (x, y, x+w, y+h))
@@ -194,6 +204,7 @@ class SimulatorControl:
             target = info['ImageData']
             if "SearchArea" in info:
                 xy, wh = info["SearchArea"]
+                logger.debug("Search in %s+%s", xy, wh)
                 x, y = xy
                 w, h = wh
                 part = cv_crop(image, (x, y, x+w, y+h))
@@ -206,7 +217,9 @@ class SimulatorControl:
         else:
             self.critical("Invalid Type %s", info['Type'])
             return False, []
-        logger.debug("Check Resource: %s=%s", name, pos)
+        if use_buffer:
+            self.resource_pos_buffer[name] = (ret, pos)
+        logger.debug("Check Resource: %s=%s", name, (ret, pos))
         return ret, pos
 
     def resource_in_image(self, name, image):
@@ -242,7 +255,7 @@ class SimulatorControl:
         self.wait(interval)
         return self.wait_resource(name, interval, repeat-1)
 
-    def click_at_resource(self, name, wait=False, index=None):
+    def click_at_resource(self, name, wait=False, index=None, offset=None):
         """点击资源
 
         wait 为等待资源出现的时间
@@ -255,15 +268,24 @@ class SimulatorControl:
         if res['Type'] == 'Static':
             rect = self.get_resource_rect(name)
             rand_click(self.hwnd, rect)
-        elif res['Type'] == 'Dynamic':
-            _, pos = self.search_resource(name)
-            x, y = pos
-            dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
-            cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
         elif res['Type'] == 'MultiStatic':
             logger.info("index=%s", index)
             x, y = res['Positions'][index]
+            dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
+            cw, ch = res.get("ClickSize", res.get("Size"))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+        elif res['Type'] == 'Dynamic':
+            if offset is None:
+                _, offset = self.search_resource(name)
+            x, y = offset
+            dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
+            cw, ch = res.get("ClickSize", res.get("Size"))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+        elif res['Type'] == 'MultiDynamic':
+            if offset is None:
+                _, pos = self.search_resource(name)
+                offset = pos[index]
+            x, y = offset
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
             rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
