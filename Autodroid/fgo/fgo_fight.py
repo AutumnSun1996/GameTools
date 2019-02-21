@@ -29,6 +29,11 @@ class FateGrandOrder(SimulatorControl):
         logger.info("Update Scenes %s", list(self.data['Scenes'].keys()))
         self.scenes.update(self.data['Scenes'])
 
+    def update_combat_info(self, info=None, **kwargs):
+        if info:
+            self.combat_info.update(info)
+        self.combat_info.update(kwargs)
+
     def refresh_assist(self):
         logger.info("更新助战列表")
         self.click_at_resource("助战更新")
@@ -139,6 +144,9 @@ class FateGrandOrder(SimulatorControl):
         for i in range(3):
             self.combat_info["NP%d" % (i+1)] = self.get_np(self.crop_resource("从者%d-NP" % (i+1)) * multi)
 
+    def reset_combat_info(self):
+        self.combat_info = defaultdict(lambda: 0)
+
     def extract_combat_info(self, repeat=0):
         if not self.scene_changed:
             return
@@ -183,7 +191,7 @@ class FateGrandOrder(SimulatorControl):
             if match:
                 self.combat_info["Turn"] = int(match.group(1))
         except (AttributeError, IndexError, ValueError) as err:
-            if self.combat_info["Turn"] is None:
+            if not self.combat_info["Turn"]:
                 self.combat_info["Turn"] = 1
             else:
                 self.combat_info["Turn"] += 1
@@ -219,10 +227,9 @@ class FateGrandOrder(SimulatorControl):
         return best_diff, best
 
     def extract_card_info(self, image):
-        if self.resource_in_image(image, "无法行动"):
-            result = "无法行动"
-        else:
-            result = ""
+        result = ""
+        if self.resource_in_image("无法行动", image):
+            result += "无法行动"
 
         best_diff = 1
         color = ""
@@ -233,13 +240,17 @@ class FateGrandOrder(SimulatorControl):
                 color = name[0]
         result += color
 
-        if self.resource_in_image(image, "克制"):
-            relation = "+"
-        elif self.resource_in_image(image, "抵抗"):
-            relation = "-"
+        if self.resource_in_image("克制", image):
+            relation = "克制"
+        elif self.resource_in_image("抵抗", image):
+            relation = "抵抗"
         else:
             relation = "0"
         result += relation
+
+        if self.resource_in_image("助战", image):
+            result += "助战"
+
         logger.info("Found Card: %s", result)
         return result
 
