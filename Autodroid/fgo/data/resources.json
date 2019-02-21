@@ -250,6 +250,22 @@
     "Type": "MultiDynamic",
     "Image": "最后登录.png"
   },
+  "助战-从者满破": {
+    "Name": "助战-从者满破",
+    "Type": "Dynamic",
+    "MainSize": [1280, 720],
+    "SearchArea": [[120, 70], [50, 50]],
+    "Size": [24, 24],
+    "Image": "助战-礼装满破.png"
+  },
+  "助战-礼装满破": {
+    "Name": "助战-礼装满破",
+    "Type": "Dynamic",
+    "MainSize": [1280, 720],
+    "SearchArea": [[120, 140], [50, 50]],
+    "Size": [24, 24],
+    "Image": "助战-礼装满破.png"
+  },
   "助战从者-名称": {
     "Name": "助战选择-从者-名称",
     "MainSize": [1280, 720],
@@ -684,6 +700,14 @@
     "Size": [130, 36],
     "Type": "Static",
     "Image": "进行更替.png"
+  },
+  "指令卡-助战": {
+    "Name": "指令卡-助战",
+    "MainSize": [1280, 720],
+    "SearchArea": [[80, 0], [120, 130]],
+    "Size": [96, 26],
+    "Type": "Dynamic",
+    "Image": "指令卡-助战.png"
   },
   "无法行动": {
     "Name": "无法行动",
