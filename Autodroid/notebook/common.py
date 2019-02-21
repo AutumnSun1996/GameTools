@@ -81,10 +81,10 @@ def save_crop(name, cropped, offset):
         "Type": "Static",
         "Image": name + '.png'
     }
-    
+
     js_text = json.dumps(info, ensure_ascii=False)
     set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
-    
+
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
     logger.info("%s Saved.", os.path.realpath(path))
@@ -118,7 +118,7 @@ def save_anchor(name, cropped, offset):
     }
     js_text = json.dumps(anchor, ensure_ascii=False)
     set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
-    
+
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
     logger.info("%s Saved.", os.path.realpath(path))
@@ -139,7 +139,7 @@ def save_map_anchor(map_name, on_map, cropped, offset):
     }
     js_text = json.dumps(anchor, ensure_ascii=False)
     set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
-    
+
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
     logger.info("%s Saved.", os.path.realpath(path))
@@ -181,15 +181,21 @@ def check_scales(needle, scales, target=None, show_full=False):
         show_crop(*pos, w, h, img=target, show_full=show_full)
     print(best)
 
-def check_resource(name, image=None):
+
+def check_resource(info, image=None):
     s = const["s"]
     if image is None:
         image = s.screen
 
     draw = image.copy()
-    
-    info = s.resources[name]
-    
+
+    if isinstance(info, str):
+        name = info
+        info = s.resources[name]
+    else:
+        name = info["Name"]
+        update_resource(info, s.section)
+
     if 'ImageData' in info:
         target = info['ImageData']
         print("Target")
@@ -201,8 +207,21 @@ def check_resource(name, image=None):
         w, h = wh
         cv.rectangle(draw, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
-    ret, offsets = s.search_resource(name, image)
-    print("search_resource:", ret, offsets)
+    if "Dynamic" in info["Type"]:
+        diff, offsets = get_match(image, info["ImageData"])
+        print("best match:", diff, offsets)
+
+    if 'ImageData' in info:
+        ret, offsets = s.search_resource(name, image)
+        print("search_resource:", ret, offsets)
+    elif info["Type"] == "Static":
+        offsets = [info["Offset"]]
+    elif info["Type"] == "MultiStatic":
+        offsets = info["Positions"]
+    else:
+        print("Invalid:", info)
+        offsets = []
+
     for offset in np.reshape(offsets, (-1, 2)):
         dx, dy = offset
         w, h = info["Size"]
