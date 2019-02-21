@@ -1,6 +1,6 @@
 from .common import *
 
-from fgo.fgo_simple import FateGrandOrder
+from fgo.fast import FGOSimple as FateGrandOrder
 
 const["section"] = "fgo"
 
