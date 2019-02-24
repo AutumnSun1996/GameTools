@@ -18,9 +18,9 @@ build
 Autodroid/PlayerSimulate/
 WarFrame/scripts/shot*.png
 
-
 **/dump/
 **/logs/
+**/shots/
 
 **/resources/*.json
 *.bak.json
@@ -32,3 +32,4 @@ WarFrame/image_based/
 */AutoFight.7z
 FateGO/AutoFight/
 碧蓝航线/AutoFight/
+
