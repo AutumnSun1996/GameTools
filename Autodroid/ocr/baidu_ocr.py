@@ -53,7 +53,9 @@ class BaiduOCR:
         return res.json()
 
     def parse_result(self, res):
-        res = [item["words"] for item in res["words_result"]]
+        if "words_result" not in res:
+            logger.error("OCR Error: %s", res)
+        res = [item["words"] for item in res.get("words_result", [])]
         if len(res) == 1:
             res = res[0]
         return res
