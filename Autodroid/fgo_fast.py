@@ -1,27 +1,40 @@
+from datetime import datetime
+from dateutil.parser import parse
 from fgo.fast import FGOSimple
 
 import logging
 logger = logging.getLogger(__name__)
 
+
+def stop_checker(s):
+    if s.current_scene_name == "AP不足" and s.scene_history_count["AP不足"] >= 10:
+        return True
+    if s.current_scene_name == "获得物品" and s.actions_done:
+        logger.warning("On 获得物品; %s", s.scene_history_count)
+    return False
+
+
+def main(map_name):
+    fgo = FGOSimple(map_name)
+    try:
+        fgo.main_loop(stop_checker)
+        # input("Pause...")
+    except KeyboardInterrupt:
+        pass
+    logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
+
+    # if datetime.now() > target_time:
+    #     fgo.wait(10)
+    #     win32api.SendMessage(fgo.hwnd, win32con.WM_CLOSE, 0, 0)
+
+
+
 if __name__ == "__main__":
+    target_time = parse("2019-02-24 13:15:00")
     # fgo = FGOSimple("刷材料")
     # fgo = FGOSimple("主号换人礼装速刷")
     # fgo = FGOSimple("主号赝作速刷")
-    fgo = FGOSimple("主号赝作-终本-慢速")
+    main("主号赝作-终本-慢速")
     # fgo = FGOSimple("主号赝作速刷-术本")
     # fgo = FGOSimple("主号赝作速刷-杀本")
 
-    count = 0
-    try:
-        while 1:
-            fgo.check_scene()
-            if fgo.current_scene_name == "获得物品":
-                count += 1
-                logger.warning("Scene %s Count %d", fgo.current_scene_name, count)
-                if count >= 0:
-                    # fgo.manual()
-                    fgo.error("已完成%d" % count)
-                    break
-            # input("Pause...")
-    except KeyboardInterrupt:
-        logger.warning("(OnExit) Scene %s Count %d", fgo.current_scene_name, count)
