@@ -6,7 +6,7 @@ from simulator.image_tools import get_all_match
 from config_loader import config
 
 
-def main(section):
+def main(section, rows):
     window_title = config.get(section, "WindowTitle")
     hwnd = get_window_hwnd(window_title)
 
@@ -18,7 +18,7 @@ def main(section):
     dx, dy = int(800/6), int(430/3)
     w, h = 80, 80
     for i in range(7):
-        for j in range(3):
+        for j in range(rows):
             x, y = (x0+dx*i, y0+dy*j)
             rand_click(hwnd, (x, y, x+w, y+h))
             time.sleep(0.3)
@@ -29,6 +29,12 @@ if __name__ == "__main__":
         section = sys.argv[1]
     else:
         section = "FGO"
+
+    rows = ''
     while True:
-        main(section)
-        input("Pause...")
+        if rows:
+            rows = int(rows)
+        else:
+            rows = 3
+        main(section, rows)
+        rows = input("Pause...")
