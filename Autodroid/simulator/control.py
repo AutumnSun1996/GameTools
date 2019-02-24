@@ -11,6 +11,7 @@ import json
 import traceback
 from collections import deque
 from threading import Timer
+from collections import defaultdict
 import operator
 import builtins
 
@@ -84,8 +85,10 @@ class SimulatorControl:
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
         set_logging_dir(os.path.join(self.section, "logs"))
         self.scene_history = deque(maxlen=50)
+        self.scene_history_count = defaultdict(lambda: 0)
         self.last_change = time.time()
         self.screen = None
+        self.actions_done = False
         self.scenes = load_scenes(self.section)
         self.resources = load_resources(self.section)
         self.last_manual = 0
@@ -348,7 +351,6 @@ class SimulatorControl:
         res = self.parse_scene_condition(scene["Condition"])
         if res:
             logger.debug("Scene Matched: %s", scene)
-            self.scene_history.append(scene)
         return res
 
     def go_top(self):
@@ -363,7 +365,7 @@ class SimulatorControl:
         else:
             image = self.crop_resource(area)
             prefix += '-%s' % area
-        name = "{}/logs/{}-{:%Y-%m-%d_%H%M%S}.png".format(self.section, prefix, datetime.datetime.now())
+        name = "{}/shots/{}-{:%Y-%m-%d_%H%M%S}.png".format(self.section, prefix, datetime.datetime.now())
         cv_save(name, image)
 
     def critical(self, message=None, title="", action=None):
@@ -424,7 +426,9 @@ class SimulatorControl:
         if repeat == 0:
             self.error("场景判断失败! 上一场景: %s" % self.current_scene)
             # 若选择忽略错误，则返回“无匹配场景”
-            self.scene_history.append(self.fallback_scene)
+            scene = self.fallback_scene
+            self.scene_history.append(scene)
+            self.scene_history_count[scene["Name"]] += 1
             return self.fallback_scene
 
         if candidates is None:
@@ -454,12 +458,16 @@ class SimulatorControl:
             else:
                 scene = self.scenes[key]
             if self.scene_match_check(scene, False):
+                self.scene_history.append(scene)
+                self.scene_history_count[scene["Name"]] += 1
                 return scene
 
         for key in self.scenes:
             scene = self.scenes[key]
             if scene.get("Global"):
                 if self.scene_match_check(scene, False):
+                    self.scene_history.append(scene)
+                    self.scene_history_count[scene["Name"]] += 1
                     return scene
 
         self.wait(interval)
@@ -471,7 +479,9 @@ class SimulatorControl:
         w, h = self.resources[key]["Size"]
         return (x, y, x+w, y+h)
 
-    def do_actions(self, actions):
+    def do_actions(self, actions=None):
+        if actions is None:
+            actions = self.current_scene["Actions"]
         """执行指定的操作"""
         for action in actions:
             if "Condition" in action and not parse_condition(action["Condition"], self):
@@ -504,8 +514,9 @@ class SimulatorControl:
         """返回从上次场景变化到当前时间的秒数"""
         return time.time() - self.last_change
 
-    def check_scene(self):
+    def check_scene(self, stop_checker=None):
         """判断当前场景, 执行对应的操作"""
+        self.actions_done = False
         scene = self.update_current_scene()
         heartbeat()
         now = time.time()
@@ -516,8 +527,16 @@ class SimulatorControl:
             nochange = "(No Change)"
 
         logger.info("%s - %s%s", scene['Name'], scene['Actions'], nochange)
+        if stop_checker and stop_checker(self):
+            return
         self.do_actions(scene['Actions'])
+        self.actions_done = True
 
+    def main_loop(self, stop_checker=None):
+        while True:
+            self.check_scene(stop_checker)
+            if stop_checker and stop_checker(self):
+                return
 
 if __name__ == "__main__":
     logger.setLevel("DEBUG")
