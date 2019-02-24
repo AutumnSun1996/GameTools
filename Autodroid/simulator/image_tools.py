@@ -226,6 +226,36 @@ def extract_text(image, font_size, text='0123456789/'):
     result.sort(key=lambda a: a[0])
     return ''.join(item[1] for item in result)
 
+class Affine:
+    @staticmethod
+    def move(dx, dy):
+        return np.mat([
+            [1, 0, dx],
+            [0, 1, dy],
+            [0, 0, 1]
+        ])
+
+    @staticmethod
+    def scale(fx, fy):
+        return np.mat([
+            [fx, 0, 0],
+            [0, fy, 0],
+            [0, 0, 1]
+        ])
+
+    @staticmethod
+    def rotate(theta):
+        cos = np.cos(theta)
+        sin = np.sin(theta)
+        return np.mat([
+            [cos, -sin, 0],
+            [sin, cos, 0],
+            [0, 0, 1]
+        ])
+    
+    @staticmethod
+    def warp(src, mat, outsize):
+        return cv.warpAffine(src, mat[:2, :].astype("float32"), outsize)
 
 if __name__ == "__main__":
     import win32_tools
