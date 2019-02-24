@@ -1,7 +1,7 @@
 {
   "Name": "主号赝作-终本-慢速",
   "Description": [
-    "队伍: 全加成礼装; 阿拉什, 助战孔明, Berserker兰斯洛特, Caster尼禄, 梅林",
+    "队伍: 全加成礼装; Berserker兰斯洛特, 助战孔明, 阿拉什, Caster尼禄, 梅林",
     "第一面: 阿拉什 50NP + 自充 30 + 孔明23 20=100",
     "第二面: 尼禄 30NP + 自充 50 + 梅林 20=100",
     "第三面: 兰斯洛特 30NP + 孔明1 30 + 孔明23 20 + 梅林 20=100"
@@ -15,7 +15,7 @@
             "Description": "孔明23, 阿拉什3",
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[2, 2], [2, 3], [1, 3]]
+            "args": [[2, 2], [2, 3], [3, 3]]
           }
         ]
       },
@@ -26,22 +26,21 @@
         ],
         "Actions": [
           {
-            "Description": "孔明1给狂兰, 孔明换梅林",
+            "Description": "孔明1给狂兰, 孔明换梅林, 礼装加攻击",
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[2, 1, 3], [0, 3, 2, 4]]
+            "args": [[2, 1, 1], [0, 3, 2, 4], [0, 1]]
           }
         ]
       },
-      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
       {
         "Condition": ["$le", ["BattleLeft"], 1],
         "Actions": [
           {
-            "Description": "尼禄12, 梅林1, 第二面后有就放",
+            "Description": "梅林1, 尼禄12, 第二面后有就放",
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 1], [1, 2], [2, 1]]
+            "args": [[2, 1], [3, 1], [3, 2]]
           },
           {"Type": "InnerCall", "Target": "extract_np_info"}
         ]
@@ -53,17 +52,25 @@
         ],
         "Actions": [
           {
-            "Description": "第三面, 选择中间敌人",
+            "Description": "第三面第一回合, 选择中间敌人",
             "Type": "Click",
             "Target": "战斗-敌人位置",
             "Index": 1
           },
-          {"Type": "Wait", "Time": 0.5},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$le", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Actions": [
           {
-            "Description": "第三面, 礼装加攻击",
+            "Description": "第三面第一回合, 御主技能2",
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[0, 1]]
+            "args": [[0, 2]]
           }
         ]
       },
@@ -71,32 +78,43 @@
         "Condition": ["$le", ["BattleLeft"], 0],
         "Actions": [
           {
-            "Description": "第三面, 尼禄3, 梅林23, 狂兰123, ",
+            "Description": "第三面第一回合后, 狂兰123, 尼禄3给狂兰",
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [
-              [1, 3, 3],
-              [2, 3, 3],
-              [2, 2],
-              [3, 1],
-              [3, 2],
-              [3, 3]
-            ]
+            "args": [[1, 1], [1, 2], [1, 3], [3, 3, 1]]
+          }
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$le", ["BattleLeft"], 0], ["$ge", ["TurnOfBattle"], 2]]
+        ],
+        "Actions": [
+          {
+            "Description": "第三面第二回合后, 梅林3给狂兰, 梅林2",
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[2, 3, 1], [2, 2]]
           }
         ]
       }
     ],
     "UseNP": [
       {
-        "Description": "阿拉什/兰斯洛特",
-        "Target": 3,
+        "Description": "孔明/梅林",
+        "Target": 2,
         "Condition": [
-          "$any",
-          [["$eq", ["BattleNow"], 1], ["$eq", ["BattleLeft"], 0]]
+          "$all",
+          [["$le", ["BattleLeft"], 0], ["$ne", ["TurnOfBattle"], 2]]
         ]
       },
-      {"Target": 1, "Condition": ["$le", ["BattleLeft"], 1]},
-      {"Target": 2, "Condition": ["$le", ["BattleLeft"], 0]}
+      {
+        "Description": "兰斯洛特",
+        "Target": 1,
+        "Condition": ["$le", ["BattleLeft"], 0]
+      },
+      {"Description": "阿拉什/尼禄", "Target": 3, "Condition": true}
     ],
     "CardChoice": [
       {
@@ -126,9 +144,9 @@
               "^B0",
               "^A0",
               "^Q0",
+              "^B抵抗",
               "^A抵抗",
-              "^Q抵抗",
-              "^B抵抗"
+              "^Q抵抗"
             ]
           ],
           [
@@ -140,9 +158,9 @@
               "^B0",
               "^A0",
               "^Q0",
+              "^B抵抗",
               "^A抵抗",
-              "^Q抵抗",
-              "^B抵抗"
+              "^Q抵抗"
             ]
           ]
         ]

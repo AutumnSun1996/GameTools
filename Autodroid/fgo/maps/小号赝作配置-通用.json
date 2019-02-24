@@ -1,0 +1,122 @@
+{
+  "Name": "小号赝作配置-通用",
+  "Description": "队伍: 全加成礼装; 贞德, 北斋, 阿拉什, 助战北斋",
+  "Strategy": {
+    "Skills": [
+      {
+        "Description": "贞德1, 北斋12, 阿拉什/助战北斋123",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [
+              [1, 1],
+              [2, 1],
+              [2, 2],
+              [3, 1],
+              [3, 2],
+              [3, 3]
+            ]
+          }
+        ]
+      },
+      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
+      {
+        "Condition": [
+          "$all",
+          [
+            ["$eq", ["BattleLeft"], 0],
+            ["$method", "resource_in_screen", "敌人充能完成"]
+          ]
+        ],
+        "Description": "防御",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 3]]
+          }
+        ]
+      }
+    ],
+    "UseNP": [
+      {"Target": 1, "Condition": ["$le", ["BattleLeft"], 1]},
+      {"Target": 2, "Condition": ["$le", ["BattleLeft"], 1]},
+      {"Target": 3, "Condition": ["$le", ["BattleLeft"], 1]}
+    ],
+    "CardChoice": [
+      {
+        "Condition": true,
+        "Description": "蓝卡优先",
+        "Choice": [
+          [
+            0,
+            [
+              "^A克制",
+              "^A0",
+              "^B克制",
+              "^B0",
+              "^Q克制",
+              "^Q0",
+              "^B抵抗",
+              "^A抵抗",
+              "^Q抵抗"
+            ]
+          ],
+          [
+            2,
+            [
+              "^A克制",
+              "^A0",
+              "^Q克制",
+              "^B克制",
+              "^B0",
+              "^Q0",
+              "^A抵抗",
+              "^Q抵抗",
+              "^B抵抗"
+            ]
+          ],
+          [
+            1,
+            [
+              "^A克制",
+              "^A0",
+              "^Q克制",
+              "^B克制",
+              "^B0",
+              "^Q0",
+              "^A抵抗",
+              "^Q抵抗",
+              "^B抵抗"
+            ]
+          ]
+        ]
+      }
+    ],
+    "AssistCondition": [
+      "$all",
+      [["助战-北斋"], ["礼装-迦勒底的学者"], ["助战-礼装满破"]]
+    ],
+    "AssistRange": 0.7
+  },
+  "Scenes": {},
+  "Resources": {
+    "助战-北斋": {
+      "Name": "助战-北斋",
+      "MainSize": [1280, 720],
+      "SearchArea": [[300, 60], [320, 100]],
+      "Size": [300, 40],
+      "Type": "Dynamic",
+      "Image": "助战-北斋.png"
+    },
+    "礼装-迦勒底的学者": {
+      "Name": "礼装-迦勒底的学者",
+      "MainSize": [1280, 720],
+      "Offset": [5, 135],
+      "Size": [158, 45],
+      "Type": "Static",
+      "Image": "礼装-迦勒底的学者.png"
+    }
+  }
+}

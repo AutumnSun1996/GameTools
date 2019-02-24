@@ -160,7 +160,7 @@
         ]
       },
       {"Type": "Click", "Target": "Attack"},
-      {"Type": "Wait", "Time": 1}
+      {"Type": "Wait", "Time": 3}
     ],
     "Next": ["选择指令卡", "选择技能"]
   },
@@ -171,7 +171,21 @@
       {"Type": "InnerCall", "Target": "choose_cards"},
       {"Type": "Wait", "Time": 5}
     ],
-    "Next": ["选择技能", "获得羁绊"]
+    "Next": ["选择技能", "获得羁绊", "战斗失败"]
+  },
+  "战斗失败": {
+    "Name": "战斗失败",
+    "Condition": ["续关"],
+    "Actions": [
+      {"Type": "InnerCall", "Target": "error", "args": ["战斗失败"]},
+      {"Type": "Click", "Target": "续关-撤退"},
+      {"Type": "Wait", "Time": 0.5},
+      {"Type": "Click", "Target": "撤退-决定"},
+      {"Type": "Wait", "Time": 0.5},
+      {"Type": "Click", "Target": "撤退-关闭"},
+      {"Type": "Wait", "Time": 0.5}
+    ],
+    "Next": ["地图选择", "关卡选择", "申请好友"]
   },
   "获得羁绊": {
     "Name": "获得羁绊",
@@ -180,7 +194,29 @@
       {"Type": "Click", "Target": "下一步"},
       {"Type": "Wait", "Time": 0.5}
     ],
-    "Next": ["获得羁绊", "获得经验", "羁绊加深"]
+    "Next": ["获得羁绊", "获得经验", "羁绊加深", "获得羁绊礼装"]
+  },
+  "获得羁绊礼装": {
+    "Name": "获得羁绊礼装",
+    "Condition": ["获得羁绊礼装"],
+    "Actions": [
+      {
+        "Type": "InnerCall",
+        "Target": "save_record",
+        "args": ["获得羁绊礼装"]
+      },
+      {"Type": "InnerCall", "Target": "error", "args": ["获得羁绊礼装"]},
+      {"Type": "Click", "Target": "点击画面"},
+      {"Type": "Wait", "Time": 0.5},
+      {
+        "Type": "InnerCall",
+        "Target": "save_record",
+        "args": ["获得羁绊礼装"]
+      },
+      {"Type": "Click", "Target": "羁绊礼装-关闭"},
+      {"Type": "Wait", "Time": 0.5}
+    ],
+    "Next": ["获得羁绊", "获得经验", "羁绊加深", "获得羁绊礼装"]
   },
   "羁绊加深": {
     "Name": "羁绊加深",
