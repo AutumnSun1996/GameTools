@@ -58,12 +58,21 @@ class FGOSimple(FGOBase):
                 self.wait(1)
                 target = "御主技能列表"
                 index = skill[1] - 1
+
+                skill_img = self.crop_resource(target, index=index)
+                if self.resource_in_image("御主技能-还剩", skill_img):
+                    # 为保证连续使用御主技能时不出错, 再次点击收回御主技能菜单
+                    self.click_at_resource("御主技能")
+                    self.wait(1)
+                    logger.debug("Ignore 御主技能 For CD: %s: %s %s", skill, target, index)
+                    continue
             else:
                 target = "从者技能列表"
                 index = (skill[0]-1) * 3 + (skill[1] - 1)
+
                 skill_img = self.crop_resource(target, index=index)
                 if self.resource_in_image("从者技能-剩余", skill_img):
-                    logger.debug("Ignore For CD: %s: %s %s", skill, target, index)
+                    logger.debug("Ignore 从者技能 For CD: %s: %s %s", skill, target, index)
                     continue
 
             logger.debug("Use Skill %s: %s %s", skill, target, index)
@@ -85,17 +94,27 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
 
-            if self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"]]]):
+            if self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
 
-    def choose_card(self, card_names, card_rects, order):
-        """根据order中的顺序, 在card_names中搜索第一个匹配的指令卡"""
-        idx = 0
+    def choose_card_idx(self, card_names, order):
+        """
+        根据order中的顺序, 在card_names中搜索第一个匹配的指令卡, 
+        返回其下标
+        """
         for item in order:
             for idx, card in enumerate(card_names):
                 if re.search(item, card):
-                    break
+                    return idx
+        return 0
+
+    def choose_card(self, card_names, card_rects, order):
+        """
+        根据order中的顺序, 在card_names中搜索第一个匹配的指令卡, 
+        从选项中删除该卡, 返回该卡的名称、坐标
+        """
+        idx = self.choose_card_idx(card_names, order)
         result = [card_names[idx], card_rects[idx]]
         card_names.remove(card_names[idx])
         card_rects.remove(card_rects[idx])
@@ -103,8 +122,6 @@ class FGOSimple(FGOBase):
 
     def choose_cards(self):
         choice = []
-        self.wait(3)
-        self.make_screen_shot()
         if not self.combat_info:
             self.extract_combat_info()
         else:
@@ -114,7 +131,7 @@ class FGOSimple(FGOBase):
         for check in self.data["Strategy"]["UseNP"]:
             idx = check["Target"]
             if self.combat_info["NP%d" % idx] >= 100 and\
-                parse_condition(check["Condition"], self, self.combat_info.__getitem__):
+                    parse_condition(check["Condition"], self, self.combat_info.__getitem__):
                 name = "宝具%s" % (check["Target"])
                 logger.info("使用宝具: %s", name)
                 choice.append(self.get_resource_rect(name))
