@@ -195,6 +195,7 @@ def check_resource(info, image=None):
     else:
         name = info["Name"]
         update_resource(info, s.section)
+        s.resources[name] = info
 
     if 'ImageData' in info:
         target = info['ImageData']
@@ -214,6 +215,9 @@ def check_resource(info, image=None):
     if 'ImageData' in info:
         ret, offsets = s.search_resource(name, image)
         print("search_resource:", ret, offsets)
+        if not ret and "Dynamic" not in info["Type"]:
+            diff, offsets = get_match(image, info["ImageData"])
+            print("best match:", diff, offsets)
     elif info["Type"] == "Static":
         offsets = [info["Offset"]]
     elif info["Type"] == "MultiStatic":
