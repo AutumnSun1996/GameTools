@@ -7,7 +7,7 @@ import requests
 
 from config_loader import config
 from simulator import SimulatorControl, parse_condition
-from simulator.image_tools import cv_crop, cv_save, load_map, load_resources, load_scenes, get_multi_match, get_match
+from simulator.image_tools import cv_crop, cv_save, load_map, load_resources, load_scenes, get_multi_match, get_match, Affine
 from simulator.win32_tools import drag, rand_drag, rand_click, rand_point
 from ocr import ocr
 
@@ -248,14 +248,26 @@ class FateGrandOrder(SimulatorControl):
             relation = "0"
         result += relation
 
-        if self.resource_in_image("助战", image):
-            result += "助战"
+        if self.resource_in_image("指令卡-助战", image):
+            result += "-助战"
 
         logger.info("Found Card: %s", result)
         return result
 
     def choose_cards(self):
         pass
+
+    def pre_cards_info(self):
+        """提取技能选择画面中的指令卡信息"""
+        cards = []
+        info = self.resources["指令卡预判"]
+        for i in range(5):
+            x, y = info["Positions"][i]
+            theta = info["Angles"][i]
+            mat = Affine.move(4, 30) * Affine.rotate(theta) * Affine.move(-x, -y)
+            card_image = Affine.warp(self.screen, mat, (100, 140))
+            cards.append(self.extract_card_info(card_image))
+        return cards
 
 
 # if __name__ == "__main__":
