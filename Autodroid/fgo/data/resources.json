@@ -718,8 +718,7 @@
     "MainSize": [1280, 720],
     "Offset": [580, 542],
     "Size": [120, 40],
-    "Type": "Static",
-    "Image": "撤退-关闭.png"
+    "Type": "Static"
   },
   "从者信息": {
     "Name": "从者信息",
