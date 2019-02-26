@@ -17,16 +17,25 @@
       "Condition": ["10连抽"],
       "Actions": [
         {"Type": "Click", "Target": "10连抽"},
-        {"Type": "Wait", "Time": 0.5}
+        {"Type": "Wait", "Time": 0.3},
+        {"Type": "Wait", "Condition": ["$random", 0.4], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.4], "Time": 0.1}
       ],
       "Next": ["10连抽", "中间场景"]
     },
     "中间场景": {
       "Name": "中间场景",
-      "Condition": true,
+      "Condition": [
+        "$not_",
+        ["$any", [["10连抽"], ["10连抽-开始"], ["剩余奖品0"]]]
+      ],
       "Actions": [
         {"Type": "Click", "Target": "10连抽"},
-        {"Type": "Wait", "Time": 0.5}
+        {"Type": "Wait", "Time": 0.2},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1}
       ],
       "Next": [
         "10连抽",
