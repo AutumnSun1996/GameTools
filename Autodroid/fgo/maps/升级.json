@@ -115,8 +115,14 @@
         {
           "Type": "InnerCall",
           "Condition": [
-            "$not_",
-            ["$method", "resource_in_screen", "EXP金卡"]
+            "$all",
+            [
+              [
+                "$not_",
+                ["$method", "resource_in_screen", "EXP金卡"]
+              ],
+              ["$ne", ["$getattr", ["$"], "section"], "FGO2"]
+            ]
           ],
           "Target": "error",
           "args": ["金卡不足"]
@@ -124,7 +130,7 @@
         {
           "Type": "InnerCall",
           "Target": "choose_exp_cards",
-          "args": [3, 7, ["$any", [["LvMAX-金卡"], false]]]
+          "args": [3, 7, ["$any", [["LvMAX-金卡"], ["LvMAX-银卡"]]]]
         },
         {"Type": "Wait", "Time": 1},
         {"Type": "Click", "Target": "选卡-决定"},
@@ -210,7 +216,7 @@
       "Size": [80, 40],
       "Type": "Static",
       "Image": "LvMAX-金卡.png"
-    },
+    },"LvMAX-银卡": {"Name": "LvMAX-银卡", "MainSize": [1280, 720], "Offset": [900, 660], "Size": [80, 40], "Type": "Static", "Image": "LvMAX-银卡.png"},
     "从者满破": {
       "Name": "从者满破",
       "MainSize": [1280, 720],
