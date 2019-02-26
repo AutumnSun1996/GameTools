@@ -283,12 +283,16 @@
     "Size": [450, 38],
     "Type": "Anchor"
   },
-  "助战从者-宝具": {
-    "Name": "助战选择-从者-宝具",
+  "助战-宝具": {
+    "Name": "助战-宝具",
     "MainSize": [1280, 720],
-    "Offset": [310, 126],
-    "Size": [450, 38],
-    "Type": "Anchor"
+    "SearchArea": [[190, 100], [80, 80]],
+    "CropOffset": [120, 0],
+    "CropSize": [40, 30],
+    "Size": [60, 30],
+    "Type": "Dynamic",
+    "Image": "助战-宝具.png",
+    "MaxDiff": 0.1
   },
   "助战从者-礼装": {
     "Name": "助战选择-从者-礼装",
