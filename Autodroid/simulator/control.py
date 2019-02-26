@@ -167,14 +167,15 @@ class SimulatorControl:
             return self.resource_pos_buffer[name]
 
         if info["Type"] == "Static":
-            rect = self.get_resource_rect(name)
+            x, y = info["Offset"]
+            w, h = info["Size"]
             target = info['ImageData']
-            cropped = cv_crop(image, rect)
-            diff = get_diff(cropped, target)
+            part = cv_crop(image, (x, y, x+w, y+h))
+            diff = get_diff(part, target)
             # 有位置限制, 可以使用较为宽松的阈值
             ret = diff <= info.get('MaxDiff', 0.06)
             if ret:
-                pos = rect[:2]
+                pos = [x, y]
             else:
                 pos = []
         elif info["Type"] in {"Dynamic", "Anchor"}:
@@ -272,8 +273,10 @@ class SimulatorControl:
         res = self.resources[name]
         logger.info("Click at <%s> resource: %s", res["Type"], name)
         if res['Type'] == 'Static':
-            rect = self.get_resource_rect(name)
-            rand_click(self.hwnd, rect)
+            x, y = res['Offset']
+            dx, dy = res.get("ClickOffset", (0, 0))
+            cw, ch = res.get("ClickSize", res.get("Size"))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
         elif res['Type'] == 'MultiStatic':
             logger.info("index=%s", index)
             x, y = res['Positions'][index]
