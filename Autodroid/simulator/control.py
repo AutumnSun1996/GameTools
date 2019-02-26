@@ -51,6 +51,9 @@ def parse_condition(cond, obj, extra=None):
             elif cond[0] == "$method":
                 cmd = getattr(obj, parse_condition(cond[1], obj, extra))
                 cond = cmd(*cond[2:])
+            elif cond[0] == "$random":
+                thresh = parse_condition(cond[1], obj, extra)
+                cond = np.random.rand() < thresh
             elif cond[0] == "$call":
                 cmd = parse_condition(cond[1], obj, extra)
                 cond = cmd(*cond[2:])
@@ -304,10 +307,15 @@ class SimulatorControl:
             if res["Type"] == "MultiStatic":
                 x, y = res["Positions"][index]
             elif res["Type"] == "MultiDynamic":
-                ret, pos = self.search_resource(name)
+                ret, pos = self.search_resource(name, image=image)
                 if not ret:
                     raise ValueError("Resource[%s] not in Image" % name)
                 x, y = pos[index]
+            elif res["Type"] == "Dynamic":
+                ret, pos = self.search_resource(name, image=image)
+                if not ret:
+                    raise ValueError("Resource[%s] not in Image" % name)
+                x, y = pos
             else:
                 x, y = 0, 0
         else:
@@ -344,13 +352,11 @@ class SimulatorControl:
         if isinstance(scene, str):
             scene = self.scenes[scene]
 
-        logger.debug("Check scene: %s", scene)
         if reshot:
             self.make_screen_shot()
 
         res = self.parse_scene_condition(scene["Condition"])
-        if res:
-            logger.debug("Scene Matched: %s", scene)
+        logger.info("Check scene %s: %s=%s", scene["Name"], scene["Condition"], res)
         return res
 
     def go_top(self):
