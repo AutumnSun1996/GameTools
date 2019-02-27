@@ -15,7 +15,7 @@ if __name__ == "__main__":
         if fgo.current_scene_name in {"重置奖品"}:
             count += 1
             print(fgo.current_scene_name, count)
-        elif fgo.current_scene_name == "结束":
+        elif fgo.current_scene_name == "结束" and not fgo.scene_changed:
             fgo.notice("抽取结束(已重置%d次), 等待手动操作" % count)
             print("Total:", count)
             input("Pause...")
