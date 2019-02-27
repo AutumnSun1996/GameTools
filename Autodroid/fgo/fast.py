@@ -19,12 +19,19 @@ def choose_match(cards, items):
 
 
 class AssistInfo(dict):
+    """从者信息提取"""
+
     def __init__(self, fgo, offset):
         super().__init__()
         self.fgo = fgo
         self.image = self.fgo.crop_resource("助战从者定位", offset=offset)
 
     def check(self, name):
+        if name == "助战-宝具可用":
+            self[name] = self.fgo.crop_resource("助战-宝具", image=self.image).max() > 240
+        elif name == "RecheckCount":
+            self[name] = [s["Name"] for s in self.fgo.scene_history].count("助战选择")
+
         if name not in self:
             self[name] = self.fgo.resource_in_image(name, self.image)
         return self[name]
@@ -40,6 +47,7 @@ class FGOSimple(FGOBase):
                 logger.info("选择助战: %s", info)
                 self.click_at_resource("助战从者定位", offset=offset)
                 return True
+            logger.info("跳过助战: %s", info)
         return False
 
     def choose_skills(self):
@@ -50,6 +58,8 @@ class FGOSimple(FGOBase):
             if parse_condition(item.get("Condition", True), self, self.combat_info.__getitem__):
                 logger.info("Skill Strategy Passed: %s", item)
                 self.do_actions(item["Actions"])
+            else:
+                logger.info("Skill Strategy Skipped: %s", item)
 
     def use_skills(self, *skills):
         for skill in skills:
@@ -133,7 +143,7 @@ class FGOSimple(FGOBase):
             if self.combat_info["NP%d" % idx] >= 100 and\
                     parse_condition(check["Condition"], self, self.combat_info.__getitem__):
                 name = "宝具%s" % (check["Target"])
-                logger.info("使用宝具: %s", name)
+                logger.info("使用宝具: %s(NP=%s, Condition=%s)", name, self.combat_info["NP%d" % idx], check["Condition"])
                 choice.append(self.get_resource_rect(name))
 
         self.wait(1)
