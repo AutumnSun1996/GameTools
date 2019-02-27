@@ -14,7 +14,7 @@
             "resource_in_screen",
             "灵基变还-金卡"
           ],
-          "Target": "error",
+          "Target": "wait_mannual",
           "args": ["出售-出现金卡"]
         },
         {
@@ -48,7 +48,7 @@
               ["$method", "resource_in_screen", "从者满级"]
             ]
           ],
-          "Target": "error",
+          "Target": "wait_mannual",
           "args": ["从者已满级"]
         },
         {"Type": "Click", "Target": "等待选卡"},
@@ -88,7 +88,7 @@
             "resource_in_screen",
             "灵基再临-素材不足"
           ],
-          "Target": "error",
+          "Target": "wait_mannual",
           "args": ["灵基再临素材不足"]
         },
         {
@@ -98,7 +98,7 @@
             "resource_in_screen",
             "灵基再临-未选择"
           ],
-          "Target": "error",
+          "Target": "wait_mannual",
           "args": ["未选择灵基再临对象"]
         },
         {"Type": "Click", "Target": "强化按钮"},
@@ -124,7 +124,7 @@
               ["$ne", ["$getattr", ["$"], "section"], "FGO2"]
             ]
           ],
-          "Target": "error",
+          "Target": "wait_mannual",
           "args": ["金卡不足"]
         },
         {
@@ -216,7 +216,15 @@
       "Size": [80, 40],
       "Type": "Static",
       "Image": "LvMAX-金卡.png"
-    },"LvMAX-银卡": {"Name": "LvMAX-银卡", "MainSize": [1280, 720], "Offset": [900, 660], "Size": [80, 40], "Type": "Static", "Image": "LvMAX-银卡.png"},
+    },
+    "LvMAX-银卡": {
+      "Name": "LvMAX-银卡",
+      "MainSize": [1280, 720],
+      "Offset": [900, 660],
+      "Size": [80, 40],
+      "Type": "Static",
+      "Image": "LvMAX-银卡.png"
+    },
     "从者满破": {
       "Name": "从者满破",
       "MainSize": [1280, 720],
