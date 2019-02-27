@@ -1,5 +1,6 @@
 import ctypes
 import os
+import re
 import json
 
 from PIL import Image, ImageFont, ImageDraw
@@ -41,13 +42,15 @@ def rescale_item(item, rx, ry):
     if isinstance(item, dict):
         return {key: rescale_item(val, rx, ry) for key, val in item.items()}
     if isinstance(item, list):
-        if isinstance(item[0], int):
-            return (int(np.round(item[0] * rx)), int(np.round(item[1] * ry)))
-        if isinstance(item[0], float):
-            return (item[0] * rx, item[1] * ry)
-        # 解决退役失败问题
-        # (x for x in xs) 返回的是生成器, 改为返回list
-        return [rescale_item(sub, rx, ry) for sub in item]
+        if len(item) == 2:
+            if isinstance(item[0], int):
+                return (int(np.round(item[0] * rx)), int(np.round(item[1] * ry)))
+            if isinstance(item[0], float):
+                return (item[0] * rx, item[1] * ry)
+        if isinstance(item[0], list):
+            # 解决退役失败问题
+            # (x for x in xs) 返回的是生成器, 改为返回list
+            return [rescale_item(sub, rx, ry) for sub in item]
     raise ValueError("Invalid Item %s" % item)
 
 
@@ -56,9 +59,10 @@ def update_resource(resource, section):
     dw = config.getint("Device", "MainWidth")
     dh = config.getint("Device", "MainHeight")
     sdw, sdh = resource["MainSize"]
-    for key in resource:
-        if isinstance(resource[key], list):
-            resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
+    if dw != sdw or dh != sdh:
+        for key in resource:
+            if re.search("Offset|Position|Size", key):
+                resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
     if resource.get("Image"):
         load_image(resource, section)
 
@@ -226,6 +230,7 @@ def extract_text(image, font_size, text='0123456789/'):
     result.sort(key=lambda a: a[0])
     return ''.join(item[1] for item in result)
 
+
 class Affine:
     @staticmethod
     def move(dx, dy):
@@ -252,10 +257,11 @@ class Affine:
             [sin, cos, 0],
             [0, 0, 1]
         ])
-    
+
     @staticmethod
     def warp(src, mat, outsize):
         return cv.warpAffine(src, mat[:2, :].astype("float32"), outsize)
+
 
 if __name__ == "__main__":
     import win32_tools
