@@ -171,6 +171,14 @@
       {"Type": "InnerCall", "Target": "choose_cards"},
       {"Type": "Wait", "Time": 5}
     ],
+    "ActionsWhenWait": [
+      {
+        "Type": "Click",
+        "Condition": ["$random", 0.3],
+        "Target": "空白区域-使用指令卡"
+      },
+      {"Type": "Wait", "Time": 1}
+    ],
     "Next": ["选择技能", "获得羁绊", "战斗失败"]
   },
   "战斗失败": {

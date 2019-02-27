@@ -359,7 +359,10 @@ class SimulatorControl:
             self.make_screen_shot()
 
         res = self.parse_scene_condition(scene["Condition"])
-        logger.info("Check scene %s: %s=%s", scene["Name"], scene["Condition"], res)
+        if res:
+            logger.info("Check scene %s: %s=%s", scene["Name"], scene["Condition"], res)
+        elif logger.isEnabledFor(logging.DEBUG):
+            logger.debug("Check scene %s: %s=%s", scene["Name"], scene["Condition"], res)
         return res
 
     def go_top(self):
@@ -410,10 +413,17 @@ class SimulatorControl:
         logger.info("等待手动操作: %s", message)
 
         info = "等待手动指令:\n%s" % message
-        flag = win32con.MB_ICONINFORMATION | win32con.MB_OK | win32con.MB_TOPMOST \
-            | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        # flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
+        #     | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        flag = win32con.MB_YESNO | win32con.MB_SETFOREGROUND
         title = "自动脚本 - 等待手动指令"
-        res = win32api.MessageBox(0, info, title, flag)
+        res = ctypes.windll.user32.MessageBoxTimeoutA(
+            0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
+        if res == win32con.IDNO:
+            self.go_top()
+            exit(0)
+        else:
+            input("Paused...")
 
     def notice(self, message=None, title="", action="继续"):
         """提醒"""
@@ -427,7 +437,7 @@ class SimulatorControl:
             self.go_top()
             exit(0)
 
-    def update_current_scene(self, candidates=None, interval=1, repeat=None):
+    def update_current_scene(self, candidates=None, repeat=None):
         """等待指定的场景或全局场景"""
         if repeat is None:
             repeat = self.scene_check_max_repeat
@@ -447,7 +457,6 @@ class SimulatorControl:
             else:
                 candidates = self.current_scene["Next"]
                 if isinstance(candidates, dict):
-                    interval = candidates.get("Interval", interval)
                     repeat = candidates.get("Repeat", repeat)
                     candidates = candidates["Candidates"]
                 logger.debug("update candidates: Next for %s: %s", self.current_scene["Name"], candidates)
@@ -479,8 +488,9 @@ class SimulatorControl:
                     self.scene_history_count[scene["Name"]] += 1
                     return scene
 
-        self.wait(interval)
-        return self.update_current_scene(candidates, interval, repeat-1)
+        self.do_actions(self.current_scene.get("ActionsWhenWait", [{"Type": "Wait", "Time": 1}]))
+
+        return self.update_current_scene(candidates, repeat-1)
 
     def get_resource_rect(self, key):
         """获取资源的bbox"""
