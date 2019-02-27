@@ -136,7 +136,14 @@ class FateGrandOrder(SimulatorControl):
         if best[0] == 0:
             return 0
 
-    def extract_np_info(self):
+    def extract_np_info(self, outcall=True):
+        """提取NP信息
+        outcall表示调用是否来自extract_combat_info以外的函数
+        是则需要重新截屏、提取信息后log
+        """
+        if outcall:
+            self.make_screen_shot()
+
         if self.current_scene_name == "选择指令卡":
             multi = 1.4
         else:
@@ -144,12 +151,16 @@ class FateGrandOrder(SimulatorControl):
         for i in range(3):
             self.combat_info["NP%d" % (i+1)] = self.get_np(self.crop_resource("从者%d-NP" % (i+1)) * multi)
 
+        if outcall:
+            logger.info("extract_np_info: %s", self.combat_info)
+
     def reset_combat_info(self):
         self.combat_info = defaultdict(lambda: 0)
 
     def extract_combat_info(self, repeat=0):
         if not self.scene_changed:
             return
+        self.make_screen_shot()
         if repeat > 3:
             self.notice("extract_combat_info Failed")
             return
@@ -197,7 +208,7 @@ class FateGrandOrder(SimulatorControl):
                 self.combat_info["Turn"] += 1
             errors.append(err)
 
-        self.extract_np_info()
+        self.extract_np_info(False)
         if errors:
             self.notice("OCR Errors %s" % errors)
             self.wait(1)
