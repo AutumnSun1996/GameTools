@@ -131,14 +131,60 @@
       [
         ["助战-从者满破"],
         ["助战-奶光"],
-        ["礼装-万华镜"],
+        [
+          "$any",
+          [
+            ["礼装-万华镜"],
+            ["$all", [["礼装-醉贞"], ["助战-礼装满破"]]]
+          ]
+        ],
         ["助战-宝具可用"]
       ]
     ],
     "AssistRange": 0.7
   },
-  "Scenes": {},
+  "Scenes": {
+    "关卡选择": {
+      "Name": "关卡选择",
+      "Condition": ["$all", [["右下-菜单"], ["左上-关闭"]]],
+      "Actions": [
+        {"Type": "Wait", "Time": 1},
+        {"Type": "InnerCall", "Target": "make_screen_shot"},
+        {
+          "Type": "Click",
+          "Condition": ["$method", "resource_in_screen", "自由关卡"],
+          "Target": "左上-关闭"
+        },
+        {
+          "Type": "Click",
+          "Condition": [
+            "$not_",
+            ["$method", "resource_in_screen", "自由关卡"]
+          ],
+          "Target": "默认关卡"
+        },
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["助战选择", "AP不足", "关卡选择", "地图选择"]
+    }
+  },
   "Resources": {
+    "助战-梅林": {
+      "Name": "助战-梅林",
+      "MainSize": [1280, 720],
+      "SearchArea": [[300, 60], [80, 100]],
+      "Size": [60, 32],
+      "Type": "Dynamic",
+      "Image": "助战-梅林.png"
+    },
+    "礼装-醉贞": {
+      "Name": "礼装-醉贞",
+      "MainSize": [1280, 720],
+      "Offset": [5, 135],
+      "Size": [158, 45],
+      "Type": "Static",
+      "Image": "礼装-醉贞.png"
+    },
     "助战-奶光": {
       "Name": "助战-奶光",
       "MainSize": [1280, 720],

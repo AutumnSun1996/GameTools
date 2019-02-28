@@ -15,19 +15,19 @@
       [["右下-菜单"], ["左上-关闭"], ["$not_", ["无战斗"]]]
     ],
     "Actions": [
-      {"Type": "Click", "Target": "无战斗-开始任务"},
+      {"Type": "Click", "Target": "默认关卡"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["剧情"]
+    "Next": ["助战选择", "AP不足", "关卡选择", "无战斗"]
   },
   "无战斗": {
     "Name": "无战斗",
     "Condition": ["$all", [["右下-菜单"], ["左上-关闭"], ["无战斗"]]],
     "Actions": [
-      {"Type": "Click", "Target": "默认关卡"},
+      {"Type": "Click", "Target": "无战斗-开始任务"},
       {"Type": "Wait", "Time": 1}
     ],
-    "Next": ["助战选择", "AP不足", "关卡选择"]
+    "Next": ["剧情"]
   },
   "AP不足": {
     "Name": "AP不足",

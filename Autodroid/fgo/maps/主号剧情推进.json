@@ -1,29 +1,31 @@
 {
   "Name": "主号剧情推进",
-  "Description": "队伍: 肯娘@80NP, 梅林, 尼禄@50NP",
+  "Description": "队伍: 肯娘@80NP, 梅林, 阿拉什@50NP, 幼贞@50NP",
   "Strategy": {
     "Skills": [
       {
+        "Description": "肯娘1, 梅林1",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 1], [2, 1], [3, 2]]
+            "args": [[1, 1], [2, 1]]
           }
         ]
       },
-      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
       {
-        "Condition": ["$le", ["NP3"], 100],
+        "Description": "阿拉什123",
+        "Condition": ["$eq", ["BattleNow"], 1],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 1]]
+            "args": [[3, 1], [3, 2], [3, 3]]
           }
         ]
       },
       {
+        "Description": "梅林2 防御",
         "Condition": [
           "$all",
           [
@@ -41,6 +43,7 @@
       },
       {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
       {
+        "Description": "肯娘宝具准备",
         "Condition": [
           "$all",
           [["$ge", ["NP1"], 100], ["$le", ["BattleLeft"], 0]]
@@ -49,11 +52,24 @@
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 3], [3, 3, 1]]
+            "args": [[1, 3]]
           }
         ]
       },
       {
+        "Description": "幼贞自充",
+        "Condition": ["$le", ["NP3"], 100],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 2]]
+          },
+          {"Type": "InnerCall", "Target": "extract_np_info"}
+        ]
+      },
+      {
+        "Description": "幼贞宝具准备",
         "Condition": [
           "$all",
           [["$ge", ["NP3"], 100], ["$le", ["BattleLeft"], 1]]
@@ -62,7 +78,7 @@
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[2, 3, 3]]
+            "args": [[3, 3]]
           }
         ]
       }
@@ -70,7 +86,7 @@
     "UseNP": [
       {"Target": 1, "Condition": ["$le", ["BattleLeft"], 0]},
       {"Target": 2, "Condition": true},
-      {"Target": 3, "Condition": ["$le", ["BattleLeft"], 1]}
+      {"Target": 3, "Condition": true}
     ],
     "CardChoice": [
       {
@@ -139,6 +155,29 @@
         {"Type": "Wait", "Time": 300}
       ],
       "Next": ["关卡选择"]
+    },
+    "关卡选择": {
+      "Name": "关卡选择",
+      "Condition": ["$all", [["右下-菜单"], ["左上-关闭"]]],
+      "Actions": [
+        {"Type": "Wait", "Time": 1},
+        {"Type": "InnerCall", "Target": "make_screen_shot"},
+        {
+          "Type": "Click",
+          "Condition": ["$method", "resource_in_screen", "自由关卡"],
+          "Target": "左上-关闭"
+        },
+        {
+          "Type": "Click",
+          "Condition": [
+            "$not_",
+            ["$method", "resource_in_screen", "自由关卡"]
+          ],
+          "Target": "默认关卡"
+        },
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["助战选择", "AP不足", "关卡选择", "地图选择"]
     }
   },
   "Resources": {}
