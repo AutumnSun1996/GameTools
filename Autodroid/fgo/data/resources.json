@@ -283,6 +283,16 @@
     "Size": [450, 38],
     "Type": "Anchor"
   },
+  "助战-从者名称": {
+    "Name": "助战-从者名称",
+    "MainSize": [1280, 720],
+    "SearchArea": [[190, 60], [80, 100]],
+    "CropOffset": [110, 0],
+    "CropSize": [400, 30],
+    "Size": [60, 30],
+    "Type": "Dynamic",
+    "Image": "助战-从者名称.png"
+  },
   "助战-宝具": {
     "Name": "助战-宝具",
     "MainSize": [1280, 720],
@@ -701,6 +711,29 @@
     "Offset": [700, 180],
     "Size": [400, 100],
     "Type": "Static"
+  },
+  "无战斗": {
+    "Name": "无战斗",
+    "MainSize": [1280, 720],
+    "Offset": [520, 300],
+    "Size": [240, 32],
+    "Type": "Static",
+    "Image": "无战斗.png"
+  },
+  "无战斗-开始任务": {
+    "Name": "无战斗-开始任务",
+    "MainSize": [1280, 720],
+    "Offset": [740, 540],
+    "Size": [200, 46],
+    "Type": "Static"
+  },
+  "自由关卡": {
+    "Name": "自由关卡",
+    "MainSize": [1280, 720],
+    "SearchArea": [[640, 80], [120, 220]],
+    "Size": [100, 90],
+    "Type": "Dynamic",
+    "Image": "自由关卡.png"
   },
   "续关": {
     "Name": "续关",
