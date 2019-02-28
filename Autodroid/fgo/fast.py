@@ -63,6 +63,7 @@ class FGOSimple(FGOBase):
 
     def use_skills(self, *skills):
         for skill in skills:
+            self.combat_info["SkillCheck<{0}-{1}>".format(*skill)] = self.combat_info["Turn"]
             if skill[0] == 0:
                 self.click_at_resource("御主技能")
                 self.wait(1)
@@ -86,6 +87,7 @@ class FGOSimple(FGOBase):
                     continue
 
             logger.debug("Use Skill %s: %s %s", skill, target, index)
+            self.combat_info["SkillUse<{0}-{1}>".format(*skill)] = self.combat_info["Turn"]
             self.click_at_resource(target, index=index)
             self.wait(1)
             if len(skill) == 3:
