@@ -23,12 +23,13 @@ def rescale_point(hwnd, point):
     return int(np.round(x * 96 / dpi)), int(np.round(y * 96 / dpi))
 
 
-def click_at(hwnd, x, y, ):
+def click_at(hwnd, x, y, hold=0):
     # 向后台窗口发送单击事件，(x, y)为相对于窗口左上角的位置
     x, y = rescale_point(hwnd, (x, y))
     pos = win32api.MAKELONG(int(x), int(y))
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, pos)
+    time.sleep(hold)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
 def rand_point(p, diff=0.2):
@@ -96,11 +97,11 @@ def drag(hwnd, start, end, step=100):
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
 
-def rand_click(hwnd, rect):
+def rand_click(hwnd, rect, hold=0):
     x_min, y_min, x_max, y_max = rect
     x = np.random.triangular(x_min, (x_min + x_max) / 2, x_max)
     y = np.random.triangular(y_min, (y_min + y_max) / 2, y_max)
-    click_at(hwnd, x, y)
+    click_at(hwnd, x, y, hold)
 
 
 def make_foreground(hwnd, retry=True):
