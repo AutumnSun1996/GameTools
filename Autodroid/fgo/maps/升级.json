@@ -140,7 +140,7 @@
     },
     "从者强化-确认": {
       "Name": "从者强化",
-      "Condition": ["$all", [["强化按钮"], ["从者强化"]]],
+      "Condition": ["$all", [["$not_", ["选卡"]], ["从者强化"]]],
       "Actions": [
         {"Type": "Click", "Target": "强化按钮"},
         {"Type": "Wait", "Time": 1},
@@ -263,16 +263,14 @@
       "MainSize": [1280, 720],
       "Offset": [1000, 650],
       "Size": [200, 56],
-      "Type": "Static",
-      "Image": "强化按钮.png"
+      "Type": "Static"
     },
     "强化-决定": {
       "Name": "强化-决定",
       "MainSize": [1280, 720],
       "Offset": [760, 570],
       "Size": [160, 40],
-      "Type": "Static",
-      "Image": "强化-决定.png"
+      "Type": "Static"
     },
     "从者强化": {
       "Name": "从者强化",

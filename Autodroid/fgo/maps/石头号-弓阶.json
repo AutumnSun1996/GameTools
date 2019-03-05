@@ -119,7 +119,6 @@
     "花叶二重奏": {
       "Name": "花叶二重奏",
       "MainSize": [1280, 720],
-      "ClickSize": [400, 160],
       "Size": [300, 35],
       "Type": "Dynamic",
       "Image": "花叶二重奏.png"

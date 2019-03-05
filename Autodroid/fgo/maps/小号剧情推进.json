@@ -1,15 +1,15 @@
 {
   "Name": "小号剧情推进1",
-  "Description": "队伍: 北斋@50NP, 助战奶光@50NP, 阿拉什@75NP, 梅林",
+  "Description": "队伍: 北斋@50NP, 助战黑狗, 阿拉什@75NP, 梅林",
   "Strategy": {
     "Skills": [
       {
-        "Description": "北斋2, 奶光3, 阿拉什/梅林1",
+        "Description": "北斋2, 黑狗123, 阿拉什/梅林1",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 2], [2, 3], [3, 1]]
+            "args": [[1, 2], [2, 1], [2, 2], [2, 3], [3, 1]]
           }
         ]
       },
@@ -54,21 +54,7 @@
         ]
       },
       {
-        "Description": "奶光宝具准备",
-        "Condition": [
-          "$all",
-          [["$ge", ["NP2"], 100], ["$le", ["BattleLeft"], 0]]
-        ],
-        "Actions": [
-          {
-            "Type": "InnerCall",
-            "Target": "use_skills",
-            "args": [[2, 1], [2, 2]]
-          }
-        ]
-      },
-      {
-        "Description": "奶光宝具准备-御主技能",
+        "Description": "黑狗宝具准备-御主技能",
         "Condition": [
           "$all",
           [
@@ -143,18 +129,7 @@
     ],
     "AssistCondition": [
       "$all",
-      [
-        ["助战-从者满破"],
-        ["助战-奶光"],
-        [
-          "$any",
-          [
-            ["礼装-万华镜"],
-            ["$all", [["礼装-醉贞"], ["助战-礼装满破"]]]
-          ]
-        ],
-        ["助战-宝具可用"]
-      ]
+      [["助战-从者满破"], ["助战-黑狗"], ["助战-宝具可用"]]
     ],
     "AssistRange": 0.7
   },
@@ -225,38 +200,5 @@
       "Next": ["助战选择", "AP不足", "关卡选择", "地图选择", "无战斗"]
     }
   },
-  "Resources": {
-    "助战-梅林": {
-      "Name": "助战-梅林",
-      "MainSize": [1280, 720],
-      "SearchArea": [[300, 60], [80, 100]],
-      "Size": [60, 32],
-      "Type": "Dynamic",
-      "Image": "助战-梅林.png"
-    },
-    "礼装-醉贞": {
-      "Name": "礼装-醉贞",
-      "MainSize": [1280, 720],
-      "Offset": [5, 135],
-      "Size": [158, 45],
-      "Type": "Static",
-      "Image": "礼装-醉贞.png"
-    },
-    "助战-奶光": {
-      "Name": "助战-奶光",
-      "MainSize": [1280, 720],
-      "SearchArea": [[300, 60], [110, 100]],
-      "Size": [90, 32],
-      "Type": "Dynamic",
-      "Image": "助战-奶光.png"
-    },
-    "礼装-万华镜": {
-      "Name": "礼装-万华镜",
-      "MainSize": [1280, 720],
-      "Offset": [5, 135],
-      "Size": [158, 45],
-      "Type": "Static",
-      "Image": "礼装-万华镜.png"
-    }
-  }
+  "Resources": {}
 }
