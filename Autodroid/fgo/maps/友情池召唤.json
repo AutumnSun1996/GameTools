@@ -1,0 +1,124 @@
+{
+  "Name": "友情池召唤",
+  "Description": "友情池召唤",
+  "Strategy": {},
+  "Scenes": {
+    "开始召唤": {
+      "Name": "开始召唤",
+      "Condition": ["召唤10次"],
+      "Actions": [
+        {"Type": "Click", "Target": "召唤10次"},
+        {"Type": "Wait", "Time": 1},
+        {"Type": "Click", "Target": "召唤-决定"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["中间场景", "已满"]
+    },
+    "中间场景": {
+      "Name": "中间场景",
+      "Condition": [
+        "$not_",
+        [
+          "$any",
+          [
+            ["召唤10次"],
+            ["左上-关闭"],
+            ["召唤"],
+            ["召唤-下一步"],
+            ["已满"]
+          ]
+        ]
+      ],
+      "Actions": [
+        {"Type": "Click", "Target": "召唤-右侧空白区域"},
+        {"Type": "Wait", "Time": 0.2},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1}
+      ],
+      "Next": ["下一步", "召唤结束", "中间场景"]
+    },
+    "下一步": {
+      "Name": "下一步",
+      "Condition": ["召唤-下一步"],
+      "Actions": [
+        {"Type": "Wait", "Time": 0.5},
+        {"Type": "Click", "Target": "召唤-下一步"},
+        {"Type": "Wait", "Time": 0.5}
+      ],
+      "Next": ["召唤结束", "中间场景"]
+    },
+    "召唤结束": {
+      "Name": "召唤结束",
+      "Condition": ["召唤"],
+      "Actions": [
+        {"Type": "Wait", "Time": 0.5},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Wait", "Condition": ["$random", 0.5], "Time": 0.1},
+        {"Type": "Click", "Target": "召唤"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["开始召唤", "中间场景"]
+    },
+    "已满": {
+      "Name": "已满",
+      "Condition": ["召唤-已满"],
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Target": "wait_mannual",
+          "args": ["已满"]
+        }
+      ]
+    }
+  },
+  "Resources": {
+    "召唤10次": {
+      "Name": "召唤10次",
+      "MainSize": [1280, 720],
+      "Offset": [710, 520],
+      "Size": [230, 80],
+      "Type": "Static",
+      "Image": "召唤10次.png"
+    },
+    "召唤-已满": {
+      "Name": "召唤-已满",
+      "MainSize": [1280, 720],
+      "Offset": [470, 236],
+      "Size": [320, 40],
+      "Type": "Static",
+      "Image": "召唤-已满.png"
+    },
+    "召唤-决定": {
+      "Name": "召唤-决定",
+      "MainSize": [1280, 720],
+      "Offset": [740, 540],
+      "Size": [200, 50],
+      "Type": "Static"
+    },
+    "召唤-右侧空白区域": {
+      "Name": "召唤-右侧空白区域",
+      "MainSize": [1280, 720],
+      "Offset": [1080, 400],
+      "Size": [200, 200],
+      "Type": "Static"
+    },
+    "召唤-下一步": {
+      "Name": "召唤-下一步",
+      "MainSize": [1280, 720],
+      "Offset": [1000, 650],
+      "Size": [170, 50],
+      "Type": "Static",
+      "Image": "召唤-下一步.png"
+    },
+    "召唤": {
+      "Name": "召唤",
+      "MainSize": [1280, 720],
+      "Offset": [700, 650],
+      "Size": [130, 50],
+      "Type": "Static",
+      "Image": "召唤.png"
+    }
+  }
+}
