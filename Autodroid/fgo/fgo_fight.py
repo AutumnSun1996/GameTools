@@ -18,6 +18,13 @@ logger = logging.getLogger(__name__)
 class FateGrandOrder(SimulatorControl):
     scene_check_max_repeat = 60
     section = "FGO"
+    assist_servant_names = """
+    玉藻前 杀生院 BB 阿比 两仪式 孔明 北斋 B叔 BX 阿蒂拉 茨木童子 兰斯洛特 莫德雷德 
+    奶光 梅林 黑贞 黑狗 花嫁尼禄 阿尔托莉雅 宫本武藏 闪闪 伊什塔尔 小黑 白枪呆
+    """
+    assist_equip_names = """
+    醉贞 万华镜 
+    """
 
     def __init__(self, map_name="CommonConfig"):
         super().__init__()
@@ -29,10 +36,13 @@ class FateGrandOrder(SimulatorControl):
         logger.info("Update Scenes %s", list(self.data['Scenes'].keys()))
         self.scenes.update(self.data['Scenes'])
 
-    def update_combat_info(self, info=None, **kwargs):
-        if info:
-            self.combat_info.update(info)
+    def update_combat_info(self, parse=False, **kwargs):
+        if parse:
+            for key in kwargs:
+                kwargs[key] = parse_condition(kwargs[key], self, self.combat_info.__getitem__)
+        logger.info("Update combat_info: %s", kwargs)
         self.combat_info.update(kwargs)
+        logger.info("combat_info Now: %s", self.combat_info)
 
     def refresh_assist(self):
         logger.info("更新助战列表")
