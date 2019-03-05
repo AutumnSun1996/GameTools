@@ -291,7 +291,8 @@
     "Offset": [1590, 960],
     "Size": [300, 85],
     "Image": "迎击.png",
-    "Type": "Static"
+    "Type": "Static",
+    "MaxDiff": 0.1
   },
   "进入地图-立刻前往": {
     "Name": "进入地图-立刻前往",
@@ -537,6 +538,14 @@
     "Size": [40, 10],
     "Type": "Static",
     "Image": "加载进度条.png"
+  },
+  "加载进度条2": {
+    "Name": "加载进度条2",
+    "MainSize": [1280, 720],
+    "Offset": [140, 609],
+    "Size": [40, 10],
+    "Type": "Static",
+    "Image": "加载进度条2.png"
   },
   "Lv-Smaller": {
     "Name": "Lv-Smaller",
