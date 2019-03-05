@@ -5,6 +5,7 @@ import win32clipboard
 
 from simulator.win32_tools import *
 from simulator.image_tools import *
+from json_format import encode
 
 from IPython.display import display
 
@@ -24,6 +25,11 @@ def set_clip(text):
     win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text.encode("UTF-16-LE") + b"\x00")
     win32clipboard.CloseClipboard()
 
+def tojson(item, prefix=""):
+    return encode(item, prefix, 0)
+
+def to_res_text(item):
+    return encode(item, '"%s": ' % item["Name"], 0) + ","
 
 def show(img):
     if isinstance(img, Image.Image):
@@ -82,8 +88,7 @@ def save_crop(name, cropped, offset):
         "Image": name + '.png'
     }
 
-    js_text = json.dumps(info, ensure_ascii=False)
-    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
+    set_clip('{}: {},'.format(tojson(name), tojson(info)))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
@@ -116,8 +121,7 @@ def save_anchor(name, cropped, offset):
         "Type": "Anchor",
         "Image": name + '.png'
     }
-    js_text = json.dumps(anchor, ensure_ascii=False)
-    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
+    set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
@@ -137,8 +141,7 @@ def save_map_anchor(map_name, on_map, cropped, offset):
         "OnMap": on_map,
         "Image": name + '.png'
     }
-    js_text = json.dumps(anchor, ensure_ascii=False)
-    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), js_text))
+    set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
