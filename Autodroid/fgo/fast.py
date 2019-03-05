@@ -25,15 +25,58 @@ class AssistInfo(dict):
         super().__init__()
         self.fgo = fgo
         self.image = self.fgo.crop_resource("助战从者定位", offset=offset)
+        names = self.fgo.assist_servant_names
+        if isinstance(names, str):
+            names = re.findall(r"\w+", names)
+        self.servant_names = set(names)
+
+        names = self.fgo.assist_equip_names
+        if isinstance(names, str):
+            names = re.findall(r"\w+", names)
+        self.equip_names = set(names)
+
+    def check_servant_name(self, name):
+        """确认助战从者是否为指定的从者"""
+        info = {
+            "Name": name,
+            "MainSize": [1280, 720],
+            "SearchArea": [[300, 60], [420, 100]],
+            "Size": [400, 32],
+            "Type": "Dynamic",
+            "Image": name+".png"
+        }
+        self[name] = self.fgo.resource_in_image(info, image=self.image)
+        logger.info("check_servant_name %s: %s", name, self[name])
+
+    def check_servant_equip(self, name):
+        """确认助战从者是否携带指定的礼装"""
+        info = {
+            "Name": name,
+            "MainSize": [1280, 720],
+            "Offset": [5, 135],
+            "Size": [158, 45],
+            "Type": "Static",
+            "Image": name+".png"
+        }
+        self[name] = self.fgo.resource_in_image(info, image=self.image)
+        logger.info("check_servant_equip %s: %s", name, self[name])
 
     def check(self, name):
+        """判断助战从者是否满足指定条件"""
+        if name in self:
+            return self[name]
+
         if name == "助战-宝具可用":
             self[name] = self.fgo.crop_resource("助战-宝具", image=self.image).max() > 240
         elif name == "RecheckCount":
             self[name] = [s["Name"] for s in self.fgo.scene_history].count("助战选择")
+        elif name.startswith("助战-") and name[3:] in self.servant_names:
+            self.check_servant_name(name)
+        elif name.startswith("礼装-") and name[3:] in self.equip_names:
+            self.check_servant_equip(name)
+        else:
+            self[name] = self.fgo.resource_in_image(name, image=self.image)
 
-        if name not in self:
-            self[name] = self.fgo.resource_in_image(name, self.image)
         return self[name]
 
 
@@ -109,6 +152,7 @@ class FGOSimple(FGOBase):
             if self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
+                self.make_screen_shot()
 
     def choose_card_idx(self, card_names, order):
         """
