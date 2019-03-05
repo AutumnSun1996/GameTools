@@ -21,32 +21,34 @@ def save_assist_equip(name, index=0):
     save_crop(name, equip, offset)
 
 
-def save_assist_name(name, index=0, width=100):
+def save_assist_name(name, index=0):
     s = const["s"]
-    x = 310
-    h = 32
+    part = s.crop_resource("助战从者定位", index=index)
+    name_info = s.resources["助战-从者名称"]
+    ret, offset = s.search_resource(name_info["Name"], image=part)
+    if not ret:
+        raise ValueError("助战-从者名称 Not Found")
+    name_img = s.crop_resource(name_info, image=part, offset=offset)
+    dx, _ = name_info["CropOffset"]
+    x = offset[0] + dx
+    h, w = name_img.shape[:2]
+    if not name.startswith("助战-"):
+        name = "助战-" + name
     info = {
         "Name": name,
         "MainSize": [1280, 720],
         "SearchArea": [
             [x-10, 60],
-            [width+20, 100]
+            [w+20, 100]
         ],
-        "Size": [width, h],
+        "Size": [w, h],
         "Type": "Dynamic",
         "Image": name+".png",
     }
-    part = s.crop_resource("助战从者定位", index=index)
-    name_part = s.crop_resource("助战-从者名称", image=part)
-    name_part = name_part[:, :width, :]
     path = "fgo/resources/"+name+".png"
-    cv_save(path, name_part)
-    set_clip('{}: {},'.format(json.dumps(name, ensure_ascii=False), json.dumps(info, ensure_ascii=False)))
-
-    update_resource(info, s.section)
-    s.resources[name] = info
-    check_resource(name, part)
-
+    cv_save(path, name_img)
+    set_clip(name[3:])
+    check_resource(info, part)
 
 def init_map(name="通用配置", section="FGO"):
     FateGrandOrder.section = section
