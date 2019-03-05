@@ -2,8 +2,15 @@ import os
 import shutil
 import json
 
+import numpy as np
 
 config = {"MaxLineWidth": 80}
+
+
+def numpy2json(item):
+    if isinstance(item, (np.ndarray, np.number)):
+        return item.tolist()
+    return item
 
 
 def text_width(text):
@@ -12,7 +19,7 @@ def text_width(text):
 
 
 def dumps(obj):
-    return json.dumps(obj, indent=None, ensure_ascii=False)
+    return json.dumps(obj, indent=None, ensure_ascii=False, default=numpy2json)
 
 
 def encode(obj, prefix, level):
@@ -77,6 +84,15 @@ def do_format(folder, max_width=80):
             except Exception as err:
                 print(target, err)
 
+
 if __name__ == "__main__":
     do_format("fgo", 80)
     do_format("azurlane", 70)
+    # print(encode({
+    #         "Name": "助战-奶光",
+    #         "MainSize": [1280, 720],
+    #         "SearchArea": [[300, 60], [420, 100]],
+    #         "Size": [400, 32],
+    #         "Type": "Dynamic",
+    #         "Image": "助战-奶光.png"
+    #     }, "", 0))
