@@ -63,13 +63,15 @@ def update_resource(resource, section):
         for key in resource:
             if re.search("Offset|Position|Size", key):
                 resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
-    if resource.get("Image"):
+    if resource.get("Image") or resource.get("ImageData"):
         load_image(resource, section)
 
 
 def load_image(resource, section):
-    img_path = os.path.join(config.get(section, "ResourcesFolder"), "Resources", resource["Image"])
-    resource["ImageData"] = cv.resize(cv_imread(img_path), tuple(resource["Size"]), cv.INTER_CUBIC)
+    if "ImageData" not in resource:
+        img_path = os.path.join(config.get(section, "ResourcesFolder"), "Resources", resource["Image"])
+        resource["ImageData"] = cv_imread(img_path)
+    resource["ImageData"] = cv.resize(resource["ImageData"], tuple(resource["Size"]), cv.INTER_CUBIC)
     return resource["ImageData"]
 
 
