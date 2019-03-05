@@ -21,11 +21,12 @@ import win32api
 
 from config_loader import config, set_logging_dir
 from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
-    cv_save, load_scenes, load_resources, load_image
+    cv_save, load_scenes, load_resources, load_image, update_resource
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 import logging
 logger = logging.getLogger(__name__)
+
 
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
@@ -106,7 +107,7 @@ class SimulatorControl:
             self.go_top()
             win32api.MessageBeep()
             self.last_manual = time.time()
-    
+
     @property
     def last_scene(self):
         """上一次检测出的场景"""
@@ -118,7 +119,7 @@ class SimulatorControl:
     def last_scene_name(self):
         """上一次检测出的场景名称"""
         return self.last_scene["Name"]
-        
+
     @property
     def current_scene(self):
         """最近检测出的场景"""
@@ -142,23 +143,30 @@ class SimulatorControl:
         self.screen = get_window_shot(self.hwnd)
         return self.screen
 
-    def search_resource(self, name, image=None):
+    def search_resource(self, info, image=None):
         """判断资源是否存在于画面内
 
         返回 found, pos
         found: 是否找到
         pos: 找到目标的左上角坐标
         """
-        if name not in self.resources:
-            logger.warning("No resource: %s", name)
-            return False, []
-        info = self.resources[name]
+        if isinstance(info, str):
+            if info not in self.resources:
+                logger.warning("No resource: %s", info)
+                return False, []
+            info = self.resources[info]
+            use_buffer = True
+
+        elif isinstance(info, dict):
+            update_resource(info, self.section)
+            use_buffer = False
+
+        name = info["Name"]
         if info.get("ImageData") is None:
             self.error("No ImageData for %s" % info)
             return False, []
         if image is None:
             image = self.screen
-            use_buffer = True
         else:
             use_buffer = False
 
@@ -229,13 +237,13 @@ class SimulatorControl:
         logger.debug("Check Resource: %s=%s", name, (ret, pos))
         return ret, pos
 
-    def resource_in_image(self, name, image):
-        """判断资源是否存在于给出的画面内. 仅返回bool判断
+    def resource_in_image(self, info, image):
+        """判断资源是否存在于给出的画面内. 可接受资源名字符串或资源定义dict, 返回bool判断
         """
-        return self.search_resource(name, image)[0]
+        return self.search_resource(info, image)[0]
 
     def resource_in_screen(self, name):
-        """判断资源是否存在于画面内. 仅返回bool判断
+        """判断资源是否存在于画面内. 仅接受资源名字符串, 返回bool判断
         """
         if not isinstance(name, str):
             return name
@@ -262,7 +270,7 @@ class SimulatorControl:
         self.wait(interval)
         return self.wait_resource(name, interval, repeat-1)
 
-    def click_at_resource(self, name, wait=False, index=None, offset=None):
+    def click_at_resource(self, name, wait=False, index=None, offset=None, hold=0):
         """点击资源
 
         wait 为等待资源出现的时间
@@ -276,20 +284,20 @@ class SimulatorControl:
             x, y = res['Offset']
             dx, dy = res.get("ClickOffset", (0, 0))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
         elif res['Type'] == 'MultiStatic':
             logger.info("index=%s", index)
             x, y = res['Positions'][index]
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
         elif res['Type'] == 'Dynamic':
             if offset is None:
                 _, offset = self.search_resource(name)
             x, y = offset
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
         elif res['Type'] == 'MultiDynamic':
             if offset is None:
                 _, pos = self.search_resource(name)
@@ -297,7 +305,7 @@ class SimulatorControl:
             x, y = offset
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch))
+            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
         else:
             self.error("Want to click at <%s> resource: %s", res["Type"], name)
 
@@ -305,6 +313,9 @@ class SimulatorControl:
         """截取资源所在位置的当前截图"""
         if image is None:
             image = self.screen
+        if isinstance(name, dict):
+            res = name
+            name = res["Name"]
         res = self.resources[name]
         if offset is None:
             if res["Type"] == "MultiStatic":
@@ -329,10 +340,10 @@ class SimulatorControl:
         bbox = (x+dx, y+dy, x+w+dx, y+h+dy)
         logger.info("crop_resource<%s>[%s] %s", res["Type"], name, bbox)
         return cv_crop(image, bbox)
-    
+
     def parse_scene_condition(self, condition):
         return parse_condition(condition, self, self.resource_in_screen)
-    
+
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
         if repeat < 0:
@@ -522,7 +533,12 @@ class SimulatorControl:
                 except Exception:
                     self.critical(traceback.format_exc(), "程序")
             elif action['Type'] == 'Click':
-                self.click_at_resource(action['Target'], action.get("Wait", False), action.get("Index", None))
+                self.click_at_resource(
+                    name=action['Target'],
+                    wait=action.get("Wait", False),
+                    index=action.get("Index", None),
+                    hold=action.get("Hold", 0)
+                )
             elif action['Type'] == 'MultiActions':
                 self.do_actions(action['Actions'])
             else:
@@ -556,6 +572,7 @@ class SimulatorControl:
             self.check_scene(stop_checker)
             if stop_checker and stop_checker(self):
                 return
+
 
 if __name__ == "__main__":
     logger.setLevel("DEBUG")
