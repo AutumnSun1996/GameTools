@@ -110,6 +110,7 @@
     "Name": "队伍确认",
     "Condition": ["队伍确认"],
     "Actions": [
+      {"Type": "Wait", "Time": 4},
       {"Type": "Click", "Target": "开始任务"},
       {"Type": "Wait", "Time": 1}
     ],
@@ -123,7 +124,7 @@
   },
   "剧情": {
     "Name": "剧情",
-    "Condition": ["剧情-对话框"],
+    "Condition": ["$any", [["剧情-对话框"], ["剧情-选择框"]]],
     "Actions": [
       {"Type": "Click", "Target": "剧情-跳过"},
       {"Type": "Wait", "Time": 1},
