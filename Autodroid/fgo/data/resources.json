@@ -559,8 +559,7 @@
     "MainSize": [1280, 720],
     "Offset": [540, 540],
     "Size": [200, 45],
-    "Type": "Static",
-    "Image": "关闭.png"
+    "Type": "Static"
   },
   "好友申请失败-关闭": {
     "Name": "好友申请失败-关闭",
@@ -806,6 +805,13 @@
     "Type": "Static",
     "Image": "选择换人目标.png"
   },
+  "技能无法使用": {
+    "Name": "技能无法使用",
+    "MainSize": [1280, 720],
+    "Size": [240, 40],
+    "Type": "Dynamic",
+    "Image": "技能无法使用.png"
+  },
   "魔术礼装等级": {
     "Name": "魔术礼装等级",
     "MainSize": [1280, 720],
@@ -844,8 +850,8 @@
     "Offset": [70, 230],
     "Size": [24, 30],
     "SearchArea": [[66, 215], [850, 460]],
-    "CropOffset": [11, -40],
-    "CropSize": [115, 115],
+    "CropOffset": [10, -42],
+    "CropSize": [120, 115],
     "Type": "MultiDynamic",
     "Image": "锁.png",
     "MaxDiff": 0.06
