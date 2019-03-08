@@ -88,6 +88,7 @@ class FGOSimple(FGOBase):
             info = AssistInfo(self, offset)
             if parse_condition(self.data['Strategy']['AssistCondition'], self, info.check):
                 logger.info("选择助战: %s", info)
+                self.combat_info["AssitInfo"] = info
                 self.click_at_resource("助战从者定位", offset=offset)
                 return True
             logger.info("跳过助战: %s", info)
@@ -98,6 +99,7 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(3)
         for item in self.data["Strategy"]["Skills"]:
+            self.make_screen_shot()
             if parse_condition(item.get("Condition", True), self, self.combat_info.__getitem__):
                 logger.info("Skill Strategy Passed: %s", item)
                 self.do_actions(item["Actions"])
@@ -149,7 +151,11 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
 
-            if self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
+            if self.parse_scene_condition([["技能无法使用"]]):
+                self.click_at_resource("关闭")
+                self.wait(0.5)
+                self.make_screen_shot()
+            elif self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
                 self.make_screen_shot()
