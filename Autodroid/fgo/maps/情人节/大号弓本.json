@@ -1,44 +1,95 @@
 {
-  "Name": "FGO3",
-  "Description": "从者：闪闪, 亚马逊CEO, 助战-北斋",
+  "Name": "情人节-大号-弓本",
+  "Description": "队伍: 幼贞, 黑枪呆, 助战-白枪呆/帕尔瓦蒂/迦尔纳",
   "Strategy": {
     "Skills": [
       {
-        "Description": "闪闪12; 亚马逊CEO 123",
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 1], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "二面第一回合, 选择敌人",
+        "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 0},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "三面第一回合, 选择敌人",
+        "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 0},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Description": "黑枪呆23, 随时释放",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 1], [1, 2], [2, 1], [2, 2], [2, 3]]
+            "args": [[2, 2], [2, 3]]
           }
         ]
       },
       {
-        "Description": "北斋自充",
-        "Condition": ["$lt", ["NP3"], 100],
-        "Actions": [
-          {
-            "Type": "InnerCall",
-            "Target": "use_skills",
-            "args": [[3, 1]]
-          },
-          {"Type": "InnerCall", "Target": "extract_np_info"}
-        ]
-      },
-      {
-        "Description": "闪闪自充",
+        "Description": "幼贞自充",
         "Condition": ["$lt", ["NP1"], 100],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 3]]
+            "args": [[1, 2]]
           },
           {"Type": "InnerCall", "Target": "extract_np_info"}
         ]
       },
       {
-        "Description": "北斋宝具准备",
+        "Description": "助战自充",
+        "Condition": ["$lt", ["NP3"], 100],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 3, 3]]
+          },
+          {"Type": "InnerCall", "Target": "extract_np_info"}
+        ]
+      },
+      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
+      {
+        "Description": "幼贞宝具准备",
+        "Condition": [
+          "$all",
+          [["$ge", ["NP1"], 100], ["$le", ["BattleLeft"], 1]]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 3]]
+          }
+        ]
+      },
+      {
+        "Description": "黑枪呆宝具准备",
+        "Condition": [
+          "$all",
+          [["$ge", ["NP2"], 100], ["$le", ["BattleLeft"], 1]]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[2, 1]]
+          }
+        ]
+      },
+      {
+        "Description": "助战宝具准备",
         "Condition": [
           "$all",
           [["$ge", ["NP3"], 100], ["$le", ["BattleLeft"], 0]]
@@ -47,33 +98,45 @@
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 2], [3, 3]]
+            "args": [[3, 1], [3, 2]]
           }
         ]
       },
       {
-        "Description": "北斋宝具准备-御主技能",
+        "Description": "助战宝具准备-御主技能",
         "Condition": [
           "$all",
           [
             ["$ge", ["NP3"], 100],
             ["$le", ["BattleLeft"], 0],
-            ["$not_", ["SkillCheck<0-2>"]]
+            ["$not_", ["SkillCheck<0-1>"]]
           ]
         ],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[0, 2, 3]]
+            "args": [[0, 1]]
           }
         ]
       }
     ],
     "UseNP": [
-      {"Target": 1, "Condition": ["$le", ["BattleLeft"], 1]},
-      {"Target": 2, "Condition": true},
-      {"Target": 3, "Condition": ["$le", ["BattleLeft"], 0]}
+      {
+        "Target": 1,
+        "Description": "幼贞",
+        "Condition": ["$le", ["BattleLeft"], 1]
+      },
+      {
+        "Target": 2,
+        "Description": "黑枪呆",
+        "Condition": ["$le", ["BattleLeft"], 1]
+      },
+      {
+        "Target": 3,
+        "Description": "助战",
+        "Condition": ["$le", ["BattleLeft"], 0]
+      }
     ],
     "CardChoice": [
       {
@@ -125,10 +188,34 @@
         ]
       }
     ],
-    "AssistCondition": ["助战-北斋"],
-    "AssistRange": 0.5
+    "AssistCondition": [
+      "$all",
+      [
+        ["礼装-材料4加成"],
+        ["$any", [["助战-白枪呆"], ["助战-帕尔瓦蒂"], ["助战-迦尔纳"]]],
+        ["助战-宝具可用"]
+      ]
+    ],
+    "AssistRange": 0.7
   },
   "Scenes": {
+    "AP不足": {
+      "Name": "AP不足",
+      "Condition": ["AP不足"],
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Target": "servant_scroll",
+          "args": [1.5]
+        },
+        {"Type": "Wait", "Time": 0.5},
+        {"Type": "Click", "Target": "银苹果"},
+        {"Type": "Wait", "Time": 1},
+        {"Type": "Click", "Target": "补充AP-决定"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["助战选择"]
+    },
     "获得物品": {
       "Name": "获得物品",
       "Condition": ["获得物品"],

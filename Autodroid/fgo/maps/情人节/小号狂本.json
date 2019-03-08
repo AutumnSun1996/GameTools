@@ -1,0 +1,275 @@
+{
+  "Name": "情人节-小号-狂本",
+  "Description": "队伍: 北斋, 梅林, 阿比",
+  "Strategy": {
+    "Skills": [
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 1], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "二面第一回合, 选择敌人",
+        "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 1},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "三面第一回合, 选择左侧敌人",
+        "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 0},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Description": "北斋自充",
+        "Condition": ["$le", ["NP1"], 100],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 1]]
+          },
+          {"Type": "InnerCall", "Target": "extract_np_info"}
+        ]
+      },
+      {
+        "Description": "北斋宝具准备",
+        "Condition": [
+          "$all",
+          [["$ge", ["NP1"], 100], ["$le", ["BattleLeft"], 1]]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 2], [1, 3]]
+          }
+        ]
+      },
+      {
+        "Description": "梅林1, 阿比1, 随时释放",
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[2, 1], [3, 1]]
+          }
+        ]
+      },
+      {
+        "Description": "梅林2 防御",
+        "Condition": [
+          "$all",
+          [
+            ["$method", "resource_in_screen", "敌人充能完成"],
+            ["$le", ["BattleLeft"], 1]
+          ]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 2]]
+          }
+        ]
+      },
+      {
+        "Description": "阿比宝具准备",
+        "Condition": [
+          "$all",
+          [["$ge", ["NP3"], 100], ["$le", ["BattleLeft"], 1]]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[2, 3, 3]]
+          }
+        ]
+      },
+      {
+        "Description": "阿比2",
+        "Condition": ["$le", ["BattleLeft"], 1],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 2]]
+          }
+        ]
+      },
+      {
+        "Description": "阿比3",
+        "Condition": [
+          "$all",
+          [["$le", ["BattleLeft"], 1], ["$gt", ["TurnOfBattle"], 1]]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 3]]
+          }
+        ]
+      },
+      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
+      {
+        "Description": "北斋宝具准备-御主技能",
+        "Condition": [
+          "$all",
+          [
+            ["$ge", ["NP1"], 100],
+            ["$le", ["BattleLeft"], 0],
+            ["$not_", ["SkillCheck<0-2>"]]
+          ]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[0, 2, 1]]
+          }
+        ]
+      }
+    ],
+    "UseNP": [
+      {
+        "Target": 1,
+        "Description": "北斋",
+        "Condition": ["$le", ["BattleLeft"], 1]
+      },
+      {"Target": 2, "Description": "梅林", "Condition": true},
+      {
+        "Target": 3,
+        "Description": "阿比",
+        "Condition": ["$le", ["BattleLeft"], 1]
+      }
+    ],
+    "CardChoice": [
+      {
+        "Condition": true,
+        "Description": "蓝卡优先",
+        "Choice": [
+          [
+            0,
+            [
+              "^A+",
+              "^A0",
+              "^B+",
+              "^B0",
+              "^Q+",
+              "^Q0",
+              "^B-",
+              "^A-",
+              "^Q-"
+            ]
+          ],
+          [
+            2,
+            [
+              "^A+",
+              "^A0",
+              "^Q+",
+              "^B+",
+              "^B0",
+              "^Q0",
+              "^A-",
+              "^Q-",
+              "^B-"
+            ]
+          ],
+          [
+            1,
+            [
+              "^A+",
+              "^A0",
+              "^Q+",
+              "^B+",
+              "^B0",
+              "^Q0",
+              "^A-",
+              "^Q-",
+              "^B-"
+            ]
+          ]
+        ]
+      }
+    ],
+    "AssistCondition": ["礼装-材料4加成"],
+    "AssistRange": 0.99
+  },
+  "Scenes": {
+    "AP不足": {
+      "Name": "AP不足",
+      "Condition": ["AP不足"],
+      "Actions": [
+        {
+          "Type": "InnerCall",
+          "Target": "servant_scroll",
+          "args": [1.5]
+        },
+        {"Type": "Wait", "Time": 0.5},
+        {"Type": "Click", "Target": "银苹果"},
+        {"Type": "Wait", "Time": 1},
+        {"Type": "Click", "Target": "补充AP-决定"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": ["助战选择"]
+    },
+    "获得物品": {
+      "Name": "获得物品",
+      "Condition": ["获得物品"],
+      "Actions": [
+        {"Type": "Wait", "Time": 1},
+        {"Type": "InnerCall", "Target": "make_screen_shot"},
+        {"Type": "InnerCall", "Target": "save_record"},
+        {"Type": "InnerCall", "Target": "reset_combat_info"},
+        {"Type": "Click", "Target": "下一步"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": [
+        "获得物品",
+        "巧克力奖励",
+        "地图选择",
+        "关卡选择",
+        "任务奖励",
+        "申请好友",
+        "剧情"
+      ]
+    },
+    "巧克力奖励": {
+      "Name": "巧克力奖励",
+      "Condition": ["巧克力奖励"],
+      "Actions": [
+        {"Type": "Wait", "Time": 0.5},
+        {"Type": "InnerCall", "Target": "make_screen_shot"},
+        {"Type": "InnerCall", "Target": "save_record"},
+        {"Type": "Click", "Target": "下一步"},
+        {"Type": "Wait", "Time": 1}
+      ],
+      "Next": [
+        "巧克力奖励",
+        "地图选择",
+        "关卡选择",
+        "任务奖励",
+        "申请好友",
+        "剧情"
+      ]
+    }
+  },
+  "Resources": {
+    "巧克力奖励": {
+      "Name": "巧克力奖励",
+      "MainSize": [1280, 720],
+      "Offset": [100, 70],
+      "Size": [340, 40],
+      "Type": "Static",
+      "Image": "巧克力奖励.png"
+    }
+  }
+}

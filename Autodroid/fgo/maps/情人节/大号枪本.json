@@ -1,33 +1,48 @@
 {
-  "Name": "FGO3",
-  "Description": "从者：闪闪, 亚马逊CEO, 助战-北斋",
+  "Name": "情人节-大号-枪本",
+  "Description": "队伍: 助战-小莫, 梅林, 弗兰",
   "Strategy": {
     "Skills": [
       {
-        "Description": "闪闪12; 亚马逊CEO 123",
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 1], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "二面第一回合, 选择敌人",
         "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 1},
+          {"Type": "Wait", "Time": 0.5}
+        ]
+      },
+      {
+        "Condition": [
+          "$all",
+          [["$eq", ["BattleLeft"], 0], ["$eq", ["TurnOfBattle"], 1]]
+        ],
+        "Description": "三面第一回合, 选择敌人; 弗兰2",
+        "Actions": [
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 0},
+          {"Type": "Wait", "Time": 0.5},
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[1, 1], [1, 2], [2, 1], [2, 2], [2, 3]]
+            "args": [[3, 2]]
           }
         ]
       },
       {
-        "Description": "北斋自充",
-        "Condition": ["$lt", ["NP3"], 100],
+        "Description": "梅林1, 弗兰13, 随时释放",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[3, 1]]
-          },
-          {"Type": "InnerCall", "Target": "extract_np_info"}
+            "args": [[2, 1], [3, 1], [3, 3]]
+          }
         ]
       },
       {
-        "Description": "闪闪自充",
-        "Condition": ["$lt", ["NP1"], 100],
+        "Description": "小莫自充",
+        "Condition": ["$le", ["NP1"], 100],
         "Actions": [
           {
             "Type": "InnerCall",
@@ -38,42 +53,68 @@
         ]
       },
       {
-        "Description": "北斋宝具准备",
-        "Condition": [
-          "$all",
-          [["$ge", ["NP3"], 100], ["$le", ["BattleLeft"], 0]]
-        ],
-        "Actions": [
-          {
-            "Type": "InnerCall",
-            "Target": "use_skills",
-            "args": [[3, 2], [3, 3]]
-          }
-        ]
-      },
-      {
-        "Description": "北斋宝具准备-御主技能",
+        "Description": "梅林2 防御",
         "Condition": [
           "$all",
           [
-            ["$ge", ["NP3"], 100],
-            ["$le", ["BattleLeft"], 0],
-            ["$not_", ["SkillCheck<0-2>"]]
+            ["$method", "resource_in_screen", "敌人充能完成"],
+            ["$le", ["BattleLeft"], 0]
           ]
         ],
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[0, 2, 3]]
+            "args": [[2, 2]]
+          }
+        ]
+      },
+      {
+        "Description": "小莫宝具准备",
+        "Condition": [
+          "$all",
+          [["$ge", ["NP1"], 100], ["$le", ["BattleLeft"], 0]]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[1, 1], [1, 2], [2, 3, 1]]
+          }
+        ]
+      },
+      {"Actions": [{"Type": "InnerCall", "Target": "extract_np_info"}]},
+      {
+        "Description": "小莫宝具准备-御主技能",
+        "Condition": [
+          "$all",
+          [
+            ["$ge", ["NP1"], 100],
+            ["$le", ["BattleLeft"], 0],
+            ["$not_", ["SkillCheck<0-1>"]]
+          ]
+        ],
+        "Actions": [
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[0, 1, 1]]
           }
         ]
       }
     ],
     "UseNP": [
-      {"Target": 1, "Condition": ["$le", ["BattleLeft"], 1]},
-      {"Target": 2, "Condition": true},
-      {"Target": 3, "Condition": ["$le", ["BattleLeft"], 0]}
+      {
+        "Target": 1,
+        "Description": "小莫",
+        "Condition": ["$le", ["BattleLeft"], 0]
+      },
+      {"Target": 2, "Description": "梅林", "Condition": true},
+      {
+        "Target": 3,
+        "Description": "弗兰",
+        "Condition": ["$le", ["BattleLeft"], 1]
+      }
     ],
     "CardChoice": [
       {
@@ -125,10 +166,24 @@
         ]
       }
     ],
-    "AssistCondition": ["助战-北斋"],
-    "AssistRange": 0.5
+    "AssistCondition": ["$all", [["礼装-材料4加成"], ["助战-莫德雷德"]]],
+    "AssistRange": 0.99
   },
   "Scenes": {
+    "AP不足": {
+      "Name": "AP不足",
+      "Condition": ["AP不足"],
+      "Actions": [
+        {"Type": "Click", "Target": "AP不足-关闭"},
+        {
+          "Type": "InnerCall",
+          "Target": "wait_mannal",
+          "args": ["AP不足"]
+        },
+        {"Type": "Wait", "Time": 300}
+      ],
+      "Next": ["关卡选择"]
+    },
     "获得物品": {
       "Name": "获得物品",
       "Condition": ["获得物品"],
