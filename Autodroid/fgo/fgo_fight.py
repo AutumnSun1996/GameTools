@@ -20,14 +20,17 @@ class FateGrandOrder(SimulatorControl):
     section = "FGO"
     assist_servant_names = """
     玉藻前 杀生院 BB 阿比 两仪式 孔明 北斋 B叔 BX 阿蒂拉 茨木童子 兰斯洛特 莫德雷德 
-    奶光 梅林 黑贞 黑狗 花嫁尼禄 阿尔托莉雅 宫本武藏 闪闪 伊什塔尔 小黑 白枪呆
+    奶光 梅林 黑贞 黑狗 花嫁尼禄 阿尔托莉雅 宫本武藏 闪闪 伊什塔尔 小黑 白枪呆 帕尔瓦蒂
+    迦尔纳
     """
     assist_equip_names = """
-    醉贞 万华镜 
+    醉贞 万华镜 材料1加成 材料2加成 材料3加成 材料4加成
     """
 
     def __init__(self, map_name="CommonConfig"):
         super().__init__()
+        self.map_name = map_name
+        logger.warning("Init %s", self)
         self.combat_info = defaultdict(lambda: 0)
         self.best_equips = []
         self.data = load_map(map_name, self.section)
@@ -35,6 +38,9 @@ class FateGrandOrder(SimulatorControl):
         self.resources.update(self.data['Resources'])
         logger.info("Update Scenes %s", list(self.data['Scenes'].keys()))
         self.scenes.update(self.data['Scenes'])
+
+    def __str__(self):
+        return "<{}: {}>".format(self.__class__.__name__, self.map_name)
 
     def update_combat_info(self, parse=False, **kwargs):
         if parse:
