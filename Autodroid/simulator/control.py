@@ -388,7 +388,7 @@ class SimulatorControl:
         else:
             image = self.crop_resource(area)
             prefix += '-%s' % area
-        name = "{}/shots/{}-{:%Y-%m-%d_%H%M%S}.png".format(self.section, prefix, datetime.datetime.now())
+        name = "{0}/shots/{2:%Y%m%d}/{1}-{2:%Y-%m-%d_%H%M%S}.jpg".format(self.section, prefix, datetime.datetime.now())
         cv_save(name, image)
 
     def critical(self, message=None, title="", action=None):
