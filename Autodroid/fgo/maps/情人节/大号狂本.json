@@ -1,6 +1,6 @@
 {
   "Name": "情人节-大号-弓本",
-  "Description": "队伍: 幼贞, 黑枪呆, 助战-白枪呆/帕尔瓦蒂/迦尔纳",
+  "Description": "队伍: 幼贞, 黑枪呆, 剑弗兰",
   "Strategy": {
     "Skills": [
       {
@@ -10,7 +10,7 @@
         ],
         "Description": "二面第一回合, 选择敌人",
         "Actions": [
-          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 0},
+          {"Type": "Click", "Target": "战斗-敌人位置", "Index": 1},
           {"Type": "Wait", "Time": 0.5}
         ]
       },
@@ -22,16 +22,21 @@
         "Description": "三面第一回合, 选择敌人",
         "Actions": [
           {"Type": "Click", "Target": "战斗-敌人位置", "Index": 0},
-          {"Type": "Wait", "Time": 0.5}
+          {"Type": "Wait", "Time": 0.5},
+          {
+            "Type": "InnerCall",
+            "Target": "use_skills",
+            "args": [[3, 2]]
+          }
         ]
       },
       {
-        "Description": "黑枪呆23, 随时释放",
+        "Description": "黑枪呆23, 弗兰3, 随时释放",
         "Actions": [
           {
             "Type": "InnerCall",
             "Target": "use_skills",
-            "args": [[2, 2], [2, 3]]
+            "args": [[2, 2], [2, 3], [3, 3]]
           }
         ]
       },
@@ -43,18 +48,6 @@
             "Type": "InnerCall",
             "Target": "use_skills",
             "args": [[1, 2]]
-          },
-          {"Type": "InnerCall", "Target": "extract_np_info"}
-        ]
-      },
-      {
-        "Description": "助战自充",
-        "Condition": ["$lt", ["NP3"], 100],
-        "Actions": [
-          {
-            "Type": "InnerCall",
-            "Target": "use_skills",
-            "args": [[3, 3, 3]]
           },
           {"Type": "InnerCall", "Target": "extract_np_info"}
         ]
@@ -89,25 +82,18 @@
         ]
       },
       {
-        "Description": "助战宝具准备",
-        "Condition": [
-          "$all",
-          [["$ge", ["NP3"], 100], ["$le", ["BattleLeft"], 0]]
-        ],
-        "Actions": [
-          {
-            "Type": "InnerCall",
-            "Target": "use_skills",
-            "args": [[3, 1], [3, 2]]
-          }
-        ]
-      },
-      {
-        "Description": "助战宝具准备-御主技能",
+        "Description": "第三面宝具准备-御主技能",
         "Condition": [
           "$all",
           [
-            ["$ge", ["NP3"], 100],
+            [
+              "$any",
+              [
+                ["$ge", ["NP1"], 100],
+                ["$ge", ["NP2"], 100],
+                ["$ge", ["NP3"], 100]
+              ]
+            ],
             ["$le", ["BattleLeft"], 0],
             ["$not_", ["SkillCheck<0-1>"]]
           ]
@@ -134,8 +120,8 @@
       },
       {
         "Target": 3,
-        "Description": "助战",
-        "Condition": ["$le", ["BattleLeft"], 0]
+        "Description": "弗兰",
+        "Condition": ["$le", ["BattleLeft"], 1]
       }
     ],
     "CardChoice": [
@@ -188,14 +174,7 @@
         ]
       }
     ],
-    "AssistCondition": [
-      "$all",
-      [
-        ["礼装-材料2加成"],
-        ["$any", [["助战-白枪呆"], ["助战-帕尔瓦蒂"], ["助战-迦尔纳"]]],
-        ["助战-宝具可用"]
-      ]
-    ],
+    "AssistCondition": ["$all", [["礼装-材料3加成"], 1]],
     "AssistRange": 0.7
   },
   "Scenes": {

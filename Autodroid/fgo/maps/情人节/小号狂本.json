@@ -200,7 +200,7 @@
         ]
       }
     ],
-    "AssistCondition": ["礼装-材料4加成"],
+    "AssistCondition": ["$not_", ["助战-宝具可用"]],
     "AssistRange": 0.99
   },
   "Scenes": {
