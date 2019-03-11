@@ -121,7 +121,7 @@
                 "$not_",
                 ["$method", "resource_in_screen", "EXP金卡"]
               ],
-              ["$ne", ["$getattr", ["$"], "section"], "FGO2"]
+              ["$getattr", ["$"], "gold_only"]
             ]
           ],
           "Target": "wait_mannual",

@@ -7,6 +7,9 @@ const["section"] = "fgo"
 
 def save_assist_equip(name, index=0):
     s = const["s"]
+    
+    if not name.startswith("礼装-"):
+        name = "礼装-" + name
     part = s.crop_resource("助战从者定位", index=index)
     offset = (5, 135)
     equip = cv_crop(part, (5, 135, 5+158, 135+45))
@@ -49,6 +52,7 @@ def save_assist_name(name, index=0):
     cv_save(path, name_img)
     set_clip(name[3:])
     check_resource(info, part)
+    
 
 def init_map(name="通用配置", section="FGO"):
     FateGrandOrder.section = section
