@@ -9,7 +9,7 @@ from shapely import geometry
 
 from simulator import image_tools, win32_tools
 from notebook.common import set_clip, show
-from format import encode
+from json_format import encode
 
 
 class Status(IntEnum):
@@ -25,7 +25,7 @@ anchors = []
 cur_anchor = {"Status": Status.Line2End, "Name": None, "RectStart": None, "RectEnd": None, "Line1Start": None, "Line1End": None, "Line2Start": None, "Line2End": None}
 
 section = "AzurLane"
-map_name = "11-2"
+map_name = "峡湾间的星辰SP3"
 
 def extract_anchors(anchors):
     for anchor in anchors:
@@ -145,7 +145,7 @@ panel.bind("<B1-Motion>", on_move)
 panel.bind("<ButtonRelease-1>", on_release)
 panel.pack(padx=10, pady=10)
 
-nox_hwnd = win32_tools.get_window_hwnd("碧蓝航线模拟器")
+nox_hwnd = win32_tools.get_window_hwnd("碧蓝航线")
 base_img = image_tools.get_window_shot(nox_hwnd)
 img = base_img.copy()
 
