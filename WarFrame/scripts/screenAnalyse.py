@@ -1,6 +1,5 @@
 import ctypes
 import os
-import json
 
 from PIL import Image, ImageFont, ImageDraw
 import cv2.cv2 as cv
