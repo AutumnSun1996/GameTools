@@ -30,6 +30,7 @@ class CommonMap(FightMap):
         self.boss = []
         self.other_fleet = None
         self.current_fleet = None
+        self.born_points = []  # used for init `current_fleet`
         self.fleet_id = 1
         self.submarine = []
         self.resource_points = []
@@ -48,6 +49,8 @@ class CommonMap(FightMap):
                     self.resource_points.append(name)
                 if cell_type == 'S': # 潜艇
                     self.submarine.append(name)
+                if cell_type == 'F': # 出生点
+                    self.born_points.append(name)
                 if i > 0:
                     left = chr(ord('A')+i-1) + str(j+1)
                     if self.g.nodes.get(left, {}).get('cell_type', 'O') != 'O':
@@ -61,8 +64,6 @@ class CommonMap(FightMap):
         for node in self.g:
             if self.g.nodes[node]['cell_type'] == 'E': # 可能出现敌人的地点
                 self.set_enemy(node, 'Possible')
-        if len(self.boss) == 1:
-            self.boss = self.boss[0]
 
     def reset_fight_index(self, target_mod=0):
         # self.virtual_fight_index = 0
@@ -216,6 +217,10 @@ class CommonMap(FightMap):
     def search_for_boss(self, repeat=0, idx=0):
         logger.info("搜索Boss(%d)", repeat)
 
+        if len(self.boss) == 1:
+            self.click_at_map(self.boss[0])
+            return
+
         if idx is not None:
             target = self.data['ViewPort'][idx]
             logger.info("检查区域%s", target)
@@ -241,7 +246,7 @@ class CommonMap(FightMap):
         w, h = self.resources['Boss']['ClickSize']
         logger.debug("点击: (%d, %d)+(%d, %d)", x, y, w, h)
         rand_click(self.hwnd, (x, y, x+w, y+h))
-        self.wait(6)
+        self.wait(3)
         return
 
     def find_on_map(self, anchor_name, anchor_pos, target_name, reshot=True):
@@ -251,10 +256,11 @@ class CommonMap(FightMap):
 
     def check_map(self):
         self.make_screen_shot()
-        anchor_name, anchor_pos = self.get_best_anchor()
-        if not parse_condition(self.scenes['战斗地图']['Condition'], None, self.resource_in_screen):
+        # in case of scene changes after scene update
+        if not self.scene_match_check("战斗地图", False):
             self.notice("Not in 战斗地图")
             return
+        anchor_name, anchor_pos = self.get_best_anchor()
 
         enemies = set(self.find_on_map(anchor_name, anchor_pos, 'Lv', False))
         if 'Lv2' in self.resources:
@@ -313,7 +319,13 @@ class CommonMap(FightMap):
         for target in self.data['ViewPort']:
             logger.info("查看%s周围信息", target)
             self.wait(1)
-            self.move_map_to(*self.locate_target(target)[1])
+            self.make_screen_shot()
+            # in case of scene changes after scene update
+            if not self.scene_match_check("战斗地图", False):
+                self.notice("Not in  战斗地图.")
+                return
+            _, pos = self.locate_target(target, reshot=False)
+            self.move_map_to(*pos)
             self.wait(1)
             self.check_map()
 
@@ -367,6 +379,9 @@ class CommonMap(FightMap):
 
     def click_at_map(self, target):
         FightMap.click_at_map(self, target)
+        if self.current_fleet is None:
+            # avoid wrong shortest_path search.
+            self.current_fleet = self.born_points[0]
         path = self.shortest_path(self.current_fleet, target)
         wait = (len(path)-1) * 0.7
         self.wait(wait)
