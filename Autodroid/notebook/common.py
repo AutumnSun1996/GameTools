@@ -2,6 +2,7 @@ from PIL import Image
 from PIL import ImageDraw, ImageFont
 import matplotlib.pyplot as plt
 import win32clipboard
+import yaml
 
 from simulator.win32_tools import *
 from simulator.image_tools import *
@@ -27,6 +28,9 @@ def set_clip(text):
 
 def tojson(item, prefix=""):
     return encode(item, prefix, 0)
+
+def toyaml(item):
+    return yaml.safe_dump(item, allow_unicode=True)
 
 def to_res_text(item):
     return encode(item, '"%s": ' % item["Name"], 0) + ","
@@ -88,7 +92,8 @@ def save_crop(name, cropped, offset):
         "Image": name + '.png'
     }
 
-    set_clip('{}: {},'.format(tojson(name), tojson(info)))
+    # set_clip('{}: {},'.format(tojson(name), tojson(info)))
+    set_clip(toyaml({name: info}))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
@@ -121,7 +126,8 @@ def save_anchor(name, cropped, offset):
         "Type": "Anchor",
         "Image": name + '.png'
     }
-    set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
+    # set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
+    set_clip(toyaml({name: anchor}))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
@@ -141,7 +147,8 @@ def save_map_anchor(map_name, on_map, cropped, offset):
         "OnMap": on_map,
         "Image": name + '.png'
     }
-    set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
+    # set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
+    set_clip(toyaml({name: anchor}))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
