@@ -1,7 +1,7 @@
 import ctypes
 import os
 import re
-import json
+import yaml
 
 from PIL import Image, ImageFont, ImageDraw
 import cv2.cv2 as cv
@@ -77,21 +77,21 @@ def load_image(resource, section):
 
 def load_scenes(section):
     with open(config.get(section, "Scenes"), "r", -1, "UTF-8") as fl:
-        items = json.load(fl)
+        items = yaml.load(fl)
     return items
 
 
 def load_resources(section):
     with open(config.get(section, "Resources"), "r", -1, "UTF-8") as fl:
-        items = json.load(fl)
+        items = yaml.load(fl)
     for resource in items.values():
         update_resource(resource, section)
     return items
 
 
 def load_map(name, section):
-    with open(os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".json"), "r", -1, "UTF-8") as fl:
-        items = json.load(fl)
+    with open(os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".yaml"), "r", -1, "UTF-8") as fl:
+        items = yaml.load(fl)
     for val in items["Resources"].values():
         update_resource(val, section)
     if "Anchors" in items:

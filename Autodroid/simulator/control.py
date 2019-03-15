@@ -7,7 +7,6 @@ import os
 import ctypes
 import time
 import datetime
-import json
 import traceback
 from collections import deque
 from threading import Timer
