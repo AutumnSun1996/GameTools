@@ -1,0 +1,134 @@
+Description: 10连抽
+Name: 10连抽
+Resources:
+  10连抽:
+    Image: 10连抽.png
+    MainSize: [1280, 720]
+    Name: 10连抽
+    Offset: [290, 360]
+    Size: [210, 110]
+    Type: Static
+  10连抽-开始:
+    Image: 10连抽.png
+    MainSize: [1280, 720]
+    Name: 10连抽-开始
+    Offset: [320, 420]
+    Size: [210, 110]
+    Type: Static
+  剩余奖品0:
+    Image: 剩余奖品0.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.001
+    Name: 剩余奖品0
+    Offset: [590, 230]
+    Size: [340, 30]
+    Type: Static
+  礼物盒已满:
+    Image: 礼物盒已满.png
+    MainSize: [1280, 720]
+    Name: 礼物盒已满
+    Offset: [440, 200]
+    Size: [400, 100]
+    Type: Static
+  空白区域:
+    MainSize: [1280, 720]
+    Name: 空白区域
+    Offset: [100, 140]
+    Size: [380, 200]
+    Type: Static
+  重置奖品:
+    Image: 重置奖品.png
+    MainSize: [1280, 720]
+    Name: 重置奖品
+    Offset: [1070, 230]
+    Size: [140, 30]
+    Type: Static
+  重置奖品-关闭:
+    Image: 重置奖品-关闭.png
+    MainSize: [1280, 720]
+    Name: 重置奖品-关闭
+    Offset: [550, 540]
+    Size: [180, 50]
+    Type: Static
+  重置奖品-执行:
+    Image: 重置奖品-执行.png
+    MainSize: [1280, 720]
+    Name: 重置奖品-执行
+    Offset: [750, 540]
+    Size: [180, 50]
+    Type: Static
+Scenes:
+  10连抽:
+    Actions:
+    - {Target: 10连抽, Type: Click}
+    - {Time: 0.3, Type: Wait}
+    - Condition: [$random, 0.4]
+      Time: 0.1
+      Type: Wait
+    - Condition: [$random, 0.4]
+      Time: 0.1
+      Type: Wait
+    Condition: [10连抽]
+    Name: 10连抽
+    Next: [10连抽, 中间场景]
+  中间场景:
+    Actions:
+    - {Target: 10连抽, Type: Click}
+    - {Time: 0.2, Type: Wait}
+    - Condition: [$random, 0.5]
+      Time: 0.1
+      Type: Wait
+    - Condition: [$random, 0.5]
+      Time: 0.1
+      Type: Wait
+    - Condition: [$random, 0.5]
+      Time: 0.1
+      Type: Wait
+    - Condition: [$random, 0.5]
+      Time: 0.1
+      Type: Wait
+    Condition:
+    - $not_
+    - - $any
+      - - [10连抽]
+        - [10连抽-开始]
+        - [剩余奖品0]
+    Name: 中间场景
+    Next: [10连抽, 关卡选择, 结束, 礼物盒已满, 重置奖品, 中间场景]
+  关卡选择:
+    Actions:
+    - {Target: 10连抽-开始, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [10连抽-开始]
+    Name: 关卡选择
+    Next: [中间场景]
+  礼物盒已满:
+    Actions: []
+    Condition: [礼物盒已满]
+    Name: 礼物盒已满
+  结束:
+    Actions:
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - - [右下-菜单]
+      - [左上-关闭]
+      - - $not_
+        - [10连抽-开始]
+      - - $not_
+        - [剩余奖品0]
+    Name: 结束
+    Next: [结束, 关卡选择, 重置奖品]
+  重置奖品:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - {Target: 重置奖品, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 重置奖品-执行, Type: Click}
+    - {Time: 2, Type: Wait}
+    - {Target: 重置奖品-关闭, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [剩余奖品0]
+    Name: 重置奖品
+    Next: [关卡选择, 结束, 礼物盒已满, 中间场景]
+Strategy: {}

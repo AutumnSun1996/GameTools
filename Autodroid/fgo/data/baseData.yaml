@@ -1,0 +1,19 @@
+职阶中英转换: {剑: Saber, 弓: Archer, 术: Caster, 杀: Assassin, 枪: Lancer, 狂: Berserker, 盾: Shielder,
+  骑: Rider}
+职阶攻击伤害倍率:
+  Alterego: {Archer: 0.5, Assassin: 1.5, Basic: 1, Berserker: 2, Caster: 1.5, Lancer: 0.5,
+    Rider: 1.5, Saber: 0.5}
+  Archer: {Basic: 0.95, Berserker: 2, Lancer: 0.5, Ruler: 0.5, Saber: 2}
+  Assassin: {Basic: 0.9, Berserker: 2, Caster: 0.5, Rider: 2, Ruler: 0.5}
+  Avenger: {Basic: 1.1, Berserker: 2, MoonCancer: 0.5, Ruler: 2}
+  Berserker: {Alterego: 1.5, Archer: 1.5, Assassin: 1.5, Avenger: 1.5, Basic: 1.1,
+    Berserker: 2, Caster: 1.5, Foreigner: 0.5, Lancer: 1.5, MoonCancer: 1.5, Rider: 1.5,
+    Ruler: 1.5, Saber: 1.5}
+  Caster: {Assassin: 2, Basic: 0.9, Berserker: 2, Rider: 0.5, Ruler: 0.5}
+  Foreigner: {Alterego: 0.5, Basic: 1, Berserker: 2}
+  Lancer: {Archer: 2, Basic: 1.05, Berserker: 2, Ruler: 0.5, Saber: 0.5}
+  MoonCancer: {Avenger: 2, Basic: 1, Berserker: 2, Ruler: 0.5}
+  Rider: {Assassin: 0.5, Basic: 1, Berserker: 2, Caster: 2, Ruler: 0.5}
+  Ruler: {Avenger: 0.5, Basic: 1.1, Berserker: 2, MoonCancer: 2, Ruler: 0.5}
+  Saber: {Archer: 0.5, Basic: 1, Berserker: 2, Lancer: 2, Ruler: 0.5}
+  Shielder: {Basic: 1}

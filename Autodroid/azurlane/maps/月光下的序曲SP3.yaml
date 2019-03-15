@@ -1,0 +1,35 @@
+Anchors: {}
+Map: [OBNENENOO, BNENONEOO, BENENENEN, OOONENEON, BNEENONNF, NENNNONFF]
+Name: 月光下的序曲SP3
+Scenes:
+  外部地图:
+    Actions:
+    - {Target: 月光下的序曲SP3, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition: [月光下的序曲SP3]
+    Name: 外部地图
+    Next: [进入地图确认]
+Strategy:
+- Actions:
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - in
+  - [FightIndex]
+  - [0, 1, 2, 3]
+- Actions:
+  - {Target: 切换舰队, Type: Click}
+  - {Time: 2, Type: Wait}
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - ==
+  - [FightIndex]
+  - 4
+- Actions:
+  - {Target: 切换舰队, Type: Click}
+  - {Time: 2, Type: Wait}
+  - {Target: search_for_boss, Type: InnerCall}
+  Condition:
+  - ==
+  - [FightIndex]
+  - 5
+ViewPort: [C4, F4]

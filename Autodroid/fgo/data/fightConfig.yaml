@@ -1,0 +1,47 @@
+Assist:
+  Refresh: 5
+  指定从者: []
+  礼装限制: [$all, 来自奇境, 礼装满破]
+  职阶限制: []
+CardStrategies:
+- Condition: [$eq, turn, 1]
+  ResultWeight: {Damage: 1, NP: 1, OverNP: 0, Stars: 1}
+  UseNp: [true, false, false]
+- Condition:
+  - $all
+  - [$gt, turn, 1]
+  - [$lt, stage, 1]
+  ResultWeight: {Damage: 1, NP: 1, OverNP: 0.5, Stars: 1}
+  UseNp: [true, false, false]
+- Condition:
+  - $all
+  - [$le, stageLeft, 1]
+  - [$le, enemyLeft, 3]
+  ResultWeight: {Damage: 3, NP: 1, OverNP: 0, Stars: 1}
+  UseNp: [true, false, false]
+- Condition: true
+  ResultWeight: {Damage: 1, NP: 1, OverNP: 0, Stars: 1}
+  UseNp: [false, false, false]
+SkillStrategies:
+- Actions:
+  - {ServantIndex: 1, SkillIndex: 1, Type: Skill}
+  - {ServantIndex: 1, SkillIndex: 2, Type: Skill}
+  - {ServantIndex: 2, SkillIndex: 1, Type: Skill}
+  - {ServantIndex: 2, SkillIndex: 2, Type: Skill}
+  - {ServantIndex: 2, SkillIndex: 3, Type: Skill}
+  - {SkillIndex: 3, Type: MasterSkill}
+  Condition:
+  - $eq
+  - [$attr, turn]
+  - 1
+- Actions:
+  - {ServantIndex: 1, SkillIndex: 1, Type: Skill}
+  - {ServantIndex: 1, SkillIndex: 2, Type: Skill}
+  - {ServantIndex: 2, SkillIndex: 1, Type: Skill}
+  - {ServantIndex: 2, SkillIndex: 2, Type: Skill}
+  - {ServantIndex: 2, SkillIndex: 3, Type: Skill}
+  - {SkillIndex: 3, Type: MasterSkill}
+  Condition:
+  - $all
+  - [$eq, $stage, $totalStage]
+  - [$le, $enemyCount, 3]

@@ -1,0 +1,98 @@
+Anchors: {}
+FightCount: 1
+Map: []
+Name: 埃塞克斯演习-自律
+Resources:
+  上:
+    Image: 上.png
+    MainSize: [1280, 720]
+    Name: 上
+    Offset: [120, 450]
+    Size: [40, 60]
+    Type: Static
+  下:
+    Image: 下.png
+    MainSize: [1280, 720]
+    Name: 下
+    Offset: [120, 650]
+    Size: [40, 60]
+    Type: Static
+  右:
+    Image: 右.png
+    MainSize: [1280, 720]
+    Name: 右
+    Offset: [220, 570]
+    Size: [60, 40]
+    Type: Static
+  左:
+    Image: 左.png
+    MainSize: [1280, 720]
+    Name: 左
+    Offset: [20, 570]
+    Size: [60, 40]
+    Type: Static
+  开始战斗:
+    Image: 开始战斗.png
+    MainSize: [1280, 720]
+    Name: 开始战斗
+    Offset: [460, 530]
+    Size: [200, 40]
+    Type: Static
+  战斗完成:
+    Image: 战斗完成.png
+    MainSize: [1280, 720]
+    Name: 战斗完成
+    Offset: [560, 280]
+    Size: [370, 100]
+    Type: Static
+  战斗完成-确认:
+    MainSize: [1280, 720]
+    Name: 战斗完成-确认
+    Offset: [560, 570]
+    Size: [160, 30]
+    Type: Static
+  航母就绪:
+    ClickOffset: [-30, 30]
+    ClickSize: [80, 80]
+    Image: 航母就绪.png
+    MainSize: [1280, 720]
+    Name: 航母就绪
+    Offset: [830, 543]
+    Size: [10, 10]
+    Type: Static
+Scenes:
+  开始战斗:
+    Actions:
+    - {Target: 开始战斗, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [开始战斗]
+    Name: 开始战斗
+    Next: [加载中]
+  战斗完成:
+    Actions:
+    - {Target: 战斗完成-确认, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [战斗完成]
+    Name: 战斗完成
+    Next: [战斗完成, 开始战斗, 获得道具]
+  正常战斗中:
+    Actions:
+    - Condition:
+      - $all
+      - - - $ge
+          - - $getattr
+            - [$]
+            - since_last_change
+          - 20
+        - [$method, resource_in_screen, 潜艇数量1]
+      Target: 潜艇按钮
+      Type: Click
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - - - $not_
+        - [自律战斗]
+      - [暂停]
+    Name: 正常战斗中
+    Next: [正常战斗中, 非自律战斗中, 战斗完成, 获得道具]
+Strategy: {}

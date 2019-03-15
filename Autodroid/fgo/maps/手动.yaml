@@ -1,0 +1,45 @@
+Name: 手动
+Resources: {}
+Scenes:
+  关卡选择:
+    Actions:
+    - {Target: manual, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - [右下-菜单]
+    - [左上-关闭]
+    Name: 关卡选择
+    Next: [助战选择, AP不足, 关卡选择]
+  助战选择:
+    Actions:
+    - {Target: manual, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition: [助战选择]
+    Name: 助战选择
+    Next: [助战选择, 队伍确认]
+  获得物品:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - {Target: make_screen_shot, Type: InnerCall}
+    - {Target: save_record, Type: InnerCall}
+    - {Target: 下一步, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [获得物品]
+    Name: 获得物品
+    Next: [获得物品, 关卡选择, 申请好友]
+  选择技能:
+    Actions:
+    - {Target: manual, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition: [战斗菜单]
+    Name: 选择技能
+    Next: [选择技能, 选择指令卡, 获得羁绊]
+  选择指令卡:
+    Actions:
+    - {Target: manual, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition: [战斗速度]
+    Name: 选择指令卡
+    Next: [选择指令卡, 选择技能, 获得羁绊]
+Strategy: {}

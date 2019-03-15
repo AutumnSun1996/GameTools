@@ -1,0 +1,87 @@
+Anchors:
+  梦幻的交汇SP4-A4:
+    Image: 梦幻的交汇SP4-A4.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-A4
+    Offset: [70, 70]
+    OnMap: A4
+    Size: [100, 150]
+    Type: Anchor
+  梦幻的交汇SP4-B6:
+    Image: 梦幻的交汇SP4-B6.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-B6
+    Offset: [80, 80]
+    OnMap: B6
+    Size: [180, 100]
+    Type: Anchor
+  梦幻的交汇SP4-E1-Boss:
+    Image: 梦幻的交汇SP4-E1-Boss.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-E1-Boss
+    Offset: [50, 70]
+    OnMap: E1
+    Size: [110, 46]
+    Type: Anchor
+  梦幻的交汇SP4-E5:
+    Image: 梦幻的交汇SP4-E5.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-E5
+    Offset: [75, 30]
+    OnMap: E5
+    Size: [135, 90]
+    Type: Anchor
+  梦幻的交汇SP4-G7:
+    Image: 梦幻的交汇SP4-G7.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-G7
+    Offset: [80, 80]
+    OnMap: G7
+    Size: [180, 100]
+    Type: Anchor
+  梦幻的交汇SP4-H5:
+    Image: 梦幻的交汇SP4-H5.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-H5
+    Offset: [80, 60]
+    OnMap: H5
+    Size: [180, 100]
+    Type: Anchor
+  梦幻的交汇SP4-H7:
+    Image: 梦幻的交汇SP4-H7.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-H7
+    Offset: [80, 50]
+    OnMap: H7
+    Size: [180, 100]
+    Type: Anchor
+  梦幻的交汇SP4-I4:
+    Image: 梦幻的交汇SP4-I4.png
+    MainSize: [1920, 1080]
+    MapName: 梦幻的交汇SP4
+    Name: 梦幻的交汇SP4-I4
+    Offset: [90, 70]
+    OnMap: I4
+    Size: [140, 100]
+    Type: Anchor
+Map: [NNNOBONNN, NNENNNNNN, NNNNENNNN, ONNENENSO, OSENENEOO, 'NOON?NNOO', NNOOEOOON,
+  NNNNNNNNN, NNNNFFNNN]
+Name: 梦幻的交汇SP4
+Strategy:
+  Route:
+  - {Action: Move, Fleet: 1, Target: E6}
+  - {Action: Move, Fleet: 1, Target: E4}
+  - {Action: Move, Fleet: 2, Target: D4}
+  - {Action: Move, Fleet: 2, Target: C5}
+  - {Action: Move, Fleet: 2, Target: E3}
+  - {Action: Move, Fleet: 2, Target: F4}
+  - {Action: Move, Fleet: 2, Target: G5}
+  - {Action: Move, Fleet: 1, Target: E1}
+  Type: Static

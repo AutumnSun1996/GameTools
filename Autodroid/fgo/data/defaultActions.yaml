@@ -1,0 +1,28 @@
+CardChoice-红卡优先:
+  Choice:
+  - - 0
+    - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+  - - 2
+    - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+  - - 1
+    - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+闪闪:
+  Actions:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1]
+      - [2]
+    Description: 强化技能
+  - Actions:
+    - Target: use_skill
+      Type: InnerCall
+      args:
+      - [2]
+    Condition:
+    - $lt
+    - [NP]
+    - 100
+    Description: 自充
+  UseNP: []

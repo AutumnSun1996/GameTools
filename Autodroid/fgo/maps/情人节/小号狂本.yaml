@@ -1,0 +1,201 @@
+Description: '队伍: 北斋, 梅林, 阿比'
+Name: 情人节-小号-狂本
+Resources:
+  巧克力奖励:
+    Image: 巧克力奖励.png
+    MainSize: [1280, 720]
+    Name: 巧克力奖励
+    Offset: [100, 70]
+    Size: [340, 40]
+    Type: Static
+Scenes:
+  AP不足:
+    Actions:
+    - Target: servant_scroll
+      Type: InnerCall
+      args: [1.5]
+    - {Time: 0.5, Type: Wait}
+    - {Target: 银苹果, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  巧克力奖励:
+    Actions:
+    - {Time: 0.5, Type: Wait}
+    - {Target: make_screen_shot, Type: InnerCall}
+    - {Target: save_record, Type: InnerCall}
+    - {Target: 下一步, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [巧克力奖励]
+    Name: 巧克力奖励
+    Next: [巧克力奖励, 地图选择, 关卡选择, 任务奖励, 申请好友, 剧情]
+  获得物品:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - {Target: make_screen_shot, Type: InnerCall}
+    - {Target: save_record, Type: InnerCall}
+    - {Target: reset_combat_info, Type: InnerCall}
+    - {Target: 下一步, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [获得物品]
+    Name: 获得物品
+    Next: [获得物品, 巧克力奖励, 地图选择, 关卡选择, 任务奖励, 申请好友, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - [礼装-材料2加成]
+    - 1
+  AssistRange: 0.99
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^A+, ^A0, ^B+, ^B0, ^Q+, ^Q0, ^B-, ^A-, ^Q-]
+    - - 2
+      - [^A+, ^A0, ^Q+, ^B+, ^B0, ^Q0, ^A-, ^Q-, ^B-]
+    - - 1
+      - [^A+, ^A0, ^Q+, ^B+, ^B0, ^Q0, ^A-, ^Q-, ^B-]
+    Condition: true
+    Description: 蓝卡优先
+  Skills:
+  - Actions:
+    - {Index: 1, Target: 战斗-敌人位置, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition:
+    - $all
+    - - - $eq
+        - [BattleLeft]
+        - 1
+      - - $eq
+        - [TurnOfBattle]
+        - 1
+    Description: 二面第一回合, 选择敌人
+  - Actions:
+    - {Index: 0, Target: 战斗-敌人位置, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition:
+    - $all
+    - - - $eq
+        - [BattleLeft]
+        - 0
+      - - $eq
+        - [TurnOfBattle]
+        - 1
+    Description: 三面第一回合, 选择左侧敌人
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $le
+    - [NP1]
+    - 100
+    Description: 北斋自充
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [1, 3]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 北斋宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 1]
+      - [3, 1]
+    Description: 梅林1, 阿比1, 随时释放
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+    Condition:
+    - $all
+    - - [$method, resource_in_screen, 敌人充能完成]
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 梅林2 防御
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 3, 3]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP3]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 阿比宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 阿比2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 3]
+    Condition:
+    - $all
+    - - - $le
+        - [BattleLeft]
+        - 1
+      - - $gt
+        - [TurnOfBattle]
+        - 1
+    Description: 阿比3
+  - Actions:
+    - {Target: extract_np_info, Type: InnerCall}
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 1]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+      - - $not_
+        - [SkillCheck<0-2>]
+    Description: 北斋宝具准备-御主技能
+  UseNP:
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 北斋
+    Target: 1
+  - {Condition: true, Description: 梅林, Target: 2}
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 阿比
+    Target: 3

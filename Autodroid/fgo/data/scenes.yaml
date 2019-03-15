@@ -1,0 +1,222 @@
+AP不足:
+  Actions:
+  - Condition: [$method, resource_in_screen, 银苹果不足]
+    Target: 金苹果
+    Type: Click
+  - Condition:
+    - $not_
+    - [$method, resource_in_screen, 银苹果不足]
+    Target: 银苹果
+    Type: Click
+  - {Time: 1, Type: Wait}
+  - {Target: 补充AP-决定, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [AP不足]
+  Name: AP不足
+  Next: [助战选择]
+任务奖励:
+  Actions:
+  - {Target: 任务奖励, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [任务奖励]
+  Name: 任务奖励
+  Next: [地图选择, 关卡选择, 任务奖励, 剧情]
+关卡选择:
+  Actions:
+  - {Target: 默认关卡, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $all
+  - - [右下-菜单]
+    - [左上-关闭]
+    - - $not_
+      - [无战斗]
+  Name: 关卡选择
+  Next: [助战选择, AP不足, 关卡选择, 无战斗]
+剧情:
+  Actions:
+  - {Target: 剧情-跳过, Type: Click}
+  - {Time: 1, Type: Wait}
+  - {Target: 剧情-确认跳过, Type: Click}
+  - {Time: 3, Type: Wait}
+  Condition:
+  - $any
+  - - [剧情-对话框]
+    - [剧情-选择框]
+  Name: 剧情
+  Next: [加载关卡, 选择技能, 剧情, 任务奖励, 地图选择, 关卡选择]
+加载关卡:
+  Actions:
+  - {Time: 1, Type: Wait}
+  Condition: [加载提示]
+  Name: 加载关卡
+  Next: [加载关卡, 选择技能, 剧情]
+助战更新失败:
+  Actions:
+  - {Target: 助战更新失败-关闭, Type: Click}
+  - {Time: 2, Type: Wait}
+  Condition: [助战更新失败]
+  Name: 助战更新失败
+  Next: [助战选择]
+助战选择:
+  Actions:
+  - {Target: choose_assist_servant, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $all
+  - - [助战选择]
+    - - $not_
+      - [助战更新失败]
+  Name: 助战选择
+  Next: [队伍确认, 助战选择, 助战更新失败]
+地图选择:
+  Actions:
+  - {Target: 下一个, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $all
+  - - [右下-菜单]
+    - [左上-管理室]
+    - [下一个]
+  Name: 地图选择
+  Next: [关卡选择, 地图选择]
+好友申请失败:
+  Actions:
+  - {Target: 好友申请失败-关闭, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [好友申请失败-关闭]
+  Name: 好友申请失败
+  Next: [地图选择, 关卡选择, 任务奖励, 剧情]
+御主等级上升:
+  Actions:
+  - {Target: 下一步, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [御主等级]
+  Name: 御主等级上升
+  Next: [获得经验, 获得物品, 礼装等级上升]
+战斗失败:
+  Actions:
+  - Target: error
+    Type: InnerCall
+    args: [战斗失败]
+  - {Target: 续关-撤退, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  - {Target: 撤退-决定, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  - {Target: 撤退-关闭, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [续关]
+  Name: 战斗失败
+  Next: [地图选择, 关卡选择, 申请好友]
+无战斗:
+  Actions:
+  - {Target: 无战斗-开始任务, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $all
+  - - [右下-菜单]
+    - [左上-关闭]
+    - [无战斗]
+  Name: 无战斗
+  Next: [剧情]
+申请好友:
+  Actions:
+  - {Target: 申请好友, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [申请好友]
+  Name: 申请好友
+  Next: [好友申请失败, 地图选择, 关卡选择, 任务奖励, 剧情, 申请好友]
+礼装等级上升:
+  Actions:
+  - {Target: 下一步, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [魔术礼装等级]
+  Name: 礼装等级上升
+  Next: [获得经验, 获得物品]
+羁绊加深:
+  Actions:
+  - {Target: 下一步, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [羁绊加深]
+  Name: 羁绊加深
+  Next: [羁绊加深, 获得经验]
+获得物品:
+  Actions:
+  - {Time: 1, Type: Wait}
+  - {Target: make_screen_shot, Type: InnerCall}
+  - {Target: save_record, Type: InnerCall}
+  - {Target: reset_combat_info, Type: InnerCall}
+  - {Target: 下一步, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [获得物品]
+  Name: 获得物品
+  Next: [获得物品, 地图选择, 关卡选择, 任务奖励, 申请好友, 剧情]
+获得经验:
+  Actions:
+  - {Target: 下一步, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [获得经验]
+  Name: 获得经验
+  Next: [获得经验, 获得物品, 御主等级上升, 礼装等级上升]
+获得羁绊:
+  Actions:
+  - {Target: 下一步, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [与从者的羁绊]
+  Name: 获得羁绊
+  Next: [获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装]
+获得羁绊礼装:
+  Actions:
+  - Target: save_record
+    Type: InnerCall
+    args: [获得羁绊礼装]
+  - Target: error
+    Type: InnerCall
+    args: [获得羁绊礼装]
+  - {Target: 点击画面, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  - Target: save_record
+    Type: InnerCall
+    args: [获得羁绊礼装]
+  - {Target: 羁绊礼装-关闭, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [获得羁绊礼装]
+  Name: 获得羁绊礼装
+  Next: [获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装]
+选择技能:
+  Actions:
+  - Actions:
+    - {Time: 3, Type: Wait}
+    - {Target: extract_combat_info, Type: InnerCall}
+    - {Target: choose_skills, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $getattr
+    - [$]
+    - scene_changed
+    Type: MultiActions
+  - {Target: Attack, Type: Click}
+  - {Time: 3, Type: Wait}
+  Condition: [战斗菜单]
+  Name: 选择技能
+  Next: [选择指令卡, 选择技能]
+选择指令卡:
+  Actions:
+  - {Target: choose_cards, Type: InnerCall}
+  - {Time: 5, Type: Wait}
+  ActionsWhenWait:
+  - Condition: [$random, 0.3]
+    Target: 空白区域-使用指令卡
+    Type: Click
+  - {Time: 1, Type: Wait}
+  Condition: [战斗速度]
+  Name: 选择指令卡
+  Next: [选择技能, 获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装, 获得物品, 战斗失败]
+队伍确认:
+  Actions:
+  - {Time: 4, Type: Wait}
+  - {Target: 开始任务, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [队伍确认]
+  Name: 队伍确认
+  Next: [加载关卡, 选择技能, 队伍确认, 剧情]

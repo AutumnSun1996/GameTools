@@ -1,0 +1,117 @@
+Anchors:
+  斯图尔特的硝烟SP3-A4:
+    Image: 斯图尔特的硝烟SP3-A4.png
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟SP3-A4
+    Offset: [36, 25]
+    OnMap: A4
+    Size: [80, 60]
+    Type: Anchor
+  斯图尔特的硝烟SP3-C4:
+    Image: 斯图尔特的硝烟SP3-C4.png
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟SP3-C4
+    Offset: [46, 25]
+    OnMap: C4
+    Size: [80, 60]
+    Type: Anchor
+  斯图尔特的硝烟SP3-E2:
+    Image: 斯图尔特的硝烟SP3-E2.png
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟SP3-E2
+    Offset: [36, 25]
+    OnMap: E2
+    Size: [80, 60]
+    Type: Anchor
+  斯图尔特的硝烟SP3-F5:
+    Image: 斯图尔特的硝烟SP3-F5.png
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟SP3-F5
+    Offset: [32, 20]
+    OnMap: F5
+    Size: [80, 60]
+    Type: Anchor
+  斯图尔特的硝烟SP3-H2:
+    Image: 斯图尔特的硝烟SP3-H2.png
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟SP3-H2
+    Offset: [40, 35]
+    OnMap: H2
+    Size: [80, 60]
+    Type: Anchor
+FightCount: 6
+Map: [OBNNNENOO, BNNNONNOO, BNSNNNNNF, OOONNNNON, BNNNNONEN, NNNNFONNN]
+Name: 斯图尔特的硝烟SP3
+Resources:
+  Ammo:
+    Image: Ammo.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.06
+    Name: Ammo
+    Offset: [-20, 160]
+    Size: [33, 33]
+    Type: Anchor
+  Pointer:
+    Image: Pointer.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.06
+    Name: Pointer
+    Offset: [45, 200]
+    Size: [82, 50]
+    Type: Dynamic
+  大获全胜-左上角:
+    Image: 斯图尔特的硝烟SP3-大获全胜.png
+    MainSize: [1920, 1080]
+    Name: 大获全胜-左上角
+    Offset: [292, 40]
+    Size: [444, 123]
+    Type: Static
+  斯图尔特的硝烟-Clear:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟-Clear
+    Offset: [343, 511]
+    Size: [70, 50]
+    Type: Static
+  斯图尔特的硝烟SP3:
+    MainSize: [1280, 720]
+    Name: 斯图尔特的硝烟SP3
+    Offset: [800, 380]
+    Size: [50, 30]
+    Type: Static
+Scenes:
+  外部地图:
+    Actions:
+    - {Target: 斯图尔特的硝烟SP3, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition: [斯图尔特的硝烟-Clear]
+    Name: 外部地图
+    Next: [进入地图确认]
+  舰队选择:
+    Actions:
+    - {Target: mood_detect, Type: InnerCall}
+    - {Target: 舰队选择-立刻前往, Type: Click}
+    - {Target: reset_fight_index, Type: InnerCall}
+    - {Time: 4, Type: Wait}
+    Condition: [舰队选择-立刻前往]
+    Name: 舰队选择
+Strategy:
+- Actions:
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - in
+  - [FightIndex]
+  - [0, 1, 2, 3, 4]
+- Actions:
+  - {Target: 切换舰队, Type: Click}
+  - {Time: 2, Type: Wait}
+  - {Target: search_for_boss, Type: InnerCall}
+  Condition:
+  - ==
+  - [FightIndex]
+  - 5
+TransMatrix:
+- [1.1630701921530937, 0.3864607397491331, -284.3168952185429]
+- [0.020380902899879167, 1.932303698745669, -181.4608837094798]
+- [4.076180579975834e-05, 0.0008291468909903143, 1.0]
+ViewPort: [D2, D5, F5, F2]

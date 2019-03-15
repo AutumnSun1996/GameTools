@@ -1,0 +1,110 @@
+Anchors:
+  7-2-B1:
+    Image: 7-2-B1.png
+    MainSize: [1280, 720]
+    MapName: 7-2
+    Name: 7-2-B1
+    Offset: [40, 30]
+    OnMap: B1
+    Size: [80, 60]
+    Type: Anchor
+  7-2-B2:
+    Image: 7-2-B2.png
+    MainSize: [1280, 720]
+    MapName: 7-2
+    Name: 7-2-B2
+    Offset: [40, 30]
+    OnMap: B2
+    Size: [80, 60]
+    Type: Anchor
+  7-2-C2:
+    Image: 7-2-C2.png
+    MainSize: [1280, 720]
+    MapName: 7-2
+    Name: 7-2-C2
+    Offset: [40, 30]
+    OnMap: C2
+    Size: [80, 50]
+    Type: Anchor
+  7-2-G4:
+    Image: 7-2-G4.png
+    MainSize: [1280, 720]
+    MapName: 7-2
+    Name: 7-2-G4
+    Offset: [40, 30]
+    OnMap: G4
+    Size: [90, 70]
+    Type: Anchor
+  7-2-H4:
+    Image: 7-2-H4.png
+    MainSize: [1280, 720]
+    MapName: 7-2
+    Name: 7-2-H4
+    Offset: [40, 30]
+    OnMap: H4
+    Size: [90, 70]
+    Type: Anchor
+  7-2-H5:
+    Image: 7-2-H5.png
+    MainSize: [1280, 720]
+    MapName: 7-2
+    Name: 7-2-H5
+    Offset: [40, 30]
+    OnMap: H5
+    Size: [80, 60]
+    Type: Anchor
+Map: [EOENEENF, '?OO?NNEN', 'ENEBENE?', 'NEN?NEOO', FNEENEOO]
+Name: 7-2
+Resources:
+  Ammo:
+    Image: Ammo.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.08
+    Name: Ammo
+    Offset: [-20, 160]
+    Size: [34, 34]
+    Type: Anchor
+Scenes:
+  外部地图:
+    Actions:
+    - {Target: 7-2, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition: [Clear@第7章]
+    Name: 外部地图
+    Next: [进入地图确认]
+  舰队选择:
+    Actions:
+    - {Target: mood_detect, Type: InnerCall}
+    - {Target: 舰队选择-立刻前往, Type: Click}
+    - {Target: reset_fight_index, Type: InnerCall}
+    - {Time: 4, Type: Wait}
+    Condition: [舰队选择-立刻前往]
+    Name: 舰队选择
+Strategy:
+- Actions:
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - $in
+  - [$val, FightIndexMod]
+  - [0, 1, 2, 4]
+- Actions:
+  - {Target: search_bonus, Type: InnerCall}
+  - {Time: 2, Type: Wait}
+  - {Target: search_bonus, Type: InnerCall}
+  - {Time: 2, Type: Wait}
+  - {Target: search_bonus, Type: InnerCall}
+  Condition:
+  - $eq
+  - [$val, FightIndexMod]
+  - 3
+- Actions:
+  - {Target: 切换舰队, Type: Click}
+  - {Time: 2, Type: Wait}
+  - Target: click_at_map
+    Type: InnerCall
+    args: [D3]
+  Condition:
+  - $eq
+  - [$val, FightIndexMod]
+  - 5
+ViewPort: [D2, D3, E4, E2]

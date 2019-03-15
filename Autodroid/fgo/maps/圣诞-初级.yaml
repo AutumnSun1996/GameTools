@@ -1,0 +1,34 @@
+Name: 圣诞-初级
+Resources: {}
+Scenes:
+  关卡选择:
+    Actions:
+    - {Target: 圣诞-初级, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [圣诞-初级]
+    Name: 关卡选择
+    Next: [助战选择, AP不足]
+  获得物品:
+    Actions:
+    - {Target: save_screen, Type: InnerCall}
+    - {Target: 下一步, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [获得物品]
+    Name: 获得物品
+    Next: [获得物品, 关卡选择, 申请好友]
+Strategy:
+  Assist: [Lagenore, 助战1]
+  CardChoice:
+  - - 0
+    - [^B克制, ^B0, ^B抵抗, ^A克制, ^Q克制, ^A0, ^Q0, ^A抵抗, ^Q抵抗]
+  - - 2
+    - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+  - - 1
+    - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+  SkillsOnTurn1:
+  - [1, 1]
+  - [1, 3]
+  - [2, 1]
+  - [3, 1]
+  - [3, 2]
+  - [3, 3]

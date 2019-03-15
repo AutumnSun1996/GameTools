@@ -1,0 +1,103 @@
+Description: '队伍: 全加成礼装; Ruler贞德, 北斋, 助战梅林'
+Name: 小号赝作速刷-银材料
+Resources:
+  五河士道:
+    ClickSize: [400, 160]
+    Image: 五河士道.png
+    MainSize: [1280, 720]
+    Name: 五河士道
+    SearchArea:
+    - [220, 180]
+    - [600, 440]
+    Size: [300, 35]
+    Type: Dynamic
+  助战1:
+    MainSize: [1280, 720]
+    Name: 助战1
+    Offset: [50, 220]
+    Size: [500, 140]
+    Type: Static
+  助战3:
+    MainSize: [1280, 720]
+    Name: 助战3
+    Offset: [50, 600]
+    Size: [500, 100]
+    Type: Static
+  学者北斋:
+    ClickSize: [500, 140]
+    Image: 学者北斋.png
+    MainSize: [1280, 720]
+    Name: 学者北斋
+    SearchArea:
+    - [40, 180]
+    - [180, 540]
+    Size: [150, 140]
+    Type: Dynamic
+  迦勒底的学者:
+    ClickOffset: [10, -110]
+    ClickSize: [600, 140]
+    Image: 迦勒底的学者.png
+    MainSize: [1280, 720]
+    Name: 迦勒底的学者
+    Size: [160, 45]
+    Type: Dynamic
+Scenes: {}
+Strategy:
+  Assist: [五河士道]
+  AssistRange: 0.6
+  CardChoice:
+  - - 0
+    - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+  - - 2
+    - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+  - - 1
+    - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+  Skills:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+      - [2, 1]
+      - [2, 2]
+      - [3, 1]
+  - Actions:
+    - {Target: extract_np_info, Type: InnerCall}
+    - Condition:
+      - $ge
+      - - $getitem
+        - - $getattr
+          - [$]
+          - combat_info
+        - NP2
+      - 100
+      Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 3]
+      - [0, 2, 2]
+    Condition:
+    - $eq
+    - [BattleLeft]
+    - 0
+    Description: 北斋宝具准备
+  UseNP:
+  - {Condition: true, Target: 1}
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Target: 2
+  - {Condition: true, Target: 3}
+TMP-Scene:
+  助战选择:
+    Actions:
+    - Target: servant_scroll
+      Type: InnerCall
+      args: [30]
+    - {Time: 1, Type: Wait}
+    - {Target: 助战1, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [助战选择]
+    Name: 助战选择
+    Next: [队伍确认, 助战选择]

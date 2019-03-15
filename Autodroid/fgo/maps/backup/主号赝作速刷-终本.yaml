@@ -1,0 +1,105 @@
+Description: '队伍: 全加成礼装; Caster尼禄, 助战闪闪, 阿拉什, 梅林'
+Name: 主号赝作速刷-终本
+Resources:
+  助战-路小夏:
+    Image: 助战-路小夏.png
+    MainSize: [1280, 720]
+    Name: 助战-路小夏
+    SearchArea:
+    - [170, 0]
+    - [320, 100]
+    Size: [300, 40]
+    Type: Dynamic
+Scenes: {}
+Strategy:
+  AssistCondition: [助战-路小夏]
+  AssistRange: 0.6
+  CardChoice:
+  - Choice:
+    - - 0
+      - [助战, ^B+, ^B0, ^A+, ^A0, ^Q+, ^Q0, ^B-, ^A-, ^Q-]
+    - - 2
+      - [助战, ^B+, ^A+, ^Q+, ^B0, ^A0, ^Q0, ^A-, ^Q-, ^B-]
+    - - 1
+      - [助战, ^B+, ^A+, ^Q+, ^B0, ^A0, ^Q0, ^A-, ^Q-, ^B-]
+    Condition: true
+    Description: 助战优先, 红卡优先
+  Skills:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $eq
+    - [BattleNow]
+    - 1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [2, 1]
+      - [3, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 3, 2]
+      - [2, 2]
+      - [2, 3]
+      - [3, 3, 2]
+      - [3, 2]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 1, 2]
+    Condition:
+    - $all
+    - - - $eq
+        - [BattleLeft]
+        - 0
+      - - $eq
+        - [TurnOfBattle]
+        - 1
+  UseNP:
+  - Condition:
+    - $any
+    - - - $eq
+        - [BattleNow]
+        - 1
+      - - $all
+        - - - $eq
+            - [BattleLeft]
+            - 0
+          - - $gt
+            - [TurnOfBattle]
+            - 1
+    Target: 3
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Target: 1
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Target: 2

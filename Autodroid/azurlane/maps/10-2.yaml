@@ -1,0 +1,4 @@
+Anchors: {}
+Map: [ENEENOEB, NOONEOEE, NFOOSEEO, NFOONEEO, NOONEOEE, NEEENOEB]
+Name: 10-2
+Strategy: {FightBeforeBoss: 6, FleetForBoss: 2, Type: Search}

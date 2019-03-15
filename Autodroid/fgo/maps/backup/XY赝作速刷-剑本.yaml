@@ -1,0 +1,105 @@
+Description: '队伍: 全加成礼装; 弓大王, 助战弓凛, 孔明'
+Name: XY赝作速刷-终本
+Resources:
+  助战-一人御佐姬:
+    Image: 助战-一人御佐姬.png
+    MainSize: [1280, 720]
+    Name: 助战-一人御佐姬
+    SearchArea:
+    - [170, 0]
+    - [320, 100]
+    Size: [300, 40]
+    Type: Dynamic
+Scenes: {}
+Strategy:
+  AssistCondition: [助战-一人御佐姬]
+  AssistRange: 0.6
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^A+, ^A0, ^B+, ^B0, ^Q+, ^Q0, ^B-, ^A-, ^Q-]
+    - - 2
+      - [^A+, ^A0, ^Q+, ^B+, ^B0, ^Q0, ^A-, ^Q-, ^B-]
+    - - 1
+      - [^A+, ^A0, ^Q+, ^B+, ^B0, ^Q0, ^A-, ^Q-, ^B-]
+    Condition:
+    - $le
+    - [BattleNow]
+    - 1
+    Description: 蓝卡优先
+  - Choice:
+    - - 0
+      - [^B+, ^B0, ^A+, ^A0, ^Q+, ^Q0, ^B-, ^A-, ^Q-]
+    - - 2
+      - [^B+, ^A+, ^Q+, ^B0, ^A0, ^Q0, ^A-, ^Q-, ^B-]
+    - - 1
+      - [^B+, ^A+, ^Q+, ^B0, ^A0, ^Q0, ^A-, ^Q-, ^B-]
+    Condition:
+    - $eq
+    - [BattleLeft]
+    - 0
+    Description: 红卡优先
+  Skills:
+  - Actions:
+    - {Target: extract_np_info, Type: InnerCall}
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+      - [3, 3]
+      - [1, 1, 1]
+      - [1, 2, 1]
+      - [2, 1]
+      - [2, 3]
+      - [0, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $eq
+        - [BattleLeft]
+        - 1
+      - - $ge
+        - [NP1]
+        - 66
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+      - [3, 3]
+      - [1, 1, 1]
+      - [1, 2, 1]
+      - [2, 1]
+      - [2, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 1, 2]
+      - [2, 2]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+  UseNP:
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Target: 3
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Target: 1
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Target: 2

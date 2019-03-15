@@ -1,0 +1,795 @@
+AP不足:
+  Image: AP不足.png
+  MainSize: [1280, 720]
+  Name: AP不足
+  Offset: [540, 36]
+  Size: [200, 60]
+  Type: Static
+AP不足-关闭:
+  Image: AP不足-关闭.png
+  MainSize: [1280, 720]
+  Name: AP不足-关闭
+  Offset: [550, 595]
+  Size: [180, 50]
+  Type: Static
+Arts:
+  Image: Arts.png
+  MainSize: [1280, 720]
+  Name: Arts
+  Size: [146, 81]
+  Type: Dynamic
+Attack:
+  MainSize: [1280, 720]
+  Name: Attack
+  Offset: [1070, 540]
+  Size: [130, 130]
+  Type: Static
+Buster:
+  Image: Buster.png
+  MainSize: [1280, 720]
+  Name: Buster
+  Size: [184, 81]
+  Type: Dynamic
+Cards:
+  ClickOffset: [30, 65]
+  ClickSize: [130, 160]
+  MainSize: [1280, 720]
+  Name: Cards
+  Positions:
+  - [35, 355]
+  - [290, 355]
+  - [545, 355]
+  - [805, 355]
+  - [1065, 355]
+  Size: [200, 270]
+  Type: MultiStatic
+Quick:
+  Image: Quick.png
+  MainSize: [1280, 720]
+  Name: Quick
+  Size: [172, 89]
+  Type: Dynamic
+万华镜奶光:
+  ClickSize: [500, 140]
+  Image: 万华镜奶光.png
+  MainSize: [1280, 720]
+  Name: 万华镜奶光
+  Size: [150, 140]
+  Type: Dynamic
+下一个:
+  ClickOffset: [5, 150]
+  ClickSize: [100, 40]
+  Image: 下一个.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.08
+  Name: 下一个
+  Size: [104, 66]
+  Type: Dynamic
+下一步:
+  MainSize: [1280, 720]
+  Name: 下一步
+  Offset: [1010, 650]
+  Size: [200, 50]
+  Type: Static
+与从者的羁绊:
+  Image: 羁绊-左.png
+  MainSize: [1280, 720]
+  Name: 与从者的羁绊
+  Offset: [80, 168]
+  Size: [100, 36]
+  Type: Static
+从者1-NP:
+  MainSize: [1280, 720]
+  Name: 从者1-NP
+  Offset: [162, 676]
+  Size: [130, 3]
+  Type: Static
+从者2-NP:
+  MainSize: [1280, 720]
+  Name: 从者2-NP
+  Offset: [480, 676]
+  Size: [130, 3]
+  Type: Static
+从者3-NP:
+  MainSize: [1280, 720]
+  Name: 从者3-NP
+  Offset: [798, 676]
+  Size: [130, 3]
+  Type: Static
+从者HP:
+  MainSize: [1280, 720]
+  Name: 从者HP
+  Offset: [160, 239]
+  Size: [120, 20]
+  Type: Static
+从者NP:
+  MainSize: [1280, 720]
+  Name: 从者NP
+  Offset: [160, 275]
+  Size: [120, 20]
+  Type: Static
+从者信息:
+  Image: 从者信息.png
+  MainSize: [1280, 720]
+  Name: 从者信息
+  Offset: [570, 80]
+  Size: [180, 90]
+  Type: Static
+从者技能-剩余:
+  Image: 从者技能-剩余.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.1
+  Name: 从者技能-剩余
+  Offset: [2, 60]
+  Size: [36, 18]
+  Type: Static
+从者技能列表:
+  ClickOffset: [12, 10]
+  ClickSize: [60, 60]
+  MainSize: [1280, 720]
+  Name: 从者技能列表
+  Positions:
+  - [28, 538]
+  - [122, 538]
+  - [215, 538]
+  - [345, 538]
+  - [439, 538]
+  - [533, 538]
+  - [665, 538]
+  - [758, 538]
+  - [852, 538]
+  Size: [80, 80]
+  Type: MultiStatic
+从者职阶-文字:
+  MainSize: [1280, 720]
+  Name: 从者职阶-文字
+  Offset: [4, 316]
+  Size: [90, 18]
+  Type: Static
+任务奖励:
+  Image: 任务奖励.png
+  MainSize: [1280, 720]
+  Name: 任务奖励
+  Size: [800, 160]
+  Type: Dynamic
+克制:
+  Image: 克制.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.1
+  Name: 克制
+  Size: [47, 49]
+  Type: Dynamic
+关卡1:
+  MainSize: [1280, 720]
+  Name: 关卡1
+  Offset: [660, 140]
+  Size: [200, 100]
+  Type: Static
+关闭:
+  MainSize: [1280, 720]
+  Name: 关闭
+  Offset: [540, 540]
+  Size: [200, 45]
+  Type: Static
+剧情-对话框:
+  Image: 剧情-对话框.png
+  MainSize: [1280, 720]
+  Name: 剧情-对话框
+  Offset: [0, 490]
+  Size: [500, 62]
+  Type: Static
+剧情-确认跳过:
+  Image: 剧情-确认跳过.png
+  MainSize: [1280, 720]
+  Name: 剧情-确认跳过
+  Offset: [720, 540]
+  Size: [200, 40]
+  Type: Static
+剧情-跳过:
+  Image: 剧情-跳过.png
+  MainSize: [1280, 720]
+  Name: 剧情-跳过
+  Offset: [1124, 10]
+  Size: [146, 60]
+  Type: Static
+剧情-选择框:
+  ClickOffset: [80, 20]
+  ClickSize: [800, 60]
+  Image: 剧情-选择框.png
+  MainSize: [1280, 720]
+  Name: 剧情-选择框
+  Offset: [150, 224]
+  SearchArea:
+  - [120, 100]
+  - [160, 600]
+  Size: [80, 100]
+  Type: Dynamic
+剩余敌人:
+  MainSize: [1280, 720]
+  Name: 剩余敌人
+  Offset: [850, 46]
+  Size: [130, 30]
+  Type: Static
+加载提示:
+  Image: 加载提示.png
+  MainSize: [1280, 720]
+  Name: 加载提示
+  Offset: [500, 150]
+  Size: [300, 100]
+  Type: Static
+助战-从者名称:
+  CropOffset: [110, -2]
+  CropSize: [400, 32]
+  Image: 助战-从者名称.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.1
+  Name: 助战-从者名称
+  SearchArea:
+  - [190, 60]
+  - [80, 100]
+  Size: [60, 30]
+  Type: Dynamic
+助战-从者满破:
+  Image: 助战-礼装满破.png
+  MainSize: [1280, 720]
+  Name: 助战-从者满破
+  SearchArea:
+  - [120, 70]
+  - [50, 50]
+  Size: [24, 24]
+  Type: Dynamic
+助战-宝具:
+  CropOffset: [120, 0]
+  CropSize: [40, 30]
+  Image: 助战-宝具.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.1
+  Name: 助战-宝具
+  SearchArea:
+  - [190, 100]
+  - [80, 80]
+  Size: [60, 30]
+  Type: Dynamic
+助战-确认更新:
+  MainSize: [1280, 720]
+  Name: 助战-确认更新
+  Offset: [740, 540]
+  Size: [190, 50]
+  Type: Static
+助战-礼装满破:
+  Image: 助战-礼装满破.png
+  MainSize: [1280, 720]
+  Name: 助战-礼装满破
+  SearchArea:
+  - [120, 140]
+  - [50, 50]
+  Size: [24, 24]
+  Type: Dynamic
+助战-职阶选择:
+  MainSize: [1280, 720]
+  Name: 助战-职阶选择
+  Names: [全部, 剑, 弓, 枪, 骑, 术, 杀, 狂, 特殊]
+  Positions:
+  - [72, 108]
+  - [139, 108]
+  - [207, 108]
+  - [274, 108]
+  - [342, 108]
+  - [409, 108]
+  - [477, 108]
+  - [544, 108]
+  - [612, 108]
+  Size: [40, 40]
+  Type: MultiStatic
+助战从者-名称:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-名称
+  Offset: [310, 90]
+  Size: [450, 38]
+  Type: Anchor
+助战从者-技能1:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-技能1
+  Offset: [792, 149]
+  Size: [30, 20]
+  Type: Anchor
+助战从者-技能2:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-技能2
+  Offset: [872, 149]
+  Size: [30, 20]
+  Type: Anchor
+助战从者-技能3:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-技能3
+  Offset: [952, 149]
+  Size: [30, 20]
+  Type: Anchor
+助战从者-礼装:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-礼装
+  Offset: [3, 133]
+  Size: [160, 50]
+  Type: Anchor
+助战从者-等级:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-等级
+  Offset: [50, 10]
+  Size: [110, 30]
+  Type: Anchor
+助战从者-职阶:
+  MainSize: [1280, 720]
+  Name: 助战选择-从者-职阶
+  Offset: [-2, 0]
+  Size: [50, 50]
+  Type: Anchor
+助战从者定位:
+  ClickOffset: [-700, 0]
+  ClickSize: [800, 120]
+  CropOffset: [-780, -20]
+  CropSize: [1040, 190]
+  Image: 最后登录.png
+  MainSize: [1280, 720]
+  Name: 最后登录
+  SearchArea:
+  - [820, 195]
+  - [130, 375]
+  Size: [98, 38]
+  Type: MultiDynamic
+助战更新:
+  Image: 助战更新.png
+  MainSize: [1280, 720]
+  Name: 助战更新
+  Offset: [790, 105]
+  Size: [90, 50]
+  Type: Static
+助战更新失败:
+  Image: 助战更新失败.png
+  MainSize: [1280, 720]
+  Name: 助战更新失败
+  Offset: [360, 300]
+  Size: [550, 80]
+  Type: Static
+助战更新失败-关闭:
+  MainSize: [1280, 720]
+  Name: 助战更新失败-关闭
+  Offset: [550, 540]
+  Size: [180, 40]
+  Type: Static
+助战选择:
+  Image: 助战选择.png
+  MainSize: [1280, 720]
+  Name: 助战选择
+  Offset: [1040, 0]
+  Size: [240, 80]
+  Type: Static
+右下-菜单:
+  Image: 右下-菜单.png
+  MainSize: [1280, 720]
+  Name: 右下-菜单
+  Offset: [1130, 670]
+  Size: [110, 40]
+  Type: Static
+右侧空白区域:
+  MainSize: [1280, 720]
+  Name: 右侧空白区域
+  Offset: [1240, 230]
+  Size: [40, 50]
+  Type: Static
+回合数:
+  MainSize: [1280, 720]
+  Name: 回合数
+  Offset: [850, 82]
+  Size: [130, 30]
+  Type: Static
+好友申请失败-关闭:
+  Image: 好友申请失败-关闭.png
+  MainSize: [1280, 720]
+  Name: 好友申请失败-关闭
+  Offset: [540, 540]
+  Size: [200, 45]
+  Type: Static
+宝具1:
+  MainSize: [1280, 720]
+  Name: 宝具1
+  Offset: [340, 120]
+  Size: [140, 180]
+  Type: Static
+宝具2:
+  MainSize: [1280, 720]
+  Name: 宝具2
+  Offset: [570, 120]
+  Size: [140, 180]
+  Type: Static
+宝具3:
+  MainSize: [1280, 720]
+  Name: 宝具3
+  Offset: [800, 120]
+  Size: [140, 180]
+  Type: Static
+左上-关闭:
+  Image: 左上-关闭.png
+  MainSize: [1280, 720]
+  Name: 左上-关闭
+  Offset: [80, 28]
+  Size: [60, 30]
+  Type: Static
+左上-管理室:
+  Image: 左上-管理室.png
+  MainSize: [1280, 720]
+  Name: 左上-管理室
+  Offset: [40, 20]
+  Size: [120, 50]
+  Type: Static
+开始任务:
+  MainSize: [1280, 720]
+  Name: 开始任务
+  Offset: [1122, 650]
+  Size: [130, 50]
+  Type: Static
+御主技能:
+  Image: 御主技能.png
+  MainSize: [1280, 720]
+  Name: 御主技能
+  Offset: [1164, 286]
+  Size: [60, 60]
+  Type: Static
+御主技能-还剩:
+  Image: 御主技能-还剩.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.1
+  Name: 御主技能-还剩
+  Offset: [2, 56]
+  Size: [36, 18]
+  Type: Static
+御主技能列表:
+  ClickOffset: [14, 10]
+  ClickSize: [60, 60]
+  MainSize: [1280, 720]
+  Name: 御主技能列表
+  Positions:
+  - [862, 272]
+  - [950, 271]
+  - [1039, 271]
+  Size: [80, 80]
+  Type: MultiStatic
+御主等级:
+  Image: 御主等级.png
+  MainSize: [1280, 720]
+  Name: 御主等级
+  Offset: [700, 266]
+  Size: [160, 40]
+  Type: Static
+战斗-从者位置:
+  MainSize: [1280, 720]
+  Name: 战斗-从者位置
+  Positions:
+  - [16, 380]
+  - [333, 380]
+  - [653, 380]
+  Type: MultiStatic
+战斗-御主技能:
+  MainSize: [1280, 720]
+  Name: 战斗-御主技能
+  Positions:
+  - [880, 286]
+  - [968, 286]
+  - [1056, 286]
+  Type: MultiStatic
+战斗-敌人位置:
+  ClickOffset: [10, 10]
+  ClickSize: [200, 50]
+  MainSize: [1280, 720]
+  Name: 战斗-敌人位置
+  Positions:
+  - [8, 0]
+  - [249, 0]
+  - [488, 0]
+  Type: MultiStatic
+战斗菜单:
+  Image: 战斗菜单.png
+  MainSize: [1280, 720]
+  Name: 战斗菜单
+  Offset: [1160, 175]
+  Size: [70, 60]
+  Type: Static
+战斗轮次:
+  MainSize: [1280, 720]
+  Name: 战斗轮次
+  Offset: [850, 10]
+  Size: [100, 30]
+  Type: Static
+战斗速度:
+  Image: 战斗速度.png
+  MainSize: [1280, 720]
+  Name: 战斗速度
+  Offset: [1086, 76]
+  Size: [98, 24]
+  Type: Static
+技能信息:
+  Image: 技能信息.png
+  MainSize: [1280, 720]
+  Name: 技能信息
+  Offset: [550, 160]
+  Size: [180, 60]
+  Type: Static
+技能目标列表:
+  MainSize: [1280, 720]
+  Name: 技能目标列表
+  Positions:
+  - [220, 320]
+  - [540, 320]
+  - [860, 320]
+  Size: [200, 200]
+  Type: MultiStatic
+抵抗:
+  Image: 抵抗.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.1
+  Name: 抵抗
+  Size: [45, 50]
+  Type: Dynamic
+指令卡-助战:
+  Image: 指令卡-助战.png
+  MainSize: [1280, 720]
+  Name: 指令卡-助战
+  SearchArea:
+  - [80, 0]
+  - [120, 130]
+  Size: [96, 26]
+  Type: Dynamic
+指令卡预判:
+  Angles: [1.1390104416914508, 0.7117063445230994, 0.3120421215625333, -0.17137912638950764,
+    -0.5149333956185]
+  MainSize: [1280, 720]
+  Name: 指令卡预判
+  Positions:
+  - [948, 560]
+  - [986, 484]
+  - [1043, 434]
+  - [1123, 410]
+  - [1205, 419]
+  Size: [340, 260]
+  Type: Static
+换人目标列表:
+  MainSize: [1280, 720]
+  Name: 换人目标列表
+  Positions:
+  - [60, 270]
+  - [260, 270]
+  - [460, 270]
+  - [660, 270]
+  - [860, 270]
+  - [1060, 270]
+  Size: [150, 150]
+  Type: MultiStatic
+撤退-关闭:
+  MainSize: [1280, 720]
+  Name: 撤退-关闭
+  Offset: [580, 542]
+  Size: [120, 40]
+  Type: Static
+撤退-决定:
+  MainSize: [1280, 720]
+  Name: 撤退-决定
+  Offset: [820, 334]
+  Size: [120, 54]
+  Type: Static
+敌人充能完成:
+  Image: 敌人充能完成.png
+  MainSize: [1280, 720]
+  Name: 敌人充能完成
+  SearchArea:
+  - [130, 64]
+  - [600, 30]
+  Size: [40, 16]
+  Type: Dynamic
+无战斗:
+  Image: 无战斗.png
+  MainSize: [1280, 720]
+  Name: 无战斗
+  Offset: [520, 300]
+  Size: [240, 32]
+  Type: Static
+无战斗-开始任务:
+  MainSize: [1280, 720]
+  Name: 无战斗-开始任务
+  Offset: [740, 540]
+  Size: [200, 46]
+  Type: Static
+无法使用:
+  Image: 无法使用.png
+  MainSize: [1280, 720]
+  Name: 无法使用
+  Size: [150, 40]
+  Type: Dynamic
+无法行动:
+  Image: 无法行动.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.04
+  Name: 无法行动
+  Size: [126, 57]
+  Type: Dynamic
+滚动条-上:
+  Image: 滚动条-上.png
+  MainSize: [1280, 720]
+  Name: 滚动条-上
+  Offset: [16, 0]
+  Size: [32, 20]
+  Type: Anchor
+滚动条-下:
+  Image: 滚动条-下.png
+  MainSize: [1280, 720]
+  Name: 滚动条-下
+  Offset: [16, 20]
+  Size: [32, 20]
+  Type: Anchor
+滚动条范围:
+  MainSize: [1280, 720]
+  Name: 滚动条范围
+  Offset: [1224, 174]
+  Size: [32, 518]
+  Type: Static
+点击画面:
+  MainSize: [1280, 720]
+  Name: 点击画面
+  Offset: [300, 600]
+  Size: [700, 100]
+  Type: Static
+申请好友:
+  Image: 申请.png
+  MainSize: [1280, 720]
+  Name: 申请好友
+  Offset: [850, 585]
+  Size: [200, 60]
+  Type: Static
+礼装满破:
+  Image: Star-center.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.02
+  Name: 礼装满破
+  Size: [8, 7]
+  Type: Dynamic
+空白区域-使用指令卡:
+  MainSize: [1280, 720]
+  Name: 空白区域-使用指令卡
+  Offset: [750, 0]
+  Size: [200, 100]
+  Type: Static
+续关:
+  Image: 续关.png
+  MainSize: [1280, 720]
+  Name: 续关
+  Offset: [590, 104]
+  Size: [90, 46]
+  Type: Static
+续关-撤退:
+  MainSize: [1280, 720]
+  Name: 续关-撤退
+  Offset: [290, 300]
+  Size: [100, 50]
+  Type: Static
+羁绊-左:
+  Image: 羁绊-左.png
+  MainSize: [1280, 720]
+  Name: 羁绊-左
+  Offset: [80, 168]
+  Size: [100, 36]
+  Type: Static
+羁绊加深:
+  Image: 羁绊加深.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.03
+  Name: 羁绊加深
+  Size: [320, 42]
+  Type: Dynamic
+自由关卡:
+  Image: 自由关卡.png
+  MainSize: [1280, 720]
+  Name: 自由关卡
+  SearchArea:
+  - [640, 80]
+  - [120, 220]
+  Size: [100, 90]
+  Type: Dynamic
+获得物品:
+  Image: 获得物品.png
+  MainSize: [1280, 720]
+  Name: 获得物品
+  Offset: [114, 73]
+  Size: [100, 36]
+  Type: Static
+获得经验:
+  Image: 获得经验.png
+  MainSize: [1280, 720]
+  Name: 获得经验
+  Offset: [650, 186]
+  Size: [180, 36]
+  Type: Static
+获得羁绊礼装:
+  Image: 获得羁绊礼装.png
+  MainSize: [1280, 720]
+  Name: 获得羁绊礼装
+  Offset: [0, 0]
+  Size: [1280, 720]
+  Type: Static
+补充AP-决定:
+  Image: 决定.png
+  MainSize: [1280, 720]
+  Name: 补充AP-决定
+  Offset: [740, 540]
+  Size: [200, 50]
+  Type: Static
+进行更替:
+  Image: 进行更替.png
+  MainSize: [1280, 720]
+  Name: 进行更替
+  Offset: [580, 608]
+  Size: [130, 36]
+  Type: Static
+选择技能目标:
+  Image: 选择技能目标.png
+  MainSize: [1280, 720]
+  Name: 选择技能目标
+  Offset: [570, 178]
+  Size: [150, 32]
+  Type: Static
+选择换人目标:
+  Image: 选择换人目标.png
+  MainSize: [1280, 720]
+  Name: 选择换人目标
+  Offset: [370, 150]
+  Size: [550, 26]
+  Type: Static
+金苹果:
+  MainSize: [1280, 720]
+  Name: 金苹果
+  Offset: [330, 270]
+  Size: [600, 100]
+  Type: Static
+银苹果:
+  MainSize: [1280, 720]
+  Name: 银苹果
+  Offset: [330, 420]
+  Size: [600, 100]
+  Type: Static
+银苹果不足:
+  Image: 银苹果不足.png
+  MainSize: [1280, 720]
+  Name: 银苹果不足
+  Offset: [330, 420]
+  Size: [640, 50]
+  Type: Static
+锁:
+  CropOffset: [10, -42]
+  CropSize: [120, 115]
+  Image: 锁.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.06
+  Name: 锁
+  Offset: [70, 230]
+  SearchArea:
+  - [66, 215]
+  - [850, 460]
+  Size: [24, 30]
+  Type: MultiDynamic
+队伍确认:
+  Image: 队伍确认.png
+  MainSize: [1280, 720]
+  Name: 队伍确认
+  Offset: [1040, 0]
+  Size: [240, 80]
+  Type: Static
+魔术礼装等级:
+  Image: 魔术礼装等级.png
+  MainSize: [1280, 720]
+  Name: 魔术礼装等级
+  Offset: [690, 250]
+  Size: [240, 40]
+  Type: Static
+默认关卡:
+  MainSize: [1280, 720]
+  Name: 默认关卡
+  Offset: [700, 180]
+  Size: [400, 100]
+  Type: Static

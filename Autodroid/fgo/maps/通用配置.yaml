@@ -1,0 +1,22 @@
+Name: 通用配置
+Resources: {}
+Scenes:
+  关卡选择:
+    Actions:
+    - {Target: mannual, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [关卡选择]
+    Name: 关卡选择
+    Next: [助战选择, AP不足]
+  获得物品:
+    Actions:
+    - {Target: save_screen, Type: InnerCall}
+    - {Target: 下一步, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [获得物品]
+    Name: 获得物品
+    Next: [获得物品, 关卡选择, 申请好友]
+Strategy:
+  Assist: []
+  CardChoice: []
+  SkillsOnTurn1: []

@@ -1,0 +1,143 @@
+Anchors:
+  围剿斯佩伯爵SP3-A1:
+    Image: 围剿斯佩伯爵SP3-A1.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-A1
+    Offset: [40, 50]
+    OnMap: A1
+    Size: [80, 100]
+    Type: Anchor
+  围剿斯佩伯爵SP3-A6:
+    Image: 围剿斯佩伯爵SP3-A6.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-A6
+    Offset: [50, 40]
+    OnMap: A6
+    Size: [100, 50]
+    Type: Anchor
+  围剿斯佩伯爵SP3-A7:
+    Image: 围剿斯佩伯爵SP3-A7.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-A7
+    Offset: [40, 40]
+    OnMap: A7
+    Size: [100, 50]
+    Type: Anchor
+  围剿斯佩伯爵SP3-D4:
+    Image: 围剿斯佩伯爵SP3-D4.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-D4
+    Offset: [40, 50]
+    OnMap: D4
+    Size: [80, 100]
+    Type: Anchor
+  围剿斯佩伯爵SP3-E1:
+    Image: 围剿斯佩伯爵SP3-E1.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-E1
+    Offset: [50, 40]
+    OnMap: E1
+    Size: [100, 50]
+    Type: Anchor
+  围剿斯佩伯爵SP3-F6:
+    Image: 围剿斯佩伯爵SP3-F6.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-F6
+    Offset: [50, 40]
+    OnMap: F6
+    Size: [100, 60]
+    Type: Anchor
+  围剿斯佩伯爵SP3-H7:
+    Image: 围剿斯佩伯爵SP3-H7.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-H7
+    Offset: [50, 30]
+    OnMap: H7
+    Size: [100, 60]
+    Type: Anchor
+  围剿斯佩伯爵SP3-I1:
+    Image: 围剿斯佩伯爵SP3-I1.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-I1
+    Offset: [50, 30]
+    OnMap: I1
+    Size: [100, 50]
+    Type: Anchor
+  围剿斯佩伯爵SP3-J2:
+    Image: 围剿斯佩伯爵SP3-J2.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-J2
+    Offset: [50, 30]
+    OnMap: J2
+    Size: [100, 50]
+    Type: Anchor
+  围剿斯佩伯爵SP3-J7:
+    Image: 围剿斯佩伯爵SP3-J7.png
+    MainSize: [1280, 720]
+    MapName: 围剿斯佩伯爵SP3
+    Name: 围剿斯佩伯爵SP3-J7
+    Offset: [60, 50]
+    OnMap: J7
+    Size: [100, 60]
+    Type: Anchor
+Map: [OOOOOENBOO, 'OONBENEN?O', ENENENONEN, NENOFFNENE, BEEOFFENEN, OENNEONEEB, ONNENENOOO]
+Name: 围剿斯佩伯爵SP3
+Resources:
+  围剿斯佩伯爵SP3:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: Clear
+    Offset: [354, 220]
+    Size: [70, 50]
+    Type: Static
+Scenes:
+  外部地图:
+    Actions:
+    - {Target: 围剿斯佩伯爵SP3, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition: [围剿斯佩伯爵SP3]
+    Name: 外部地图
+    Next: [进入地图确认]
+  舰队选择:
+    Actions:
+    - {Target: mood_detect, Type: InnerCall}
+    - {Target: 舰队选择-立刻前往, Type: Click}
+    - {Target: reset_fight_index, Type: InnerCall}
+    - {Time: 4, Type: Wait}
+    Condition: [舰队选择-立刻前往]
+    Name: 舰队选择
+Strategy:
+- Actions:
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - in
+  - [FightIndex]
+  - [0, 1, 2, 4]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [I2]
+  - {Target: after_bonus, Type: InnerCall}
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - ==
+  - [FightIndex]
+  - 3
+- Actions:
+  - {Target: 切换舰队, Type: Click}
+  - {Time: 2, Type: Wait}
+  - {Target: search_for_boss, Type: InnerCall}
+  Condition:
+  - ==
+  - [FightIndex]
+  - 5
+ViewPort: [C3, C5, G3, G5]

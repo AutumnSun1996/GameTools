@@ -1,0 +1,175 @@
+Anchors:
+  峡湾间的星辰SP3-C3:
+    Image: 峡湾间的星辰SP3-C3.png
+    MainSize: [1280, 720]
+    Name: 峡湾间的星辰SP3-C3
+    Offset: [47, 26]
+    OnMap: C3
+    Size: [176, 56]
+    Type: Anchor
+  峡湾间的星辰SP3-C7:
+    Image: 峡湾间的星辰SP3-C7.png
+    MainSize: [1280, 720]
+    Name: 峡湾间的星辰SP3-C7
+    Offset: [40, 41]
+    OnMap: C7
+    Size: [97, 65]
+    Type: Anchor
+  峡湾间的星辰SP3-G2:
+    Image: 峡湾间的星辰SP3-G2.png
+    MainSize: [1280, 720]
+    Name: 峡湾间的星辰SP3-G2
+    Offset: [46, 30]
+    OnMap: G2
+    Size: [96, 63]
+    Type: Anchor
+  峡湾间的星辰SP3-I3:
+    Image: 峡湾间的星辰SP3-I3.png
+    MainSize: [1280, 720]
+    Name: 峡湾间的星辰SP3-I3
+    Offset: [44, 34]
+    OnMap: I3
+    Size: [111, 67]
+    Type: Anchor
+  峡湾间的星辰SP3-I5:
+    Image: 峡湾间的星辰SP3-I5.png
+    MainSize: [1280, 720]
+    Name: 峡湾间的星辰SP3-I5
+    Offset: [43, 35]
+    OnMap: I5
+    Size: [118, 72]
+    Type: Anchor
+FightCount: 6
+Map: [ENNENEENEEN, NNNNNNONEEE, FNOONNNNOOO, FNOONNNNNNB, NNNNNNNNOOO, EENSNNNNNEN,
+  EEOEEENNNEE]
+Name: 峡湾间的星辰SP3
+Resources:
+  Boss队伍:
+    Image: 猎人.png
+    MainSize: [1280, 720]
+    Name: Boss队伍
+    Offset: [26, 530]
+    Size: [80, 50]
+    Type: Static
+  Clear@SP3:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: Clear@SP3
+    Offset: [853, 477]
+    Size: [70, 50]
+    Type: Static
+  Lv:
+    Image: lv_label.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.1
+    Name: Lv
+    Offset: [-8, -25]
+    Size: [34, 30]
+    Type: MultiDynamic
+  Lv2:
+    Image: lv_label.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.1
+    Name: Lv2
+    Offset: [-8, -25]
+    Size: [30, 26]
+    Type: MultiDynamic
+  Lv3:
+    Image: lv_label.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.1
+    Name: Lv3
+    Offset: [-8, -25]
+    Size: [26, 23]
+    Type: MultiDynamic
+  Pointer:
+    Image: Pointer.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.06
+    Name: Pointer
+    Offset: [45, 200]
+    Size: [72, 45]
+    Type: Dynamic
+  Pointer2:
+    Image: Pointer.png
+    MainSize: [1280, 720]
+    MaxDiff: 0.06
+    Name: Pointer2
+    Offset: [45, 200]
+    Size: [83, 51]
+    Type: Dynamic
+Scenes:
+  外部地图:
+    Actions:
+    - {Target: Clear@SP3, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [Clear@SP3]
+    Name: 外部地图
+    Next: [外部地图, 进入地图确认]
+  战斗准备:
+    Actions:
+    - Condition:
+      - $eq
+      - - $getattr
+        - [$]
+        - last_scene_name
+      - 遭遇伏击
+      Target: inc_fight_index
+      Type: InnerCall
+      args: [-1]
+    - {Target: mood_detect, Type: InnerCall}
+    - {Target: 出击, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [出击]
+    Name: 战斗准备
+    Next: [加载中, 船坞已满]
+Strategy:
+- Actions:
+  - {Target: toggle_fleet, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $any
+  - - - $all
+      - - - $le
+          - [FightIndexMod]
+          - 4
+        - [$method, resource_in_screen, Boss队伍]
+    - - $all
+      - - - $gt
+          - [FightIndexMod]
+          - 4
+        - - $not_
+          - [$method, resource_in_screen, Boss队伍]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [D1]
+  Condition:
+  - $eq
+  - 0
+  - [FightIndexMod]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [J7]
+  Condition:
+  - $eq
+  - 1
+  - [FightIndexMod]
+- Actions:
+  - {Target: normal_fight, Type: InnerCall}
+  Condition:
+  - $contains
+  - [2, 3, 4]
+  - [FightIndexMod]
+- Actions:
+  - {Target: search_for_boss, Type: InnerCall}
+  Condition:
+  - $ge
+  - [FightIndexMod]
+  - 5
+TransMatrix:
+- [1.0114716626149842, 0.3121105907697896, -112.82819105657724]
+- [0.006725509191035022, 1.619684364557297, -168.93552728401787]
+- [1.7849734873447808e-05, 0.0005860623448044642, 1.0]
+ViewPort: [D2, D5, G5, G2]
