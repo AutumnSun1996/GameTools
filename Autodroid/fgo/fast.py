@@ -65,6 +65,9 @@ class AssistInfo(dict):
         """判断助战从者是否满足指定条件"""
         if name in self:
             return self[name]
+        if not isinstance(name, str):
+            logger.info("Check For %s", repr(name))
+            return name
 
         if name == "助战-宝具可用":
             self[name] = self.fgo.crop_resource("助战-宝具", image=self.image).max() > 240
@@ -151,7 +154,7 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
 
-            if self.parse_scene_condition([["技能无法使用"]]):
+            if self.parse_scene_condition([["无法使用"]]):
                 self.click_at_resource("关闭")
                 self.wait(0.5)
                 self.make_screen_shot()
