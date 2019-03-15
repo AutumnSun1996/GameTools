@@ -47,7 +47,7 @@ Strategy:
   AssistCondition:
   - $all
   - - [礼装-材料2加成]
-    - 1
+    - [助战-礼装满破]
   AssistRange: 0.99
   CardChoice:
   - Choice:
