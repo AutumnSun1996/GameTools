@@ -46,10 +46,6 @@ def get_max_convex(anchors, count=4):
         poly = geometry.Polygon([anchors[i][0] for i in idx]).convex_hull
         area = poly.area
         if best_area < area:
-#             print("Update")
-#             print([anchors[i][1] for i in idx])
-#             print(area)
-#             display(poly)
             best_area = area
             best = idx
     return [anchors[i] for i in best]
@@ -70,7 +66,7 @@ def get_perspective_transform(anchors):
     return cv.getPerspectiveTransform(src, dst)
 
 def name2pos(name, matrix):
-    inv = np.linalg.inv(trans_matrix)
+    inv = np.linalg.inv(matrix)
     inv /= inv[2, 2]
     src = on_map_offset(name)
     src = np.reshape(src, (1, -1, 2)).astype("float32")
@@ -100,7 +96,7 @@ class FightMap(AzurLaneControl):
         self.scenes.update(self.data['Scenes'])
         self._trans_matrix = None
         self._inv_trans = None
-    
+
     def update_trans_matrix(self):
         anchors = get_anchors(self)
         if len(anchors) < 4:
