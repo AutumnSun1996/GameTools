@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+import yaml
 
 import numpy as np
 
@@ -56,7 +57,11 @@ def jsonformat(path, backup=True):
     # path = os.path.realpath(path)
     with open(path, "r", -1, "UTF-8") as fl:
         content = fl.read()
-    new_content = encode(json.loads(content), '', 0)
+    data = json.loads(content)
+    new_content = encode(data, '', 0)
+    basename, ext = os.path.splitext(path)
+    with open(basename+".yaml", "w", -1, "UTF-8") as f:
+        yaml.dump(data, f, allow_unicode=True)
     if content == new_content:
         print("No Change: ", path)
         return
