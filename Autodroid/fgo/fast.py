@@ -109,8 +109,19 @@ class FGOSimple(FGOBase):
             else:
                 logger.info("Skill Strategy Skipped: %s", item)
 
+    def is_skill_ready(self, skill_img, name="从者"):
+        """根据技能截图检查技能是否可用"""
+        line = self.crop_resource(name+"技能状态", image=skill_img)
+        line = line.mean(axis=2)
+        if line.std() < 1 and line.mean() > 100 and skill_img.std() > 10:
+            return True
+        if self.resource_in_image(name+"技能CD中", skill_img):
+            return False
+        return False
+
     def use_skills(self, *skills):
         for skill in skills:
+            self.make_screen_shot()
             self.combat_info["SkillCheck<{0}-{1}>".format(*skill)] = self.combat_info["Turn"]
             if skill[0] == 0:
                 self.click_at_resource("御主技能")
@@ -118,20 +129,21 @@ class FGOSimple(FGOBase):
                 target = "御主技能列表"
                 index = skill[1] - 1
 
+                self.make_screen_shot()
                 skill_img = self.crop_resource(target, index=index)
-                if self.resource_in_image("御主技能-还剩", skill_img):
+                if self.is_skill_ready(skill_img, "御主"):
                     # 为保证连续使用御主技能时不出错, 再次点击收回御主技能菜单
                     self.click_at_resource("御主技能")
                     self.wait(1)
-                    logger.debug("Ignore 御主技能 For CD: %s: %s %s", skill, target, index)
+                    logger.info("Ignore 御主技能: %s: %s %s", skill, target, index)
                     continue
             else:
                 target = "从者技能列表"
                 index = (skill[0]-1) * 3 + (skill[1] - 1)
 
                 skill_img = self.crop_resource(target, index=index)
-                if self.resource_in_image("从者技能-剩余", skill_img):
-                    logger.debug("Ignore 从者技能 For CD: %s: %s %s", skill, target, index)
+                if not self.is_skill_ready(skill_img, "从者"):
+                    logger.info("Ignore 从者技能: %s: %s %s", skill, target, index)
                     continue
 
             logger.debug("Use Skill %s: %s %s", skill, target, index)
@@ -149,7 +161,6 @@ class FGOSimple(FGOBase):
                 self.click_at_resource("进行更替")
                 self.wait(3)
 
-            # self.wait(1)
             self.make_screen_shot()
             self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
@@ -157,11 +168,11 @@ class FGOSimple(FGOBase):
             if self.parse_scene_condition([["无法使用"]]):
                 self.click_at_resource("关闭")
                 self.wait(0.5)
-                self.make_screen_shot()
             elif self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
-                self.make_screen_shot()
+
+            self.wait(1.5)
 
     def choose_card_idx(self, card_names, order):
         """

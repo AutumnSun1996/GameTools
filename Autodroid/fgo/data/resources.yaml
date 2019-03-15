@@ -115,13 +115,19 @@ Quick:
   Offset: [570, 80]
   Size: [180, 90]
   Type: Static
-从者技能-剩余:
+从者技能CD中:
   Image: 从者技能-剩余.png
   MainSize: [1280, 720]
   MaxDiff: 0.1
-  Name: 从者技能-剩余
+  Name: 从者技能CD中
   Offset: [2, 60]
   Size: [36, 18]
+  Type: Static
+从者技能状态:
+  MainSize: [1280, 720]
+  Name: 从者技能状态
+  Offset: [20, 72]
+  Size: [44, 1]
   Type: Static
 从者技能列表:
   ClickOffset: [12, 10]
@@ -261,10 +267,11 @@ Quick:
   MainSize: [1280, 720]
   Name: 助战-礼装满破
   SearchArea:
-  - [120, 140]
-  - [50, 50]
+  - [130, 152]
+  - [32, 32]
   Size: [24, 24]
   Type: Dynamic
+  MaxDiff: 0.001
 助战-职阶选择:
   MainSize: [1280, 720]
   Name: 助战-职阶选择
@@ -434,13 +441,19 @@ Quick:
   Offset: [1164, 286]
   Size: [60, 60]
   Type: Static
-御主技能-还剩:
+御主技能CD中:
   Image: 御主技能-还剩.png
   MainSize: [1280, 720]
   MaxDiff: 0.1
-  Name: 御主技能-还剩
+  Name: 御主技能CD中
   Offset: [2, 56]
   Size: [36, 18]
+  Type: Static
+御主技能状态:
+  MainSize: [1280, 720]
+  Name: 御主技能状态
+  Offset: [24, 74]
+  Size: [26, 1]
   Type: Static
 御主技能列表:
   ClickOffset: [14, 10]
@@ -646,7 +659,7 @@ Quick:
 礼装满破:
   Image: Star-center.png
   MainSize: [1280, 720]
-  MaxDiff: 0.02
+  MaxDiff: 0.001
   Name: 礼装满破
   Size: [8, 7]
   Type: Dynamic
