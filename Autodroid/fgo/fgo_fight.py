@@ -1,6 +1,5 @@
 import re
 from collections import defaultdict
-import json
 
 import numpy as np
 import requests
@@ -21,7 +20,7 @@ class FateGrandOrder(SimulatorControl):
     assist_servant_names = """
     玉藻前 杀生院 BB 阿比 两仪式 孔明 北斋 B叔 BX 阿蒂拉 茨木童子 兰斯洛特 莫德雷德 
     奶光 梅林 黑贞 黑狗 花嫁尼禄 阿尔托莉雅 宫本武藏 闪闪 伊什塔尔 小黑 白枪呆 帕尔瓦蒂
-    迦尔纳
+    迦尔纳 塞弥拉弥斯 山中老人
     """
     assist_equip_names = """
     醉贞 万华镜 材料1加成 材料2加成 材料3加成 材料4加成
