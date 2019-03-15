@@ -16,7 +16,7 @@
       {
         "Type": "InnerCall",
         "Condition": [
-          "$ne",
+          "$eq",
           ["$getattr", ["$"], "last_scene_name"],
           "遭遇伏击"
         ],
@@ -130,6 +130,19 @@
     "Condition": ["舰队选择-立刻前往"],
     "Actions": [
       {"Type": "InnerCall", "Target": "mood_detect"},
+      {
+        "Type": "Wait",
+        "Condition": [
+          "$le",
+          [
+            "$getitem",
+            ["$getattr", ["$"], "scene_history_count"],
+            "舰队选择"
+          ],
+          1
+        ],
+        "Time": 4
+      },
       {"Type": "Click", "Target": "舰队选择-立刻前往"},
       {"Type": "InnerCall", "Target": "reset_fight_index"},
       {"Type": "Wait", "Time": 1}
@@ -139,6 +152,15 @@
     "Name": "战斗地图",
     "Condition": ["迎击"],
     "Actions": [
+      {
+        "Type": "Wait",
+        "Condition": [
+          "$eq",
+          ["$getattr", ["$"], "last_scene_name"],
+          "舰队选择"
+        ],
+        "Time": 5
+      },
       {"Type": "InnerCall", "Target": "fight"},
       {"Type": "Wait", "Time": 1}
     ],
