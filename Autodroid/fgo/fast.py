@@ -131,7 +131,7 @@ class FGOSimple(FGOBase):
 
                 self.make_screen_shot()
                 skill_img = self.crop_resource(target, index=index)
-                if self.is_skill_ready(skill_img, "御主"):
+                if not self.is_skill_ready(skill_img, "御主"):
                     # 为保证连续使用御主技能时不出错, 再次点击收回御主技能菜单
                     self.click_at_resource("御主技能")
                     self.wait(1)
