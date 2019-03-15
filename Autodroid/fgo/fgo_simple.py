@@ -45,9 +45,9 @@ class FGOSimple(FateGrandOrder):
     def choose_skills(self):
         for item in self.data["Strategy"]["Skills"]:
             if parse_condition(item["Condition"], self, self.combat_info.__getitem__):
-                self.use_skills(item["Targets"])
+                self.use_skills(*item["Targets"])
 
-    def use_skills(self, skills):
+    def use_skills(self, *skills):
         for skill in skills:
             if skill[0] == 0:
                 fmt = "御主技能{1}"

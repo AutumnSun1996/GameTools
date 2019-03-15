@@ -23,11 +23,11 @@ class FGOSimple(FGOBase):
             
         for item in self.data["Strategy"]["Skills"]:
             if parse_condition(item["Condition"], self, self.combat_info.get):
-                self.use_skills(item["Targets"])
+                self.use_skills(*item["Targets"])
         
         self.enemy_attack = None
 
-    def use_skills(self, skills):
+    def use_skills(self, *skills):
         for skill in skills:
             if skill[0] == 0:
                 self.click_at_resource("御主技能")
