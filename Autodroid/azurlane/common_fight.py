@@ -258,6 +258,7 @@ class CommonMap(FightMap):
         self.make_screen_shot()
         # in case of scene changes after scene update
         if not self.scene_match_check("战斗地图", False):
+            self.update_current_scene()
             self.notice("Not in 战斗地图")
             return
         anchor_name, anchor_pos = self.get_best_anchor()
@@ -322,6 +323,7 @@ class CommonMap(FightMap):
             self.make_screen_shot()
             # in case of scene changes after scene update
             if not self.scene_match_check("战斗地图", False):
+                self.update_current_scene()
                 self.notice("Not in  战斗地图.")
                 return
             _, pos = self.locate_target(target, reshot=False)
