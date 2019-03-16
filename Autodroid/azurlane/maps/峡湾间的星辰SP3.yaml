@@ -45,10 +45,10 @@ Map: [ENNENEENEEN, NNNNNNONEEE, FNOONNNNOOO, FNOONNNNNNB, NNNNNNNNOOO, EENSNNNNN
 Name: 峡湾间的星辰SP3
 Resources:
   Boss队伍:
-    Image: 猎人.png
+    Image: 鲟.png
     MainSize: [1280, 720]
     Name: Boss队伍
-    Offset: [26, 530]
+    Offset: [26, 102]
     Size: [80, 50]
     Type: Static
   Clear@SP3:
@@ -132,12 +132,12 @@ Strategy:
   - - - $all
       - - - $le
           - [FightIndexMod]
-          - 4
+          - 3
         - [$method, resource_in_screen, Boss队伍]
     - - $all
       - - - $gt
           - [FightIndexMod]
-          - 4
+          - 3
         - - $not_
           - [$method, resource_in_screen, Boss队伍]
 - Actions:
