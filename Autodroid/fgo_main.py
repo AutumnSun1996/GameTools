@@ -17,10 +17,11 @@ def make_stop_checker(args):
                 return True
             now = datetime.now()
             if not s.actions_done and now - args.start_time > args.end_in:
+                s.click_at_resource("AP不足-关闭")
                 return True
         if s.current_scene_name == "获得物品" and s.actions_done:
             logger.warning("On 获得物品; %s", s.scene_history_count)
-            if s.scene_history_count["获得物品"] > args.fight_count:
+            if s.scene_history_count["获得物品"] >= args.fight_count:
                 return True
         return False
     return stop_checker
