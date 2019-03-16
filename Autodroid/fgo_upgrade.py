@@ -1,7 +1,7 @@
 import sys
 
 from simulator.win32_tools import rand_click
-from fgo_fast import FGOSimple
+from fgo.fast import FGOSimple
 
 from config_loader import logging
 
