@@ -117,6 +117,8 @@ class SimulatorControl:
     @property
     def last_scene_name(self):
         """上一次检测出的场景名称"""
+        if self.last_scene is None:
+            return None
         return self.last_scene["Name"]
 
     @property
@@ -155,10 +157,15 @@ class SimulatorControl:
                 return False, []
             info = self.resources[info]
             use_buffer = True
-
         elif isinstance(info, dict):
-            update_resource(info, self.section)
+            try:
+                update_resource(info, self.section)
+            except FileNotFoundError:
+                logger.exception("No resource: %s", info)
+                return False, []
             use_buffer = False
+        else:
+            raise TypeError("Invalid resource: {}".format(info))
 
         name = info["Name"]
         if info.get("ImageData") is None:
