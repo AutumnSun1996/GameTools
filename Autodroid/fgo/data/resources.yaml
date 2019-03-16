@@ -49,13 +49,6 @@ Quick:
   Name: Quick
   Size: [172, 89]
   Type: Dynamic
-万华镜奶光:
-  ClickSize: [500, 140]
-  Image: 万华镜奶光.png
-  MainSize: [1280, 720]
-  Name: 万华镜奶光
-  Size: [150, 140]
-  Type: Dynamic
 下一个:
   ClickOffset: [5, 150]
   ClickSize: [100, 40]
@@ -332,17 +325,32 @@ Quick:
   Type: Anchor
 助战从者定位:
   ClickOffset: [-700, 0]
-  ClickSize: [800, 120]
+  ClickSize: [800, 150]
   CropOffset: [-780, -20]
   CropSize: [1040, 190]
   Image: 最后登录.png
   MainSize: [1280, 720]
-  Name: 最后登录
+  Name: 助战从者定位
   SearchArea:
-  - [820, 195]
-  - [130, 375]
+  - [826, 180]
+  - [98, 400]
   Size: [98, 38]
   Type: MultiDynamic
+助战-礼装模板:
+  MainSize: [1280, 720]
+  MaxDiff: 0.01
+  SearchArea:
+  - [0, 130]
+  - [170, 60]
+  Size: [158, 45]
+  Type: Dynamic
+助战-从者模板:
+  MainSize: [1280, 720]
+  SearchArea:
+  - [300, 60]
+  - [420, 100]
+  Size: [400, 32]
+  Type: Dynamic
 助战更新:
   Image: 助战更新.png
   MainSize: [1280, 720]
