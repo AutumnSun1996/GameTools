@@ -25,39 +25,24 @@ class AssistInfo(dict):
         super().__init__()
         self.fgo = fgo
         self.image = self.fgo.crop_resource("助战从者定位", offset=offset)
-        names = self.fgo.assist_servant_names
-        if isinstance(names, str):
-            names = re.findall(r"\w+", names)
-        self.servant_names = set(names)
-
-        names = self.fgo.assist_equip_names
-        if isinstance(names, str):
-            names = re.findall(r"\w+", names)
-        self.equip_names = set(names)
 
     def check_servant_name(self, name):
         """确认助战从者是否为指定的从者"""
-        info = {
+        info = self.fgo.resources["助战-从者模板"].copy()
+        info.update({
             "Name": name,
-            "MainSize": [1280, 720],
-            "SearchArea": [[300, 60], [420, 100]],
-            "Size": [400, 32],
-            "Type": "Dynamic",
             "Image": name+".png"
-        }
+        })
         self[name] = self.fgo.resource_in_image(info, image=self.image)
         logger.info("check_servant_name %s: %s", name, self[name])
 
     def check_servant_equip(self, name):
         """确认助战从者是否携带指定的礼装"""
-        info = {
+        info = self.fgo.resources["助战-礼装模板"].copy()
+        info.update({
             "Name": name,
-            "MainSize": [1280, 720],
-            "Offset": [5, 135],
-            "Size": [158, 45],
-            "Type": "Static",
             "Image": name+".png"
-        }
+        })
         self[name] = self.fgo.resource_in_image(info, image=self.image)
         logger.info("check_servant_equip %s: %s", name, self[name])
 
@@ -73,12 +58,12 @@ class AssistInfo(dict):
             self[name] = self.fgo.crop_resource("助战-宝具", image=self.image).max() > 240
         elif name == "RecheckCount":
             self[name] = [s["Name"] for s in self.fgo.scene_history].count("助战选择")
-        elif name.startswith("助战-") and name[3:] in self.servant_names:
-            self.check_servant_name(name)
-        elif name.startswith("礼装-") and name[3:] in self.equip_names:
-            self.check_servant_equip(name)
-        else:
+        elif name in self.fgo.resources:
             self[name] = self.fgo.resource_in_image(name, image=self.image)
+        elif name.startswith("助战-"):
+            self.check_servant_name(name)
+        elif name.startswith("礼装-"):
+            self.check_servant_equip(name)
 
         return self[name]
 
