@@ -2,27 +2,27 @@ Description: '队伍: 北斋@50NP, 助战黑狗, 阿拉什@75NP, 梅林'
 Name: 小号剧情推进1
 Resources: {}
 Scenes:
-  关卡选择:
-    Actions:
-    - {Time: 1, Type: Wait}
-    - {Target: make_screen_shot, Type: InnerCall}
-    - Condition: [$method, resource_in_screen, 自由关卡]
-      Target: 左上-关闭
-      Type: Click
-    - Condition:
-      - $not_
-      - [$method, resource_in_screen, 自由关卡]
-      Target: 默认关卡
-      Type: Click
-    - {Time: 1, Type: Wait}
-    Condition:
-    - $all
-    - - [右下-菜单]
-      - [左上-关闭]
-      - - $not_
-        - [无战斗]
-    Name: 关卡选择
-    Next: [助战选择, AP不足, 关卡选择, 地图选择, 无战斗]
+  # 关卡选择:
+  #   Actions:
+  #   - {Time: 1, Type: Wait}
+  #   - {Target: make_screen_shot, Type: InnerCall}
+  #   - Condition: [$method, resource_in_screen, 自由关卡]
+  #     Target: 左上-关闭
+  #     Type: Click
+  #   - Condition:
+  #     - $not_
+  #     - [$method, resource_in_screen, 自由关卡]
+  #     Target: 默认关卡
+  #     Type: Click
+  #   - {Time: 1, Type: Wait}
+  #   Condition:
+  #   - $all
+  #   - - [右下-菜单]
+  #     - [左上-关闭]
+  #     - - $not_
+  #       - [无战斗]
+  #   Name: 关卡选择
+  #   Next: [助战选择, AP不足, 关卡选择, 地图选择, 无战斗]
   选择指令卡:
     Actions:
     - {Target: choose_cards, Type: InnerCall}
@@ -127,11 +127,11 @@ Strategy:
   - Condition:
     - $le
     - [BattleLeft]
-    - 0
-    Target: 2
+    - 1
+    Target: 1
   - Condition:
     - $le
     - [BattleLeft]
-    - 1
-    Target: 1
+    - 0
+    Target: 2
   - {Condition: true, Target: 3}
