@@ -60,9 +60,9 @@ class AssistInfo(dict):
             self[name] = [s["Name"] for s in self.fgo.scene_history].count("助战选择")
         elif name in self.fgo.resources:
             self[name] = self.fgo.resource_in_image(name, image=self.image)
-        elif name.startswith("助战-"):
+        elif name.startswith("助战/"):
             self.check_servant_name(name)
-        elif name.startswith("礼装-"):
+        elif name.startswith("礼装/"):
             self.check_servant_equip(name)
 
         return self[name]
@@ -157,7 +157,7 @@ class FGOSimple(FGOBase):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
 
-            self.wait(1.5)
+            self.wait(0.5+self.data["Strategy"].get("ExtraSkillInterval", 0.5))
 
     def choose_card_idx(self, card_names, order):
         """
