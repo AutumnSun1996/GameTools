@@ -59,10 +59,10 @@ Resources:
     Offset: [45, 200]
     Size: [82, 50]
     Type: Dynamic
-  大获全胜-左上角:
-    Image: 斯图尔特的硝烟SP3-大获全胜.png
+  S胜-左上角:
+    Image: 斯图尔特的硝烟SP3-S胜.png
     MainSize: [1920, 1080]
-    Name: 大获全胜-左上角
+    Name: S胜-左上角
     Offset: [292, 40]
     Size: [444, 123]
     Type: Static
