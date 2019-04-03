@@ -131,7 +131,7 @@ class FateGrandOrder(SimulatorControl):
         for i in range(length):
             if gray[i] > 110:
                 light.append((2, (i+1) / length))
-            elif gray[i] > 60:
+            elif gray[i] > 40:
                 light.append((1, (i+1) / length))
             else:
                 light.append((0, (i+1) / length))
