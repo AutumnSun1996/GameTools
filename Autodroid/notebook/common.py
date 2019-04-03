@@ -7,18 +7,47 @@ import yaml
 from simulator.win32_tools import *
 from simulator.image_tools import *
 from json_format import encode
+import logging.config
 
 from IPython.display import display
 
 const = {"s": None, "section": None}
 
+def reset_log():
+    logging.config.dictConfig(yaml.load("""
+    version: 1
+    formatters:
+        default:
+            format: '%(asctime)s - %(levelname)s - %(name)s - %(filename)s[%(lineno)d] - %(message)s'
+    handlers:
+        console:
+            class : logging.StreamHandler
+            formatter: default
+            level   : DEBUG
+            stream  : ext://sys.stdout
+    loggers:
+        __main__:
+            level   : DEBUG
+            handlers: [console]
+        config_loader:
+            level   : DEBUG
+            handlers: [console]
+        simulator:
+            level   : DEBUG
+            handlers: [console]
+        azurlane:
+            level   : DEBUG
+            handlers: [console]
+        fgo:
+            level   : DEBUG
+            handlers: [console]
+    """))
 
 def get_clip():
     win32clipboard.OpenClipboard()
     text = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
     win32clipboard.CloseClipboard()
     return text
-
 
 def set_clip(text):
     win32clipboard.OpenClipboard()
@@ -218,7 +247,7 @@ def check_resource(info, image=None):
         w, h = wh
         cv.rectangle(draw, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
-    if "Dynamic" in info["Type"]:
+    if "Dynamic" in info["Type"] and "ImageData" in info:
         diff, offsets = get_match(image, info["ImageData"])
         print("best match:", diff, offsets)
 
@@ -233,7 +262,7 @@ def check_resource(info, image=None):
     elif info["Type"] == "MultiStatic":
         offsets = info["Positions"]
     else:
-        print("Invalid:", info)
+        print("Invalid Info:", info)
         offsets = []
 
     for offset in np.reshape(offsets, (-1, 2)):
