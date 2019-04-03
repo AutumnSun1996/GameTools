@@ -1,6 +1,7 @@
 #SingleInstance force
 SetTitleMatchMode, 3
 
+#IfWinActive Warframe
 *-::
 ToolTip, Reload
 Sleep, 200
