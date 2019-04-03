@@ -63,7 +63,7 @@ def update_resource(resource, section):
         for key in resource:
             if re.search("Offset|Position|Size", key):
                 resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
-    if resource.get("Image") or resource.get("ImageData"):
+    if resource.get("Image") is not None or resource.get("ImageData") is not None:
         load_image(resource, section)
 
 
@@ -142,7 +142,7 @@ def get_multi_match(image, needle, thresh):
     centroids[:, 0] -= w / 2
     centroids[:, 1] -= h / 2
     # 删去背景连通域并将数值转化为int型
-    return centroids[1:, :].astype('int')
+    return centroids[1:, :].round().astype('int')
 
 
 def get_match(image, needle):
