@@ -144,7 +144,7 @@ class SimulatorControl:
         self.screen = get_window_shot(self.hwnd)
         return self.screen
 
-    def search_resource(self, info, image=None):
+    def search_resource(self, info, image=None, index=None):
         """判断资源是否存在于画面内
 
         返回 found, pos
@@ -187,6 +187,7 @@ class SimulatorControl:
             part = cv_crop(image, (x, y, x+w, y+h))
             diff = get_diff(part, target)
             # 有位置限制, 可以使用较为宽松的阈值
+            logger.debug("Diff for %s@%s=%.3f", name, (x, y), diff)
             ret = diff <= info.get('MaxDiff', 0.06)
             if ret:
                 pos = [x, y]
@@ -204,6 +205,7 @@ class SimulatorControl:
                 x = y = 0
                 part = image
             diff, pos = get_match(part, target)
+            logger.debug("Diff for %s@%s=%.3f", name, pos, diff)
             if diff > info.get('MaxDiff', 0.02):
                 ret = False
                 pos = []
@@ -215,9 +217,14 @@ class SimulatorControl:
             w, h = info["Size"]
             pos = []
             ret = False
-            for x, y in info["Positions"]:
+            if index is not None:
+                positions = [info["Positions"][index]]
+            else:
+                positions = info["Positions"]
+            for x, y in positions:
                 cropped = cv_crop(image, (x, y, x+w, y+h))
                 diff = get_diff(cropped, target)
+                logger.debug("Diff for %s@%s=%.3f", name, (x, y), diff)
                 if diff <= info.get('MaxDiff', 0.03):
                     pos.append((x, y))
                     ret = True
@@ -233,7 +240,7 @@ class SimulatorControl:
                 x = y = 0
                 part = image
             pos = get_multi_match(part, target, info.get("MaxDiff", 0.02))
-            pos = [np.add(item, [x, y]) for item in pos]
+            pos = [[dx+x, dy+y] for dx, dy in pos]
             ret = bool(pos)
         else:
             self.critical("Invalid Type %s", info['Type'])
@@ -243,12 +250,12 @@ class SimulatorControl:
         logger.debug("Check Resource: %s=%s", name, (ret, pos))
         return ret, pos
 
-    def resource_in_image(self, info, image):
+    def resource_in_image(self, info, image, index=None):
         """判断资源是否存在于给出的画面内. 可接受资源名字符串或资源定义dict, 返回bool判断
         """
-        return self.search_resource(info, image)[0]
+        return self.search_resource(info, image, index)[0]
 
-    def resource_in_screen(self, name):
+    def resource_in_screen(self, name, index=None):
         """判断资源是否存在于画面内. 仅接受资源名字符串, 返回bool判断
         """
         if not isinstance(name, str):
@@ -256,7 +263,7 @@ class SimulatorControl:
         if name not in self.resources:
             logger.warning("resource_in_screen Ignore %s", name)
             return name
-        return self.search_resource(name)[0]
+        return self.search_resource(name, index=index)[0]
 
     def wait(self, dt):
         """等待固定时间
@@ -322,7 +329,8 @@ class SimulatorControl:
         if isinstance(name, dict):
             res = name
             name = res["Name"]
-        res = self.resources[name]
+        else:
+            res = self.resources[name]
         if offset is None:
             if res["Type"] == "MultiStatic":
                 x, y = res["Positions"][index]
@@ -348,7 +356,14 @@ class SimulatorControl:
         return cv_crop(image, bbox)
 
     def parse_scene_condition(self, condition):
-        return parse_condition(condition, self, self.resource_in_screen)
+        def resource_check(name):
+            return self.resource_in_screen(name)
+        try:
+            res = parse_condition(condition, self, resource_check)
+        except Exception as err:
+            logger.exception("parse_scene_condition Failed: %s", condition)
+            raise err
+        return res
 
     def wait_till(self, condition, interval=1, repeat=5):
         """等待画面满足给定条件"""
@@ -516,9 +531,9 @@ class SimulatorControl:
         return (x, y, x+w, y+h)
 
     def do_actions(self, actions=None):
+        """执行指定的操作"""
         if actions is None:
             actions = self.current_scene["Actions"]
-        """执行指定的操作"""
         for action in actions:
             if "Condition" in action and not parse_condition(action["Condition"], self):
                 continue
