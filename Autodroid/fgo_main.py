@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 def make_stop_checker(args):
     def stop_checker(s):
         if s.current_scene_name == "AP不足":
-            if s.scene_history_count["AP不足"] >= args.add_ap:
+            if s.scene_history_count["AP不足"] > args.add_ap:
                 s.click_at_resource("AP不足-关闭")
                 return True
             now = datetime.now()
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     args = argparse.ArgumentParser()
     args.add_argument("section", nargs="?", default="FGO", help="模拟器ID")
     args.add_argument("map_name", nargs="?", default="通用配置", help="地图名")
-    args.add_argument("--add_ap", "--ap", type=int, default=0, help="补充AP次数。默认为0，不补充")
+    args.add_argument("--add_ap", "-ap", type=int, default=0, help="补充AP次数。默认为0，不补充")
     args.add_argument("--end_in", metavar="HH[:MM[:SS]]", type=parse_end_in, default=timedelta(hours=5),
                       help="脚本最大运行时间。默认为5小时")
     args.add_argument("--fight_count", "-n", type=int, default=100, help="自动战斗次数。默认为100")
