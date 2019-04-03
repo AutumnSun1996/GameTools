@@ -1,0 +1,120 @@
+Anchors: {}
+FightCount: 1
+Map: []
+Name: 演习
+Resources:
+  碧蓝航线APP:
+    Image: 碧蓝航线APP.png
+    MainSize: [1280, 720]
+    Name: 碧蓝航线APP
+    Size: [60, 60]
+    Type: Dynamic
+  点击登录:
+    MainSize: [1280, 720]
+    Name: 点击登录
+    Offset: [410, 300]
+    Size: [480, 200]
+    Type: Static
+  服务器:
+    Image: 服务器.png
+    MainSize: [1280, 720]
+    Name: 服务器
+    Offset: [410, 580]
+    Size: [480, 50]
+    Type: Static
+  主界面-出击:
+    Image: 主界面-出击.png
+    MainSize: [1280, 720]
+    Name: 主界面-出击
+    Offset: [1000, 360]
+    Size: [180, 70]
+    Type: Static
+  演习:
+    Image: 演习.png
+    MainSize: [1280, 720]
+    Name: 演习
+    Offset: [1120, 655]
+    Size: [130, 40]
+    Type: Static
+  演习次数:
+    MainSize: [1280, 720]
+    Name: 演习次数
+    Offset: [1100, 270]
+    Size: [80, 30]
+    Type: Static
+  演习敌人列表:
+    MainSize: [1280, 720]
+    Name: 演习敌人列表
+    Positions:
+    - [80, 120]
+    - [327, 120]
+    - [574, 120]
+    - [821, 120]
+    Size: [160, 260]
+    Type: MultiStatic
+  更换对手:
+    Image: 更换对手.png
+    MainSize: [1280, 720]
+    Name: 更换对手
+    Offset: [1070, 350]
+    Size: [160, 50]
+    Type: Static
+  开始演习:
+    Image: 开始演习.png
+    MainSize: [1280, 720]
+    Name: 开始演习
+    Offset: [936, 608]
+    Size: [220, 70]
+    Type: Static
+  返回:
+    MainSize: [1280, 720]
+    Name: 返回
+    Offset: [0, 0]
+    Size: [80, 50]
+    Type: Static
+
+Scenes:
+  游戏外界面:
+    Actions:
+    - {Target: 碧蓝航线APP, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [碧蓝航线APP]
+    Name: 游戏外界面
+    Next: [登录界面]
+  登录界面:
+    Actions:
+    - {Target: 点击登录, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [服务器]
+    Name: 登录界面
+    Next: [中间界面]
+  主界面:
+    Actions:
+    - {Target: 主界面-出击, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [主界面-出击]
+    Name: 主界面
+    Next: [外部地图]
+  外部地图:
+    Actions:
+    - {Target: 演习, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [演习]
+    Name: 外部地图
+    Next: [战斗地图]
+  战斗地图: # 演习界面
+    Actions:
+    - {Target: 演习敌人列表, Type: Click, Index: 0}
+    - {Time: 1, Type: Wait}
+    - {Target: 开始演习, Type: Click, Wait: true}
+    - {Time: 1, Type: Wait}
+    Condition: [更换对手]
+    Name: 外部地图
+    Next: [战斗准备, 战斗地图]
+  中间界面:
+    Actions:
+    - {Target: 返回, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [$not_, [$any, [[服务器], [碧蓝航线APP], [演习], [出击], [主界面-出击], [更换对手]]]]
+    Name: 中间界面
+Strategy: {}
