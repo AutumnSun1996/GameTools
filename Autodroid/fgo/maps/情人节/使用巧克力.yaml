@@ -1,0 +1,68 @@
+Description: 使用巧克力
+Name: 使用巧克力
+Resources:
+  使用巧克力:
+    Image: 使用巧克力.png
+    MainSize: [1280, 720]
+    Name: 使用巧克力
+    Offset: [600, 260]
+    Size: [130, 130]
+    ClickOffset: [0, 0]
+    ClickSize: [560, 130]
+    Type: Static
+  使用巧克力-确认:
+    MainSize: [1280, 720]
+    Name: 使用巧克力-确认
+    Offset: [720, 460]
+    Size: [180, 50]
+    Type: Static
+  剧情跳过确认:
+    Image: 剧情跳过确认.png
+    MainSize: [1280, 720]
+    Name: 剧情跳过确认
+    Offset: [440, 280]
+    Size: [400, 60]
+    Type: Static
+
+Scenes:
+  关卡选择:
+    Condition: false
+    Name: 关卡选择
+    Actions: []
+  好友申请失败:
+    Condition: false
+    Name: 关卡选择
+    Actions: []
+  使用巧克力:
+    Actions:
+    - {Target: 使用巧克力, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 使用巧克力-确认, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 关闭, Type: Click}
+    - {Time: 1, Type: Wait}
+    ActionsWhenWait:
+    - {Target: 剧情-跳过, Type: Click}
+    - {Time: 0.7, Type: Wait}
+    Condition: [使用巧克力]
+    Name: 使用巧克力
+    Next: [剧情跳过确认]
+  剧情跳过确认:
+    Actions:
+    - {Target: 剧情-确认跳过, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [剧情跳过确认]
+    Name: 剧情
+    Next: [完成]
+  完成:
+    Actions:
+    - {Target: 关闭, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - - [关闭]
+      - [左上-关闭]
+      - [右下-菜单]
+    Name: 完成
+    Next: [使用巧克力]
+Strategy: {}

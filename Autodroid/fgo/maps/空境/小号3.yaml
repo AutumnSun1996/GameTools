@@ -1,0 +1,144 @@
+Description: '队伍: 肯娘, 武则天, 卡米拉'
+Name: 主号剧情推进
+Resources: {}
+Scenes:
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 7]
+      Target: 队伍选择
+      Index: 7
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $any
+  - - false
+    # 活动礼装
+    # - [礼装/空境/斩首兔女郎]  # 七人御佐姬
+    # - [礼装/空境/三重结界]    # 素体
+    # - [礼装/空境/夏日未来视]  # 尸人
+    # - [礼装/空境/循环]        # 公寓灵，骷髅兵
+    # 氪金礼装
+    - [礼装/空境/冠位人偶师]  # 黑猫模型
+    - [礼装/空境/老成之翁]    # 黑猫模型
+    # - [礼装/空境/艳丽拳舞]    # 草莓冰淇淋
+    # - [礼装/空境/歪曲魔眼]    # 草莓冰淇淋
+    # - [礼装/空境/短跑选手]    # 矿泉水
+    # - [礼装/空境/重复魔术]    # 矿泉水
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 2
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 1
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 红卡优先
+  Skills:
+  - Actions:
+    - {Index: 1, Target: 战斗-敌人位置, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition:
+    - $all
+    - - - $eq
+        - [BattleLeft]
+        - 0
+      - - $le
+        - [TurnOfBattle]
+        - 1
+    Description: 选择敌人
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+      - [2, 3]
+      - [3, 3]
+    Description: 弗兰1, 武则天3, 卡米拉3
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [2, 1]
+      - [3, 2]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 弗兰2, 武则天1, 卡米拉2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 1]
+    Condition:
+    - $lt
+    - [NP3]
+    - 100
+    Description: 卡米拉1自充
+  - Actions:
+    - {Target: extract_np_info, Type: InnerCall}
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 3]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 肯娘宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 2]
+      - [0, 1]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 武则天宝具准备
+  UseNP:
+  - Condition: true
+    Description: 弗兰
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 武则天
+    Target: 2
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 卡米拉
+    Target: 3

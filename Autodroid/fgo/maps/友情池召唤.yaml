@@ -42,6 +42,14 @@ Resources:
     Size: [230, 80]
     Type: Static
 Scenes:
+  关卡选择:
+    Condition: false
+    Name: 关卡选择
+    Actions: []
+  好友申请失败:
+    Condition: false
+    Name: 关卡选择
+    Actions: []
   下一步:
     Actions:
     - {Time: 0.5, Type: Wait}
@@ -75,7 +83,7 @@ Scenes:
         - [召唤-下一步]
         - [召唤-已满]
     Name: 中间场景
-    Next: [下一步, 召唤结束, 中间场景]
+    Next: [下一步, 召唤结束, 中间场景, 开始召唤]
   召唤结束:
     Actions:
     - {Time: 0.5, Type: Wait}

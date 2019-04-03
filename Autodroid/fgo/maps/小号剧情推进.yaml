@@ -48,7 +48,7 @@ Strategy:
   AssistCondition:
   - $all
   - - [助战-从者满破]
-    - [助战-黑狗]
+    - [助战/黑狗]
     - [助战-宝具可用]
   AssistRange: 0.7
   CardChoice:
@@ -67,19 +67,28 @@ Strategy:
       Type: InnerCall
       args:
       - [1, 2]
+      - [1, 3]
       - [2, 1]
       - [2, 2]
       - [2, 3]
-      - [3, 1]
-    Description: 北斋2, 黑狗123, 阿拉什/梅林1
+    Description: 北斋23, 黑狗123
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [3, 2]
+      - [3, 1]
+    Condition:
+    - $gt
+    - [Turn]
+    - 1
+    Description: 梅林1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
       - [3, 3]
     Condition:
-    - $eq
+    - $le
     - [Turn]
     - 1
     Description: 阿拉什23
@@ -111,7 +120,8 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [0, 2, 2]
+      - [3, 3, 2]
+      - [0, 1]
     Condition:
     - $all
     - - - $ge
@@ -120,9 +130,7 @@ Strategy:
       - - $le
         - [BattleLeft]
         - 0
-      - - $not_
-        - [SkillCheck<0-2>]
-    Description: 黑狗宝具准备-御主技能
+    Description: 黑狗宝具准备
   UseNP:
   - Condition:
     - $le

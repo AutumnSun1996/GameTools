@@ -29,6 +29,7 @@ Resources:
     Offset: [1040, 0]
     Size: [240, 80]
     Type: Static
+    MaxDiff: 0.1
   从者满破:
     Image: 从者满破.png
     MainSize: [1280, 720]
@@ -90,6 +91,7 @@ Resources:
     Offset: [1040, 0]
     Size: [240, 80]
     Type: Static
+    MaxDiff: 0.1
   灵基再临-未选择:
     Image: 灵基再临-未选择.png
     MainSize: [1280, 720]
@@ -145,6 +147,7 @@ Resources:
     Offset: [180, 0]
     Size: [340, 80]
     Type: Static
+    MaxDiff: 0.001
   选卡-决定:
     MainSize: [1280, 720]
     Name: 选卡-决定
@@ -179,9 +182,13 @@ Scenes:
     - {Time: 1, Type: Wait}
     Condition:
     - $all
-    - - - $not_
+    - - [从者强化]
+      - - $not_
         - [选卡]
-      - [从者强化]
+      - - $not_
+        - [等待选卡]
+      - - $not_
+        - [前往灵基再临]
     Name: 从者强化
     Next: [强化中, 从者强化, 前往灵基再临]
   从者强化-选卡:
@@ -238,7 +245,7 @@ Scenes:
       - - [从者强化]
         - [灵基再临]
         - [灵基变还]
-        - [关闭-左上角]
+        - [左上-关闭]
     Name: 强化中
     Next: [强化中, 前往灵基再临, 从者强化]
   灵基再临:
@@ -272,7 +279,7 @@ Scenes:
       - - [从者强化]
         - [灵基再临]
         - [灵基变还]
-        - [关闭-左上角]
+        - [左上-关闭]
     Name: 灵基再临中
     Next: [灵基再临中, 灵基再临, 前往从者强化]
   灵基变还:
