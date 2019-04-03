@@ -38,9 +38,10 @@ class FGOSimple(FateGrandOrder):
             if self.scroll_pos >= self.data["Strategy"].get("AssistRange", 0.99):
                 break
             self.servant_scroll(1)
-            self.wait(1)
+            self.wait(2)
 
         self.refresh_assist()
+        self.wait(2)
 
     def choose_skills(self):
         for item in self.data["Strategy"]["Skills"]:
