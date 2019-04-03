@@ -7,12 +7,12 @@ const["section"] = "fgo"
 
 def save_assist_equip(name, index=0):
     s = const["s"]
-    
-    if not name.startswith("礼装-"):
-        name = "礼装-" + name
+
+    if not name.startswith("礼装/"):
+        name = "礼装/" + name
     part = s.crop_resource("助战从者定位", index=index)
     offset = (5, 135)
-    equip = cv_crop(part, (5, 135, 5+158, 135+45))
+    equip = cv_crop(part, (5, 135, 5+140, 135+42))
     equip = cv.cvtColor(equip, cv.COLOR_BGR2BGRA)
     for i in range(44, 130):
         for j in range(32, 45):
@@ -35,8 +35,8 @@ def save_assist_name(name, index=0):
     dx, _ = name_info["CropOffset"]
     x = offset[0] + dx
     h, w = name_img.shape[:2]
-    if not name.startswith("助战-"):
-        name = "助战-" + name
+    if not name.startswith("助战/"):
+        name = "助战/" + name
     info = {
         "Name": name,
         "MainSize": [1280, 720],
@@ -52,10 +52,11 @@ def save_assist_name(name, index=0):
     cv_save(path, name_img)
     set_clip(name[3:])
     check_resource(info, part)
-    
+
 
 def init_map(name="通用配置", section="FGO"):
     FateGrandOrder.section = section
     const["s"] = FateGrandOrder(name)
     const["s"].make_screen_shot()
+    reset_log()
     return const["s"]
