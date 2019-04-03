@@ -154,19 +154,19 @@ Pointer:
   - [404, 174]
   - [118, 174]
   Type: Static
-大获全胜:
-  Image: 大获全胜.png
-  MainSize: [1920, 1080]
-  Name: 大获全胜
-  Offset: [810, 400]
-  Size: [650, 180]
+S胜:
+  Image: S胜.png
+  MainSize: [1280, 720]
+  Name: S胜
+  Size: [123, 112]
+  Offset: [349, 276]
   Type: Static
-大获全胜-左上角:
-  Image: 大获全胜.png
-  MainSize: [1920, 1080]
-  Name: 大获全胜-左上角
-  Offset: [292, 40]
-  Size: [444, 123]
+S胜-左上角:
+  Image: S胜.png
+  MainSize: [1280, 720]
+  Name: S胜-左上角
+  Size: [84, 76]
+  Offset: [65, 33]
   Type: Static
 左侧空白区域:
   Image: null
