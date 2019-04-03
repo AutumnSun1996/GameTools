@@ -1,4 +1,5 @@
 from .common import *
+from azurlane.map_anchor import *
 
 from azurlane.fight_event import EventFight as AzurLane
 
@@ -24,8 +25,8 @@ def check_map_anchor(anchor):
     cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
     show(draw)
 
-
 def init_map(name):
     const["s"] = AzurLane(name)
     const["s"].make_screen_shot()
+    reset_log()
     return const["s"]
