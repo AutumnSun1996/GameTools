@@ -145,12 +145,13 @@ Quick:
   Offset: [4, 316]
   Size: [90, 18]
   Type: Static
-任务奖励:
-  Image: 任务奖励.png
+获得报酬:
+  Image: 获得报酬.png
   MainSize: [1280, 720]
-  Name: 任务奖励
-  Size: [800, 160]
-  Type: Dynamic
+  Name: 获得报酬
+  Offset: [800, 50]
+  Size: [400, 160]
+  Type: Static
 克制:
   Image: 克制.png
   MainSize: [1280, 720]
@@ -165,6 +166,7 @@ Quick:
   Size: [200, 100]
   Type: Static
 关闭:
+  Image: 关闭.png
   MainSize: [1280, 720]
   Name: 关闭
   Offset: [540, 540]
@@ -229,7 +231,7 @@ Quick:
   Size: [60, 30]
   Type: Dynamic
 助战-从者满破:
-  Image: 助战-礼装满破.png
+  Image: 满星.png
   MainSize: [1280, 720]
   Name: 助战-从者满破
   SearchArea:
@@ -256,7 +258,7 @@ Quick:
   Size: [190, 50]
   Type: Static
 助战-礼装满破:
-  Image: 助战-礼装满破.png
+  Image: 满星.png
   MainSize: [1280, 720]
   Name: 助战-礼装满破
   SearchArea:
@@ -264,7 +266,7 @@ Quick:
   - [32, 32]
   Size: [24, 24]
   Type: Dynamic
-  MaxDiff: 0.001
+  MaxDiff: 0.01
 助战-职阶选择:
   MainSize: [1280, 720]
   Name: 助战-职阶选择
@@ -286,7 +288,7 @@ Quick:
   Name: 助战选择-从者-名称
   Offset: [310, 90]
   Size: [450, 38]
-  Type: Anchor
+  Type: Dynamic
 助战从者-技能1:
   MainSize: [1280, 720]
   Name: 助战选择-从者-技能1
@@ -333,8 +335,8 @@ Quick:
   Name: 助战从者定位
   SearchArea:
   - [826, 180]
-  - [98, 400]
-  Size: [98, 38]
+  - [102, 400]
+  Size: [100, 38]
   Type: MultiDynamic
 助战-礼装模板:
   MainSize: [1280, 720]
@@ -342,7 +344,7 @@ Quick:
   SearchArea:
   - [0, 130]
   - [170, 60]
-  Size: [158, 45]
+  Size: [150, 42]
   Type: Dynamic
 助战-从者模板:
   MainSize: [1280, 720]
@@ -378,6 +380,7 @@ Quick:
   Offset: [1040, 0]
   Size: [240, 80]
   Type: Static
+  MaxDiff: 0.1
 右下-菜单:
   Image: 右下-菜单.png
   MainSize: [1280, 720]
@@ -657,6 +660,13 @@ Quick:
   Offset: [300, 600]
   Size: [700, 100]
   Type: Static
+申请好友-界面:
+  Image: 申请好友-界面.png
+  MainSize: [1280, 720]
+  Name: 申请好友-界面
+  Offset: [440, 160]
+  Size: [400, 100]
+  Type: Static
 申请好友:
   Image: 申请.png
   MainSize: [1280, 720]
@@ -801,6 +811,7 @@ Quick:
   Offset: [1040, 0]
   Size: [240, 80]
   Type: Static
+  MaxDiff: 0.1
 魔术礼装等级:
   Image: 魔术礼装等级.png
   MainSize: [1280, 720]
@@ -814,3 +825,20 @@ Quick:
   Offset: [700, 180]
   Size: [400, 100]
   Type: Static
+队伍选择:
+  Image: 队伍选择.png
+  MainSize: [1280, 720]
+  Name: 队伍选择
+  Positions:
+  - [517, 40]
+  - [542, 40]
+  - [567, 40]
+  - [592, 40]
+  - [617, 40]
+  - [642, 40]
+  - [667, 40]
+  - [692, 40]
+  - [717, 40]
+  - [742, 40]
+  Size: [20, 20]
+  Type: MultiStatic

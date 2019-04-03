@@ -14,13 +14,13 @@ AP不足:
   Condition: [AP不足]
   Name: AP不足
   Next: [助战选择]
-任务奖励:
+获得报酬:
   Actions:
-  - {Target: 任务奖励, Type: Click}
+  - {Target: 获得报酬, Type: Click}
   - {Time: 1, Type: Wait}
-  Condition: [任务奖励]
-  Name: 任务奖励
-  Next: [地图选择, 关卡选择, 任务奖励, 剧情]
+  Condition: [获得报酬]
+  Name: 获得报酬
+  Next: [地图选择, 关卡选择, 获得报酬, 剧情]
 关卡选择:
   Actions:
   - {Target: 默认关卡, Type: Click}
@@ -44,7 +44,7 @@ AP不足:
   - - [剧情-对话框]
     - [剧情-选择框]
   Name: 剧情
-  Next: [加载关卡, 选择技能, 剧情, 任务奖励, 地图选择, 关卡选择]
+  Next: [加载关卡, 选择技能, 剧情, 获得报酬, 地图选择, 关卡选择]
 加载关卡:
   Actions:
   - {Time: 1, Type: Wait}
@@ -86,7 +86,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [好友申请失败-关闭]
   Name: 好友申请失败
-  Next: [地图选择, 关卡选择, 任务奖励, 剧情]
+  Next: [地图选择, 关卡选择, 获得报酬, 剧情]
 御主等级上升:
   Actions:
   - {Target: 下一步, Type: Click}
@@ -123,9 +123,9 @@ AP不足:
   Actions:
   - {Target: 申请好友, Type: Click}
   - {Time: 1, Type: Wait}
-  Condition: [申请好友]
+  Condition: [$all, [[申请好友], [申请好友-界面]]]
   Name: 申请好友
-  Next: [好友申请失败, 地图选择, 关卡选择, 任务奖励, 剧情, 申请好友]
+  Next: [好友申请失败, 地图选择, 关卡选择, 获得报酬, 剧情, 申请好友]
 礼装等级上升:
   Actions:
   - {Target: 下一步, Type: Click}
@@ -150,7 +150,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [获得物品]
   Name: 获得物品
-  Next: [获得物品, 地图选择, 关卡选择, 任务奖励, 申请好友, 剧情]
+  Next: [获得物品, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
 获得经验:
   Actions:
   - {Target: 下一步, Type: Click}
@@ -214,7 +214,17 @@ AP不足:
   Next: [选择技能, 获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装, 获得物品, 战斗失败]
 队伍确认:
   Actions:
-  - {Time: 4, Type: Wait}
+  - Condition:
+    - $le
+    - - $getitem
+      - - $getattr
+        - [$]
+        - scene_history_count
+      - 队伍确认
+    - 1
+    Time: 3
+    Type: Wait
+  - {Time: 1, Type: Wait}
   - {Target: 开始任务, Type: Click}
   - {Time: 1, Type: Wait}
   Condition: [队伍确认]
