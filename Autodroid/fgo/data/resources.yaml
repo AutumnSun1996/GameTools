@@ -691,7 +691,7 @@ Quick:
   Image: 续关.png
   MainSize: [1280, 720]
   Name: 续关
-  Offset: [590, 104]
+  Offset: [602, 104]
   Size: [90, 46]
   Type: Static
 续关-撤退:
