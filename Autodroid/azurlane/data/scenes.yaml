@@ -11,7 +11,7 @@ S胜:
   Actions:
   - {Target: 右侧空白区域, Type: Click}
   - {Time: 0.5, Type: Wait}
-  Condition: [大获全胜]
+  Condition: [S胜]
   Name: S胜
 加载中:
   Actions:
@@ -137,7 +137,7 @@ S胜:
   Actions:
   - {Target: 右侧空白区域, Type: Click}
   - {Time: 0.5, Type: Wait}
-  Condition: [大获全胜-左上角]
+  Condition: [S胜-左上角]
   Name: 获得经验-S胜
   Next: [确认经验, 获得经验-S胜]
 获得舰娘:
