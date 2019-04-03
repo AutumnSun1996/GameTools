@@ -36,7 +36,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 2:
         gold_only = int(sys.argv[2])
     else:
-        gold_only = 1
+        gold_only = 0
 
     FGOUpgrade.section = section
     FGOUpgrade.gold_only = gold_only
