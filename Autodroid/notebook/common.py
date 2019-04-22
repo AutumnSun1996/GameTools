@@ -247,20 +247,22 @@ def check_resource(info, image=None):
         w, h = wh
         cv.rectangle(draw, (x, y), (x+w, y+h), (255, 0, 0), 1)
 
-    if "Dynamic" in info["Type"] and "ImageData" in info:
-        diff, offsets = get_match(image, info["ImageData"])
-        print("best match:", diff, offsets)
-
-    if 'ImageData' in info:
+    if "ImageData" in info:
         ret, offsets = s.search_resource(name, image)
-        print("search_resource:", ret, offsets)
-        if not ret and "Dynamic" not in info["Type"]:
-            diff, offsets = get_match(image, info["ImageData"])
-            print("best match:", diff, offsets)
-    elif info["Type"] == "Static":
+        if not ret and "Static" in info["Type"]:
+            diff, offset = get_match(image, info["ImageData"])
+            print("best match:", diff, offset)
+            dx, dy = offset
+            w, h = info["Size"]
+            cv.rectangle(draw, (dx, dy), (dx+w, dy+h), (255, 255, 255), 1)
+
+    if info["Type"] == "Static":
         offsets = [info["Offset"]]
     elif info["Type"] == "MultiStatic":
         offsets = info["Positions"]
+    elif 'ImageData' in info:
+        # ret, offsets = s.search_resource(name, image)
+        print("search_resource:", ret, offsets)
     else:
         print("Invalid Info:", info)
         offsets = []
