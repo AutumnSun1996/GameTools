@@ -116,8 +116,9 @@ Resources:
   灵基变还-确认结果:
     MainSize: [1280, 720]
     Name: 灵基变还-确认结果
-    Offset: [560, 560]
-    Size: [160, 50]
+    Image: 关闭.png
+    Offset: [540, 564]
+    Size: [200, 45]
     Type: Static
   灵基变还-金卡:
     Image: 灵基变还-金卡.png
@@ -296,7 +297,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     - {Target: 灵基变还-销毁, Type: Click}
     - {Time: 1, Type: Wait}
-    - {Target: 灵基变还-确认结果, Type: Click}
+    - {Target: 灵基变还-确认结果, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
     Condition: [灵基变还]
     Name: 灵基变还
