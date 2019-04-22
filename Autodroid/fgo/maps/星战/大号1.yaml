@@ -1,0 +1,144 @@
+Description: '队伍: 剑弗兰, 剑尼禄@80NP, 助战孔明'
+Name: 大号-行星级
+Resources:
+  对应奖励:
+    Image: 对应奖励.png
+    MainSize: [1280, 720]
+    Name: 对应奖励
+    SearchArea: 
+    - [100, 65]
+    - [500, 50]
+    Size: [122, 40]
+    Type: Dynamic
+Scenes:
+  AP不足:
+    Actions:
+    - Target: servant_scroll
+      Type: InnerCall
+      args: [1.5]
+    - {Time: 0.5, Type: Wait}
+    - {Target: 银苹果, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 9]
+      Target: 队伍选择
+      Index: 9
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - true
+    # - [助战-礼装满破]
+    # - [助战-宝具可用]
+    - [助战/孔明]
+    # 活动礼装
+    # - [礼装/星战/纯洁绽放]
+    # - [礼装/星战/阿尔托莉雅之星]
+    # 氪金礼装
+    - [礼装/星战/正射必中]           # 铜: G型变换器
+    # - [礼装/星战/巫女狐！新娘修炼]    # 银: 万能透镜
+    # - [礼装/星战/化为红莲的影之国]    # 金: 真空管
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^A0, ^A抵抗, ^A克制, ^B克制, ^B0, ^Q克制, ^Q0, ^B抵抗, ^Q抵抗]
+    - - 2
+      - [^A0, ^Q0, ^B0, ^A克制, ^B克制, ^Q克制, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 1
+      - [^A0, ^Q0, ^B0, ^A克制, ^B克制, ^Q克制, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 弗兰蓝卡优先
+  Skills:
+  - Actions:
+    - {Index: 1, Target: 战斗-敌人位置, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    Condition:
+    - $all
+    - - - $eq
+        - [BattleLeft]
+        - 0
+      - - $eq
+        - [TurnOfBattle]
+        - 1
+    Description: 三面第一回合, 选择敌人
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 1]
+      - [2, 3]
+      - [3, 1, 1]
+      - [3, 2]
+      - [3, 3]
+    Description: 尼禄13, 孔明123
+  - Actions:
+    - {Target: extract_np_info, Type: InnerCall}
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 1]
+      - [1, 3]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 弗兰宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 2]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 尼禄宝具准备
+  UseNP:
+  - Condition: true
+    Description: 孔明
+    Target: 3
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 尼禄
+    Target: 2
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 弗兰
+    Target: 1
