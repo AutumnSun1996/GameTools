@@ -11,18 +11,17 @@ def save_assist_equip(name, index=0):
     if not name.startswith("礼装/"):
         name = "礼装/" + name
     part = s.crop_resource("助战从者定位", index=index)
-    offset = (5, 135)
-    equip = cv_crop(part, (5, 135, 5+140, 135+42))
+    x, y = 8, 136
+    w, h = 150, 42
+    equip = cv_crop(part, (x, y, x+w, y+h))
     equip = cv.cvtColor(equip, cv.COLOR_BGR2BGRA)
-    for i in range(44, 130):
-        for j in range(32, 45):
-            equip[j, i, 3] = 0
-    for i in range(130, 158):
-        for j in range(21, 45):
-            equip[j, i, 3] = 0
+    mask = np.ones((h, w), dtype="uint8") * 255
+    mask[21:h, 20:90, ] = 0
+    mask[32:h, 90:120, ] = 0
+    mask[16:h, 120:w, ] = 0
+    equip[:, :, 3] = mask
     show(equip)
-    save_crop(name, equip, offset)
-
+    save_crop(name, equip, (x, y))
 
 def save_assist_name(name, index=0):
     s = const["s"]
