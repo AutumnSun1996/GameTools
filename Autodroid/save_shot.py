@@ -20,10 +20,18 @@ def main():
     hwnd = win32_tools.get_window_hwnd(args.title)
     img = image_tools.get_window_shot(hwnd)
     path = os.path.join(args.save_dir, "Shot-{:%Y-%m-%d_%H%M%S}.jpg".format(datetime.now()))
-    image_tools.cv_save(path, img)
-    cv.namedWindow(path, cv.WINDOW_AUTOSIZE)
-    cv.imshow(path, img)
-    cv.waitKey(0)
+
+    window_name = "Screen Shot Preview"
+    cv.namedWindow(window_name, cv.WINDOW_AUTOSIZE)
+    cv.imshow(window_name, img)
+    key = cv.waitKey(5000)
+    if key == -1:
+        print("Time out.")
+    else:
+        print("Pressed", key)
+    if key != 27:
+        image_tools.cv_save(path, img)
+        print(path, "Saved.")
     cv.destroyAllWindows()
 
 
