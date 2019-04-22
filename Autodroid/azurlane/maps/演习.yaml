@@ -36,6 +36,14 @@ Resources:
     Offset: [1120, 655]
     Size: [130, 40]
     Type: Static
+  演习次数0:
+    MainSize: [1280, 720]
+    Name: 演习次数0
+    Image: 演习次数0.png
+    Offset: [1100, 270]
+    Size: [80, 30]
+    Type: Static
+    MaxDiff: 0.001
   演习次数:
     MainSize: [1280, 720]
     Name: 演习次数
@@ -104,7 +112,11 @@ Scenes:
     Next: [战斗地图]
   战斗地图: # 演习界面
     Actions:
-    - {Target: 演习敌人列表, Type: Click, Index: 0}
+    - Condition: [$method, resource_in_screen, 演习次数0]
+      Target: error
+      Type: InnerCall
+      args: [演习次数0]
+    - {Index: 0, Target: 演习敌人列表, Type: Click}
     - {Time: 1, Type: Wait}
     - {Target: 开始演习, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
