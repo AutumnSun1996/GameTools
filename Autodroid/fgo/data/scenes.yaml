@@ -140,6 +140,16 @@ AP不足:
   Condition: [羁绊加深]
   Name: 羁绊加深
   Next: [羁绊加深, 获得经验]
+活动点数奖励:
+  Actions:
+  - {Time: 0.5, Type: Wait}
+  - {Target: make_screen_shot, Type: InnerCall}
+  - {Target: save_record, Type: InnerCall}
+  - {Target: 下一步, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [对应奖励]
+  Name: 活动点数奖励
+  Next: [活动点数奖励, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
 获得物品:
   Actions:
   - {Time: 1, Type: Wait}
@@ -150,7 +160,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [获得物品]
   Name: 获得物品
-  Next: [获得物品, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
+  Next: [获得物品, 活动点数奖励, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
 获得经验:
   Actions:
   - {Target: 下一步, Type: Click}
