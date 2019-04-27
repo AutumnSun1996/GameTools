@@ -60,6 +60,7 @@ AP不足:
   Next: [助战选择]
 助战选择:
   Actions:
+  - {Time: 3, Type: Wait}
   - {Target: choose_assist_servant, Type: InnerCall}
   - {Time: 1, Type: Wait}
   Condition:
@@ -221,7 +222,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [战斗速度]
   Name: 选择指令卡
-  Next: [选择技能, 获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装, 获得物品, 战斗失败]
+  Next: [选择技能, 获得羁绊, 获得经验, 获得羁绊礼装, 获得物品, 战斗失败]
 队伍确认:
   Actions:
   - Condition:
