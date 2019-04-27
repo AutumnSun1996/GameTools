@@ -16,7 +16,7 @@ Arts:
   Image: Arts.png
   MainSize: [1280, 720]
   Name: Arts
-  Size: [146, 81]
+  Size: [125, 75]
   Type: Dynamic
 Attack:
   MainSize: [1280, 720]
@@ -28,26 +28,26 @@ Buster:
   Image: Buster.png
   MainSize: [1280, 720]
   Name: Buster
-  Size: [184, 81]
+  Size: [189, 75]
   Type: Dynamic
 Cards:
-  ClickOffset: [30, 65]
+  ClickOffset: [30, 100]
   ClickSize: [130, 160]
   MainSize: [1280, 720]
   Name: Cards
   Positions:
-  - [35, 355]
-  - [290, 355]
-  - [545, 355]
-  - [805, 355]
-  - [1065, 355]
-  Size: [200, 270]
+  - [35, 320]
+  - [290, 320]
+  - [545, 320]
+  - [805, 320]
+  - [1065, 320]
+  Size: [200, 310]
   Type: MultiStatic
 Quick:
   Image: Quick.png
   MainSize: [1280, 720]
   Name: Quick
-  Size: [172, 89]
+  Size: [170, 94]
   Type: Dynamic
 下一个:
   ClickOffset: [5, 150]
@@ -65,11 +65,11 @@ Quick:
   Size: [200, 50]
   Type: Static
 与从者的羁绊:
-  Image: 羁绊-左.png
+  Image: 与从者的羁绊.png
   MainSize: [1280, 720]
   Name: 与从者的羁绊
   Offset: [80, 168]
-  Size: [100, 36]
+  Size: [220, 42]
   Type: Static
 从者1-NP:
   MainSize: [1280, 720]
@@ -158,6 +158,9 @@ Quick:
   MaxDiff: 0.1
   Name: 克制
   Size: [47, 49]
+  SearchArea:
+  - [140, 0]
+  - [60, 100]
   Type: Dynamic
 关卡1:
   MainSize: [1280, 720]
@@ -701,19 +704,14 @@ Quick:
   Offset: [290, 300]
   Size: [100, 50]
   Type: Static
-羁绊-左:
-  Image: 羁绊-左.png
-  MainSize: [1280, 720]
-  Name: 羁绊-左
-  Offset: [80, 168]
-  Size: [100, 36]
-  Type: Static
 羁绊加深:
   Image: 羁绊加深.png
   MainSize: [1280, 720]
-  MaxDiff: 0.03
   Name: 羁绊加深
   Size: [320, 42]
+  SearchArea: 
+  - [650, 320]
+  - [340, 100]
   Type: Dynamic
 自由关卡:
   Image: 自由关卡.png
