@@ -55,7 +55,11 @@ class AssistInfo(dict):
             return name
 
         if name == "助战-宝具可用":
-            self[name] = self.fgo.crop_resource("助战-宝具", image=self.image).max() > 240
+            try:
+                light = self.fgo.crop_resource("助战-宝具", image=self.image).max()
+                self[name] = light > 240
+            except ValueError:
+                self[name] = False
         elif name == "RecheckCount":
             self[name] = [s["Name"] for s in self.fgo.scene_history].count("助战选择")
         elif name in self.fgo.resources:
@@ -217,7 +221,7 @@ class FGOSimple(FGOBase):
         for card_choice in self.data["Strategy"]["CardChoice"]:
             if parse_condition(card_choice["Condition"], self, self.combat_info.__getitem__):
                 break
-
+        logger.info("CardChoice Strategy=%s", card_choice)
         choice += [None, None, None]
         for idx, order in card_choice["Choice"]:
             if choice[idx] is None:
