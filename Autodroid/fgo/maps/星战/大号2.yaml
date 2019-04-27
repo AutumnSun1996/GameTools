@@ -2,22 +2,6 @@ Description: '队伍: 助战-枪玉藻前, 剑尼禄@80NP, 梅林'
 Name: 大号-星团级
 Resources: {}
 Scenes:
-  获得羁绊:
-    Actions:
-    - {Target: 下一步, Type: Click}
-    - {Target: save_record, Type: InnerCall}
-    - {Time: 0.5, Type: Wait}
-    Condition: [与从者的羁绊]
-    Name: 获得羁绊
-    Next: [获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装]
-  羁绊加深:
-    Actions:
-    - {Target: 下一步, Type: Click}
-    - {Target: save_record, Type: InnerCall}
-    - {Time: 0.5, Type: Wait}
-    Condition: [羁绊加深]
-    Name: 羁绊加深
-    Next: [羁绊加深, 获得经验]
   AP不足:
     Actions:
     - Target: servant_scroll
