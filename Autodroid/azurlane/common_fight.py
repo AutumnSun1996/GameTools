@@ -263,11 +263,10 @@ class CommonMap(FightMap):
             return
         anchor_name, anchor_pos = self.get_best_anchor()
 
-        enemies = set(self.find_on_map(anchor_name, anchor_pos, 'Lv', False))
-        if 'Lv2' in self.resources:
-            enemies = enemies.union(self.find_on_map(anchor_name, anchor_pos, 'Lv2', False))
-        if 'Lv3' in self.resources:
-            enemies = enemies.union(self.find_on_map(anchor_name, anchor_pos, 'Lv3', False))
+        enemies = set()
+        for name in self.data.get("EnemyMarkers", ["Lv", "Lv1", "Lv2"]):
+            if name in self.resources:
+                enemies = enemies.union(self.find_on_map(anchor_name, anchor_pos, name, False))
         logger.info("找到敌人: %s", enemies)
         for enemy in enemies:
             self.set_enemy(enemy)
@@ -398,10 +397,12 @@ class CommonMap(FightMap):
             self.error("地图处理失败")
             return
 
-        if not self.current_fleet:
+        if not self.current_fleet and not self.enemies:
             self.recheck_full_map()
             self.normal_fight(repeat+1)
             return
+        if self.current_fleet is None:
+            self.current_fleet = self.born_points[0]
 
         fleets = [self.current_fleet]
         if self.other_fleet:
