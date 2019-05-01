@@ -2,7 +2,7 @@ svtId	class_link	id	name_cn
 800100    	Shielder  	1	玛修・基列莱特
 100100    	Saber     	2	阿尔托莉雅・潘德拉贡
 100200    	Saber     	3	阿尔托莉雅・潘德拉贡(Alter)
-0         	Saber     	4	阿尔托莉雅・潘德拉贡(Lily)
+100300    	Saber     	4	阿尔托莉雅・潘德拉贡(Lily)
 100500    	Saber     	5	尼禄・克劳狄乌斯
 100800    	Saber     	6	齐格飞
 101300    	Saber     	7	盖乌斯・尤利乌斯・恺撒
@@ -75,11 +75,12 @@ svtId	class_link	id	name_cn
 500400    	Caster    	74	童谣
 600500    	Assassin  	75	开膛手杰克
 100900    	Saber     	76	莫德雷德
-201100         	Archer    	77	尼古拉・特斯拉
+0         	Archer    	77	尼古拉・特斯拉
 301900    	Lancer    	78	阿尔托莉雅・潘德拉贡(Alter)
 501000    	Caster    	79	冯・霍恩海姆・帕拉塞尔苏斯
 501100    	Caster    	80	查尔斯・巴贝奇
 600700    	Assassin  	81	亨利・杰基尔＆海德
+600710    	Berserker  	0 	海德
 700400    	Berserker 	82	弗兰肯斯坦
 0         	Caster    	83	所罗门
 201500    	Archer    	84	阿周那
@@ -90,7 +91,7 @@ svtId	class_link	id	name_cn
 700800    	Berserker 	89	贝奥武夫
 100600    	Saber     	90	尼禄・克劳狄乌斯(新娘)
 102800    	Saber     	91	两仪式
-0         	Assassin  	92	两仪式
+602300    	Assassin  	92	两仪式
 900200    	Ruler     	93	天草四郎
 400400    	Rider     	94	阿斯托尔福
 201800    	Archer    	95	幼吉尔
