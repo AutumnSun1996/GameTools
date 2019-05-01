@@ -1,0 +1,233 @@
+Anchors:
+  AI-SP4/B6:
+    Image: AI-SP4/B6.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/B6
+    Offset: [59, 19]
+    OnMap: B6
+    Size: [230, 56]
+    Type: Anchor
+  AI-SP4/G3:
+    Image: AI-SP4/G3.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/G3
+    Offset: [131, 33]
+    OnMap: G3
+    Size: [183, 66]
+    Type: Anchor
+  AI-SP4/H6:
+    Image: AI-SP4/H6.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/H6
+    Offset: [106, 26]
+    OnMap: H6
+    Size: [182, 50]
+    Type: Anchor
+  AI-SP4/I3:
+    Image: AI-SP4/I3.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/I3
+    Offset: [104, 35]
+    OnMap: I3
+    Size: [156, 70]
+    Type: Anchor
+  AI-SP4/D2:
+    Image: AI-SP4/D2.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/D2
+    Offset: [47, 58]
+    OnMap: D2
+    Size: [98, 145]
+    Type: Anchor
+  AI-SP4/F3:
+    Image: AI-SP4/F3.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/F3
+    Offset: [49, 26]
+    OnMap: F3
+    Size: [171, 54]
+    Type: Anchor
+  AI-SP4/G1:
+    Image: AI-SP4/G1.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/G1
+    Offset: [41, 25]
+    OnMap: G1
+    Size: [85, 115]
+    Type: Anchor
+EnemyMarkers:
+- 高雄
+- 高雄2
+- 高雄3
+- 欧根
+- 欧根2
+- 欧根3
+- 欧根4
+- 翔鹤
+- 翔鹤2
+- 翔鹤3
+- 命运女神
+- 命运女神2
+- 命运女神3
+FightCount: 6
+Map: 
+- NENONNONEN
+- NNNONBNNNN
+- OOEOOOONOO
+- NNNNEENNSE
+- NESNENNEOO
+- NOOENNNOOO
+- NOONNNNENN
+- NNNNFFNNNN
+Name: AI-SP4
+Resources:
+  翔鹤:
+    Image: AI-SP4/翔鹤.png
+    MainSize: [1280, 720]
+    Name: 翔鹤
+    Offset: [50, 90]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  翔鹤2:
+    Image: AI-SP4/翔鹤2.png
+    MainSize: [1280, 720]
+    Name: 翔鹤2
+    Offset: [50, 110]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+
+  高雄:
+    Image: AI-SP4/高雄.png
+    MainSize: [1280, 720]
+    Name: 高雄
+    Offset: [50, 100]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  高雄2:
+    Image: AI-SP4/高雄2.png
+    MainSize: [1280, 720]
+    Name: 高雄2
+    Offset: [50, 100]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  命运女神:
+    Image: AI-SP4/命运女神.png
+    MainSize: [1280, 720]
+    Name: 命运女神
+    Offset: [50, 95]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  命运女神2:
+    Image: AI-SP4/命运女神2.png
+    MainSize: [1280, 720]
+    Name: 命运女神2
+    Offset: [50, 110]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  欧根:
+    Image: AI-SP4/欧根.png
+    MainSize: [1280, 720]
+    Name: 欧根
+    Offset: [55, 100]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+
+  欧根2:
+    Image: AI-SP4/欧根2.png
+    MainSize: [1280, 720]
+    Name: 欧根2
+    Offset: [50, 120]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  欧根3:
+    Image: AI-SP4/欧根3.png
+    MainSize: [1280, 720]
+    Name: 欧根3
+    Offset: [50, 120]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+  欧根4:
+    Image: AI-SP4/欧根4.png
+    MainSize: [1280, 720]
+    Name: 欧根4
+    Offset: [50, 100]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+
+  道中队伍:
+    Image: 长门.png
+    MainSize: [1280, 720]
+    Name: 道中队伍
+    Offset: [26, 102]
+    Size: [80, 50]
+    Type: Static
+  Clear@SP4:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: Clear@SP4
+    Offset: [820, 465]
+    Size: [70, 50]
+    Type: Static
+Scenes:
+  外部地图:
+    Actions:
+    - {Target: Clear@SP4, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [Clear@SP4]
+    Name: 外部地图
+    Next: [外部地图, 进入地图确认]
+Strategy:
+- Actions:
+  - {Target: toggle_fleet, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $any
+  - - - $all
+      - - - $ge
+          - [FightIndexMod]
+          - 5
+        - [$method, resource_in_screen, 道中队伍]
+    - - $all
+      - - - $lt
+          - [FightIndexMod]
+          - 5
+        - - $not_
+          - [$method, resource_in_screen, 道中队伍]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [C3]
+  Condition:
+  - $eq
+  - 0
+  - [FightIndexMod]
+- Actions:
+  - Target: normal_fight
+    Type: InnerCall
+  Condition:
+  - $contains
+  - [1, 2, 3, 4]
+  - [FightIndexMod]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [F2]
+  Condition:
+  - $ge
+  - [FightIndexMod]
+  - 5
+TransMatrix: 
+- [1.0511933189462517, 0.2584943926902309, -324.46803131105355]
+- [-0.006486955855499273, 1.6164243467398416, -362.738925566012]
+- [-3.243477927749573e-05, 0.0006776621867779948, 1.0]
+ViewPort: [D2, G2]
