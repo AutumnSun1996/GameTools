@@ -403,13 +403,16 @@ class SimulatorControl:
 
     def save_record(self, prefix=None, area=None):
         if prefix is None:
-            prefix = "Shot"
+            prefix = "Shot-" + self.current_scene_name
         if area is None:
             image = self.screen
         else:
             image = self.crop_resource(area)
-            prefix += '-%s' % area
-        name = "{0}/shots/{2:%Y%m%d}/{1}-{2:%Y-%m-%d_%H%M%S}.jpg".format(self.section, prefix, datetime.datetime.now())
+            if isinstance(area, dict):
+                area = area["Name"]
+            if isinstance(area, str):
+                prefix += '-%s' % area
+        name = "{0}/shots/{2:%Y%m%d}/{1}@{2:%Y%m%d_%H%M%S}.jpg".format(self.section, prefix, datetime.datetime.now())
         cv_save(name, image)
 
     def critical(self, message=None, title="", action=None):
@@ -565,6 +568,8 @@ class SimulatorControl:
             else:
                 self.critical("Invalid Action %s" % action)
 
+            if action.get("Break"):
+                break
     @property
     def since_last_change(self):
         """返回从上次场景变化到当前时间的秒数"""
