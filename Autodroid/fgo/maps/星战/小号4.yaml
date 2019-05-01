@@ -68,6 +68,17 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
+      - [0, 2, 3]
+    Condition:
+    - $all
+    - - [$eq, [BattleLeft], 0]
+      - [$eq, [TurnOfBattle], 3]
+      - [$not_, [SkillUse<0-2>]]
+    Description: 解除无法行动
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
       - [1, 1]
       - [1, 3]
       - [2, 3]
