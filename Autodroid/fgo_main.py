@@ -12,16 +12,16 @@ logger = logging.getLogger(__name__)
 def make_stop_checker(args):
     def stop_checker(s):
         if s.current_scene_name == "AP不足":
-            if s.scene_history_count["AP不足"] > args.add_ap:
+            if args.add_ap is not None and s.scene_history_count["AP不足"] > args.add_ap:
                 s.click_at_resource("AP不足-关闭")
                 return True
             now = datetime.now()
-            if not s.actions_done and now - args.start_time > args.end_in:
+            if args.end_in is not None and not s.actions_done and now - args.start_time > args.end_in:
                 s.click_at_resource("AP不足-关闭")
                 return True
         if s.current_scene_name == "获得物品" and s.actions_done:
             logger.warning("On 获得物品; %s", s.scene_history_count)
-            if s.scene_history_count["获得物品"] >= args.fight_count:
+            if args.fight_count is not None and s.scene_history_count["获得物品"] >= args.fight_count:
                 return True
         return False
     return stop_checker
@@ -33,9 +33,12 @@ def main(args):
     try:
         fgo.main_loop(make_stop_checker(args))
         # input("Pause...")
-    except KeyboardInterrupt:
-        pass
-    logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
+    except KeyboardInterrupt as e:
+        logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
+    except Exception as e:
+        logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
+        raise e
+
 
     # if datetime.now() > target_time:
     #     fgo.wait(10)
@@ -45,23 +48,25 @@ def main(args):
 def parse_end_in(text):
     dt = [3, 0, 0]
     for idx, item in enumerate(text.split(":")):
-        dt[idx] = int(item)
+        dt[idx] = int('0'+item)
     return timedelta(**dict(zip(["hours", "minutes", "seconds"], dt)))
 
 
 if __name__ == "__main__":
     # help(conflictsparse.conflictsparse)
-    args = argparse.ArgumentParser()
-    args.add_argument("section", nargs="?", default="FGO", help="模拟器ID")
-    args.add_argument("map_name", nargs="?", default="通用配置", help="地图名")
-    args.add_argument("--add_ap", "-ap", type=int, default=0, help="补充AP次数。默认为0，不补充")
-    args.add_argument("--end_in", metavar="HH[:MM[:SS]]", type=parse_end_in, default=timedelta(hours=5),
-                      help="脚本最大运行时间。默认为5小时")
-    args.add_argument("--fight_count", "-n", type=int, default=100, help="自动战斗次数。默认为100")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("section", nargs="?", default="FGO", help="模拟器ID")
+    parser.add_argument("map_name", nargs="?", default="通用配置", help="地图名")
+    parser.add_argument("--add_ap", "-ap", type=int, default=None, help="补充AP次数。默认为0，不补充")
+    parser.add_argument("--end_in", "-t", metavar="HH[:MM[:SS]]", type=parse_end_in, default=None,
+                           help="脚本最大运行时间。")
+    parser.add_argument("--fight_count", "-n", type=int, default=None, help="自动战斗次数。")
 
-    args = args.parse_args()
+    args = parser.parse_args()
 
     args.start_time = datetime.now()
+    if args.add_ap is None and args.end_in is None and args.fight_count is None:
+        args.add_ap = 0
     logger.warning("Start Args: %s", args)
     # fgo = FGOSimple("刷材料")
     # fgo = FGOSimple("主号换人礼装速刷")
