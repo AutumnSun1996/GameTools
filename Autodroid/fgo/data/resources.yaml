@@ -357,6 +357,7 @@ Quick:
   - [420, 100]
   Size: [400, 32]
   Type: Dynamic
+  MaxDiff: 0.04
 助战更新:
   Image: 助战更新.png
   MainSize: [1280, 720]
