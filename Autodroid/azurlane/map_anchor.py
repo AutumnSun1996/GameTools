@@ -99,17 +99,21 @@ class FightMap(AzurLaneControl):
 
     def update_trans_matrix(self):
         anchors = get_anchors(self)
-        if len(anchors) < 4:
+        if len(anchors) >= 4:
+            logger.info("Update Trans Matrix With %d Anchors", len(anchors))
+            logger.debug("Anchors: %s", anchors)
+            anchors4 = get_max_convex(anchors)
+            self._trans_matrix = get_perspective_transform(anchors4)
+            if self._trans_matrix[1][1] < 0:
+                logger.warning("Bad TransMatrix. Discard.")
+                self._trans_matrix = None
+        if self._trans_matrix is None:
             if "TransMatrix" in self.data:
                 logger.info("Update Trans Matrix With Map Defined Matrix")
                 self._trans_matrix = np.mat(self.data["TransMatrix"])
             else:
                 logger.info("Update Trans Matrix With Global Matrix")
                 self._trans_matrix = trans_matrix
-        else:
-            logger.info("Update Trans Matrix With %d Anchors", len(anchors))
-            anchors4 = get_max_convex(anchors)
-            self._trans_matrix = get_perspective_transform(anchors4)
         _, self._inv_trans = cv.invert(self._trans_matrix)
 
     @property
