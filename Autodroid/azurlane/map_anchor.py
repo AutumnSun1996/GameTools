@@ -157,7 +157,7 @@ class FightMap(AzurLaneControl):
         diff_x = center_x - x
         diff_y = center_y - y
         drag(self.hwnd, (center_x, center_y), (center_x + diff_x, center_y + diff_y))
-        self.wait(1)
+        self.wait(2)
 
     def reset_map(self):
         """重置战斗棋盘位置"""
