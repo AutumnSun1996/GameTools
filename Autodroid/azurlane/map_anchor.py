@@ -105,7 +105,7 @@ class FightMap(AzurLaneControl):
             anchors4 = get_max_convex(anchors)
             self._trans_matrix = get_perspective_transform(anchors4)
             if self._trans_matrix[1][1] < 0:
-                logger.warning("Bad TransMatrix. Discard.")
+                logger.warning("Discard Bad TransMatrix. (%s From %s)", self._trans_matrix, anchors)
                 self._trans_matrix = None
         if self._trans_matrix is None:
             if "TransMatrix" in self.data:
