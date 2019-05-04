@@ -30,10 +30,9 @@ logger = logging.getLogger(__name__)
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
     cond_in = str(cond)
-    use_extra = False
     if isinstance(cond, list) and cond:
         cond = [parse_condition(sub, obj, extra) for sub in cond]
-        cond_in = str(cond)
+        cond_in = cond_in + "=" + str(cond)
         # 仅对非空的list进行解析
         need_extra = False
         if isinstance(cond[0], str) and cond[0].startswith("$"):
