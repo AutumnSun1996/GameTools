@@ -1,6 +1,7 @@
 from PIL import Image
 from PIL import ImageDraw, ImageFont
 import matplotlib.pyplot as plt
+import itertools
 import win32clipboard
 import yaml
 
@@ -12,6 +13,7 @@ import logging.config
 from IPython.display import display
 
 const = {"s": None, "section": None}
+
 
 def reset_log():
     logging.config.dictConfig(yaml.load("""
@@ -43,11 +45,13 @@ def reset_log():
             handlers: [console]
     """))
 
+
 def get_clip():
     win32clipboard.OpenClipboard()
     text = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
     win32clipboard.CloseClipboard()
     return text
+
 
 def set_clip(text):
     win32clipboard.OpenClipboard()
@@ -55,14 +59,18 @@ def set_clip(text):
     win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text.encode("UTF-16-LE") + b"\x00")
     win32clipboard.CloseClipboard()
 
+
 def tojson(item, prefix=""):
     return encode(item, prefix, 0)
+
 
 def toyaml(item):
     return yaml.safe_dump(item, allow_unicode=True)
 
+
 def to_res_text(item):
     return encode(item, '"%s": ' % item["Name"], 0) + ","
+
 
 def show(img):
     if isinstance(img, Image.Image):
@@ -282,3 +290,15 @@ def check_resource(info, image=None):
             w, h = info.get("CropSize", info["Size"])
             cv.rectangle(draw, (x+dx, y+dy), (x+dx+w, y+dy+h), (0, 0, 255), 1)
     show(draw)
+
+
+def image_intersection(imgs):
+    h, w = imgs[0].shape[:2]
+    result = np.zeros((h, w, 4), dtype="uint8")
+    result[:, :, :3] = imgs[0]
+    mask = np.ones((h, w), dtype="bool")
+    for a, b in itertools.combinations(imgs, 2):
+        mask &= ((a == b).sum(axis=2) == 3)
+        show(mask)
+    result[:, :, 3] = mask * 255
+    return result
