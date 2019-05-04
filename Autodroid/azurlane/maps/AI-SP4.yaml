@@ -39,6 +39,14 @@ Anchors:
     OnMap: D2
     Size: [98, 145]
     Type: Anchor
+  AI-SP4/D3:
+    Image: AI-SP4/D3.png
+    MainSize: [1280, 720]
+    Name: AI-SP4/D3
+    Offset: [39, 29]
+    OnMap: D3
+    Size: [127, 58]
+    Type: Anchor
   AI-SP4/F3:
     Image: AI-SP4/F3.png
     MainSize: [1280, 720]
@@ -130,6 +138,15 @@ Resources:
     Size: [100, 130]
     Type: Anchor
     MaxDiff: 0.1
+  命运女神3:
+    Image: AI-SP4/命运女神3.png
+    MainSize: [1280, 720]
+    Name: 命运女神3
+    Offset: [50, 120]
+    Size: [100, 130]
+    Type: Anchor
+    MaxDiff: 0.1
+
   欧根:
     Image: AI-SP4/欧根.png
     MainSize: [1280, 720]
@@ -178,6 +195,21 @@ Resources:
     Offset: [820, 465]
     Size: [70, 50]
     Type: Static
+  紧急维修:
+    Image: 紧急维修.png
+    MainSize: [1280, 720]
+    Name: 紧急维修
+    Offset: [145, 475]
+    Size: [40, 40]
+    Type: Static
+  紧急维修-使用:
+    Image: 紧急维修-使用.png
+    MainSize: [1280, 720]
+    Name: 紧急维修-使用
+    Offset: [700, 450]
+    Size: [100, 40]
+    Type: Static
+
 Scenes:
   外部地图:
     Actions:
@@ -186,6 +218,43 @@ Scenes:
     Condition: [Clear@SP4]
     Name: 外部地图
     Next: [外部地图, 进入地图确认]
+  战斗地图:
+    Actions:
+    - Condition:
+      - $eq
+      - - $getattr
+        - [$]
+        - last_scene_name
+      - 舰队选择
+      Time: 5
+      Type: Wait
+    - {Target: fight, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition: [迎击]
+    Name: 战斗地图
+    Next: [战斗准备, 战斗地图, 获得道具]
+  战斗准备:
+    Actions:
+    - {Target: mood_detect, Type: InnerCall}
+    - Condition:
+      - $all
+      - - - $eq
+          - - $getitem
+            - [$method, get_fight_status]
+            - FightIndexMod
+          - 4
+        - [$method, resource_in_screen, 紧急维修]
+      Type: MultiActions
+      Actions: 
+      - {Target: 紧急维修, Type: Click}
+      - {Time: 1, Type: Wait}
+      - {Target: 紧急维修-使用, Type: Click}
+      - {Time: 1, Type: Wait}
+    - {Target: 出击, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [出击]
+    Name: 战斗准备
+    Next: [加载中, 船坞已满]
 Strategy:
 - Actions:
   - {Target: toggle_fleet, Type: InnerCall}
