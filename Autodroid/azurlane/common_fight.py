@@ -17,9 +17,13 @@ class CommonMap(FightMap):
         super().__init__(map_name)
         self.reset_map_data()
 
+    def get_fight_status(self):
+        status = super().get_fight_status()
+        status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
+        return status
+
     def parse_fight_condition(self, condition):
         status = self.get_fight_status()
-        status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
         return parse_condition(condition, self, status.__getitem__)
 
     def reset_map_data(self):
@@ -188,6 +192,10 @@ class CommonMap(FightMap):
         return choice
 
     def next_enemy(self, source):
+        if not self.scene_match_check("战斗地图", False):
+            self.notice("abort next_enemy: Not in 战斗地图.")
+            return
+
         if not self.enemies:
             self.recheck_full_map()
             return self.next_enemy(source)
@@ -258,7 +266,6 @@ class CommonMap(FightMap):
         self.make_screen_shot()
         # in case of scene changes after scene update
         if not self.scene_match_check("战斗地图", False):
-            self.update_current_scene()
             self.notice("Not in 战斗地图")
             return
         anchor_name, anchor_pos = self.get_best_anchor()
@@ -322,8 +329,7 @@ class CommonMap(FightMap):
             self.make_screen_shot()
             # in case of scene changes after scene update
             if not self.scene_match_check("战斗地图", False):
-                self.update_current_scene()
-                self.notice("Not in  战斗地图.")
+                self.notice("abort recheck_full_map: Not in 战斗地图.")
                 return
             _, pos = self.locate_target(target, reshot=False)
             self.move_map_to(*pos)
