@@ -63,7 +63,8 @@ def get_perspective_transform(anchors):
         dst.append(on_map_offset(anchor[1]))
     src = np.reshape(src, (-1, 2)).astype("float32")
     dst = np.reshape(dst, (-1, 2)).astype("float32")
-    return cv.getPerspectiveTransform(src, dst)
+    matrix, mask = cv.findHomography(src, dst)
+    return matrix
 
 def name2pos(name, matrix):
     inv = np.linalg.inv(matrix)
@@ -99,12 +100,11 @@ class FightMap(AzurLaneControl):
 
     def update_trans_matrix(self):
         anchors = get_anchors(self)
+        logger.info("Found %d Anchors", len(anchors))
         if len(anchors) >= 4:
-            logger.info("Update Trans Matrix With %d Anchors", len(anchors))
             logger.debug("Anchors: %s", anchors)
-            anchors4 = get_max_convex(anchors)
-            self._trans_matrix = get_perspective_transform(anchors4)
-            if self._trans_matrix[1][1] < 0:
+            self._trans_matrix = get_perspective_transform(anchors)
+            if self._trans_matrix is None or self._trans_matrix[1][1] < 0:
                 logger.warning("Discard Bad TransMatrix. (%s From %s)", self._trans_matrix, anchors)
                 self._trans_matrix = None
         if self._trans_matrix is None:
