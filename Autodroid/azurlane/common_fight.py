@@ -111,6 +111,9 @@ class CommonMap(FightMap):
     def set_enemy(self, cell, status="Exist"):
         if cell == "CUR_FLEET":
             cell = self.current_fleet
+        if cell is None:
+            logger.warning("abort set_enemy: cell is None")
+            return
         info = self.g.nodes[cell]
         if info['cell_type'] == 'O':
             self.notice("%s为不可通过区域" % cell)
