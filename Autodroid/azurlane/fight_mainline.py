@@ -3,6 +3,7 @@
 """
 from .common_fight import CommonMap, FightMap, logger
 
+
 class MainFight(CommonMap):
     def __init__(self, *args):
         super().__init__(*args)
@@ -23,13 +24,13 @@ class MainFight(CommonMap):
         if self.current_fleet == self.click_target:
             logger.info("Reset ClickTarget")
             self.click_target = None
-        
+
         if self.click_target is None:
             super().normal_fight(repeat)
         else:
             logger.info("ReClickAt %s", self.click_target)
             self.click_at_map(self.click_target)
-    
+
     def search_for_boss(self, repeat=0, idx=0):
         logger.info("搜索Boss(%d)", repeat)
 
@@ -37,7 +38,7 @@ class MainFight(CommonMap):
             self.recheck_full_map()
             self.search_for_boss(repeat+1, idx)
             return
-            
+
         if not isinstance(self.boss, str):
             if idx is not None:
                 target = self.data['ViewPort'][idx]
@@ -47,7 +48,7 @@ class MainFight(CommonMap):
                 self.critical("Boss搜索失败")
 
             anchor_name, anchor_pos = self.get_best_anchor()
-            
+
             pos = self.find_on_map(anchor_name, anchor_pos, 'Boss')
             if not pos and "Boss2" in self.resources:
                 pos = self.find_on_map(anchor_name, anchor_pos, 'Boss2')
