@@ -109,6 +109,8 @@ class CommonMap(FightMap):
         return '#66ccff'
 
     def set_enemy(self, cell, status="Exist"):
+        if cell == "CUR_FLEET":
+            cell = self.current_fleet
         info = self.g.nodes[cell]
         if info['cell_type'] == 'O':
             self.notice("%s为不可通过区域" % cell)
@@ -395,8 +397,8 @@ class CommonMap(FightMap):
         if target == self.other_fleet:
             self.other_fleet = self.current_fleet
         self.current_fleet = target
-        if target in self.enemies:
-            self.set_enemy(target, 'Defeated')
+        # if target in self.enemies:
+        #     self.set_enemy(target, 'Defeated')
 
     def normal_fight(self, repeat=0):
         if repeat >= 5:

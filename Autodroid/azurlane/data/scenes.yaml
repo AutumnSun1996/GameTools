@@ -86,6 +86,7 @@ S胜:
 确认经验:
   Actions:
   - {Target: 确认经验, Type: Click}
+  - {Target: set_enemy, Type: InnerCall, args: ["CUR_FLEET", "Defeated"]}
   - Condition:
     - $getattr
     - [$]
