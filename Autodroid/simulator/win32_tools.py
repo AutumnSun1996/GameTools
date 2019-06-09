@@ -14,7 +14,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
 def rescale_point(hwnd, point):
     dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
     x = point[0] + config.getint("Device", "EdgeOffsetX")
@@ -32,10 +31,11 @@ def click_at(hwnd, x, y, hold=0):
     time.sleep(hold)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
+
 def rand_point(p, diff=0.2):
     if not isinstance(diff, (list, tuple)):
         diff = [diff, diff]
-    
+
     res = []
     for i in range(2):
         if isinstance(diff[i], float) and 0 < diff[i] <= 1:
@@ -51,12 +51,13 @@ def rand_point(p, diff=0.2):
     return res
 
 
-def rand_drag(hwnd, start, end, step=100):
+def rand_drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, win32api.MAKELONG(*start))
-    
+    time.sleep(start_delay)
+
     dx = abs(start[0]-end[0])
     dy = abs(start[1]-end[1])
     dist = np.sqrt(dx**2+dy**2)
@@ -75,11 +76,13 @@ def rand_drag(hwnd, start, end, step=100):
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
-def drag(hwnd, start, end, step=100):
+
+def drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
                          win32con.MK_LBUTTON, win32api.MAKELONG(*start))
+    time.sleep(start_delay)
 
     count = int(np.linalg.norm(np.array(start) - np.array(end)) / step)
     # 最少需要2个坐标

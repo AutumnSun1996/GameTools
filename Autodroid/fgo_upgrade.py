@@ -1,6 +1,6 @@
 import sys
 
-from simulator.win32_tools import rand_click
+from simulator.win32_tools import rand_click, rand_drag
 from fgo.fast import FGOSimple
 
 from config_loader import logging
@@ -10,7 +10,7 @@ logger.setLevel("DEBUG")
 
 
 class FGOUpgrade(FGOSimple):
-    def choose_exp_cards(self, cols=3, rows=7, stop=False):
+    def click_each(self, cols=3, rows=7, stop=False):
         info = self.resources["卡位列表"]
         x0, y0 = info["Offset"]
         dx, dy = info["PositionDelta"]
@@ -25,6 +25,16 @@ class FGOUpgrade(FGOSimple):
                     self.make_screen_shot()
                     if self.parse_scene_condition(stop):
                         return
+
+    def choose_exp_cards(self, cols=3, rows=7, stop=False):
+        info = self.resources["卡位列表"]
+        x0, y0 = info["Offset"]
+        dx, dy = info["PositionDelta"]
+        start = (x0, y0)
+        end = (x0+dx*7, y0+dy*3)
+        rand_drag(self.hwnd, start, end, start_delay=1)
+        self.wait(1)
+
 
 
 if __name__ == "__main__":
