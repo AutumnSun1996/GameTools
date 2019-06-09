@@ -1,0 +1,194 @@
+外部地图:
+  Actions:
+  - {Target: manual, Type: InnerCall}
+  - {Time: 2, Type: Wait}
+  Condition: [外部地图-出击]
+  Name: 外部地图
+  Next: [外部地图, 进入地图确认, 战斗地图]
+进入地图确认:
+  Actions:
+  - {Target: 进入地图-立刻前往, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [进入地图-立刻前往]
+  Name: 进入地图确认
+  Next: [舰队选择, 船坞已满]
+舰队选择:
+  Actions:
+  - {Target: mood_detect, Type: InnerCall}
+  - Condition:
+    - $le
+    - - $getitem
+      - - $getattr
+        - [$]
+        - scene_history_count
+      - 舰队选择
+    - 1
+    Time: 4
+    Type: Wait
+    # 首次选择舰队时，加长等待时间
+  - {Target: 舰队选择-立刻前往, Type: Click}
+  - {Target: reset_fight_index, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition: [舰队选择-立刻前往]
+  Name: 舰队选择
+战斗地图:
+  Actions:
+  - Condition:
+    - $eq
+    - - $getattr
+      - [$]
+      - last_scene_name
+    - 舰队选择
+    Time: 5
+    Type: Wait
+  - {Target: fight, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition: [迎击]
+  Name: 战斗地图
+  Next: [战斗准备, 加载中, 受到伏击, 战斗地图, 外部地图]
+战斗准备:
+  Actions:
+  - {Time: 1, Type: Wait}
+  - Condition:
+    - $eq
+    - - $getattr
+      - [$]
+      - last_scene_name
+    - 受到伏击
+    Target: inc_fight_index
+    Type: InnerCall
+    args: [-1]
+  - {Target: mood_detect, Type: InnerCall}
+  - Condition:
+    - $method
+    - resource_in_screen
+    - 自律OFF
+    Type: MultiActions
+    Actions:
+    - {Target: 自律OFF, Type: Click}
+    - {Time: 0.6, Type: Wait}
+    - {Target: 战斗准备-左侧空白区域, Type: Click}
+    - {Time: 0.6, Type: Wait}
+    - {Target: 呼叫潜艇OFF, Type: Click}
+  - Condition:
+    - $method
+    - resource_in_screen
+    - 呼叫潜艇OFF
+    Type: MultiActions
+    Actions:
+    - {Target: 呼叫潜艇OFF, Type: Click}
+  - {Time: 2, Type: Wait}
+  - {Target: 出击, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [出击]
+  Name: 战斗准备
+  Next: [加载中, 船坞已满]
+船坞已满:
+  Actions:
+  - {Target: 船坞已满-整理, Type: Click}
+  - {Time: 2, Type: Wait}
+  Condition:
+  - $all
+  - - [船坞已满-整理]
+    - [信息-标题]
+  Name: 船坞已满
+  Next: [退役]
+退役:
+  Actions:
+  - {Target: retire, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition: [选择退役角色]
+  Name: 退役
+加载中:
+  Actions:
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $any
+  - - [加载进度条]
+    - [加载进度条2]
+  Name: 加载中
+  Next: [加载中, 正常战斗中]
+正常战斗中:
+  Actions:
+  - {Time: 1, Type: Wait}
+  Condition: [暂停]
+  Name: 正常战斗中
+  Next: [正常战斗中, 战斗评价]
+战斗评价:
+  Actions:
+  - {Time: 1, Type: Wait}
+  - {Target: 确认经验, Type: Click}
+  - {Target: set_enemy, Type: InnerCall, args: ["CUR_FLEET", "Defeated"]}
+  - Condition:
+    - $getattr
+    - [$]
+    - scene_changed
+    Target: inc_fight_index
+    Type: InnerCall
+  - {Time: 2, Type: Wait}
+  Condition: [战斗评价]
+  Name: 战斗评价
+  Next: [获得道具, 战斗评价]
+获得道具:
+  Actions:
+  - {Time: 0.2, Type: Wait}
+  - Condition:
+    - $getattr
+    - [$]
+    - scene_changed
+    Target: save_record
+    Type: InnerCall
+    args: [Save, 获得道具]
+  - {Target: 确认经验, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [获得道具]
+  Name: 获得道具
+  Next: [获得经验, 获得舰娘, 获得道具]
+获得舰娘:
+  Actions:
+  - {Target: 右侧空白区域, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [性能]
+  Name: 获得舰娘
+  Next: [获得经验]
+获得经验:
+  Actions:
+  - {Target: 确认经验, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [COMMANDER]
+  Name: 获得经验
+  Next: [获得经验, 外部地图, 战斗地图]
+
+信息:
+  Actions:
+  - {Target: 信息-确定, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $all
+  - - [信息-标题]
+    - [信息-确定]
+  Name: 信息
+  Global: True
+受到伏击:
+  Actions:
+  - {Target: 伏击-规避, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [伏击-规避]
+  Name: 受到伏击
+  Next: [战斗准备, 战斗地图]
+非自律战斗中:
+  Actions:
+  - {Target: 自律战斗, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  - {Target: 右侧空白区域, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [自律战斗]
+  Name: 非自律战斗中
+  Next: [正常战斗中]
+自律提醒:
+  Actions:
+  - {Target: 自律提醒, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [自律提醒]
+  Name: 自律提醒
+  Next: [战斗准备]

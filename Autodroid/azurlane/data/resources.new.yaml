@@ -1,0 +1,306 @@
+Clear:
+  Image: Clear.png
+  MainSize: [1280, 720]
+  Name: Clear
+  Size: [80, 80]
+  ClickSize: [120, 40]
+  ClickOffset: [30, 16]
+  Type: MultiDynamic
+COMMANDER:
+  Image: COMMANDER.png
+  MainSize: [1280, 720]
+  Name: COMMANDER
+  SearchArea: 
+  - [100, 190]
+  - [460, 40]
+  Size: [200, 25]
+  Type: Dynamic
+
+出击:
+  Image: 出击.jpg
+  MainSize: [1280, 720]
+  Name: 出击
+  Offset: [1041, 605]
+  Size: [202, 64]
+  Type: Static
+  
+自律提醒:
+  Image: 自律提醒.jpg
+  MainSize: [1280, 720]
+  Name: 自律提醒
+  Size: [600, 420]
+  ClickOffset: [220, 350]
+  ClickSize: [160, 50]
+  Type: Dynamic
+舰队选择-立刻前往:
+  Image: 立刻前往.png
+  MainSize: [1280, 720]
+  Name: 舰队选择-立刻前往
+  Size: [202, 64]
+  Offset: [980, 573]
+  Type: Static
+迎击:
+  Image: 迎击.png
+  MainSize: [1280, 720]
+  Name: 迎击
+  Offset: [1147, 652]
+  Size: [116, 54]
+  Type: Static
+进入地图-立刻前往:
+  Image: 立刻前往.png
+  MainSize: [1280, 720]
+  Name: 进入地图-立刻前往
+  Size: [202, 64]
+  Offset: [852, 474]
+  Type: Static
+确认经验:
+  Image: 确定.jpg
+  MainSize: [1280, 720]
+  Name: 确认经验
+  Size: [174, 60]
+  Offset: [1000, 630]
+  Type: Static
+战斗评价:
+  Image: 战斗评价.png
+  MainSize: [1280, 720]
+  Name: 战斗评价
+  Offset: [600, 340]
+  Size: [200, 60]
+  Type: Static
+
+获得道具:
+  Image: 获得道具.png
+  MainSize: [1280, 720]
+  Name: 获得道具
+  SearchArea:
+  - [440, 90]
+  - [400, 200]
+  CropSize: [720, 320]
+  CropOffset: [-260, 60]
+  Type: Dynamic
+战斗准备-左侧空白区域:
+  Image: null
+  MainSize: [1920, 1080]
+  Name: 战斗准备-左侧空白区域
+  Offset: [80, 500]
+  Size: [100, 100]
+  Type: Static
+右侧空白区域:
+  Image: null
+  MainSize: [1920, 1080]
+  Name: 右侧空白区域
+  Offset: [1700, 500]
+  Size: [100, 100]
+  Type: Static
+
+外部地图-出击:
+  Image: 外部地图-出击.png
+  MainSize: [1280, 720]
+  Name: 外部地图-出击
+  Offset: [0, 0]
+  Size: [300, 45]
+  Type: Static
+加载进度条:
+  Image: 加载进度条.png
+  MainSize: [1280, 720]
+  Name: 加载进度条
+  Offset: [33, 676]
+  Size: [16, 4]
+  Type: Static
+加载进度条2:
+  Image: 加载进度条2.png
+  MainSize: [1280, 720]
+  Name: 加载进度条2
+  Offset: [1230, 676]
+  Size: [16, 4]
+  Type: Static
+暂停:
+  Image: 暂停.png
+  MainSize: [1280, 720]
+  Name: 暂停
+  Offset: [1140, 26]
+  Size: [110, 40]
+  Type: Static
+信息-标题:
+  Image: 信息-标题.png
+  MainSize: [1280, 720]
+  Name: 信息-标题
+  Offset: [350, 172]
+  Size: [76, 42]
+  SearchArea:
+  - [140, 140]
+  - [500, 100]
+  Type: Dynamic
+信息-确定:
+  Image: 确定-蓝.png
+  MainSize: [1280, 720]
+  Name: 信息-确定
+  Size: [174, 60]
+  SearchArea:
+  - [440, 460]
+  - [500, 100]
+  Type: Dynamic
+自律OFF:
+  Image: OFF.png
+  MainSize: [1280, 720]
+  Name: 自律OFF
+  Offset: [750, 110]
+  Size: [48, 22]
+  Type: Static
+呼叫潜艇OFF:
+  Image: OFF.png
+  MainSize: [1280, 720]
+  Name: 呼叫潜艇OFF
+  Offset: [751, 163]
+  Size: [48, 22]
+  Type: Static
+船坞已满-整理:
+  Image: 船坞已满-整理.png
+  MainSize: [1280, 720]
+  Offset: [353, 481]
+  Name: 船坞已满-整理
+  Type: Static
+  MaxDiff: 0.02
+选择退役角色:
+  Image: 选择退役角色.png
+  MainSize: [1280, 720]
+  Name: 选择退役角色
+  Offset: [110, 660]
+  Size: [230, 26]
+  Type: Static
+退役选择:
+  ClickOffset: [10, -140]
+  ClickSize: [120, 170]
+  MainSize: [1280, 720]
+  Name: 退役选择
+  Positions:
+  - [92, 238]
+  - [92, 464]
+  - [256, 238]
+  - [256, 464]
+  - [421, 238]
+  - [421, 464]
+  - [586, 238]
+  - [586, 464]
+  - [750, 238]
+  - [750, 464]
+  - [915, 238]
+  - [915, 464]
+  - [1080, 238]
+  - [1080, 464]
+  Size: [140, 24]
+  Type: MultiStatic
+退役-确定:
+  Image: 确定-蓝.png
+  MainSize: [1280, 720]
+  Size: [174, 60]
+  Offset: [993, 640]
+  Name: 退役-确定
+  Type: Static
+退役-确定2:
+  Image: 确定-蓝.png
+  MainSize: [1280, 720]
+  Size: [174, 60]
+  Offset: [927, 615]
+  Name: 退役-确定2
+  Type: Static
+退役-精锐角色确认:
+  Image: 确定-蓝.png
+  MainSize: [1280, 720]
+  Size: [174, 60]
+  Offset: [703, 481]
+  Name: 退役-精锐角色确认
+  Type: Static
+退役-装备拆解:
+  Image: 确定-蓝.png
+  MainSize: [1280, 720]
+  Size: [174, 60]
+  Offset: [871, 514]
+  Name: 退役-装备拆解
+  Type: Static
+退役-装备拆解2:
+  Image: 确定-蓝.png
+  MainSize: [1280, 720]
+  Size: [174, 60]
+  Offset: [720, 539]
+  Name: 退役-装备拆解2
+  Type: Static
+退役-取消:
+  Image: 取消.png
+  MainSize: [1280, 720]
+  Size: [174, 60]
+  Offset: [773, 640]
+  Name: 退役-取消
+  Type: Static
+伏击-规避:
+  Image: 伏击-规避.png
+  MainSize: [1280, 720]
+  Name: 伏击-规避
+  Offset: [978, 443]
+  Size: [175, 60]
+  Type: Static
+  MaxDiff: 0.01
+切换舰队:
+  Image: 切换舰队.png
+  MainSize: [1280, 720]
+  Name: 切换舰队
+  Offset: [946, 653]
+  Size: [172, 54]
+  Type: Static
+
+地图区域:
+  MainSize: [1280, 720]
+  Name: 地图区域
+  Points:
+    - [124, 160]
+    - [124, 720]
+    - [660, 720]
+    - [660, 670]
+    - [720, 656]
+    - [1060, 656]
+    - [1060, 638]
+    - [1280, 638]
+    - [1280, 480]
+    - [1190, 480]
+    - [1190, 405]
+    - [1280, 405]
+    - [1280, 220]
+    - [1230, 220]
+    - [1230, 60]
+    - [570, 60]
+    - [570, 160]
+    - [124, 160]
+  Type: Static
+
+可移动区域:
+  Image: null
+  MainSize: [1280, 720]
+  Name: 可移动区域
+  Offset: [120, 164]
+  Size: [1066, 490]
+  Type: Static
+Ammo:
+  Image: Ammo.png
+  MainSize: [1280, 720]
+  Name: Ammo
+  Size: [56, 61]
+  Offset: [85, 185]
+  Type: MultiDynamic
+  MaxDiff: 0.04
+Ammo2:
+  Image: Ammo.png
+  MainSize: [1280, 720]
+  Name: Ammo2
+  Size: [50, 54]
+  Offset: [85, 185]
+  Type: MultiDynamic
+  MaxDiff: 0.04
+
+Pointer:
+  Image: Pointer.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.06
+  Name: Pointer
+  Offset: [45, 200]
+  Size: [82, 50]
+  Type: Dynamic
