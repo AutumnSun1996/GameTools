@@ -94,6 +94,7 @@ class SimulatorControl:
         self.scenes = load_scenes(self.section)
         self.resources = load_resources(self.section)
         self.last_manual = 0
+        self.stop = False
         self.resource_pos_buffer = {}
 
     @property
@@ -260,8 +261,8 @@ class SimulatorControl:
         if not isinstance(name, str):
             return name
         if name not in self.resources:
-            logger.warning("resource_in_screen Ignore %s", name)
-            return name
+            logger.warning("resource_in_screen: No Resouce %s", name)
+            return False
         return self.search_resource(name, index=index)[0]
 
     def wait(self, dt):
@@ -508,6 +509,9 @@ class SimulatorControl:
                     self.error("Invalid Scene %s", key)
                     continue
             else:
+                if key not in self.scenes:
+                    logger.warning("Scene %s Unkown", key)
+                    continue
                 scene = self.scenes[key]
             if self.scene_match_check(scene, False):
                 self.scene_history.append(scene)
@@ -569,6 +573,7 @@ class SimulatorControl:
 
             if action.get("Break"):
                 break
+
     @property
     def since_last_change(self):
         """返回从上次场景变化到当前时间的秒数"""
@@ -588,15 +593,21 @@ class SimulatorControl:
 
         logger.info("%s - %s%s", scene['Name'], scene['Actions'], nochange)
         if stop_checker and stop_checker(self):
+            # 执行动作前预先判断是否已处于停止条件
             return
         self.do_actions(scene['Actions'])
         self.actions_done = True
 
     def main_loop(self, stop_checker=None):
-        while True:
+        """进行`判断停止条件-判断场景-判断停止条件`循环"""
+        while not self.stop:
             self.check_scene(stop_checker)
             if stop_checker and stop_checker(self):
-                return
+                self.stop = True
+
+    def close(self):
+        self.stop = True
+        logger.warning("Closing by set stop=%s", self.stop)
 
 
 if __name__ == "__main__":
