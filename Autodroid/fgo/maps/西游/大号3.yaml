@@ -1,0 +1,188 @@
+Description: '队伍: 海伦娜, 女帝, 助战孔明'
+Name: 大号-行星级
+Resources: {}
+Scenes:
+  AP不足:
+    Actions:
+    - Target: servant_scroll
+      Type: InnerCall
+      args: [1.5]
+    - {Time: 0.5, Type: Wait}
+    - {Target: 银苹果, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 7]
+      Target: 队伍选择
+      Index: 7
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - true
+    - [助战-礼装满破]
+    # - [助战-宝具可用]
+    - [助战/孔明]
+    - [礼装/西游/英雄风采三英杰]
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 2
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 1
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 红卡优先
+  Skills:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 2]
+    Description: 女帝2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $lt
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 孔明3
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $lt
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 孔明2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $lt
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 女帝自充
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 1, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $lt
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 孔明1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 杰克2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+    Condition:
+    - $all
+    - - - $le
+        - [BattleLeft]
+        - 0
+      - - $ge
+        - [NP1]
+        - 100
+      - - $not_
+        - [SkillCheck<0-2>]
+    Description: 杰克1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 1]
+    Condition:
+    - $all
+    - - - $le
+        - [BattleLeft]
+        - 0
+      - - $ge
+        - [NP1]
+        - 100
+      - - $not_
+        - [SkillCheck<0-2>]
+    Description: 魔术礼装2
+  UseNP:
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 杰克
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 女帝
+    Target: 2
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 孔明
+    Target: 3
+

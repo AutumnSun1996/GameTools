@@ -1,0 +1,112 @@
+Description: '队伍: 海伦娜@60NP, 童谣@80NP, 助战孔明'
+Name: 大号-行星级
+Resources:
+  对应奖励:
+    Image: 奖励.png
+    MainSize: [1280, 720]
+    Name: 奖励
+    Offset: [535, 81]
+    Size: [300, 28]
+    SearchArea:
+    - [100, 65]
+    - [1080, 50]
+    Type: Dynamic
+Scenes:
+  AP不足:
+    Actions:
+    - Target: servant_scroll
+      Type: InnerCall
+      args: [1.5]
+    - {Time: 0.5, Type: Wait}
+    - {Target: 银苹果, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 9]
+      Target: 队伍选择
+      Index: 9
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - true
+    - [助战-礼装满破]
+    # - [助战-宝具可用]
+    - [助战/孔明]
+    - $any
+    - [礼装/西游/英雄风采三英杰]
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^A0, ^A抵抗, ^A克制, ^B克制, ^B0, ^Q克制, ^Q0, ^B抵抗, ^Q抵抗]
+    - - 2
+      - [^A0, ^Q0, ^B0, ^A克制, ^B克制, ^Q克制, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 1
+      - [^A0, ^Q0, ^B0, ^A克制, ^B克制, ^Q克制, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 蓝卡优先
+  Skills:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 3]
+      - [3, 2]
+      - [3, 3]
+    Description: 孔明23
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+      - [2, 3]
+      - [3, 1, 2]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 童谣自充, 海伦娜充能, 孔明1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [0, 2, 1]
+    Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 海伦娜2
+  UseNP:
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 海伦娜
+    Target: 1
+  - Condition: true
+    Description: 童谣
+    Target: 2

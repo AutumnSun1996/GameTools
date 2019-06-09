@@ -1,0 +1,144 @@
+Description: '队伍: JK, 女帝, 助战梅林'
+Name: 小号， 地狱道
+Resources: {}
+Scenes:
+  AP不足:
+    Actions:
+    - {Time: 0.5, Type: Wait}
+    - {Target: 金苹果, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 5]
+      Target: 队伍选择
+      Index: 5
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - true
+    # - [助战-礼装满破]
+    # - [助战-宝具可用]
+    - [助战/梅林]
+    - - $any
+      - - false
+        # - [礼装/西游/风云仙姬]
+        - [礼装/西游/九首牛魔王]
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 2
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 1
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 红卡优先
+  Skills:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 3]
+      - [2, 2]
+      - [3, 1]
+    Description: JK3, 女帝2, 梅林1
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $lt
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 女帝自充
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+      - [3, 3, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $all
+    - - - $ge
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: JK宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 2]
+    Condition:
+    - $all
+    - - - $le
+        - [BattleLeft]
+        - 0
+      - - $ge
+        - [NP2]
+        - 100
+      - - $not_
+        - [SkillCheck<0-2>]
+    Description: 魔术礼装2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+    Condition:
+    - $all
+    - - [$method, resource_in_screen, 敌人充能完成]
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 梅林2 防御
+  UseNP:
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: JK
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 女帝
+    Target: 2
+  - Condition: true
+    Description: 梅林
+    Target: 3
+
