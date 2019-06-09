@@ -71,7 +71,11 @@ def load_image(resource, section):
     if "ImageData" not in resource:
         img_path = os.path.join(config.get(section, "ResourcesFolder"), "Resources", resource["Image"])
         resource["ImageData"] = cv_imread(img_path)
-    resource["ImageData"] = cv.resize(resource["ImageData"], tuple(resource["Size"]), cv.INTER_CUBIC)
+        if "Size" in resource:
+            resource["ImageData"] = cv.resize(resource["ImageData"], tuple(resource["Size"]), cv.INTER_CUBIC)
+        else:
+            h, w = resource["ImageData"].shape[:2]
+            resource["Size"] = (w, h)
     return resource["ImageData"]
 
 
