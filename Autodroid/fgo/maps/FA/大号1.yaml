@@ -1,0 +1,156 @@
+Description: '队伍: 肯娘@50NP, 助战-孔明, 童谣@50NP, 幼贞@80NP, '
+Name: 大号3T
+Resources:
+  敌人充能完成:
+    Image: 敌人充能完成.png
+    MainSize: [1280, 720]
+    Name: 敌人充能完成
+    SearchArea:
+    - [130, 74]
+    - [600, 30]
+    Size: [40, 16]
+    Type: Dynamic
+Scenes:
+  AP不足:
+    Actions:
+    - Target: servant_scroll
+      Type: InnerCall
+      args: [1.5]
+    - {Time: 0.5, Type: Wait}
+    - {Target: 银苹果, Type: Click}
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 0]
+      Target: 队伍选择
+      Index: 0
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Time: 1, Type: Wait}
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $any
+  - - - $all
+      - - [礼装/FA/城塞的午后]
+        - [助战-礼装满破]
+        - [助战/孔明]
+    - - $all
+      - - [礼装/FA/城塞的午后]
+        - [助战/孔明]
+        - [$ge, [RecheckCount], 3]
+    - - $all
+      - - [助战/孔明]
+        - [$ge, [RecheckCount], 5]
+  CardChoice:
+  - Choice:
+    - - 0
+      - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 2
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 1
+      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 红卡优先
+  Skills:
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 1, 1]
+      - [2, 2]
+      - [2, 3]
+      - [0, 3, 2, 4]
+    Condition:
+    - $le
+    - [Turn]
+    - 1
+    Description: 孔明123, 孔明换幼贞
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 2]
+    Condition:
+    - $lt
+    - [NP2]
+    - 100
+    Description: 幼贞2自充
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 3]
+    Condition:
+    - $lt
+    - [NP3]
+    - 100
+    Description: 童谣3自充
+  - Actions:
+    - {Target: extract_np_info, Type: InnerCall}
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 3]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 幼贞宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 3]
+      - [0, 1]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP1]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 肯娘宝具准备
+  UseNP:
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 肯娘
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 幼贞
+    Target: 2
+  - Condition: true
+    Description: 童谣
+    Target: 3
