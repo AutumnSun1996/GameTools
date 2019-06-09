@@ -147,10 +147,11 @@ class AzurLaneControl(SimulatorControl):
     def retire(self):
         """执行退役操作"""
         self.make_screen_shot()
-        if self.resource_in_screen("降序"):
-            logger.debug("切换倒序显示")
-            self.click_at_resource("降序")
-            time.sleep(1)
+        # 选择降序显示
+        # if self.resource_in_screen("降序"):
+        #     logger.debug("切换倒序显示")
+        #     self.click_at_resource("降序")
+        #     time.sleep(1)
         waiting = 1
         targets = self.select_ships()
         if not targets:
@@ -165,21 +166,24 @@ class AzurLaneControl(SimulatorControl):
             self.click_at_resource("退役-确定", True)
             time.sleep(waiting)
             logger.debug("确定拆解")
-            self.click_at_resource("退役-二次确定", True)
+            self.click_at_resource("退役-确定2", True)
             time.sleep(waiting)
-            logger.debug("点击继续")
+            if self.resource_in_screen("退役-精锐角色确认"):
+                logger.debug("精锐角色确认")
+                self.click_at_resource("退役-精锐角色确认")
+            logger.debug("获得道具")
             self.wait_resource("获得道具")
-            self.click_at_resource("退役-二次确定")
+            self.click_at_resource("退役-确定")
             time.sleep(waiting)
             logger.debug("装备拆解")
-            self.click_at_resource("退役-装备-确定", True)
+            self.click_at_resource("退役-装备拆解", True)
             time.sleep(waiting)
             logger.debug("确定拆解")
-            self.click_at_resource("退役-装备-拆解", True)
+            self.click_at_resource("退役-装备拆解2", True)
             time.sleep(waiting)
-            logger.debug("点击继续")
+            logger.debug("获得道具")
             self.wait_resource("获得道具")
-            self.click_at_resource("退役-装备-拆解")
+            self.click_at_resource("退役-确定")
             time.sleep(waiting)
             targets = self.select_ships()
 
