@@ -27,26 +27,12 @@ Resources:
     Offset: [45, 200]
     Size: [75, 46]
     Type: Dynamic
-  外部地图-出击:
-    Image: 外部地图-出击.png
-    MainSize: [1280, 720]
-    Name: 外部地图-出击
-    Offset: [120, 0]
-    Size: [160, 44]
-    Type: Static
 Scenes:
-  外部地图:
-    Actions:
-    - {Target: manual, Type: InnerCall}
-    - {Time: 2, Type: Wait}
-    Condition: [外部地图-出击]
-    Name: 外部地图
-    Next: [外部地图, 进入地图确认]
   战斗地图:
     Actions:
     - {Target: manual, Type: InnerCall}
     - {Time: 1, Type: Wait}
     Condition: [迎击]
     Name: 战斗地图
-    Next: [战斗准备, 遭遇伏击, 战斗地图, 获得道具]
+    Next: [自律提醒, 战斗准备, 遭遇伏击, 战斗地图, 获得道具]
 Strategy: {}
