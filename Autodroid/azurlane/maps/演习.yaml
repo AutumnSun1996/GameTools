@@ -82,6 +82,12 @@ Resources:
     Type: Static
 
 Scenes:
+  确认经验:
+    Actions:
+    - {Target: 确认经验, Type: Click}
+    - {Time: 2, Type: Wait}
+    Condition: [确认经验]
+    Name: 确认经验
   游戏外界面:
     Actions:
     - {Target: 碧蓝航线APP, Type: Click}
