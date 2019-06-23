@@ -4,15 +4,18 @@
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import logging
 
-from config_loader import logger
 from simulator.win32_tools import rand_click
 from simulator import parse_condition
 from .map_anchor import FightMap
 
+logger = logging.getLogger(__name__)
+
 
 class CommonMap(FightMap):
     """地图操作"""
+
     def __init__(self, map_name=None):
         super().__init__(map_name)
         self.reset_map_data()
@@ -45,15 +48,15 @@ class CommonMap(FightMap):
                 name = chr(ord('A')+i) + str(j+1)
                 self.g.add_node(name, cell_type=cell_type)
                 self.pos[name] = i, -j
-                if cell_type == "O": # 障碍
+                if cell_type == "O":  # 障碍
                     continue
-                if cell_type == 'B': # Boss
+                if cell_type == 'B':  # Boss
                     self.boss.append(name)
-                if cell_type == '?': # 问号点
+                if cell_type == '?':  # 问号点
                     self.resource_points.append(name)
-                if cell_type == 'S': # 潜艇
+                if cell_type == 'S':  # 潜艇
                     self.submarine.append(name)
-                if cell_type == 'F': # 出生点
+                if cell_type == 'F':  # 出生点
                     self.born_points.append(name)
                 if i > 0:
                     left = chr(ord('A')+i-1) + str(j+1)
@@ -66,17 +69,17 @@ class CommonMap(FightMap):
         if len(self.submarine) == 1:
             self.submarine = self.submarine[0]
         for node in self.g:
-            if self.g.nodes[node]['cell_type'] == 'E': # 可能出现敌人的地点
+            if self.g.nodes[node]['cell_type'] == 'E':  # 可能出现敌人的地点
                 self.set_enemy(node, 'Possible')
 
     def reset_fight_index(self, target_mod=0):
         # self.virtual_fight_index = 0
         self.reset_map_data()
         status = self.get_fight_status()
-        mod = status["FightIndex"] % self.data["FightCount"]
+        mod = status["TrueFightIndex"] % self.data["FightCount"]
         logger.warning("Current Fight Index: %d (%d)", status["FightIndex"], mod)
         if mod != target_mod:
-            status["VirtualFightIndex"] += target_mod - mod
+            status["VirtualFightIndex"] = target_mod - mod
             self.save_fight_status(status)
             logger.info("Reset Fight Index From Mod %d To %d",
                         mod, target_mod)
@@ -85,7 +88,7 @@ class CommonMap(FightMap):
         self.click_at_resource("切换舰队")
         self.current_fleet, self.other_fleet = self.other_fleet, self.current_fleet
         self.wait(2)
-    
+
     def enemies_on_path(self, path):
         enemies = []
         for cell in path:
@@ -198,7 +201,7 @@ class CommonMap(FightMap):
 
     def next_enemy(self, source):
         if not self.scene_match_check("战斗地图", False):
-            self.notice("abort next_enemy: Not in 战斗地图.")
+            logger.warning("abort next_enemy: Not in 战斗地图.")
             return
 
         if not self.enemies:
@@ -267,18 +270,24 @@ class CommonMap(FightMap):
             self, anchor_name, anchor_pos, target_name, reshot)
         return results.intersection(self.g.nodes)
 
+    def find_multi_on_map(self, anchor_name, anchor_pos, target_names, reshot=True):
+        results = set()
+        for name in target_names:
+            if name in self.resources:
+                items = self.find_on_map(anchor_name, anchor_pos, name, reshot=reshot)
+                results = results.union(items)
+        return results.intersection(self.g.nodes)
+
     def check_map(self):
         self.make_screen_shot()
         # in case of scene changes after scene update
         if not self.scene_match_check("战斗地图", False):
-            self.notice("Not in 战斗地图")
+            logger.warning("abort check_map: Not in 战斗地图")
             return
         anchor_name, anchor_pos = self.get_best_anchor()
 
-        enemies = set()
-        for name in self.data.get("EnemyMarkers", ["Lv", "Lv1", "Lv2"]):
-            if name in self.resources:
-                enemies = enemies.union(self.find_on_map(anchor_name, anchor_pos, name, False))
+        names = self.data.get("EnemyMarkers", ["Lv", "Lv1", "Lv2"])
+        enemies = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
         logger.info("找到敌人: %s", enemies)
         for enemy in enemies:
             self.set_enemy(enemy)
@@ -292,16 +301,14 @@ class CommonMap(FightMap):
             # logger.info("找到Boss: %s", boss)
 
         if self.current_fleet is None:
-            pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer', False)
-            if not pointer and "Pointer2" in self.resources:
-                pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer2', False)
-            if not pointer and "Pointer3" in self.resources:
-                pointer = self.find_on_map(anchor_name, anchor_pos, 'Pointer3', False)
-            if pointer:
-                self.current_fleet = list(pointer)[0]
-                logger.info("找到当前舰队: %s", self.current_fleet)
+            names = self.data.get("CurFleetMarkers", ["Pointer", "Pointer2", "Pointer3"])
+            cur_fleet = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
+            logger.info("找到当前舰队: %s", cur_fleet)
+            if cur_fleet:
+                self.current_fleet = list(cur_fleet)[0]
 
-        fleets = self.find_on_map(anchor_name, anchor_pos, 'Ammo', False)
+        names = self.data.get("CurFleetMarkers", ["Ammo", "Ammo2", "Ammo3"])
+        fleets = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
         logger.info("找到舰队: %s", fleets)
         if self.current_fleet in fleets:
             fleets.discard(self.current_fleet)
@@ -334,7 +341,7 @@ class CommonMap(FightMap):
             self.make_screen_shot()
             # in case of scene changes after scene update
             if not self.scene_match_check("战斗地图", False):
-                self.notice("abort recheck_full_map: Not in 战斗地图.")
+                logger.warning("abort recheck_full_map: Not in 战斗地图.")
                 return
             _, pos = self.locate_target(target, reshot=False)
             self.move_map_to(*pos)
@@ -376,18 +383,19 @@ class CommonMap(FightMap):
         self.wait(6)
         self.after_bonus()
         return
-        
+
     def get_fight_index(self):
         return self.get_fight_status()["FightIndex"]
-        
+
     def fight(self):
         status = self.get_fight_status()
         logger.info("战斗%s", status)
-        self.check_map()
         for item in self.data['Strategy']:
             if self.parse_fight_condition(item['Condition']):
                 logger.info("战斗策略：%s", item)
                 self.do_actions(item['Actions'])
+                if item.get("Break"):
+                    break
 
     def click_at_map(self, target):
         FightMap.click_at_map(self, target)
