@@ -114,7 +114,6 @@ ViewPort: [C3, D5, F5, F3]
 Strategy:
 - Actions:
   - {Target: toggle_fleet, Type: InnerCall}
-  - {Time: 1, Type: Wait}
   Condition:
   - $any
   - - - $all
@@ -128,9 +127,10 @@ Strategy:
           - [FightIndexMod]
           - 6
         - [$method, resource_in_screen, Boss队伍]
+  Break: true
 - Actions:
-  - Target: normal_fight
-    Type: InnerCall
+  - {Target: manual, Type: InnerCall}
+  - {Time: 1, Type: Wait}
   Condition:
   - $contains
   - [0, 1, 5]
@@ -164,6 +164,6 @@ Strategy:
     Type: InnerCall
     args: [I4]
   Condition:
-  - $ge
+  - $eq
   - [FightIndexMod]
   - 6
