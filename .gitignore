@@ -15,7 +15,6 @@ build
 
 # 资源文件
 碧蓝航线/Data
-碧蓝航线/dump-20190501/
 Autodroid/PlayerSimulate/
 WarFrame/scripts/shot*.png
 
@@ -33,8 +32,10 @@ WarFrame/image_based/
 */AutoFight.7z
 FateGO/AutoFight/
 碧蓝航线/AutoFight/
+碧蓝航线/dump/
 
 Autodroid/FiddlerDump/Unreal.FGO-master
 *.log
 Autodroid/azurlane/data/fightStatus.json
+
 
