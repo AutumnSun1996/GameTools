@@ -225,6 +225,7 @@ class FightMap(AzurLaneControl):
         for anchor in self.data['Anchors'].values():
             logger.debug("Check Anchor %s", anchor['Name'])
             diff, pos = get_match(self.screen, anchor['ImageData'])
+            logger.debug("Diff Anchor %s: %.3f@%s", anchor['Name'], diff, pos)
             pos = np.add(pos, anchor['Offset'])
             res.append([diff, pos, anchor['OnMap']])
         res.sort(key=lambda a: a[0])
