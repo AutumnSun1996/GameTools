@@ -148,7 +148,7 @@ AP不足:
   - {Target: save_record, Type: InnerCall}
   - {Target: 下一步, Type: Click}
   - {Time: 1, Type: Wait}
-  Condition: [对应奖励]
+  Condition: [活动点数奖励]
   Name: 活动点数奖励
   Next: [活动点数奖励, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
 获得物品:
@@ -198,6 +198,15 @@ AP不足:
   Actions:
   - Actions:
     - {Time: 3, Type: Wait}
+    - Time: 4
+      Type: Wait
+      Condition: 
+      - $not_
+      - - $contains
+        - [选择指令卡, 选择技能]
+        - - $getattr
+          - [$]
+          - last_scene_name
     - {Target: extract_combat_info, Type: InnerCall}
     - {Target: choose_skills, Type: InnerCall}
     - {Time: 1, Type: Wait}
