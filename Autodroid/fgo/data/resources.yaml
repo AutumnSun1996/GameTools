@@ -711,8 +711,8 @@ Quick:
   Name: 羁绊加深
   Size: [320, 42]
   SearchArea: 
-  - [650, 320]
-  - [340, 100]
+  - [650, 240]
+  - [340, 360]
   Type: Dynamic
 自由关卡:
   Image: 自由关卡.png
@@ -842,12 +842,13 @@ Quick:
   - [742, 40]
   Size: [20, 20]
   Type: MultiStatic
-对应奖励:
-  Image: 对应奖励.png
+活动点数奖励:
+  Image: 奖励.png
   MainSize: [1280, 720]
-  Name: 对应奖励
-  SearchArea: 
+  Name: 活动点数奖励
+  Offset: [535, 81]
+  Size: [300, 28]
+  SearchArea:
   - [100, 65]
-  - [500, 50]
-  Size: [122, 40]
+  - [1080, 50]
   Type: Dynamic
