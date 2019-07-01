@@ -14,9 +14,12 @@ from simulator.win32_tools import drag, click_at
 from .azurlane import AzurLaneControl
 
 
-trans_matrix = np.mat([[0.9973946527568224, 0.3603604397038424, -26.031979896145074],
-                       [0.0003077413569570231, 1.6993955643161198, -11.85941523333576],
-                       [1.341898625115588e-06, 0.0005934941602383196, 1.0]])
+trans_matrix = np.mat([
+    [0.9433189178530791, 0.2679732964804766, -158.43695741776074],
+    [1.3417181644390942e-05, 1.5656008796635157, -92.70256198000683],
+    [7.711117850185767e-07, 0.0005944962831996344, 1.0]
+])
+filter_kernel = np.array([[-4, -2, -4], [-2, 24, -2], [-4, -2, -4]])
 
 
 def ord_distance(anchor_name, target_name):
@@ -24,6 +27,7 @@ def ord_distance(anchor_name, target_name):
     dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
     dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
     return np.linalg.norm([dx, dy])
+
 
 def get_anchors(self):
     """在屏幕上搜索匹配的锚点
@@ -36,6 +40,7 @@ def get_anchors(self):
         if diff < anchor.get("MaxDiff", 0.03):
             res.append([pos, anchor['OnMap']])
     return res
+
 
 def get_max_convex(anchors, count=4):
     if len(anchors) < count:
@@ -50,10 +55,12 @@ def get_max_convex(anchors, count=4):
             best = idx
     return [anchors[i] for i in best]
 
+
 def on_map_offset(name):
     x = 100 * (ord(name[0]) - ord("A"))
     y = 100 * (ord(name[1]) - ord("1"))
     return [x, y]
+
 
 def get_perspective_transform(anchors):
     src = []
@@ -66,12 +73,14 @@ def get_perspective_transform(anchors):
     matrix, mask = cv.findHomography(src, dst)
     return matrix
 
+
 def name2pos(name, matrix):
     inv = np.linalg.inv(matrix)
     inv /= inv[2, 2]
     src = on_map_offset(name)
     src = np.reshape(src, (1, -1, 2)).astype("float32")
     return cv.perspectiveTransform(src, inv).reshape(2)
+
 
 def pos2name(pos, matrix):
     src = np.reshape(pos, (1, -1, 2)).astype("float32")
@@ -127,17 +136,16 @@ class FightMap(AzurLaneControl):
         if self._inv_trans is None:
             self.update_trans_matrix()
         return self._inv_trans
-    
+
     def make_screen_shot(self):
         self._trans_matrix = None
         self._inv_trans = None
         return super().make_screen_shot()
-    
+
     def image2square(self, image_pos):
         """根据透视变换矩阵将像素坐标变换到棋盘坐标"""
         image_pos = np.array([image_pos], dtype='float32').reshape((1, 1, 2))
         return cv.perspectiveTransform(image_pos, self.trans_matrix).reshape((2))
-
 
     def square2image(self, square_pos):
         """根据透视变换矩阵将棋盘坐标变换到像素坐标"""
@@ -152,7 +160,7 @@ class FightMap(AzurLaneControl):
         virtual_target_pos = np.add(virtual_anchor_pos, [dx, dy])
         target_pos = self.square2image(virtual_target_pos)
         return target_pos
-        
+
     def move_map_to(self, x, y):
         """移动战斗棋盘使目标点趋近中心位置"""
         x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
