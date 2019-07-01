@@ -1,0 +1,110 @@
+Description: '队伍: 女帝, 杀尼托, 杰克'
+Name: 大号-新选组-烈士级
+Resources: {}
+Scenes:
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 7]
+      Target: 队伍选择
+      Index: 7
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Time: 1, Type: Wait}
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - [礼装/明治维新/壬生狼]
+    - [助战-礼装满破]
+  CardChoice:
+  - Choice:
+    - - 2
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 0
+      - [^A克制, ^A0, ^B克制, ^B0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 1
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 蓝卡优先
+  Skills:
+  - Actions:
+    - Type: Click
+      Target: 战斗-敌人位置
+      Index: 1
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - - [$eq, [TurnOfBattle], 1]
+      - [$le, [BattleLeft], 1]
+    Description: 选择中间敌人
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [2, 1]
+      - [2, 2]
+      - [2, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Description: 女帝2, 尼托123
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP1]
+    - 100
+    Description: 女帝1自充
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 3]
+      - [3, 1]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP3]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 杰克宝具准备
+  UseNP:
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 女帝
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 尼托
+    Target: 2
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 杰克
+    Target: 3

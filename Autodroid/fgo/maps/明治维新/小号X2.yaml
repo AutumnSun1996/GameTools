@@ -1,0 +1,124 @@
+Description: '队伍: 助战孔明, 帕尔瓦蒂, 玛丽'
+Name: 小号-新选组-队士级
+Resources: {}
+Scenes:
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 8]
+      Target: 队伍选择
+      Index: 8
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Time: 1, Type: Wait}
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [队伍确认]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - [助战-礼装满破]
+    - [助战/孔明]
+    - $any
+    - - false
+      - [礼装/明治维新/壬生狼]
+      - [礼装/明治维新/日轮之城]
+  CardChoice:
+  - Choice:
+    - - 2
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 0
+      - [^A克制, ^A0, ^B克制, ^B0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 1
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 蓝卡优先
+  Skills:
+  - Actions:
+    - Type: Click
+      Target: 战斗-敌人位置
+      Index: 1
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - - [$eq, [TurnOfBattle], 1]
+      - [$le, [BattleLeft], 1]
+    Description: 选择中间敌人
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [1, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Description: 孔明23
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1, 2]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP2]
+    - 100
+    Description: 孔明1充能
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 3, 2]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP2]
+    - 100
+    Description: 帕尔瓦蒂3充能
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 2]
+      - [2, 1]
+      - [2, 2]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 帕尔瓦蒂宝具准备
+  UseNP:
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 孔明
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 帕尔瓦蒂
+    Target: 2
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 玛丽
+    Target: 3
