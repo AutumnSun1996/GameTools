@@ -232,36 +232,14 @@ class CommonMap(FightMap):
 
     def search_for_boss(self, repeat=0, idx=0):
         logger.info("搜索Boss(%d)", repeat)
-
         if len(self.boss) == 1:
             self.click_at_map(self.boss[0])
             return
-
-        if idx is not None:
-            target = self.data['ViewPort'][idx]
-            logger.info("检查区域%s", target)
-            self.move_map_to(*self.locate_target(target)[1])
-        if repeat > 5:
-            self.critical("Boss搜索失败")
-
-        ret, pos = self.search_resource('Boss')
-        if not ret:
-            ret, pos = self.search_resource('Boss-Bigger')
-        if not ret:
-            self.search_for_boss(repeat, idx+1)
-            return
-        logger.info("找到Boss %s", pos)
-        x, y = pos
-        x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
-        if x < x_min or x > x_max or y < y_min or y > y_max:
-            logger.debug("目标不在中间区域")
-            self.move_map_to(x, y)
-            self.search_for_boss(repeat+1, None)
-            return
-        x, y = np.add(self.resources['Boss']['ClickOffset'], pos)
-        w, h = self.resources['Boss']['ClickSize']
-        logger.debug("点击: (%d, %d)+(%d, %d)", x, y, w, h)
-        rand_click(self.hwnd, (x, y, x+w, y+h))
+        anchor_name, anchor_pos = self.get_best_anchor()
+        names = self.data.get("BossMarkers", ["Boss"])
+        boss = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
+        boss = list(boss)[0]
+        self.click_at_map(boss)
         self.wait(3)
         return
 
@@ -288,6 +266,7 @@ class CommonMap(FightMap):
 
         names = self.data.get("EnemyMarkers", ["Lv", "Lv1", "Lv2"])
         enemies = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
+
         logger.info("找到敌人: %s", enemies)
         for enemy in enemies:
             self.set_enemy(enemy)
@@ -307,7 +286,7 @@ class CommonMap(FightMap):
             if cur_fleet:
                 self.current_fleet = list(cur_fleet)[0]
 
-        names = self.data.get("CurFleetMarkers", ["Ammo", "Ammo2", "Ammo3"])
+        names = self.data.get("FleetMarkers", ["Ammo", "Ammo2", "Ammo3"])
         fleets = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
         logger.info("找到舰队: %s", fleets)
         if self.current_fleet in fleets:

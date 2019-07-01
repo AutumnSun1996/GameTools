@@ -8,7 +8,7 @@ from shapely import geometry
 import numpy as np
 
 from config_loader import logger, config
-from simulator.image_tools import get_match, cv, get_multi_match, load_map
+from simulator.image_tools import get_match, cv, get_multi_match, load_map, cv_crop
 from simulator.win32_tools import drag, click_at
 
 from .azurlane import AzurLaneControl
@@ -20,6 +20,9 @@ trans_matrix = np.mat([
     [7.711117850185767e-07, 0.0005944962831996344, 1.0]
 ])
 filter_kernel = np.array([[-4, -2, -4], [-2, 24, -2], [-4, -2, -4]])
+target_size = (980, 725)
+_, inv_trans = cv.invert(trans_matrix)
+inv_trans = inv_trans / inv_trans[2, 2]
 
 
 def ord_distance(anchor_name, target_name):
@@ -29,65 +32,36 @@ def ord_distance(anchor_name, target_name):
     return np.linalg.norm([dx, dy])
 
 
-def get_anchors(self):
-    """在屏幕上搜索匹配的锚点
-    """
-    res = []
-    for anchor in self.data['Anchors'].values():
-        logger.debug("Check Anchor %s", anchor['Name'])
-        diff, pos = get_match(self.screen, anchor['ImageData'])
-        pos = np.add(pos, anchor['Offset'])
-        if diff < anchor.get("MaxDiff", 0.03):
-            res.append([pos, anchor['OnMap']])
-    return res
+def search_on_map(info, screen, pos_in_screen):
+    offset = info["CropOffset"]
+    size = info["CropSize"]
+    wh = np.array(list(reversed(screen.shape[:2])))
+    coef = 0.0005907301142274507
 
-
-def get_max_convex(anchors, count=4):
-    if len(anchors) < count:
-        raise ValueError("Need At Least %d anchors, got %d" % (count, len(anchors)))
-    best = None
-    best_area = 0
-    for idx in itertools.combinations(range(len(anchors)), count):
-        poly = geometry.Polygon([anchors[i][0] for i in idx]).convex_hull
-        area = poly.area
-        if best_area < area:
-            best_area = area
-            best = idx
-    return [anchors[i] for i in best]
+    diff_s = []
+    results = []
+    for x, y in pos_in_screen:
+        r = coef * y + 1
+        lt = np.asarray(offset) * r + [x, y]
+        rb = lt + np.asarray(size) * r
+        if lt.min() < 0:
+            continue
+        if np.any(rb > wh):
+            continue
+        part = cv_crop(screen, (*lt.astype("int"), *rb.astype("int")))
+        part = cv.resize(part, tuple(size))
+        diff, _ = get_match(part, info["ImageData"])
+        if diff < info.get("MaxDiff", 0.2):
+            diff_s.append(diff)
+            results.append([x, y])
+    logger.debug("search_on_map found %s with diff%sfor %s", results, diff_s, info["Name"])
+    return diff_s, results
 
 
 def on_map_offset(name):
     x = 100 * (ord(name[0]) - ord("A"))
     y = 100 * (ord(name[1]) - ord("1"))
     return [x, y]
-
-
-def get_perspective_transform(anchors):
-    src = []
-    dst = []
-    for anchor in anchors:
-        src.append(anchor[0])
-        dst.append(on_map_offset(anchor[1]))
-    src = np.reshape(src, (-1, 2)).astype("float32")
-    dst = np.reshape(dst, (-1, 2)).astype("float32")
-    matrix, mask = cv.findHomography(src, dst)
-    return matrix
-
-
-def name2pos(name, matrix):
-    inv = np.linalg.inv(matrix)
-    inv /= inv[2, 2]
-    src = on_map_offset(name)
-    src = np.reshape(src, (1, -1, 2)).astype("float32")
-    return cv.perspectiveTransform(src, inv).reshape(2)
-
-
-def pos2name(pos, matrix):
-    src = np.reshape(pos, (1, -1, 2)).astype("float32")
-    x, y = cv.perspectiveTransform(src, matrix).reshape(2)
-    x = chr(int(np.round(ord("A") + x/100)))
-    y = chr(int(np.round(ord("1") + y/100)))
-    return x+y
 
 
 class FightMap(AzurLaneControl):
@@ -104,61 +78,58 @@ class FightMap(AzurLaneControl):
         self.resources.update(self.data['Resources'])
         logger.info("Update Scenes %s", self.data['Scenes'].keys())
         self.scenes.update(self.data['Scenes'])
-        self._trans_matrix = None
-        self._inv_trans = None
+        self._pos_in_screen = None
 
-    def update_trans_matrix(self):
-        anchors = get_anchors(self)
-        logger.info("Found %d Anchors", len(anchors))
-        if len(anchors) >= 4:
-            logger.debug("Anchors: %s", anchors)
-            self._trans_matrix = get_perspective_transform(anchors)
-            if self._trans_matrix is None or self._trans_matrix[1][1] < 0:
-                logger.warning("Discard Bad TransMatrix. (%s From %s)", self._trans_matrix, anchors)
-                self._trans_matrix = None
-        if self._trans_matrix is None:
-            if "TransMatrix" in self.data:
-                logger.info("Update Trans Matrix With Map Defined Matrix")
-                self._trans_matrix = np.mat(self.data["TransMatrix"])
-            else:
-                logger.info("Update Trans Matrix With Global Matrix")
-                self._trans_matrix = trans_matrix
-        _, self._inv_trans = cv.invert(self._trans_matrix)
+    def get_grid_centers(self, retry=0):
+        """返回格子中心点坐标列表，包括棋盘坐标和屏幕坐标"""
+        if retry > 4:
+            raise RuntimeError("Failed after %s attempt", retry)
+        warped = cv.warpPerspective(self.screen, trans_matrix, target_size)
+        filtered_map = cv.filter2D(warped, 0, filter_kernel)
+        _, poses = self.search_resource("Corner", image=filtered_map)
+        if len(poses) < 4:
+            logger.warning("Less than 4 anchors found. Reshot.")
+            return self.get_grid_centers(retry+1)
 
-    @property
-    def trans_matrix(self):
-        if self._trans_matrix is None:
-            self.update_trans_matrix()
-        return self._trans_matrix
+        poses = np.array(poses)
+        poses += self.resources["Corner"]["Offset"]
+        diff = (poses % 100)
+        dx = np.argmax(np.bincount(diff[:, 0]))
+        dy = np.argmax(np.bincount(diff[:, 1]))
+
+        res = itertools.product(range(dx, target_size[0], 100), range(dy, target_size[1], 100))
+        res = (np.array(list(res), dtype="float") + 50).reshape(1, -1, 2)
+
+        pos_in_screen = cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
+        return res.reshape(-1, 2), pos_in_screen
 
     @property
-    def inv_trans(self):
-        if self._inv_trans is None:
-            self.update_trans_matrix()
-        return self._inv_trans
+    def pos_in_screen(self):
+        if self._pos_in_screen is None:
+            _, self._pos_in_screen = self.get_grid_centers()
+        return self._pos_in_screen
 
     def make_screen_shot(self):
-        self._trans_matrix = None
-        self._inv_trans = None
+        self._pos_in_screen = None
         return super().make_screen_shot()
 
-    def image2square(self, image_pos):
+    def screen2grid(self, image_pos):
         """根据透视变换矩阵将像素坐标变换到棋盘坐标"""
         image_pos = np.array([image_pos], dtype='float32').reshape((1, 1, 2))
-        return cv.perspectiveTransform(image_pos, self.trans_matrix).reshape((2))
+        return cv.perspectiveTransform(image_pos, trans_matrix).reshape((2))
 
-    def square2image(self, square_pos):
+    def grid2screen(self, square_pos):
         """根据透视变换矩阵将棋盘坐标变换到像素坐标"""
         square_pos = np.array([square_pos], dtype='float32').reshape((1, 1, 2))
-        return cv.perspectiveTransform(square_pos, self.inv_trans).reshape((2))
+        return cv.perspectiveTransform(square_pos, inv_trans).reshape((2))
 
     def get_map_pos(self, anchor_name, anchor_pos, target_name):
         """根据锚点的像素坐标、锚点的棋盘坐标、目标点的棋盘坐标，计算目标点的像素坐标"""
         dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
         dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
-        virtual_anchor_pos = self.image2square(anchor_pos)
+        virtual_anchor_pos = self.screen2grid(anchor_pos)
         virtual_target_pos = np.add(virtual_anchor_pos, [dx, dy])
-        target_pos = self.square2image(virtual_target_pos)
+        target_pos = self.grid2screen(virtual_target_pos)
         return target_pos
 
     def move_map_to(self, x, y):
@@ -183,22 +154,13 @@ class FightMap(AzurLaneControl):
         """搜索指定的棋盘坐标, 返回像素坐标"""
         if reshot:
             self.make_screen_shot()
-        self.anchors = [val for val in self.data['Anchors'].values()]
-
-        self.anchors.sort(key=lambda a: ord_distance(a['OnMap'], target))
-        # max_len = 3 * len(self.anchors) // 4
-        for anchor in self.anchors:
-            diff, anchor_pos = get_match(self.screen, anchor["ImageData"])
-            if diff < anchor.get("MaxDiff", 0.05):
-                map_anchor = anchor_pos + np.array(anchor['Offset'])
-                logger.debug("找到%s(%.3f): %s. 坐标%s:%s",
-                             anchor['Name'], diff, anchor_pos, anchor['OnMap'], map_anchor)
-                return True, self.get_map_pos(anchor['OnMap'], map_anchor, target)
-            logger.debug("未找到%s. 最优结果%.3f.", anchor['Name'], diff)
-        return False, None
+        name, pos = self.get_best_anchor()
+        return True, self.get_map_pos(name, pos, target)
 
     def click_at_map(self, target, repeat=0):
-        """点击指定的棋盘坐标"""
+        """点击指定的棋盘坐标
+        param: target: str, 如 'D2', 'B5'
+        """
         if not self.resource_in_screen("迎击"):
             logger.warning("非战斗地图. 停止搜索目标")
             return
@@ -230,37 +192,34 @@ class FightMap(AzurLaneControl):
         当前使用匹配程度最高的锚点
         """
         res = []
-        for anchor in self.data['Anchors'].values():
-            logger.debug("Check Anchor %s", anchor['Name'])
-            diff, pos = get_match(self.screen, anchor['ImageData'])
-            logger.debug("Diff Anchor %s: %.3f@%s", anchor['Name'], diff, pos)
-            pos = np.add(pos, anchor['Offset'])
-            res.append([diff, pos, anchor['OnMap']])
-        res.sort(key=lambda a: a[0])
-        diff, pos, name = res[0]
-        if diff > 0.06:
-            raise ValueError("Best Match Diff %.3f" % diff)
-        return name, pos
+        for anchor in self.data["Anchors"].values():
+            diff, found = search_on_map(anchor, self.screen, self.pos_in_screen)
+            # logger.debug("Check anchor %s: %s, %s", anchor["Name"], diff, found)
+            if not diff:
+                continue
+            pos = found[np.argmin(diff)]
+            return anchor["OnMap"], pos
+        raise ValueError("No Valid Anchor")
 
     def find_on_map(self, anchor_name, anchor_pos, target_name, reshot=True):
         """在屏幕上搜索并返回指定的anchor出现的所有棋盘坐标"""
         if reshot:
             self.make_screen_shot()
-        anchor_pos_s = self.image2square(anchor_pos)
+        anchor_pos_grid = self.screen2grid(anchor_pos)
         logger.debug("find_on_map %s by %s at %s", target_name, anchor_name, anchor_pos)
         target = self.resources[target_name]
         name_x, name_y = anchor_name
 
-        points = np.array(self.resources["地图区域"]["Points"]).reshape((1, -1, 2))
-        result = set()
-        for x, y in np.reshape(self.search_resource(target_name)[1], (-1, 2)):
+        points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype("float32")
+        _, pos = search_on_map(target, self.screen, self.pos_in_screen)
+        results = set()
+        for x, y in pos:
             if cv.pointPolygonTest(points, (x, y), False) < 0:
                 # 不在地图区域内, 忽略
                 continue
-            pos = np.add(target['Offset'], [x, y])
-            offset = self.image2square(pos) - anchor_pos_s
+            offset = self.screen2grid((x, y)) - anchor_pos_grid
             dx, dy = np.round(offset / 100).reshape((2)).astype('int')
             name = chr(ord(name_x) + dx) + chr(ord(name_y) + dy)
-            result.add(name)
-        logger.debug("find_on_map %s by %s at %s: %s", target_name, anchor_name, anchor_pos, result)
-        return result
+            results.add(name)
+        logger.debug("find_on_map %s by %s at %s: %s", target_name, anchor_name, anchor_pos, results)
+        return results

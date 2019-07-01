@@ -280,30 +280,59 @@ COMMANDER:
   Size: [1066, 490]
   Type: Static
 Ammo:
-  Image: Ammo.png
-  MainSize: [1280, 720]
+  Image: ui/Ammo.png
   Name: Ammo
-  Size: [56, 61]
-  Offset: [85, 185]
-  Type: MultiDynamic
-  MaxDiff: 0.04
-Ammo2:
-  Image: Ammo.png
   MainSize: [1280, 720]
-  Name: Ammo2
-  Size: [50, 54]
-  Offset: [85, 185]
-  Type: MultiDynamic
-  MaxDiff: 0.04
-
+  Size: [52, 48]
+  CropOffset: [-70, -120]
+  CropSize: [60, 60]
+  Type: Dynamic
+  MaxDiff: 0.15
+Enemy1:
+  Image: ui/xiao.png
+  Name: Enemy1
+  MainSize: [1280, 720]
+  Size: [44, 44]
+  CropOffset: [-65, -75]
+  CropSize: [50, 50]
+  Type: Dynamic
+  MaxDiff: 0.2
+Enemy2:
+  Image: ui/zhong.png
+  Name: Enemy2
+  MainSize: [1280, 720]
+  Size: [43, 43]
+  CropOffset: [-65, -75]
+  CropSize: [50, 50]
+  Type: Dynamic
+  MaxDiff: 0.2
+Enemy3:
+  Image: ui/da.png
+  Name: Enemy3
+  MainSize: [1280, 720]
+  Size: [43, 43]
+  CropOffset: [-65, -75]
+  CropSize: [50, 50]
+  Type: Dynamic
+  MaxDiff: 0.2
 Pointer:
   Image: Pointer.png
   MainSize: [1280, 720]
-  MaxDiff: 0.06
+  CropOffset: [-40, -190]
+  CropSize: [80, 60]
+  MaxDiff: 0.1
   Name: Pointer
-  Offset: [45, 200]
-  Size: [82, 50]
+  Size: [74, 46]
   Type: Dynamic
+Boss:
+  Image: ui/Boss.png
+  Name: Boss
+  MainSize: [1280, 720]
+  Size: [67, 56]
+  CropOffset: [-40, -50]
+  CropSize: [80, 80]
+  Type: Dynamic
+  MaxDiff: 0.15
 Corner:
   Image: SharpCorner.png
   MainSize: [1280, 720]
