@@ -304,3 +304,11 @@ Pointer:
   Offset: [45, 200]
   Size: [82, 50]
   Type: Dynamic
+Corner:
+  Image: SharpCorner.png
+  MainSize: [1280, 720]
+  MaxDiff: 0.4
+  Name: Corner
+  Size: [23, 24]
+  Offset: [12, 12]
+  Type: MultiDynamic
