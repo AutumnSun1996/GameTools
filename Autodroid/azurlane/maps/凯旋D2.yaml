@@ -1,0 +1,202 @@
+Anchors:
+  凯旋D2/D3:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/D3.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/D3
+    OnMap: D3
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/D5:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/D5.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/D5
+    OnMap: D5
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/E3:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/E3.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/E3
+    OnMap: E3
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/E5:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/E5.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/E5
+    OnMap: E5
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/H1:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/H1.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/H1
+    OnMap: H1
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/F5:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/F5.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/F5
+    OnMap: F5
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/H6:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/H6.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/H6
+    OnMap: H6
+    Size: [60, 60]
+    Type: Anchor
+  凯旋D2/H7:
+    CropOffset: [-30, -30]
+    CropSize: [60, 60]
+    Image: 凯旋D2/H7.png
+    MainSize: [1280, 720]
+    Name: 凯旋D2/H7
+    OnMap: H7
+    Size: [60, 60]
+    Type: Anchor
+FightCount: 7
+Map: 
+- FNNNNNEOB
+- NNNNNNNON
+- NNNOOONNN
+- NSNNNNNNN
+- ENNOOONNN
+- NNNNNNNON
+- FNNNNNNOB
+MapClass: azurlane.fight_event.EventFight
+Name: 凯旋炮
+Resources:
+  Clear@D2:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: Clear
+    Size: [80, 80]
+    Offset: [367, 532]
+    ClickSize: [120, 40]
+    ClickOffset: [30, 16]
+    Type: Static
+  道中队伍:
+    Image: 亚利桑那.png
+    MainSize: [1280, 720]
+    Name: 道中队伍-亚利桑那
+    Offset: [20, 138]
+    Size: [86, 50]
+    Type: Static
+  补给商店:
+    Image: 补给商店.png
+    MainSize: [1280, 720]
+    Name: 补给商店
+    Offset: [110, 0]
+    Size: [130, 50]
+    Type: Static
+
+Scenes:
+  商店:
+    Actions:
+    - {Target: 返回, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [补给商店]
+    Name: 商店
+    Next: [外部地图]
+    Global: true
+  外部地图:
+    Actions:
+    - {Target: Clear@D2, Type: Click}
+    - {Time: 2, Type: Wait}
+    Condition: [Clear@D2]
+    Name: 外部地图
+    Next: [外部地图, 进入地图确认, 商店]
+  战斗准备:
+    Actions:
+    - {Target: mood_detect, Type: InnerCall}
+    - {Target: 出击, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [出击]
+    Name: 战斗准备
+    Next: [加载中, 船坞已满]
+  战斗地图:
+    Actions:
+    - {Target: fight, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition: [迎击]
+    Name: 战斗地图
+    Next: [战斗准备, 战斗地图, 获得道具, 外部地图]
+Strategy:
+- Actions:
+  - {Time: 1, Type: Wait}
+  - {Target: toggle_fleet, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Break: true
+  Condition:
+  - $any
+  - - - $all
+      - - - $le
+          - [FightIndexMod]
+          - 5
+        - - $not_
+          - [$method, resource_in_screen, 道中队伍]
+    - - $all
+      - - - $gt
+          - [FightIndexMod]
+          - 5
+        - [$method, resource_in_screen, 道中队伍]
+- Actions:
+  - {Target: normal_fight, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $contains
+  - [0, 1, 5]
+  - [FightIndexMod]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [D2]
+  Condition:
+  - $eq
+  - 2
+  - [FightIndexMod]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [B5]
+  Condition:
+  - $eq
+  - 3
+  - [FightIndexMod]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [H4]
+  Condition:
+  - $eq
+  - 4
+  - [FightIndexMod]
+- Actions:
+  - {Target: search_for_boss, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $eq
+  - 6
+  - [FightIndexMod]
+ViewPort: [D3, D6, H6, G3]
+Elite: [D2, B5, H4]
+EnemyMarkers: [Enemy1, Enemy2, Enemy3]
+CurFleetMarkers: [Pointer]
+FleetMarkers: [Ammo]
