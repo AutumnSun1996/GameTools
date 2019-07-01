@@ -555,10 +555,20 @@ class SimulatorControl:
                 target = getattr(self, action['Target'])
                 args = action.get("args", [])
                 kwargs = action.get("kwargs", {})
-                try:
-                    target(*args, **kwargs)
-                except Exception:
-                    self.critical(traceback.format_exc(), "程序")
+                max_retry = action.get("MaxRetry", 5)
+                retry = 0
+                while retry < max_retry:
+                    try:
+                        target(*args, **kwargs)
+                    except RuntimeError:
+                        retry += 1
+                        if not self.scene_match_check(self.current_scene_name, True):
+                            logger.warning("Scene changed from %s, abort left actions", self.current_scene_name)
+                            return
+                    except Exception:
+                        self.critical(traceback.format_exc(), "程序")
+                    else:
+                        max_retry = -1
             elif action['Type'] == 'Click':
                 self.click_at_resource(
                     name=action['Target'],
