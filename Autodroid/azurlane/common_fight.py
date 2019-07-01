@@ -231,13 +231,27 @@ class CommonMap(FightMap):
         return distance[0][1]
 
     def search_for_boss(self, repeat=0, idx=0):
-        logger.info("搜索Boss(%d)", repeat)
+        if not self.scene_match_check("战斗地图", False):
+            logger.warning("abort search_for_boss: Not in 战斗地图")
+            return
+        logger.info("搜索Boss(%d,%d)", repeat, idx)
         if len(self.boss) == 1:
             self.click_at_map(self.boss[0])
             return
+        if repeat > 5:
+            raise RuntimeError("search_for_boss:Failed after %s attempt", repeat)
         anchor_name, anchor_pos = self.get_best_anchor()
         names = self.data.get("BossMarkers", ["Boss"])
         boss = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
+        boss_ports = self.data.get("BossViewPort", list(self.boss))
+        if not boss:
+            if idx < len(boss_ports):
+                _, pos = self.locate_target(boss_ports[idx])
+                self.move_map_to(*pos)
+                self.search_for_boss(repeat, idx+1)
+                return
+            self.search_for_boss(repeat+1, 0)
+            return
         boss = list(boss)[0]
         self.click_at_map(boss)
         self.wait(3)
@@ -391,6 +405,9 @@ class CommonMap(FightMap):
         #     self.set_enemy(target, 'Defeated')
 
     def normal_fight(self, repeat=0):
+        if not self.scene_match_check("战斗地图", False):
+            logger.warning("abort normal_fight: Not in 战斗地图")
+            return
         if repeat >= 5:
             self.error("地图处理失败")
             return
