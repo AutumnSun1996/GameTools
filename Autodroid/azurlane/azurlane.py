@@ -62,7 +62,7 @@ class AzurLaneControl(SimulatorControl):
         "企业", "光辉", "埃塞克斯",
 
         # 其他
-        "女灶神", "黑暗界", "茗",
+        "女灶神", "黑暗界", "茗", "恐怖",
     }
 
     def get_fight_status(self):
