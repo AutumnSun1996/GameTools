@@ -9,7 +9,7 @@ import numpy as np
 
 from config_loader import logger, config
 from simulator.image_tools import get_match, cv, get_multi_match, load_map, cv_crop
-from simulator.win32_tools import drag, click_at
+from simulator.win32_tools import drag, click_at, rand_click
 
 from .azurlane import AzurLaneControl
 
@@ -82,6 +82,9 @@ class FightMap(AzurLaneControl):
 
     def get_grid_centers(self, retry=0):
         """返回格子中心点坐标列表，包括棋盘坐标和屏幕坐标"""
+        if not self.scene_match_check("战斗地图", False):
+            logger.warning("abort get_grid_centers: Not in 战斗地图")
+            return
         if retry > 4:
             raise RuntimeError("Failed after %s attempt", retry)
         warped = cv.warpPerspective(self.screen, trans_matrix, target_size)
@@ -89,6 +92,7 @@ class FightMap(AzurLaneControl):
         _, poses = self.search_resource("Corner", image=filtered_map)
         if len(poses) < 4:
             logger.warning("Less than 4 anchors found. Reshot.")
+            self.wait(0.2)
             return self.get_grid_centers(retry+1)
 
         poses = np.array(poses)
@@ -185,7 +189,7 @@ class FightMap(AzurLaneControl):
             FightMap.click_at_map(self, target, repeat+1)
             return
         logger.info("点击%s: (%d, %d)", target, x, y)
-        click_at(self.hwnd, x, y)
+        rand_click(self.hwnd, (x-10, y-20, x+10, y), 0)
 
     def get_best_anchor(self):
         """在屏幕上搜索最佳的锚点
@@ -199,7 +203,7 @@ class FightMap(AzurLaneControl):
                 continue
             pos = found[np.argmin(diff)]
             return anchor["OnMap"], pos
-        raise ValueError("No Valid Anchor")
+        raise RuntimeError("No Valid Anchor")
 
     def find_on_map(self, anchor_name, anchor_pos, target_name, reshot=True):
         """在屏幕上搜索并返回指定的anchor出现的所有棋盘坐标"""
