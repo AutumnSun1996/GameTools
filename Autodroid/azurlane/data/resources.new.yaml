@@ -341,3 +341,15 @@ Corner:
   Size: [23, 24]
   Offset: [12, 12]
   Type: MultiDynamic
+返回:
+  MainSize: [1280, 720]
+  Name: 返回
+  Offset: [30, 30]
+  Size: [50, 50]
+  Type: Static
+Home:
+  MainSize: [1280, 720]
+  Name: Home
+  Offset: [1210, 15]
+  Size: [40, 40]
+  Type: Static
