@@ -1,7 +1,7 @@
 Anchors:
   凯旋D2/D3:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/D3.png
     MainSize: [1280, 720]
     Name: 凯旋D2/D3
@@ -9,8 +9,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/D5:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/D5.png
     MainSize: [1280, 720]
     Name: 凯旋D2/D5
@@ -18,8 +18,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/E3:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/E3.png
     MainSize: [1280, 720]
     Name: 凯旋D2/E3
@@ -27,8 +27,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/E5:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/E5.png
     MainSize: [1280, 720]
     Name: 凯旋D2/E5
@@ -36,8 +36,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/H1:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/H1.png
     MainSize: [1280, 720]
     Name: 凯旋D2/H1
@@ -45,8 +45,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/F5:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/F5.png
     MainSize: [1280, 720]
     Name: 凯旋D2/F5
@@ -54,8 +54,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/H6:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/H6.png
     MainSize: [1280, 720]
     Name: 凯旋D2/H6
@@ -63,8 +63,8 @@ Anchors:
     Size: [60, 60]
     Type: Anchor
   凯旋D2/H7:
-    CropOffset: [-30, -30]
-    CropSize: [60, 60]
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
     Image: 凯旋D2/H7.png
     MainSize: [1280, 720]
     Name: 凯旋D2/H7
@@ -138,6 +138,19 @@ Scenes:
     Condition: [迎击]
     Name: 战斗地图
     Next: [战斗准备, 战斗地图, 获得道具, 外部地图]
+  获得经验:
+    Actions:
+    - {Target: 确认经验, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    - Time: 3
+      Type: Wait
+      Condition:
+      - $eq
+      - [$getitem, [$method, get_fight_status], FightIndexMod]
+      - 0
+    Condition: [COMMANDER]
+    Name: 获得经验
+    Next: [获得经验, 外部地图, 战斗地图]
 Strategy:
 - Actions:
   - {Time: 1, Type: Wait}
