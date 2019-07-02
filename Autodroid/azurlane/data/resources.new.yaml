@@ -235,11 +235,25 @@ COMMANDER:
 伏击-规避:
   Image: 伏击-规避.png
   MainSize: [1280, 720]
-  Name: 伏击-规避
+  Name: 伏击-规避-蓝
+  Offset: [978, 443]
+  Size: [175, 60]
+  Type: Static
+伏击-规避-灰:
+  Image: 规避-灰.png
+  MainSize: [1280, 720]
+  Name: 伏击-规避-灰
   Offset: [978, 443]
   Size: [175, 60]
   Type: Static
   MaxDiff: 0.01
+伏击-迎击:
+  Image: 迎击-蓝.png
+  MainSize: [1280, 720]
+  Name: 迎击-蓝
+  Offset: [753, 443]
+  Size: [175, 60]
+  Type: Static
 切换舰队:
   Image: 切换舰队.png
   MainSize: [1280, 720]
@@ -329,8 +343,8 @@ Boss:
   Name: Boss
   MainSize: [1280, 720]
   Size: [67, 56]
-  CropOffset: [-40, -50]
-  CropSize: [80, 80]
+  CropOffset: [-50, -60]
+  CropSize: [100, 100]
   Type: Dynamic
   MaxDiff: 0.15
 Corner:
@@ -352,4 +366,31 @@ Home:
   Name: Home
   Offset: [1210, 15]
   Size: [40, 40]
+  Type: Static
+精锐:
+  Image: 精锐.png
+  MainSize: [1280, 720]
+  Name: 精锐
+  Offset: [925, 394]
+  Size: [120, 50]
+  Type: Static
+超稀有:
+  Image: 超稀有.png
+  MainSize: [1280, 720]
+  Name: 超稀有
+  Offset: [925, 394]
+  Size: [150, 50]
+  Type: Static
+New:
+  Name: New
+  Image: NEW.png
+  MainSize: [1280, 720]
+  Offset: [186, 44]
+  Size: [126, 107]
+  Type: Static
+获得舰娘-锁定:
+  Name: 获得舰娘-锁定
+  MainSize: [1280, 720]
+  Offset: [186, 44]
+  Size: [170, 60]
   Type: Static
