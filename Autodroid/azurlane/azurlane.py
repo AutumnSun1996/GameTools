@@ -21,8 +21,8 @@ class AzurLaneControl(SimulatorControl):
     status_path = "%s/data/fightStatus.json" % section
     retire_choices = {
         # 驱逐-普通
-        # "卡辛", "唐斯", "克雷文", "麦考尔", "奥利克", "富特", "斯彭斯", "小猎兔犬", "大斗犬",
-        # "彗星", "新月", "小天鹅", "狐提", "蒲", "松", "樟", "楙", "杌", "檧", "Z20",
+        "卡辛", "唐斯", "克雷文", "麦考尔", "奥利克", "富特", "斯彭斯", "小猎兔犬", "大斗犬",
+        "彗星", "新月", "小天鹅", "狐提", "蒲", "松", "樟", "楙", "杌", "檧", "Z20",
         # 驱逐-稀有
         "格里德利", "弗莱彻", "撒切尔", "本森", "西姆斯", "哈曼", "拉德福特", "杰金斯", "布什",
         "黑泽伍德", "霍比", "科尔克", "女将", "热心", "命运女神", "天后",
@@ -33,7 +33,7 @@ class AzurLaneControl(SimulatorControl):
         "萤火虫", "标枪", "Z23", "拉菲", "柚", "查尔斯·奥斯本",
 
         # 轻巡-普通
-        # "奥马哈", "罗利", "里士满", "利安得", "貊", "貃", "柯尼斯堡", "卡尔斯鲁厄", "科隆",
+        "奥马哈", "罗利", "里士满", "利安得", "貊", "貃", "柯尼斯堡", "卡尔斯鲁厄", "科隆",
         # 轻巡-稀有
         "布鲁克林", "菲尼克斯", "亚特兰大", "朱诺", "孟菲斯", "康克德",  "阿基里斯", "阿贾克斯",
         "阿瑞托莎", "加拉蒂亚", "斐济", "纽卡斯尔", "--牙买加", "貉", "--豻",
@@ -43,14 +43,14 @@ class AzurLaneControl(SimulatorControl):
         "圣地亚哥", "贝尔法斯特",
 
         # 重巡-普通
-        # "彭萨科拉", "盐湖城", "狼", "狌", "犹", "猅",
+        "彭萨科拉", "盐湖城", "狼", "狌", "犹", "猅",
         # 重巡-稀有
         "北安普敦", "芝加哥", "波特兰", "什罗普郡", "肯特", "萨福克", "诺福克", "獌", "狏", "苏塞克斯",
         # 重巡-精锐
         "休斯敦", "印第安纳波利斯", "伦敦", "埃克塞特", "约克",
 
         # 战
-        # "内华达", "俄克拉荷马",
+        "内华达", "俄克拉荷马",
         "反击", "宾夕法尼亚", "田纳西", "加利福尼亚", "鲼",
         "声望", "伊丽莎白女王", "罗德尼",
         "胡德", "华盛顿",
@@ -145,6 +145,30 @@ class AzurLaneControl(SimulatorControl):
                 logger.info("select_ship: Skip %s", names[idx])
         return results[:10]
 
+    def keep_click(self, name, at_least=1, max_check=5, waiting=1):
+        """多次尝试点击指定的资源
+
+        每次检查后会等待`waiting`s，如果始终没有找到资源会报错
+        如果找到资源，会点击之后等待`waiting`s，重新检查
+
+        name: 资源名
+        at_least: 最低点击次数
+        max_check: 最大检查次数
+        """
+        clicked = 0
+        checked = 0
+        while checked < max_check:
+            checked += 1
+            if self.resource_in_screen(name):
+                self.click_at_resource(name)
+                clicked += 1
+            elif clicked >= at_least:
+                break
+            self.wait(waiting)
+            self.make_screen_shot()
+            if checked >= max_check:
+                raise RuntimeError("{} not found after {} check".format(name, checked))
+
     def retire(self):
         """执行退役操作"""
         self.make_screen_shot()
@@ -162,30 +186,14 @@ class AzurLaneControl(SimulatorControl):
             for rect in targets:
                 rand_click(self.hwnd, rect)
                 time.sleep(0.3)
+            time.sleep(0.5)
+            self.make_screen_shot()
 
-            logger.debug("确定")
-            self.click_at_resource("退役-确定", True)
-            time.sleep(waiting)
-            logger.debug("确定拆解")
-            self.click_at_resource("退役-确定2", True)
-            time.sleep(waiting)
-            if self.resource_in_screen("退役-精锐角色确认"):
-                logger.debug("精锐角色确认")
-                self.click_at_resource("退役-精锐角色确认")
-            logger.debug("获得道具")
-            self.wait_resource("获得道具")
-            self.click_at_resource("退役-确定")
-            time.sleep(waiting)
-            logger.debug("装备拆解")
-            self.click_at_resource("退役-装备拆解", True)
-            time.sleep(waiting)
-            logger.debug("确定拆解")
-            self.click_at_resource("退役-装备拆解2", True)
-            time.sleep(waiting)
-            logger.debug("获得道具")
-            self.wait_resource("获得道具")
-            self.click_at_resource("退役-确定")
-            time.sleep(waiting)
+            self.keep_click("退役-确定")
+            self.keep_click("获得道具")
+            self.keep_click("退役-确定")
+            self.keep_click("获得道具")
+
             targets = self.select_ships()
 
         time.sleep(waiting)
