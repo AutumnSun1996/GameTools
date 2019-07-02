@@ -45,7 +45,7 @@
   - {Time: 1, Type: Wait}
   Condition: [迎击]
   Name: 战斗地图
-  Next: [战斗准备, 加载中, 受到伏击, 战斗地图, 外部地图]
+  Next: [战斗准备, 加载中, 受到伏击, 战斗地图, 外部地图, 自律提醒]
 战斗准备:
   Actions:
   - {Time: 1, Type: Wait}
@@ -146,9 +146,9 @@
   Next: [获得经验, 获得舰娘, 获得道具, 战斗地图]
 获得舰娘:
   Actions:
-  - {Target: 右侧空白区域, Type: Click}
+  - {Target: 获得舰娘-锁定, Type: Click}
   - {Time: 1, Type: Wait}
-  Condition: [性能]
+  Condition: [$any, [[精锐], [超稀有]]]
   Name: 获得舰娘
   Next: [获得经验]
 获得经验:
@@ -171,9 +171,14 @@
   Global: True
 受到伏击:
   Actions:
-  - {Target: 伏击-规避, Type: Click}
-  - {Time: 1, Type: Wait}
-  Condition: [伏击-规避]
+    - {Target: 伏击-规避, Type: Click}
+    - {Time: 1, Type: Wait}
+  Condition: 
+    - $all
+    - - - $any
+        - - [伏击-规避-灰]
+          - [伏击-规避]
+      - [伏击-迎击]
   Name: 受到伏击
   Next: [战斗准备, 战斗地图]
 非自律战斗中:
