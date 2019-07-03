@@ -1,7 +1,8 @@
+import os
 import sys
+import yaml
 from datetime import datetime, timedelta
 from dateutil.parser import parse
-from azurlane.common_fight import CommonMap
 
 import argparse
 
@@ -22,7 +23,18 @@ def make_stop_checker(args):
 
 
 def main(args):
-    az = CommonMap(args.map_name)
+    config_file = os.path.join("azurlane", "maps", args.map_name + ".yaml")
+    with open(config_file, "r", -1, "UTF8") as fl:
+        info = yaml.safe_load(fl)
+    if "MapClass" in info:
+        import importlib
+        module_path, cls_name = info["MapClass"]
+        m = importlib.import_module(module_path)
+        map_cls = getattr(m, cls_name)
+    else:
+        from azurlane.common_fight import CommonMap as map_cls
+    logger.warning("Use class %r", map_cls)
+    az = map_cls(args.map_name)
     try:
         az.main_loop(make_stop_checker(args))
         # input("Pause...")
