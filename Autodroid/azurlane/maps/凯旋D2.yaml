@@ -80,7 +80,7 @@ Map:
 - ENNOOONNN
 - NNNNNNNON
 - FNNNNNNOB
-MapClass: azurlane.fight_event.EventFight
+# MapClass: [azurlane.fight_event, EventFight]
 Name: 凯旋炮
 Resources:
   Clear@D2:
@@ -92,10 +92,10 @@ Resources:
     ClickSize: [120, 40]
     ClickOffset: [30, 16]
     Type: Static
-  道中队伍:
-    Image: 亚利桑那.png
+  Boss队伍:
+    Image: 北卡.png
     MainSize: [1280, 720]
-    Name: 道中队伍-亚利桑那
+    Name: Boss队伍-北卡
     Offset: [20, 138]
     Size: [86, 50]
     Type: Static
@@ -160,27 +160,32 @@ Strategy:
   Condition:
   - $any
   - - - $all
-      - - - $le
-          - [FightIndexMod]
-          - 5
-        - - $not_
-          - [$method, resource_in_screen, 道中队伍]
-    - - $all
       - - - $gt
           - [FightIndexMod]
           - 5
-        - [$method, resource_in_screen, 道中队伍]
+        - - $not_
+          - [$method, resource_in_screen, Boss队伍]
+    - - $all
+      - - - $le
+          - [FightIndexMod]
+          - 5
+        - [$method, resource_in_screen, Boss队伍]
 - Actions:
-  - {Target: normal_fight, Type: InnerCall}
+  - Target: goto_res_on_map
+    Type: InnerCall
+    MaxRetry: 0
+    args: [[Enemy1, Enemy2, Enemy3]]
   - {Time: 1, Type: Wait}
+  Break: true
   Condition:
   - $contains
-  - [0, 1, 5]
+  - [0, 1]
   - [FightIndexMod]
 - Actions:
   - Target: click_at_map
     Type: InnerCall
     args: [D2]
+  Break: true
   Condition:
   - $eq
   - 2
@@ -189,6 +194,7 @@ Strategy:
   - Target: click_at_map
     Type: InnerCall
     args: [B5]
+  Break: true
   Condition:
   - $eq
   - 3
@@ -197,19 +203,34 @@ Strategy:
   - Target: click_at_map
     Type: InnerCall
     args: [H4]
+  Break: true
   Condition:
   - $eq
   - 4
   - [FightIndexMod]
 - Actions:
-  - {Target: search_for_boss, Type: InnerCall}
+  - Target: goto_res_on_map
+    Type: InnerCall
+    MaxRetry: 0
+    args: [[Enemy1, Enemy2]]
   - {Time: 1, Type: Wait}
+  Break: true
+  Condition:
+  - $eq
+  - 5
+  - [FightIndexMod]
+- Actions:
+  - Target: goto_res_on_map
+    Type: InnerCall
+    MaxRetry: 0
+    args: [[Boss]]
+  - {Time: 1, Type: Wait}
+  Break: true
   Condition:
   - $eq
   - 6
   - [FightIndexMod]
-ViewPort: [D3, D6, H6, G3]
-Elite: [D2, B5, H4]
+ViewPoints: [D3, D6, H6, G3]
 EnemyMarkers: [Enemy1, Enemy2, Enemy3]
 CurFleetMarkers: [Pointer]
 FleetMarkers: [Ammo]
