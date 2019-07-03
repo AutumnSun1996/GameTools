@@ -211,7 +211,7 @@ def check_anchor(name):
     show(draw)
 
 
-def check_scales(needle, scales, target=None, show_full=False):
+def check_scales(needle, scales, target=None, show=True, show_full=False):
     if target is None:
         target = const["s"].screen
 
@@ -224,9 +224,10 @@ def check_scales(needle, scales, target=None, show_full=False):
         print(scale, (w, h))
         print(diff, pos)
         if best["diff"] > diff:
-            best = {"diff": diff, "scale": scale, "size": [w, h]}
-        show_crop(*pos, w, h, img=target, show_full=show_full)
-    print(best)
+            best = {"diff": diff, "scale": scale, "size": [w, h], "pos": pos}
+        if show:
+            show_crop(*pos, w, h, img=target, show_full=show_full)
+    return best
 
 
 def check_resource(info, image=None):
