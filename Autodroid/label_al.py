@@ -11,7 +11,6 @@ from PIL import Image, ImageTk
 from shapely import geometry
 
 from simulator import image_tools, win32_tools
-from azurlane.map_anchor import name2pos, pos2name
 from notebook.azurlane import *
 
 import itertools
@@ -26,10 +25,16 @@ target_size = (980, 725)
 _, inv_trans = cv.invert(trans_matrix)
 inv_trans = inv_trans / inv_trans[2, 2]
 
-anchor_template = {
+
+crop_set = {
     "CropOffset": [-30, -30],
     "CropSize": [60, 60],
-    "Size": [60, 60],
+}
+
+anchor_template = {
+    "CropOffset": [-40, -40],
+    "CropSize": [80, 80],
+    "Size": crop_set["CropSize"],
     "Type": "Anchor",
     "MainSize": [1280, 720],
 }
@@ -55,9 +60,9 @@ def get_cadidates(screen):
     return res.reshape(-1, 2).astype("int"), pos_in_screen
 
 
-def crop_anchor(anchor, screen, x, y):
-    offset = anchor["CropOffset"]
-    size = anchor["CropSize"]
+def crop_anchor(screen, x, y):
+    offset = crop_set["CropOffset"]
+    size = crop_set["CropSize"]
     wh = np.array(list(reversed(s.screen.shape[:2])))
     coef = 0.0005907301142274507
 
@@ -76,10 +81,11 @@ def crop_anchor(anchor, screen, x, y):
 
 
 def extract_anchors(anchors):
+    res = {}
     for anchor in anchors:
         name = "{}/{}".format(map_name, anchor["Name"])
         x, y = anchor["Pos"]
-        cropped = crop_anchor(anchor_template, s.screen, x, y)
+        cropped = crop_anchor(s.screen, x, y)
         path = "%s/resources/%s.png" % (section, name)
         image_tools.cv_save(path, cropped)
         info = copy.deepcopy(anchor_template)
@@ -88,8 +94,8 @@ def extract_anchors(anchors):
             "OnMap": anchor["Name"],
             "Image": name+".png",
         })
-        yield name, info
-
+        res[name] = info
+    return res
 
 def key(event):
     global anchors
@@ -100,7 +106,7 @@ def key(event):
         if anchors:
             anchors.remove(anchors[-1])
     elif event.char == "s":
-        result = {key: val for key, val in extract_anchors(anchors)}
+        result = extract_anchors(anchors)
         text = toyaml(result)
         print(text)
         set_clip(text)
@@ -116,12 +122,13 @@ def get_nearest(point, candidates):
             near_dist = dist
     return near
 
+
 def get_name(compare, pos):
     old_ = cv.perspectiveTransform(
-        np.array(compare["Pos"]).reshape(1, -1, 2).astype("float32"), 
+        np.array(compare["Pos"]).reshape(1, -1, 2).astype("float32"),
         trans_matrix)
     new_ = cv.perspectiveTransform(
-        np.array(pos).reshape(1, -1, 2).astype("float32"), 
+        np.array(pos).reshape(1, -1, 2).astype("float32"),
         trans_matrix)
     diff = np.round((new_ - old_).reshape(2) / 100).astype("int")
     print(old_, new_, (new_ - old_), diff)
@@ -148,7 +155,7 @@ def on_click(event):
 def render():
     img = s.screen.copy()
     for pos in points:
-        cv.circle(img, tuple(pos), 3, (255,255,255), -1)
+        cv.circle(img, tuple(pos), 3, (255, 255, 255), -1)
     for anchor in anchors:
         x, y = anchor["Pos"]
         cv.putText(img, anchor["Name"], (x-20, y), 0, 1, (255, 255, 0), 2)
@@ -165,7 +172,7 @@ anchors = []
 section = "AzurLane"
 
 map_name = sys.argv[1]
-s = init_map(map_name)
+s = init_map("通用地图")
 _, points = get_cadidates(s.screen)
 print("Init Points", points)
 root = tk.Tk()
