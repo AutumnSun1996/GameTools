@@ -194,36 +194,16 @@ COMMANDER:
   Image: 确定-蓝.png
   MainSize: [1280, 720]
   Size: [174, 60]
-  Offset: [993, 640]
   Name: 退役-确定
-  Type: Static
-退役-确定2:
-  Image: 确定-蓝.png
+  Type: Dynamic
+  SearchArea:
+  - [400, 400]
+  - [880, 320]
+退役-右下角:
   MainSize: [1280, 720]
-  Size: [174, 60]
-  Offset: [927, 615]
-  Name: 退役-确定2
-  Type: Static
-退役-精锐角色确认:
-  Image: 确定-蓝.png
-  MainSize: [1280, 720]
-  Size: [174, 60]
-  Offset: [703, 481]
-  Name: 退役-精锐角色确认
-  Type: Static
-退役-装备拆解:
-  Image: 确定-蓝.png
-  MainSize: [1280, 720]
-  Size: [174, 60]
-  Offset: [871, 514]
-  Name: 退役-装备拆解
-  Type: Static
-退役-装备拆解2:
-  Image: 确定-蓝.png
-  MainSize: [1280, 720]
-  Size: [174, 60]
-  Offset: [720, 539]
-  Name: 退役-装备拆解2
+  Offset: [1000, 640]
+  Size: [280, 80]
+  Name: 退役-右下角
   Type: Static
 退役-取消:
   Image: 取消.png
@@ -394,3 +374,40 @@ New:
   Offset: [186, 44]
   Size: [170, 60]
   Type: Static
+战斗准备-绿脸:
+  Image: face-green.png
+  MainSize: [1280, 720]
+  Name: 战斗准备-绿脸
+  Size: [30, 30]
+  Type: MultiDynamic
+  SearchArea:
+  - [200, 200]
+  - [700, 360]
+战斗准备-黄脸:
+  Image: face-yellow.png
+  MainSize: [1280, 720]
+  Name: 战斗准备-黄脸
+  Size: [30, 30]
+  Type: MultiDynamic
+  SearchArea:
+  - [200, 200]
+  - [700, 360]
+战斗准备-红脸:
+  Image: face-red.png
+  MainSize: [1280, 720]
+  Name: 战斗准备-红脸
+  Size: [30, 30]
+  Type: MultiDynamic
+  SearchArea:
+  - [200, 200]
+  - [700, 360]
+舰队选择-黄脸:
+  Image: face-yellow.png
+  MainSize: [1280, 720]
+  Name: 舰队选择-黄脸
+  Offset: [420, 430]
+  Size: [30, 30]
+  Type: MultiDynamic
+  SearchArea:
+  - [200, 240]
+  - [700, 240]
