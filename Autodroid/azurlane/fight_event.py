@@ -29,15 +29,9 @@ class EventFight(CommonMap):
         if target in self.enemies:
             self.set_enemy(target, 'Defeated')
 
-    def normal_fight(self, repeat=0):
-        if repeat >= 5:
-            self.error("地图处理失败")
-            return
-
+    def normal_fight(self):
         if not self.current_fleet:
-            self.recheck_full_map()
-            self.normal_fight(repeat+1)
-            return
+            self.current_fleet = self.born_points[0]
 
         fleets = [self.current_fleet]
         if self.other_fleet:
