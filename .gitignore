@@ -17,6 +17,7 @@ build
 碧蓝航线/Data
 Autodroid/PlayerSimulate/
 WarFrame/scripts/shot*.png
+*.apk
 
 **/dump/
 **/logs/
@@ -41,3 +42,4 @@ Autodroid/azurlane/data/fightStatus.json
 # 临时文件
 tmp*
 temp*
+
