@@ -556,17 +556,25 @@ class SimulatorControl:
                 args = action.get("args", [])
                 kwargs = action.get("kwargs", {})
                 max_retry = action.get("MaxRetry", 5)
-                retry = 0
+                # 保证 max_retry被设置为0或负值时会执行一次
+                retry = min(0, max_retry-1)
                 while retry < max_retry:
                     try:
                         target(*args, **kwargs)
-                    except RuntimeError:
-                        retry += 1
+                    except RuntimeError as e:
+                        logger.info("do_actions: Got %r", e)
                         if not self.scene_match_check(self.current_scene_name, True):
                             logger.warning("Scene changed from %s, abort left actions", self.current_scene_name)
                             return
+                        retry += 1
+                        if retry > max_retry:
+                            self.critical(traceback.format_exc(), "程序")
+                            raise e
+                        if "OnFailed" in action:
+                            self.do_actions(action["OnFailed"])
                     except Exception:
                         self.critical(traceback.format_exc(), "程序")
+                        max_retry = -1
                     else:
                         max_retry = -1
             elif action['Type'] == 'Click':
