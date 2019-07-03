@@ -37,6 +37,7 @@ class CommonMap(FightMap):
         self.boss = []
         self.other_fleet = None
         self.current_fleet = None
+        self.last_map_target = None
         self.born_points = []  # used for init `current_fleet`
         self.fleet_id = 1
         self.submarine = []
@@ -89,6 +90,15 @@ class CommonMap(FightMap):
         self.current_fleet, self.other_fleet = self.other_fleet, self.current_fleet
         self.wait(2)
 
+    def update_cur_fleet(self):
+        """将上次点击位置设置为当前舰队位置
+
+        预期在战斗准备界面被调用
+        """
+        if self.last_map_target is not None:
+            self.current_fleet = self.last_map_target
+            self.set_enemy(self.current_fleet, "Defeated")
+
     def enemies_on_path(self, path):
         enemies = []
         for cell in path:
@@ -112,8 +122,6 @@ class CommonMap(FightMap):
         return '#66ccff'
 
     def set_enemy(self, cell, status="Exist"):
-        if cell == "CUR_FLEET":
-            cell = self.current_fleet
         if cell is None:
             logger.warning("abort set_enemy: cell is None")
             return
@@ -392,6 +400,7 @@ class CommonMap(FightMap):
 
     def click_at_map(self, target):
         FightMap.click_at_map(self, target)
+        self.last_map_target = target
         if self.current_fleet is None:
             # avoid wrong shortest_path search.
             self.current_fleet = self.born_points[0]
@@ -424,6 +433,39 @@ class CommonMap(FightMap):
             fleets.append(self.other_fleet)
 
         self.click_at_map(self.next_enemy(fleets))
+
+    def goto_res_on_map(self, names, viewpoints=None, repeat=0, idx=0):
+        if not self.scene_match_check("战斗地图", False):
+            logger.warning("abort goto_res_on_map({}): Not in 战斗地图".format(names))
+            return
+        if repeat >= 5:
+            self.error("地图处理失败 goto_res_on_map({})".format(names))
+            return
+        if isinstance(names, str):
+            # 获取待检查资源名列表
+            names = self.data.get(names, [names])
+        if names == ["Boss"] and viewpoints is None:
+            # 单独处理Boss
+            viewpoints = list(self.boss)
+        if viewpoints is None:
+            # 获取待检查点位列表
+            viewpoints = self.data["ViewPoints"]
+
+        if idx >= len(viewpoints):
+            self.goto_res_on_map(names, viewpoints, repeat+1, 0)
+            return
+
+        logger.info("move to %s.", viewpoints[idx])
+        _, pos = self.locate_target(viewpoints[idx])
+        self.move_map_to(*pos)
+        self.make_screen_shot()
+        anchor_name, anchor_pos = self.get_best_anchor()
+        targets = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
+        logger.info("goto_res_on_map(%s, %s[%d]) attempt%d: %s", names, viewpoints, idx, repeat, targets)
+        if not targets:
+            self.goto_res_on_map(names, viewpoints, repeat, idx+1)
+            return
+        self.click_at_map(list(targets)[0])
 
 
 if __name__ == "__main__":
