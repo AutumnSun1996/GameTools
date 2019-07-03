@@ -3,6 +3,7 @@ Map: []
 Strategy: {}
 FightCount: 1
 Name: 每日任务
+MapClass: [azurlane.daily, Daily]
 Resources:
   每日任务:
     Image: 每日任务.png
@@ -77,6 +78,66 @@ Resources:
     ClickOffset: [31, 31]
     ClickSize: [50, 50]
     Type: Static
+  Crop0:
+    MainSize: [1280, 720]
+    Name: Crop0
+    Offset: [526, 110]
+    Size: [200, 300]
+    Type: Static
+  Crop1:
+    MainSize: [1280, 720]
+    Name: Crop1
+    Offset: [275, 152]
+    Size: [167, 251]
+    Type: Static
+  Crop2:
+    MainSize: [1280, 720]
+    Name: Crop2
+    Offset: [814, 152]
+    Size: [167, 251]
+    Type: Static
+  Crop3:
+    MainSize: [1280, 720]
+    Name: Crop3
+    Offset: [78, 196]
+    Size: [136, 204]
+    Type: Static
+  Crop4:
+    MainSize: [1280, 720]
+    Name: Crop4
+    Offset: [1045, 196]
+    Size: [136, 204]
+    Type: Static
+  Total3:
+    Name: 3/3
+    Image: ui/Total3.png
+    MainSize: [1280, 720]
+    Type: Dynamic
+    Size: [23, 22]
+    SearchArea: 
+    - [0, 0]
+    - [60, 50]
+    MaxDiff: 0.1
+  Num0:
+    Name: Num0
+    Image: ui/Num0.png
+    MainSize: [1280, 720]
+    Type: Dynamic
+    Size: [9, 22]
+    SearchArea: 
+    - [0, 0]
+    - [30, 50]
+    MaxDiff: 0.1
+  今日未开放:
+    Image: 今日未开放.jpg
+    MainSize: [1280, 720]
+    Name: 今日未开放
+    Size: [135, 30]
+    Type: Dynamic
+    SearchArea: 
+    - [0, 240]
+    - [160, 60]
+    MaxDiff: 0.2
 Scenes:
   外部地图:
     Actions:
@@ -87,7 +148,7 @@ Scenes:
     Next: [每日任务]
   每日任务:
     Actions:
-    - {Target: manual, Type: InnerCall}
+    - {Target: choose_daily_task, Type: InnerCall}
     - {Time: 1, Type: Wait}
     Condition: 
     - $all
@@ -147,3 +208,11 @@ Scenes:
     Condition: [出击]
     Name: 战斗准备
     Next: [加载中, 战斗准备, 船坞已满]
+  战斗评价:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - {Target: 确认经验, Type: Click}
+    - {Time: 2, Type: Wait}
+    Condition: [战斗评价]
+    Name: 战斗评价
+    Next: [获得道具, 战斗评价]
