@@ -80,20 +80,13 @@ class FightMap(AzurLaneControl):
         self.scenes.update(self.data['Scenes'])
         self._pos_in_screen = None
 
-    def get_grid_centers(self, retry=0):
+    def get_grid_centers(self):
         """返回格子中心点坐标列表，包括棋盘坐标和屏幕坐标"""
-        if not self.scene_match_check("战斗地图", False):
-            logger.warning("abort get_grid_centers: Not in 战斗地图")
-            return
-        if retry > 4:
-            raise RuntimeError("Failed after %s attempt", retry)
         warped = cv.warpPerspective(self.screen, trans_matrix, target_size)
         filtered_map = cv.filter2D(warped, 0, filter_kernel)
         _, poses = self.search_resource("Corner", image=filtered_map)
-        if len(poses) < 4:
-            logger.warning("Less than 4 anchors found. Reshot.")
-            self.wait(0.2)
-            return self.get_grid_centers(retry+1)
+        if len(poses) < 3:
+            raise RuntimeError("Less than 4 anchors found. ")
 
         poses = np.array(poses)
         poses += self.resources["Corner"]["Offset"]
