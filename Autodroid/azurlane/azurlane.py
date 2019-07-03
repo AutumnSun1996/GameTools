@@ -101,7 +101,7 @@ class AzurLaneControl(SimulatorControl):
         elif self.current_scene['Name'] == "战斗准备":
             colors = [
                 ("红", self.critical),
-                ("黄", self.error),
+                ("黄", self.notice),
                 ("绿", self.notice),
             ]
             action = "继续战斗"
@@ -145,30 +145,6 @@ class AzurLaneControl(SimulatorControl):
                 logger.info("select_ship: Skip %s", names[idx])
         return results[:10]
 
-    def keep_click(self, name, at_least=1, max_check=5, waiting=1):
-        """多次尝试点击指定的资源
-
-        每次检查后会等待`waiting`s，如果始终没有找到资源会报错
-        如果找到资源，会点击之后等待`waiting`s，重新检查
-
-        name: 资源名
-        at_least: 最低点击次数
-        max_check: 最大检查次数
-        """
-        clicked = 0
-        checked = 0
-        while checked < max_check:
-            checked += 1
-            if self.resource_in_screen(name):
-                self.click_at_resource(name)
-                clicked += 1
-            elif clicked >= at_least:
-                break
-            self.wait(waiting)
-            self.make_screen_shot()
-            if checked >= max_check:
-                raise RuntimeError("{} not found after {} check".format(name, checked))
-
     def retire(self):
         """执行退役操作"""
         self.make_screen_shot()
@@ -187,12 +163,18 @@ class AzurLaneControl(SimulatorControl):
                 rand_click(self.hwnd, rect)
                 time.sleep(0.3)
             time.sleep(0.5)
-            self.make_screen_shot()
-
-            self.keep_click("退役-确定")
-            self.keep_click("获得道具")
-            self.keep_click("退役-确定")
-            self.keep_click("获得道具")
+            while self.scene_match_check("退役", True):
+                if self.search_resource("退役-确定"):
+                    self.click_at_resource("退役-确定")
+                    break
+                self.wait(0.5)
+            time.sleep(0.5)
+            while not self.scene_match_check("退役", True):
+                if self.resource_in_screen("退役-确定"):
+                    self.click_at_resource("退役-确定")
+                elif self.resource_in_screen("获得道具"):
+                    self.click_at_resource("退役-右下角")
+                self.wait(0.5)
 
             targets = self.select_ships()
 
