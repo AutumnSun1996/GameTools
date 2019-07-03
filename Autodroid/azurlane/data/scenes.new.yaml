@@ -118,7 +118,7 @@
   Actions:
   - {Time: 1, Type: Wait}
   - {Target: 确认经验, Type: Click}
-  - {Target: set_enemy, Type: InnerCall, args: ["CUR_FLEET", "Defeated"]}
+  - {Target: update_cur_fleet, Type: InnerCall}
   - Condition:
     - $getattr
     - [$]
@@ -150,7 +150,7 @@
   - {Time: 1, Type: Wait}
   Condition: [$any, [[精锐], [超稀有]]]
   Name: 获得舰娘
-  Next: [获得经验]
+  Next: [获得经验, 获得舰娘]
 获得经验:
   Actions:
   - {Target: 确认经验, Type: Click}
