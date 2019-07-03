@@ -38,4 +38,6 @@ Autodroid/FiddlerDump/Unreal.FGO-master
 *.log
 Autodroid/azurlane/data/fightStatus.json
 
-
+# 临时文件
+tmp*
+temp*
