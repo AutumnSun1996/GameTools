@@ -175,8 +175,8 @@ class FightMap(AzurLaneControl):
             return
 
         x, y = target_pos
-        x_min, y_min, x_max, y_max = self.get_resource_rect("可移动区域")
-        if x < x_min or x > x_max or y < y_min or y > y_max:
+        points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype("float32")
+        if cv.pointPolygonTest(points, (x-20, y-30), False) < 0 or cv.pointPolygonTest(points, (x+20, y+10), False) < 0:
             logger.debug("目标不在中间区域")
             self.move_map_to(x, y)
             FightMap.click_at_map(self, target, repeat+1)
