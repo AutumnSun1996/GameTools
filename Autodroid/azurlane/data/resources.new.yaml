@@ -15,6 +15,7 @@ COMMANDER:
   - [460, 40]
   Size: [200, 25]
   Type: Dynamic
+  MaxDiff: 0.05
 
 出击:
   Image: 出击.jpg
