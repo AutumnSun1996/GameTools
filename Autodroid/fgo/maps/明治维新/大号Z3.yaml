@@ -1,5 +1,5 @@
-Description: '队伍: 北斋, 卡米拉, 女帝'
-Name: 小号-新选组-烈士级
+Description: '队伍: 助战孔明, 骑凛, 弓大王'
+Name: 大号-织田幕府-大名级
 Resources: {}
 Scenes:
   队伍确认:
@@ -7,9 +7,9 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 7]
+      - [$method, resource_in_screen, 队伍选择, 4]
       Target: 队伍选择
-      Index: 7
+      Index: 4
       Type: Click
     - Condition:
       - $le
@@ -30,16 +30,17 @@ Scenes:
 Strategy:
   AssistCondition:
   - $all
-  - - [礼装/明治维新/壬生狼]
+  - - [助战/孔明]
+    - [礼装/明治维新/日轮之城]
     - [助战-礼装满破]
   CardChoice:
   - Choice:
     - - 2
-      - [^A克制, ^A0, ^B克制, ^Q克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
     - - 0
       - [^A克制, ^A0, ^B克制, ^B0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
     - - 1
-      - [^A克制, ^A0, ^B克制, ^Q克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
     Condition: true
     Description: 蓝卡优先
   Skills:
@@ -52,88 +53,70 @@ Strategy:
     - $all
     - - [$eq, [TurnOfBattle], 1]
       - [$le, [BattleLeft], 1]
-    Description: 二三回合，选择中间敌人
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [2, 2]
-      - [2, 3]
-    - {Time: 1, Type: Wait}
-    Condition:
-    - $all
-    - - [$eq, [TurnOfBattle], 1]
-      - [$le, [BattleLeft], 0]
-    Description: 第三回合，卡米拉23
+    Description: 选择中间敌人
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
       - [1, 2]
       - [1, 3]
-      - [3, 2]
-    - {Target: extract_np_info, Type: InnerCall}
-    Description: 北斋23, 女帝2
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [1, 1]
-    - {Target: extract_np_info, Type: InnerCall}
-    Condition:
-    - $lt
-    - [NP1]
-    - 100
-    Description: 北斋1自充
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
       - [2, 1]
+      - [2, 2]
     - {Target: extract_np_info, Type: InnerCall}
-    Condition:
-    - $lt
-    - [NP2]
-    - 100
-    Description: 卡米拉1自充
+    Description: 孔明23, 骑凛12
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [3, 1]
+      - [1, 1, 3]
     - {Target: extract_np_info, Type: InnerCall}
     Condition:
     - $lt
     - [NP3]
     - 100
-    Description: 女帝1自充
+    Description: 孔明1充能
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [0, 2, 2]
+      - [3, 1, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP3]
+    - 100
+    Description: 弓大王1充能
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 3]
+      - [3, 2, 3]
     Condition:
     - $all
     - - - $ge
-        - [NP2]
+        - [NP3]
         - 100
       - - $le
         - [BattleLeft]
         - 0
-    Description: 卡米拉宝具准备
+    Description: 弓大王宝具准备
   UseNP:
-  - Condition: 
+  - Condition:
     - $le
     - [BattleLeft]
     - 0
-    Description: 女帝
-    Target: 3
-  - Condition: true
-    Description: 北斋
+    Description: 孔明
     Target: 1
   - Condition: 
     - $le
     - [BattleLeft]
-    - 0
-    Description: 卡米拉
+    - 1
+    Description: 骑凛
     Target: 2
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 弓大王
+    Target: 3
