@@ -2,6 +2,7 @@
 碧蓝航线战斗棋盘地图分析和定位
 """
 import time
+import json
 import itertools
 
 from shapely import geometry
@@ -79,6 +80,12 @@ class FightMap(AzurLaneControl):
         logger.info("Update Scenes %s", self.data['Scenes'].keys())
         self.scenes.update(self.data['Scenes'])
         self._pos_in_screen = None
+
+    def save_record(self, prefix=None, area=None, **extra_kwargs):
+        if "comment" not in extra_kwargs:
+            extra_kwargs["comment"] = {}
+        extra_kwargs["comment"]["MapName"] = self.map_name
+        super().save_record(prefix, area, **extra_kwargs)
 
     def get_grid_centers(self):
         """返回格子中心点坐标列表，包括棋盘坐标和屏幕坐标"""
@@ -176,11 +183,13 @@ class FightMap(AzurLaneControl):
 
         x, y = target_pos
         points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype("float32")
-        if cv.pointPolygonTest(points, (x-20, y-30), False) < 0 or cv.pointPolygonTest(points, (x+20, y+10), False) < 0:
-            logger.debug("目标不在中间区域")
-            self.move_map_to(x, y)
-            FightMap.click_at_map(self, target, repeat+1)
-            return
+        # 需要检查四个角落
+        for dx, dy in itertools.product([-20, 20], [-30, 10]):
+            if cv.pointPolygonTest(points, (x+dx, y+dy), False) < 0:
+                logger.debug("目标不在中间区域")
+                self.move_map_to(x, y)
+                FightMap.click_at_map(self, target, repeat+1)
+                return
         logger.info("点击%s: (%d, %d)", target, x, y)
         rand_click(self.hwnd, (x-10, y-20, x+10, y), 0)
 
