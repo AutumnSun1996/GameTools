@@ -20,7 +20,7 @@ import win32api
 
 from config_loader import config, set_logging_dir
 from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
-    cv_save, load_scenes, load_resources, load_image, update_resource
+    cv_save, load_scenes, load_resources, load_image, update_resource, save_jpeg
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 import logging
@@ -401,7 +401,7 @@ class SimulatorControl:
         """使模拟器窗口前置"""
         make_foreground(self.hwnd)
 
-    def save_record(self, prefix=None, area=None):
+    def save_record(self, prefix=None, area=None, **extra_kwargs):
         if prefix is None:
             prefix = "Shot-" + self.current_scene_name
         if area is None:
@@ -412,18 +412,21 @@ class SimulatorControl:
                 area = area["Name"]
             if isinstance(area, str):
                 prefix += '-%s' % area
-        name = "{0}/shots/{2:%Y%m%d}/{1}@{2:%Y%m%d_%H%M%S}.jpg".format(self.section, prefix, datetime.datetime.now())
-        cv_save(name, image)
+        now = datetime.datetime.now()
+        name = "{0}/shots/{2:%Y%m%d}/{1}@{2:%Y%m%d_%H%M%S}.jpg".format(self.section, prefix, now)
+        if "keywords" not in extra_kwargs:
+            extra_kwargs["keywords"] = self.current_scene_name
+        save_jpeg(name, image, now=now, **extra_kwargs)
 
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
         logger.critical(message)
-        self.save_record("Critical")
+        title = "自动脚本%s - %s错误" % (self.section, title)
+        self.save_record("Critical", comment={"message": message}, title=title)
 
         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        title = "自动脚本%s - %s错误" % (self.section, title)
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDYES:
             self.go_top()
@@ -432,12 +435,12 @@ class SimulatorControl:
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
         logger.error(message)
-        self.save_record("Error")
+        title = "自动脚本%s - %s警告" % (self.section, title)
+        self.save_record("Error", comment={"message": message}, title=title)
 
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
-        title = "自动脚本%s - %s警告" % (self.section, title)
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDNO:
             self.go_top()

@@ -1,8 +1,11 @@
 import ctypes
+import json
 import os
 import re
 import yaml
+import datetime
 
+import piexif
 from PIL import Image, ImageFont, ImageDraw
 import cv2.cv2 as cv
 import numpy as np
@@ -33,6 +36,37 @@ def cv_save(path, image):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
     data.tofile(path)
+
+def get_xp_info(text):
+    if not isinstance(text, str):
+        text = json.dumps(text, ensure_ascii=False, separators=(',', ':'))
+    return tuple((text+"\x00").encode("UTF-16-LE"))
+
+def save_jpeg(path, image, now=None, title=None, subject=None, comment=None, keywords=None):
+    if not path.endswith((".jpg", ".jpeg")):
+        path = path + ".jpg"
+    image = Image.fromarray(cv.cvtColor(image, cv.COLOR_BGR2RGB))
+    dirname = os.path.dirname(path)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+    exif_dict = {ifd: {} for ifd in ("0th", "Exif", "GPS", "1st")}
+    exif_dict["0th"][piexif.ImageIFD.Artist] = "AutumnSun"
+    exif_dict["0th"][piexif.ImageIFD.Software] = "AutoDroid"
+    if now is None:
+        now = datetime.datetime.now()
+    exif_dict["Exif"][piexif.ExifIFD.DateTimeDigitized] = now.strftime("%Y:%m:%d %H:%M:%S")
+    exif_dict["Exif"][piexif.ExifIFD.SubSecTimeDigitized] = "{:.0f}".format(now.microsecond)
+
+    if title is not None:
+        exif_dict["0th"][piexif.ImageIFD.ImageDescription] = title.encode("UTF-8")
+    if subject is not None:
+        exif_dict["0th"][piexif.ImageIFD.XPSubject] = get_xp_info(subject)
+    if comment is not None:
+        exif_dict["0th"][piexif.ImageIFD.XPComment] = get_xp_info(comment)
+    if keywords is not None:
+        exif_dict["0th"][piexif.ImageIFD.XPKeywords] = get_xp_info(keywords)
+    exif_bytes = piexif.dump(exif_dict)
+    image.save(path, "jpeg", exif=exif_bytes)
 
 
 def rescale_item(item, rx, ry):

@@ -33,6 +33,12 @@ class FateGrandOrder(SimulatorControl):
     def __str__(self):
         return "<{}: {}>".format(self.__class__.__name__, self.map_name)
 
+    def save_record(self, prefix=None, area=None, **extra_kwargs):
+        if "comment" not in extra_kwargs:
+            extra_kwargs["comment"] = {}
+        extra_kwargs["comment"]["MapName"] = self.map_name
+        super().save_record(prefix, area, **extra_kwargs)
+
     def update_combat_info(self, parse=False, **kwargs):
         if parse:
             for key in kwargs:
