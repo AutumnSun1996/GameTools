@@ -1,0 +1,184 @@
+Description: '队伍: 助战孔明, BX, 金时'
+Name: 熊轶-点数本
+Resources: {}
+Scenes:
+  AP不足:
+    Actions:
+    - Target: 金苹果
+      Type: Click
+    - {Time: 1, Type: Wait}
+    - {Target: 补充AP-决定, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [AP不足]
+    Name: AP不足
+    Next: [助战选择]
+  队伍确认:
+    Actions:
+    - {Time: 1, Type: Wait}
+    - Condition:
+      - $not_
+      - [$method, resource_in_screen, 队伍选择, 9]
+      Target: 队伍选择
+      Index: 9
+      Type: Click
+    - Condition:
+      - $le
+      - - $getitem
+        - - $getattr
+          - [$]
+          - scene_history_count
+        - 队伍确认
+      - 1
+      Time: 3
+      Type: Wait
+    - {Time: 1, Type: Wait}
+    - {Target: 开始任务, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [$any, [[队伍确认], [队伍确认2]]]
+    Name: 队伍确认
+    Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+Strategy:
+  AssistCondition:
+  - $all
+  - - [助战/孔明]
+    - [礼装/明治维新/日轮之城]
+    - [助战-礼装满破]
+  CardChoice:
+  - Choice:
+    - - 2
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 0
+      - [^A克制, ^A0, ^B克制, ^B0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+    - - 1
+      - [^A克制, ^A0, ^Q克制, ^B克制, ^B0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    Condition: true
+    Description: 蓝卡优先
+  Skills:
+  # 敌人选择
+  - Actions:
+    - Type: Click
+      Target: 战斗-敌人位置
+      Index: 1
+    - {Time: 1, Type: Wait}
+    Condition:
+    - $all
+    - - [$eq, [TurnOfBattle], 1]
+      - [$eq, [BattleLeft], 1]
+    Description: 选择中间敌人
+  # 充能相关
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 2]
+      - [1, 3]
+    - {Target: extract_np_info, Type: InnerCall}
+    Description: 孔明23
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1, 2]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP2]
+    - 100
+    Description: 孔明1充能
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP3]
+    - 100
+    Description: 金时2自充
+  # 一定回合后释放
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 3, 1]
+    Condition: [$contains, [1, 15], [Turn]]
+    Description: 减CD给孔明
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 1, 2]
+    Condition: 
+    - $all
+    - - [$eq, [TurnOfBattle], 2]
+      - [$eq, [BattleLeft], 0]
+    Description: 第三面第二回合放无敌给BX
+  - Actions:
+    - Type: InnerCall
+      Target: use_skills
+      args:
+      - [3, 1]
+    Condition: [$le, [BattleLeft], 1]
+    Description: 金时1
+  - Actions:
+    - Type: InnerCall
+      Target: use_skills
+      args:
+      - [2, 1]
+      - [2, 3, 1]
+      - [3, 3]
+    Condition: [$le, [BattleLeft], 0]
+    Description: 金时3
+  # 宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [2, 2]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP2]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: BX宝具准备
+  - Actions:
+    - Type: Click
+      Target: 战斗-敌人位置
+      Index: 0
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [0, 2, 3]
+      - [3, 1]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP3]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 金时宝具准备
+  UseNP:
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: 孔明
+    Target: 1
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 0
+    Description: BX
+    Target: 2
+  - Condition:
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 金时
+    Target: 3
