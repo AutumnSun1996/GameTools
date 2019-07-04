@@ -812,6 +812,15 @@ Quick:
   Size: [240, 80]
   Type: Static
   MaxDiff: 0.1
+队伍确认2:
+  Image: 队伍确认2.png
+  MainSize: [1280, 720]
+  Name: 队伍确认2
+  Offset: [1040, 0]
+  Size: [240, 80]
+  Type: Static
+  MaxDiff: 0.1
+
 魔术礼装等级:
   Image: 魔术礼装等级.png
   MainSize: [1280, 720]

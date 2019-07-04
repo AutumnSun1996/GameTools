@@ -247,6 +247,6 @@ AP不足:
   - {Time: 1, Type: Wait}
   - {Target: 开始任务, Type: Click}
   - {Time: 1, Type: Wait}
-  Condition: [队伍确认]
+  Condition: [$any, [[队伍确认], [队伍确认2]]]
   Name: 队伍确认
   Next: [加载关卡, 选择技能, 队伍确认, 剧情]
