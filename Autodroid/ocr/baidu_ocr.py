@@ -4,6 +4,7 @@ import base64
 import numpy as np
 import cv2.cv2 as cv
 import requests
+from retry import retry
 
 from config_loader import config, logger
 
@@ -34,6 +35,7 @@ class BaiduOCR:
         self.token = res.json()["access_token"]
         print("Token:", self.token)
 
+    @retry(tries=5, delay=1)
     def api_request(self, name, image, params=None):
         if self.token is None:
             self.get_token()
