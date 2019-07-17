@@ -819,7 +819,7 @@ Quick:
   Offset: [1040, 0]
   Size: [240, 80]
   Type: Static
-  MaxDiff: 0.1
+  MaxDiff: 0.02
 
 魔术礼装等级:
   Image: 魔术礼装等级.png
