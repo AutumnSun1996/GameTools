@@ -140,4 +140,4 @@ Strategy:
   - ==
   - [FightIndex]
   - 5
-ViewPort: [C3, C5, G3, G5]
+ViewPoints: [C3, C5, G3, G5]

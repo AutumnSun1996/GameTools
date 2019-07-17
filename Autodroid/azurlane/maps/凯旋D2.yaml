@@ -171,10 +171,9 @@ Strategy:
           - 5
         - [$method, resource_in_screen, Boss队伍]
 - Actions:
-  - Target: goto_res_on_map
+  - Target: normal_fight
     Type: InnerCall
     MaxRetry: 0
-    args: [[Enemy1, Enemy2, Enemy3]]
   - {Time: 1, Type: Wait}
   Break: true
   Condition:
@@ -209,10 +208,9 @@ Strategy:
   - 4
   - [FightIndexMod]
 - Actions:
-  - Target: goto_res_on_map
+  - Target: normal_fight
     Type: InnerCall
     MaxRetry: 0
-    args: [[Enemy1, Enemy2]]
   - {Time: 1, Type: Wait}
   Break: true
   Condition:

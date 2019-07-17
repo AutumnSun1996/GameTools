@@ -32,4 +32,4 @@ Strategy:
   - ==
   - [FightIndex]
   - 5
-ViewPort: [C4, F4]
+ViewPoints: [C4, F4]

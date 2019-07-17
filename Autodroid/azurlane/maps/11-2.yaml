@@ -213,4 +213,4 @@ Strategy:
   - $gt
   - [FightIndexMod]
   - 6
-ViewPort: [D3, D5, H5, H3]
+ViewPoints: [D3, D5, H5, H3]
