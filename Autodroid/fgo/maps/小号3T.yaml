@@ -117,6 +117,18 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
+      - [2, 2]
+    Condition:
+    - $all
+    - - [$method, resource_in_screen, 敌人充能完成]
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 梅林2 防御
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
       - [0, 1]
       - [1, 2]
       - [1, 3]
