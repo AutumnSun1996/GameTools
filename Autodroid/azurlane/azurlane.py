@@ -128,13 +128,6 @@ class AzurLaneControl(SimulatorControl):
             clicks.append((x+dx, y+dy, x+dx+dw, y+dy+dh))
 
         names = ocr.images2text(*images)
-        # if len(names) != len(images):
-        # cv_save("logs/OCR-Error.png", name_image)
-        # names = ocr.image2text_accurate(name_image)
-        # self.notice("OCR Results %s Do Not Match Input Image. Retry with accurate ocr." % names, "OCR-Error")
-        # if len(names) != len(images):
-        # self.error("Accurate OCR Results %s Do Not Match Input Image." % names, "OCR-Error")
-        # return []
 
         results = []
         for idx in range(len(names)):
@@ -164,18 +157,24 @@ class AzurLaneControl(SimulatorControl):
                 time.sleep(0.3)
             time.sleep(0.5)
             while self.scene_match_check("退役", True):
+                logger.info("In Scene 退役")
                 if self.search_resource("退役-确定"):
+                    logger.info("found 退役-确定, click 退役-确定")
                     self.click_at_resource("退役-确定")
                     break
                 self.wait(0.5)
+            logger.info("Leave Scene 退役")
             time.sleep(0.5)
             while not self.scene_match_check("退役", True):
+                logger.info("Not in scene 退役")
                 if self.resource_in_screen("退役-确定"):
+                    logger.info("found 退役-确定, click 退役-确定")
                     self.click_at_resource("退役-确定")
                 elif self.resource_in_screen("获得道具"):
+                    logger.info("found 获得道具, click 退役-右下角")
                     self.click_at_resource("退役-右下角")
-                self.wait(0.5)
-
+                self.wait(1)
+            logger.info("Re-enter Scene 退役")
             targets = self.select_ships()
 
         time.sleep(waiting)
