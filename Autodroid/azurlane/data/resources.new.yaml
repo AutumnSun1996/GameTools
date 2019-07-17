@@ -68,6 +68,7 @@ COMMANDER:
   Offset: [600, 340]
   Size: [200, 60]
   Type: Static
+  MaxDiff: 0.1
 
 获得道具:
   Image: 获得道具.png
