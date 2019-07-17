@@ -2,19 +2,19 @@ Description: '队伍: 肯娘@50NP, 助战-孔明, 童谣@50NP, 幼贞@80NP, '
 Name: 主号剧情推进
 Resources: {}
 Scenes:
-  AP不足:
-    Actions:
-    - Target: servant_scroll
-      Type: InnerCall
-      args: [1.5]
-    - {Time: 0.5, Type: Wait}
-    - {Target: 银苹果, Type: Click}
-    - {Time: 1, Type: Wait}
-    - {Target: 补充AP-决定, Type: Click}
-    - {Time: 1, Type: Wait}
-    Condition: [AP不足]
-    Name: AP不足
-    Next: [助战选择]
+  # AP不足:
+  #   Actions:
+  #   - Target: servant_scroll
+  #     Type: InnerCall
+  #     args: [1.5]
+  #   - {Time: 0.5, Type: Wait}
+  #   - {Target: 银苹果, Type: Click}
+  #   - {Time: 1, Type: Wait}
+  #   - {Target: 补充AP-决定, Type: Click}
+  #   - {Time: 1, Type: Wait}
+  #   Condition: [AP不足]
+  #   Name: AP不足
+  #   Next: [助战选择]
   队伍确认:
     Actions:
     - {Time: 1, Type: Wait}
