@@ -251,7 +251,7 @@ class CommonMap(FightMap):
         anchor_name, anchor_pos = self.get_best_anchor()
         names = self.data.get("BossMarkers", ["Boss"])
         boss = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
-        boss_ports = self.data.get("BossViewPort", list(self.boss))
+        boss_ports = self.data.get("BossViewPoints", list(self.boss))
         if not boss:
             if idx < len(boss_ports):
                 _, pos = self.locate_target(boss_ports[idx])
@@ -336,7 +336,7 @@ class CommonMap(FightMap):
 
     def recheck_full_map(self):
         logger.warning("地图信息更新")
-        for target in self.data['ViewPort']:
+        for target in self.data['ViewPoints']:
             logger.info("查看%s周围信息", target)
             self.wait(1)
             self.make_screen_shot()

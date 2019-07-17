@@ -49,10 +49,10 @@ class EventFight(CommonMap):
             
         if not isinstance(self.boss, str):
             if idx is not None:
-                target = self.data['ViewPort'][idx]
+                target = self.data['ViewPoints'][idx]
                 logger.info("检查区域%s", target)
                 self.move_map_to(*self.locate_target(target)[1])
-            if repeat >= len(self.data['ViewPort']):
+            if repeat >= len(self.data['ViewPoints']):
                 self.critical("Boss搜索失败")
 
             anchor_name, anchor_pos = self.get_best_anchor()
