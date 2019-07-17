@@ -1,92 +1,111 @@
 Anchors:
-  7-2-B1:
-    Image: 7-2-B1.png
+  7-2/B1:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 7-2/B1.png
     MainSize: [1280, 720]
-    MapName: 7-2
-    Name: 7-2-B1
-    Offset: [40, 30]
+    Name: 7-2/B1
     OnMap: B1
-    Size: [80, 60]
+    Size: [60, 60]
     Type: Anchor
-  7-2-B2:
-    Image: 7-2-B2.png
+  7-2/B2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 7-2/B2.png
     MainSize: [1280, 720]
-    MapName: 7-2
-    Name: 7-2-B2
-    Offset: [40, 30]
+    Name: 7-2/B2
     OnMap: B2
-    Size: [80, 60]
+    Size: [60, 60]
     Type: Anchor
-  7-2-C2:
-    Image: 7-2-C2.png
+  7-2/C2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 7-2/C2.png
     MainSize: [1280, 720]
-    MapName: 7-2
-    Name: 7-2-C2
-    Offset: [40, 30]
+    Name: 7-2/C2
     OnMap: C2
-    Size: [80, 50]
+    Size: [60, 60]
     Type: Anchor
-  7-2-G4:
-    Image: 7-2-G4.png
+  7-2/G4:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 7-2/G4.png
     MainSize: [1280, 720]
-    MapName: 7-2
-    Name: 7-2-G4
-    Offset: [40, 30]
+    Name: 7-2/G4
     OnMap: G4
-    Size: [90, 70]
+    Size: [60, 60]
     Type: Anchor
-  7-2-H4:
-    Image: 7-2-H4.png
+  7-2/H4:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 7-2/H4.png
     MainSize: [1280, 720]
-    MapName: 7-2
-    Name: 7-2-H4
-    Offset: [40, 30]
+    Name: 7-2/H4
     OnMap: H4
-    Size: [90, 70]
+    Size: [60, 60]
     Type: Anchor
-  7-2-H5:
-    Image: 7-2-H5.png
+  7-2/H5:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 7-2/H5.png
     MainSize: [1280, 720]
-    MapName: 7-2
-    Name: 7-2-H5
-    Offset: [40, 30]
+    Name: 7-2/H5
     OnMap: H5
-    Size: [80, 60]
+    Size: [60, 60]
     Type: Anchor
+
 Map: [EOENEENF, '?OO?NNEN', 'ENEBENE?', 'NEN?NEOO', FNEENEOO]
 Name: 7-2
 Resources:
-  Ammo:
-    Image: Ammo.png
+  Boss队伍:
+    Image: 北卡.png
     MainSize: [1280, 720]
-    MaxDiff: 0.08
-    Name: Ammo
-    Offset: [-20, 160]
-    Size: [34, 34]
-    Type: Anchor
+    Name: Boss队伍-北卡
+    Offset: [20, 138]
+    Size: [86, 50]
+    Type: Static
+  Clear@7-2:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: Clear
+    Size: [80, 80]
+    ClickSize: [120, 40]
+    ClickOffset: [30, 16]
+    Offset: [411, 180]
+    Type: Static
 Scenes:
   外部地图:
     Actions:
-    - {Target: 7-2, Type: Click}
+    - {Target: Clear@7-2, Type: Click}
     - {Time: 0.5, Type: Wait}
-    Condition: [Clear@第7章]
+    Condition: [Clear@7-2]
     Name: 外部地图
-    Next: [进入地图确认]
-  舰队选择:
-    Actions:
-    - {Target: mood_detect, Type: InnerCall}
-    - {Target: 舰队选择-立刻前往, Type: Click}
-    - {Target: reset_fight_index, Type: InnerCall}
-    - {Time: 4, Type: Wait}
-    Condition: [舰队选择-立刻前往]
-    Name: 舰队选择
+    Next: [外部地图, 进入地图确认, 战斗地图]
 Strategy:
+- Actions:
+  - {Time: 1, Type: Wait}
+  - {Target: toggle_fleet, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Break: true
+  Condition:
+  - $any
+  - - - $all
+      - - - $gt
+          - [FightIndexMod]
+          - 5
+        - - $not_
+          - [$method, resource_in_screen, Boss队伍]
+    - - $all
+      - - - $le
+          - [FightIndexMod]
+          - 5
+        - [$method, resource_in_screen, Boss队伍]
 - Actions:
   - {Target: normal_fight, Type: InnerCall}
   Condition:
-  - $in
-  - [$val, FightIndexMod]
+  - $contains
   - [0, 1, 2, 4]
+  - [FightIndexMod]
 - Actions:
   - {Target: search_bonus, Type: InnerCall}
   - {Time: 2, Type: Wait}
@@ -95,7 +114,7 @@ Strategy:
   - {Target: search_bonus, Type: InnerCall}
   Condition:
   - $eq
-  - [$val, FightIndexMod]
+  - [FightIndexMod]
   - 3
 - Actions:
   - {Target: 切换舰队, Type: Click}
@@ -105,6 +124,7 @@ Strategy:
     args: [D3]
   Condition:
   - $eq
-  - [$val, FightIndexMod]
+  - [FightIndexMod]
   - 5
-ViewPort: [D2, D3, E4, E2]
+ViewPoints: [D2, D3, E4, E2]
+FightCount: 6
