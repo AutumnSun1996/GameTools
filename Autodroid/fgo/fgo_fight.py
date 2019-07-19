@@ -170,7 +170,33 @@ class FateGrandOrder(SimulatorControl):
     def reset_combat_info(self):
         self.combat_info = defaultdict(lambda: 0)
 
+    def extract_enemy_hp(self):
+        """提取敌人HP信息"""
+        hp_max = 0
+        hp_max_idx = 0
+        for i in range(3):
+            img = self.crop_resource("战斗-敌人血量", index=i)
+            check = img.mean(2).max(0)[::-1]
+            if check.max() < 200 or img.std() < 50:
+                hp = 0
+            else:
+                hp = 100 * np.where(check > 200)[0].max() / len(check)
+            logger.info("敌人%d 血量数字长度%f", i, hp)
+            self.combat_info["EnemyHP%d" % (i+1)] = hp
+            if hp > hp_max:
+                hp_max = hp
+                hp_max_idx = i + 1
+        self.combat_info["EnemyMaxHP"] = hp_max
+        self.combat_info["MaxHPEnemyIdx"] = hp_max_idx
+
+    def check_hard_enemy(self, thresh=65):
+        self.extract_enemy_hp()
+        if self.combat_info["EnemyMaxHP"] > thresh:
+            self.click_at_resource("战斗-敌人位置", index=self.combat_info["MaxHPEnemyIdx"]-1)
+        self.wait(2)
+
     def extract_combat_info(self, repeat=0):
+        """提取战斗轮次、从者NP、敌人HP等信息"""
         if not self.scene_changed:
             return
         self.make_screen_shot()
@@ -199,7 +225,6 @@ class FateGrandOrder(SimulatorControl):
             self.combat_info["BattleNow"] = now
             self.combat_info["BattleTotal"] = total
             self.combat_info["BattleLeft"] = total - now
-
         except (AttributeError, IndexError, ValueError) as err:
             errors.append(err)
 
@@ -222,6 +247,7 @@ class FateGrandOrder(SimulatorControl):
             errors.append(err)
 
         self.extract_np_info(False)
+        # self.extract_enemy_hp()
         if errors:
             self.notice("OCR Errors %s" % errors)
             self.wait(1)

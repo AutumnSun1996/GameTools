@@ -515,6 +515,15 @@ Quick:
   - [249, 0]
   - [488, 0]
   Type: MultiStatic
+战斗-敌人血量:
+  Size: [130, 20]
+  MainSize: [1280, 720]
+  Name: 战斗-敌人血量
+  Positions:
+  - [88, 43]
+  - [329, 43]
+  - [568, 43]
+  Type: MultiStatic
 战斗菜单:
   Image: 战斗菜单.png
   MainSize: [1280, 720]
