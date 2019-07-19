@@ -1,4 +1,4 @@
-Description: '队伍: 助战孔明, 剑龙娘, SaberLily'
+Description: '队伍: 助战孔明, 美杜莎Lily, 幼贞'
 Name: 大号-通用
 Resources: {}
 Scenes:
@@ -58,16 +58,6 @@ Strategy:
     - - [$eq, [TurnOfBattle], 1]
       - [$le, [BattleLeft], 1]
     Description: 选择敌人
-  # - Actions:
-  #   - Target: use_skills
-  #     Type: InnerCall
-  #     args:
-  #     - [3, 1]
-  #   Condition:
-  #   - $all
-  #   - - [$eq, [TurnOfBattle], 1]
-  #     - [$eq, [BattleLeft], 0]
-  #   Description: 美杜莎1
   # 立刻使用
   - Actions:
     - Target: use_skills
@@ -75,10 +65,8 @@ Strategy:
       args:
       - [1, 2]
       - [1, 3]
-      - [3, 1]
-      - [3, 3]
     - {Target: extract_np_info, Type: InnerCall}
-    Description: 孔明23, Lily13
+    Description: 孔明23
   # 充能
   - Actions:
     - Target: use_skills
@@ -91,28 +79,38 @@ Strategy:
     - [NP2]
     - 100
     Description: 孔明1充能
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 2]
+    - {Target: extract_np_info, Type: InnerCall}
+    Condition:
+    - $lt
+    - [NP3]
+    - 100
+    Description: 幼贞2自充
   # 宝具准备
-  # - Actions:
-  #   - Target: use_skills
-  #     Type: InnerCall
-  #     args:
-  #     - [2, 2, 2]
-  #   Condition:
-  #   - $all
-  #   - - - $ge
-  #       - [NP3]
-  #       - 100
-  #     - - $le
-  #       - [BattleLeft]
-  #       - 0
-  #   Description: 2面宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [3, 3]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP3]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 2面宝具准备
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
       - [0, 2, 2]
-      - [2, 2, 2]
-      - [3, 3]
+      - [2, 2]
     Condition:
     - $all
     - - - $ge
