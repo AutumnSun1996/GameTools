@@ -43,6 +43,8 @@ Resources:
     Offset: [1156, 140]
     Size: [50, 24]
     Type: Static
+    MaxDiff: 0.0001
+
   演习敌人列表:
     MainSize: [1280, 720]
     Name: 演习敌人列表
