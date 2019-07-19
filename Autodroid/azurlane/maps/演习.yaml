@@ -26,59 +26,45 @@ Resources:
     Image: 主界面-出击.png
     MainSize: [1280, 720]
     Name: 主界面-出击
-    Offset: [1000, 360]
-    Size: [180, 70]
+    Offset: [1010, 300]
+    Size: [140, 120]
     Type: Static
   演习:
     Image: 演习.png
     MainSize: [1280, 720]
     Name: 演习
-    Offset: [1120, 655]
-    Size: [130, 40]
+    Offset: [1110, 650]
+    Size: [140, 50]
     Type: Static
   演习次数0:
+    Image: 演习次数0.png
     MainSize: [1280, 720]
     Name: 演习次数0
-    Image: 演习次数0.png
-    Offset: [1100, 270]
-    Size: [80, 30]
-    Type: Static
-    MaxDiff: 0.001
-  演习次数:
-    MainSize: [1280, 720]
-    Name: 演习次数
-    Offset: [1100, 270]
-    Size: [80, 30]
+    Offset: [1156, 140]
+    Size: [50, 24]
     Type: Static
   演习敌人列表:
     MainSize: [1280, 720]
     Name: 演习敌人列表
-    Positions:
-    - [80, 120]
-    - [327, 120]
-    - [574, 120]
-    - [821, 120]
-    Size: [160, 260]
+    Positions: [[116,  90],
+       [360,  90],
+       [604,  90],
+       [848,  90]]
+    Size: [180, 240]
     Type: MultiStatic
   更换对手:
     Image: 更换对手.png
     MainSize: [1280, 720]
     Name: 更换对手
-    Offset: [1070, 350]
-    Size: [160, 50]
+    Offset: [1065, 340]
+    Size: [140, 43]
     Type: Static
   开始演习:
     Image: 开始演习.png
     MainSize: [1280, 720]
     Name: 开始演习
-    Offset: [936, 608]
-    Size: [220, 70]
-    Type: Static
-  返回:
-    MainSize: [1280, 720]
-    Name: 返回
-    Offset: [0, 0]
-    Size: [80, 50]
+    Offset: [542, 540]
+    Size: [200, 60]
     Type: Static
 
 Scenes:
@@ -94,7 +80,6 @@ Scenes:
     - {Time: 1, Type: Wait}
     Condition: [碧蓝航线APP]
     Name: 游戏外界面
-    Next: [登录界面]
   登录界面:
     Actions:
     - {Target: 点击登录, Type: Click}
