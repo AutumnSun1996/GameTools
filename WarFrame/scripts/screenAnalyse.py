@@ -195,7 +195,7 @@ if __name__ == "__main__":
     print(hwnd)
     screen = get_window_shot(hwnd)
     print(sys.argv)
-    cv_save("shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen)
+    cv_save("images/shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen)
     if len(sys.argv) == 1:
         cv.imshow("ScreenShot", screen)
         cv.waitKey(0)
