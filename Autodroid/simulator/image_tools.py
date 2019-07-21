@@ -130,11 +130,23 @@ def load_resources(section):
 def load_map(name, section):
     with open(os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".yaml"), "r", -1, "UTF-8") as fl:
         items = yaml.load(fl)
-    for val in items["Resources"].values():
+    for val in items.get("Resources", {}).values():
         update_resource(val, section)
     if "Anchors" in items:
         for val in items["Anchors"].values():
             update_resource(val, section)
+    if "LoadTemplate" in items:
+        base_items = load_map(items["LoadTemplate"], section)
+        logger.info("LoadTemplate %s", items["LoadTemplate"])
+        for item_path in items["OverRide"]:
+            cur = base_items
+            cur_new = items
+            for part in item_path[:-1]:
+                cur = cur[part]
+                cur_new = cur_new[part]
+            cur[item_path[-1]] = cur_new[item_path[-1]]
+            logger.info("UpdateTemplate %s", item_path)
+        items = base_items
     return items
 
 

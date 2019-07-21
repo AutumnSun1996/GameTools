@@ -1,0 +1,4 @@
+Name: 大号-术
+LoadTemplate: 帝都/小-术
+OverRide: 
+- [Name]
