@@ -2,8 +2,8 @@ AP不足:
   Image: AP不足.png
   MainSize: [1280, 720]
   Name: AP不足
-  Offset: [540, 36]
-  Size: [200, 60]
+  Offset: [536, 36]
+  Size: [210, 60]
   Type: Static
 AP不足-关闭:
   Image: AP不足-关闭.png
@@ -190,7 +190,7 @@ Quick:
   Size: [200, 40]
   Type: Static
 剧情-跳过:
-  Image: 剧情-跳过.png
+  Image: 剧情-跳过.jpg
   MainSize: [1280, 720]
   Name: 剧情-跳过
   Offset: [1124, 10]
