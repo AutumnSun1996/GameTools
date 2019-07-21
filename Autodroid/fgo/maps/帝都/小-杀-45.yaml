@@ -1,5 +1,3 @@
-Description: '队伍: 助战梅林, 卡米拉, 赛弥拉弥斯'
-Name: 小号-杀阶-45
 LoadTemplate: 帝都/小-杀
 OverRide: 
 - [Strategy, AssistCondition]

@@ -1,5 +1,3 @@
-Description: '队伍: 助战孔明, 卡米拉, 赛弥拉弥斯'
-Name: 小号-通用
 LoadTemplate: 帝都/小-剑
 OverRide: 
 - [Strategy, AssistCondition]

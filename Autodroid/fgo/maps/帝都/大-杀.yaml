@@ -1,4 +1,4 @@
-Description: '队伍: 助战梅林, 卡米拉, 赛弥拉弥斯'
+Description: '队伍: 助战孔明, 茶茶, 尼托'
 Name: 大号-通用
 Resources: {}
 Scenes:
@@ -30,14 +30,12 @@ Scenes:
 Strategy:
   AssistCondition:
   - $all
-  - - [助战/梅林]
+  - - [助战/孔明]
     - [助战-礼装满破]
-    - $any
-    - - false
-      - [礼装/帝都/研磨锐牙之暗剑]
-      # - [礼装/帝都/坂本侦探事务所]
-      - [礼装/帝都/帝都圣杯战争]
-      # - [礼装/帝都/白衣水手小姐]
+    # - [礼装/帝都/研磨锐牙之暗剑]
+    - [礼装/帝都/坂本侦探事务所]
+    # - [礼装/帝都/帝都圣杯战争]
+    # - [礼装/帝都/白衣水手小姐]
   CardChoice:
   - Choice:
     - - 2
@@ -63,50 +61,41 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [2, 1]
+      - [2, 3]
     Condition: [$le, [BattleLeft], 0]
-    Description: 武则天2
+    Description: 茶茶3
   # 立刻使用
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [1, 1]
-      - [2, 3]
+      - [1, 2]
+      - [1, 3]
+      - [2, 1]
+      - [2, 2]
+      - [3, 1]
       - [3, 2]
+      - [3, 3]
     - {Target: extract_np_info, Type: InnerCall}
-    Description: 梅林1, 武则天3, 赛弥拉弥斯2
+    Description: 孔明23, 茶茶12, 尼托123
   # 充能
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [3, 1]
-    - {Target: extract_np_info, Type: InnerCall}
-    Condition:
-    - $lt
-    - [NP3]
-    - 100
-    Description: 赛弥拉弥斯1自充
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [2, 1]
+      - [1, 1, 2]
     - {Target: extract_np_info, Type: InnerCall}
     Condition:
     - $lt
     - [NP2]
     - 100
-    Description: 卡米拉1自充
+    Description: 孔明1充能
   # 宝具准备
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
       - [0, 2, 2]
-      - [2, 2]
-      - [1, 3, 2]
     Condition:
     - $all
     - - - $ge
@@ -121,7 +110,7 @@ Strategy:
     - $le
     - [BattleLeft]
     - 0
-    Description: 梅林
+    Description: 孔明
     Target: 1
   - Condition: 
     - $le

@@ -1,4 +1,4 @@
-LoadTemplate: 帝都/大-杀
+LoadTemplate: 帝都/小-术
 OverRide: 
 - [Strategy, AssistCondition]
 Strategy:
@@ -8,7 +8,7 @@ Strategy:
     - [助战-礼装满破]
     - $any
     - - false
-      # - [礼装/帝都/研磨锐牙之暗剑]
+      - [礼装/帝都/研磨锐牙之暗剑]
       - [礼装/帝都/坂本侦探事务所]
       # - [礼装/帝都/帝都圣杯战争]
       # - [礼装/帝都/白衣水手小姐]
