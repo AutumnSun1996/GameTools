@@ -1,4 +1,4 @@
-Description: '队伍: 助战孔明, 茶茶, 海伦娜'
+Description: '队伍: 助战孔明, 茶茶, 骑凛'
 Name: 大号-通用
 Resources: {}
 Scenes:
@@ -7,9 +7,9 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 3]
+      - [$method, resource_in_screen, 队伍选择, 5]
       Target: 队伍选择
-      Index: 3
+      Index: 5
       Type: Click
     - Condition:
       - $le
@@ -32,8 +32,8 @@ Strategy:
   - $all
   - - [助战/孔明]
     - [助战-礼装满破]
-    - [礼装/帝都/研磨锐牙之暗剑]
-    # - [礼装/帝都/坂本侦探事务所]
+    # - [礼装/帝都/研磨锐牙之暗剑]
+    - [礼装/帝都/坂本侦探事务所]
     # - [礼装/帝都/帝都圣杯战争]
     # - [礼装/帝都/白衣水手小姐]
   CardChoice:
@@ -74,9 +74,9 @@ Strategy:
       - [2, 1]
       - [2, 2]
       - [3, 1]
-      - [3, 3]
+      - [3, 2]
     - {Target: extract_np_info, Type: InnerCall}
-    Description: 孔明23, 茶茶12, 海伦娜13
+    Description: 孔明23, 茶茶12, 骑凛12
   # 充能
   - Actions:
     - Target: use_skills
@@ -90,20 +90,6 @@ Strategy:
     - 100
     Description: 孔明1充能
   # 宝具准备
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [3, 2]
-    Condition:
-    - $all
-    - - - $ge
-        - [NP3]
-        - 100
-      - - $le
-        - [BattleLeft]
-        - 1
-    Description: 2面宝具准备
   - Actions:
     - Target: use_skills
       Type: InnerCall

@@ -1,4 +1,4 @@
-LoadTemplate: 帝都/小-杀
+LoadTemplate: 帝都/大-骑
 OverRide: 
 - [Strategy, AssistCondition]
 Strategy:

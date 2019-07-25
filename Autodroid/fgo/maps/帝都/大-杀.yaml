@@ -83,11 +83,11 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [1, 1, 2]
+      - [1, 1, 3]
     - {Target: extract_np_info, Type: InnerCall}
     Condition:
     - $lt
-    - [NP2]
+    - [NP3]
     - 100
     Description: 孔明1充能
   # 宝具准备

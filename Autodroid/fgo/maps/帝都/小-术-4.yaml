@@ -1,0 +1,12 @@
+LoadTemplate: 帝都/小-术
+OverRide: 
+- [Strategy, AssistCondition]
+Strategy:
+  AssistCondition:
+  - $all
+  - - [助战/孔明]
+    - [助战-礼装满破]
+    # - [礼装/帝都/研磨锐牙之暗剑]
+    - [礼装/帝都/坂本侦探事务所]
+    # - [礼装/帝都/帝都圣杯战争]
+    # - [礼装/帝都/白衣水手小姐]
