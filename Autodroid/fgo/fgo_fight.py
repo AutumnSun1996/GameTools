@@ -189,7 +189,7 @@ class FateGrandOrder(SimulatorControl):
         self.combat_info["EnemyMaxHP"] = hp_max
         self.combat_info["MaxHPEnemyIdx"] = hp_max_idx
 
-    def check_hard_enemy(self, thresh=65):
+    def check_hard_enemy(self, thresh=60):
         self.extract_enemy_hp()
         if self.combat_info["EnemyMaxHP"] > thresh:
             self.click_at_resource("战斗-敌人位置", index=self.combat_info["MaxHPEnemyIdx"]-1)
