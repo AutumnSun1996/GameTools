@@ -102,7 +102,7 @@ class SimulatorControl:
         return time.time() - self.last_manual
 
     def manual(self):
-        if self.scene_changed or self.since_last_manual > 30:
+        if self.since_last_manual > 30:
             self.go_top()
             win32api.MessageBeep()
             self.last_manual = time.time()
