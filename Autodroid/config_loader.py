@@ -18,7 +18,7 @@ def set_logging_dir(log_dir="logs"):
     logging.config.dictConfig(conf)
 
 logger = logging.getLogger(__name__)
-logger.info("Loggin Inited...")
+logger.info("Logging Inited...")
 
 config = ConfigParser()
 config.read("config/common.conf", encoding="UTF-8")
