@@ -52,7 +52,7 @@ COMMANDER:
   MainSize: [1280, 720]
   Name: 进入地图-立刻前往
   Size: [202, 64]
-  Offset: [852, 474]
+  Offset: [852, 486]
   Type: Static
 确认经验:
   Image: 确定.jpg
