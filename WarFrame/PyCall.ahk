@@ -12,12 +12,15 @@ cmdReturn(command){
 
 ^=::
 ToolTip, %A_Now%.%A_MSec%
-RunWait,python.exe MineHelper.py test %A_Now%.%A_MSec%,D:\Documents\GameRoutes\WarFrame\scripts,Hide
+dt = %A_Now%.%A_MSec%
+RunWait,python.exe MineHelper.py test %dt%,D:\Documents\GameRoutes\WarFrame\scripts,Hide
+Sleep, 500
+ToolTip,
 Return
 
 #IfWinActive Warframe
 =::
-ToolTip, Start.
+ToolTip, Start, 5,5
 Click, down
 RunWait,python.exe MineHelper.py mine %A_Now%.%A_MSec%,D:\Documents\GameRoutes\WarFrame\scripts,Hide
 ToolTip, End.

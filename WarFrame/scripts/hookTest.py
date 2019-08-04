@@ -6,6 +6,7 @@ By AutumnSun
 import PyHook3 as pyhook
 from collections import defaultdict
 import pythoncom
+import win32con as C
 import win32api
 
 import config
@@ -93,7 +94,13 @@ class MyHookManager(object):
     def checkEvent(self, event):
         if event.FullName in self.keyHooks[event.action]:
             for func in self.keyHooks[event.action][event.FullName]:
-                ret = func(event)
+                if isinstance(func, dict):
+                    args = func.get("args", [])
+                    kwargs = func.get("kwargs", {})
+                    func = func["func"]
+                    ret = func(event, *args, **kwargs)
+                else:
+                    ret = func(event)
                 if not ret:
                     return False
 
@@ -145,12 +152,23 @@ def hold(event):
     print("Hold:", event.Key)
     return False
 
-def send_a(event):
-    win32api.keybd_event(65, 0, 0, 0)
+
+def send_keys(event, *keys):
+    show(event)
+    print("Send", keys)
+    for k in keys:
+        win32api.keybd_event(k, 0, 0, 0)
     return False
 
+def send_keys_up(event, *keys):
+    show(event)
+    print("Send", keys)
+    for k in keys:
+        win32api.keybd_event(k, 0, C.KEYEVENTF_KEYUP, 0)
+    return False
+
+
 if __name__ == "__main__":
-    print(config.DEBUG)
     manager = MyHookManager()
     # manager.on("Capital", show)
     # manager.on("Ctrl+A", show)
@@ -158,7 +176,13 @@ if __name__ == "__main__":
     manager.onKey("Alt+Tab", ["down", "press", "up"], hold)
     manager.onKey("Win+Ctrl+Right", ["down", "press", "up"], show)
     manager.onKey("Alt+Tab", ["press"], hold)
-    manager.onKey("Numpad0", ["down", "press"], send_a)
-    manager.onKey("*", ["down", "press", "mouse", "up"], show)
+    manager.onKey("Ctrl+1", ["down", "press"],
+                  {"func": send_keys, "args": [C.VK_NUMPAD0]})
+    manager.onKey("P", ["down", "press"],
+                  {"func": send_keys, "args": [27]})
+    manager.onKey("P", ["up"],
+                  {"func": send_keys_up, "args": [27]})
+    # manager.onKey("A", ["down", "press"], show)
+    manager.onKey("*", ["down", "press", "up"], show)
 
     manager.waitKeys()

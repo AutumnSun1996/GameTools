@@ -1,7 +1,7 @@
 import time
 T0 = time.time()
 import logging
-logging.basicConfig(level="INFO", filename="tmp.log", format="%(asctime)s:%(levelname)s:%(funcName)s[%(lineno)d]:%(message)s")
+logging.basicConfig(level="WARNING", filename="tmp.log", format="%(asctime)s:%(levelname)s:%(funcName)s[%(lineno)d]:%(message)s")
 logger = logging.getLogger()
 logger.warning("Inited At %s", T0)
 import os
@@ -17,9 +17,11 @@ logger.info("Import End")
 POS_PER_SEC = 258.07
 CENTER = (1438, 940)
 RADIUS = 300
-PRE_RELEASE = 150
-SAVE_SHOTS = True
+PRE_RELEASE = 60
+SAVE_SHOTS = False
 MAX_PRESSING = 5
+
+checked = 0
 
 def get_match(image, needle):
     """在image中搜索needle"""
@@ -70,14 +72,15 @@ def split_bgra(bgra):
     mask = np.concatenate((a, a, a), axis=2)
     return bgr, mask
 
-def get_match_x(image, needle):
+def get_match_x(image, match):
     """在image中搜索needle的横向位置"""
-    needle, mask = split_bgra(needle)
+    needle, mask = match
     match = 1 - cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask)
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, min_loc[0]
 
 def check_screen(left, right, extra):
+    global checked
     x, y = CENTER
     r = RADIUS
     screen = get_shot(0, x-r, y-r, 2*r, 2*r)
@@ -93,39 +96,59 @@ def check_screen(left, right, extra):
         logger.info("%s Saved.", name)
 
     diffe, xe = get_match_x(ring, extra)
-    xe += extra.shape[2] / 2
+    checked += 1
+    xe += extra[0].shape[2] / 2
     if diffe < 0.2:
         logger.info("Found Extra=%s", xe)
         return xe
     diff0, x0 = get_match_x(ring, left)
     diff1, x1 = get_match_x(ring, right)
-    x1 += right.shape[1]
-    if diff0 > 0.2 or diff1 > 0.2:
-        logger.info("Not Valid Match.")
+    x1 += right[0].shape[1]
+    if diff0 > 0.3 or diff1 > 0.3:
+        name = "shots/NoMatch-{}+{}.png".format(T0, time.time()-T0)
+        cv.imwrite(name, ring)
+        logger.warning("Not Valid Match. diff=%s, %s, %s for %s", diffe, diff0, diff1, name)
         return None
     logger.info("Found left=%s, right=%s", x0, x1)
     return (x0+x1) / 2
 
 
 def check_mine():
-    left = cv_imread("resources/MarkLeft.png")
-    right = cv.rotate(left, cv.ROTATE_180)
-    extra = cv_imread("resources/MarkExtra.png")
+    match_left = cv_imread("resources/MarkLeft.png")
+    match_right = cv.rotate(match_left, cv.ROTATE_180)
+    match_extra = cv_imread("resources/MarkExtra.png")
+    match_left = split_bgra(match_left)
+    match_right = split_bgra(match_right)
+    match_extra = split_bgra(match_extra)
     logger.info("Res Loaded")
     while True:
         dt = time.time() - T0
         pos = dt * POS_PER_SEC
-        target_pos = check_screen(left, right, extra)
+        target_pos = check_screen(match_left, match_right, match_extra)
         if target_pos is None:
             if dt > MAX_PRESSING:
-                logger.warning("Release for no valid match in %ss", dt)
+                logger.warning("Timeout at %ss", dt)
                 return
             continue
-        diff = target_pos - pos
-        if diff < PRE_RELEASE:
-            logger.info("Pos=%s, Target=%s. Release in %ss", pos, target_pos, dt)
+        left = (target_pos - pos - PRE_RELEASE) / POS_PER_SEC
+        logger.info("Pos=%s, Target=%s, left=%s at %ss", pos, target_pos, left, dt)
+        if 0 < left < 0.4:
+            logger.info("Wait and check.")
+            time.sleep(0.2)
+            logger.info("Use previous target_pos %s.", target_pos)
+            dt = time.time() - T0
+            pos = dt * POS_PER_SEC
+            left = (target_pos - pos - PRE_RELEASE) / POS_PER_SEC
+
+        if left < 0:
+            logger.info("Release.")
             return
-        logger.info("Pos=%s, Target=%s. Wait.", pos, target_pos)
+        if left < 0.2:
+            logger.info("Wait and release.", pos, target_pos, left)
+            time.sleep(left)
+            logger.info("Release in %ss", time.time() - T0)
+            return
+        logger.info("Wait.", pos, target_pos)
         # time.sleep(wait)
 
 def shot():
@@ -154,6 +177,7 @@ def main():
         shot()
     else:
         check_mine()
+        logger.warning("Checked=%d, fps=%.3f", checked, checked / (time.time() - T0))
     logger.info("End Main")
 
 
@@ -162,7 +186,7 @@ if __name__ == "__main__":
     try:
         T1 = T0
         T0 = datetime.datetime.strptime(sys.argv[2], "%Y%m%d%H%M%S.%f").timestamp()
-        logger.info("Recorded T0 - Given T0=%s. Update T0 to %s", T0-T1, T0)
+        logger.info("Recorded T0 - Given T0=%s. Update T0 to %s", T1-T0, T0)
     except Exception as err:
         logger.warning("Parse failed, use original T0=%s", T0)
 
