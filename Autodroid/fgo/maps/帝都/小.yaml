@@ -1,4 +1,4 @@
-Description: '队伍: 助战孔明, 茶茶, 骑凛'
+Description: '队伍: 助战梅林, 茶茶, 北斋'
 Name: 大号-通用
 Resources: {}
 Scenes:
@@ -7,9 +7,9 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 5]
+      - [$method, resource_in_screen, 队伍选择, 9]
       Target: 队伍选择
-      Index: 5
+      Index: 9
       Type: Click
     - Condition:
       - $le
@@ -30,7 +30,7 @@ Scenes:
 Strategy:
   AssistCondition:
   - $all
-  - - [助战/孔明]
+  - - [助战/梅林]
     - [助战-礼装满破]
     # - [礼装/帝都/研磨锐牙之暗剑]
     # - [礼装/帝都/坂本侦探事务所]
@@ -69,32 +69,45 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [1, 2]
-      - [1, 3]
+      - [1, 1]
       - [2, 1]
       - [2, 2]
-      - [3, 1]
-      - [3, 2]
+      - [3, 3]
     - {Target: extract_np_info, Type: InnerCall}
-    Description: 孔明23, 茶茶12, 骑凛12
+    Description: 梅林1, 茶茶12, 北斋3
   # 充能
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [1, 1, 3]
+      - [3, 1]
     - {Target: extract_np_info, Type: InnerCall}
     Condition:
     - $lt
     - [NP3]
     - 100
-    Description: 孔明1充能
+    Description: 北斋1自充
   # 宝具准备
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
+      - [3, 2]
+    Condition:
+    - $all
+    - - - $ge
+        - [NP3]
+        - 100
+      - - $le
+        - [BattleLeft]
+        - 1
+    Description: 2面宝具准备
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
       - [0, 2, 2]
+      - [1, 3, 2]
     Condition:
     - $all
     - - - $ge
@@ -105,11 +118,8 @@ Strategy:
         - 0
     Description: 3面宝具准备
   UseNP:
-  - Condition:
-    - $le
-    - [BattleLeft]
-    - 0
-    Description: 孔明
+  - Condition: true
+    Description: 梅林
     Target: 1
   - Condition: 
     - $le

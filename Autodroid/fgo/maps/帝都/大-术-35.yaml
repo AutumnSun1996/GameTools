@@ -1,12 +1,12 @@
 Name: 大号-术
-LoadTemplate: 帝都/小-术
+LoadTemplate: 帝都/大-术
 OverRide: 
 - [Name]
 - [Strategy, AssistCondition]
 Strategy:
   AssistCondition:
   - $all
-  - - [助战/孔明]
+  - - [助战/梅林]
     - [助战-礼装满破]
     - - $any
       - - false
