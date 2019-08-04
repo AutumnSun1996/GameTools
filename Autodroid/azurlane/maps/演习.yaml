@@ -115,7 +115,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     Condition: [更换对手]
     Name: 外部地图
-    Next: [战斗准备, 战斗地图]
+    Next: [战斗准备]
   中间界面:
     Actions:
     - {Target: 返回, Type: Click}
