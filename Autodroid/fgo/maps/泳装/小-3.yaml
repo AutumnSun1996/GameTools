@@ -16,6 +16,7 @@ Strategy:
   AssistCondition:
   - $all
   - - [助战/尼禄]
+    - [助战-宝具可用]
     - [助战-礼装满破]
     - - $any
       - - false
