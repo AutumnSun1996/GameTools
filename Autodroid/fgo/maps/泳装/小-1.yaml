@@ -9,6 +9,15 @@ Resources:
     ClickSize: [600, 80]
     Size: [50, 36]
     Type: Dynamic
+  道具:
+    MainSize: [1280, 720]
+    Name: 道具
+    Size: [600, 80]
+    Positions:
+    - [340, 180]
+    - [340, 320]
+    - [340, 480]
+    Type: MultiStatic
   确定:
     Image: 确定.png
     MainSize: [1280, 720]
@@ -39,7 +48,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     - {Target: 开始任务, Type: Click}
     - {Time: 1, Type: Wait}
-    - {Target: 点数3倍, Type: Click, Wait: true}
+    - {Target: 道具, Type: Click, Index: 1}
     - {Time: 1, Type: Wait}
     - {Target: 确定, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
