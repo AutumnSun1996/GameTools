@@ -1,4 +1,4 @@
-Description: '队伍: 助战尼禄, 阿塔, 海伦娜'
+Description: '队伍: 助战尼禄, 阿塔, 骑凛'
 Name: 小号-通用
 Resources:
   点数3倍:
@@ -101,9 +101,9 @@ Strategy:
       args:
       - [1, 2]
       - [3, 1]
-      - [3, 3]
+      - [3, 2]
     - {Target: extract_np_info, Type: InnerCall}
-    Description: 尼禄2, 海伦娜13
+    Description: 尼禄2, 骑凛12
   # 充能
   - Actions:
     - Target: use_skills
@@ -146,16 +146,6 @@ Strategy:
         - [BattleLeft]
         - 1
     Description: 2面-阿塔宝具准备
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [3, 2]
-    Condition:
-    - $ge
-    - [NP3]
-    - 100
-    Description: 1面-海伦娜宝具准备
   UseNP:
   - Condition: true
     Description: 海伦娜
