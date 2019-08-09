@@ -147,8 +147,11 @@ Strategy:
         - 1
     Description: 2面-阿塔宝具准备
   UseNP:
-  - Condition: true
-    Description: 海伦娜
+  - Condition: 
+    - $le
+    - [BattleLeft]
+    - 1
+    Description: 骑凛
     Target: 3
   - Condition: 
     - $le
