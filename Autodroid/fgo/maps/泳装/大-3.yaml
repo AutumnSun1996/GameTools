@@ -25,7 +25,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     - {Target: 开始任务, Type: Click}
     - {Time: 1, Type: Wait}
-    - {Target: 道具, Type: Click, Index: 1}
+    - {Target: 道具, Type: Click, Index: 0}
     - {Time: 1, Type: Wait}
     - {Target: 确定, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
@@ -50,3 +50,4 @@ Strategy:
         - [礼装/泳装/小小夏日]
         # 通用
         - [礼装/泳装/海滨奢华]
+        - [礼装/泳装/潜入湛蓝]
