@@ -25,7 +25,8 @@ Scenes:
     - {Time: 1, Type: Wait}
     - {Target: 开始任务, Type: Click}
     - {Time: 1, Type: Wait}
-    - {Target: 道具, Type: Click, Index: 0}
+    - {Target: 点数3倍, Type: Click, Wait: true}
+    # - {Target: 道具, Type: Click, Index: 0}
     - {Time: 1, Type: Wait}
     - {Target: 确定, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
