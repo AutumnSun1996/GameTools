@@ -1,7 +1,14 @@
 Description: '队伍: 助战骑凛, 弗兰, 骑凛, '
 Name: 大号-通用
 Resources:
-
+  下一个:
+    Image: Num2.png
+    MainSize: [1280, 720]
+    Name: Num2
+    Size: [32, 32]
+    ClickOffset: [-50, 30]
+    ClickSize: [40, 80]
+    Type: Dynamic
   点数3倍:
     Image: 点数3倍.png
     MainSize: [1280, 720]
