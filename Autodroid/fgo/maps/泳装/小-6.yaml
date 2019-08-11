@@ -1,4 +1,4 @@
-LoadTemplate: 泳装/大-1
+LoadTemplate: 泳装/小-4
 OverRide: 
 - [Strategy, AssistCondition]
 - [Scenes, 队伍确认, Actions]
@@ -8,7 +8,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 3]
+      - [$method, resource_in_screen, 队伍选择, 4]
       Target: 队伍选择
       Index: 3
       Type: Click
@@ -26,7 +26,7 @@ Scenes:
     - {Target: 开始任务, Type: Click}
     - {Time: 1, Type: Wait}
     - {Target: 点数3倍, Type: Click, Wait: true}
-    # - {Target: 道具, Type: Click, Index: 0}
+    # - {Target: 道具, Type: Click, Index: 1}
     - {Time: 1, Type: Wait}
     - {Target: 确定, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
@@ -36,7 +36,7 @@ Scenes:
 Strategy:
   AssistCondition:
   - $all
-  - - [助战/尼禄]
+  - - [助战/伊什塔尔]
     - [助战-宝具可用]
     - [助战-礼装满破]
     - - $any

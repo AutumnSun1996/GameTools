@@ -1,5 +1,5 @@
-Description: '队伍: 助战尼禄, 骑凛, 尼托'
-Name: 大号-通用
+Description: '队伍: 助战骑凛, 西行者, 骑凛'
+Name: 小号-通用
 Resources:
   点数3倍:
     Image: 点数3倍.png
@@ -31,7 +31,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 1]
+      - [$method, resource_in_screen, 队伍选择, 3]
       Target: 队伍选择
       Index: 1
       Type: Click
@@ -48,8 +48,8 @@ Scenes:
     - {Time: 1, Type: Wait}
     - {Target: 开始任务, Type: Click}
     - {Time: 1, Type: Wait}
-    # - {Target: 道具, Type: Click, Index: 0}
     - {Target: 点数3倍, Type: Click, Wait: true}
+    # - {Target: 道具, Type: Click, Index: 1}
     - {Time: 1, Type: Wait}
     - {Target: 确定, Type: Click, Wait: true}
     - {Time: 1, Type: Wait}
@@ -59,7 +59,7 @@ Scenes:
 Strategy:
   AssistCondition:
   - $all
-  - - [助战/尼禄]
+  - - [助战/伊什塔尔]
     - [助战-宝具可用]
     - [助战-礼装满破]
     - - $any
@@ -75,7 +75,6 @@ Strategy:
         # 通用
         # - [礼装/泳装/海滨奢华]
         - [礼装/泳装/潜入湛蓝]
-
   CardChoice:
   - Choice:
     - - 2
@@ -102,58 +101,58 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
+      - [1, 1]
       - [1, 2]
-      - [2, 1]
       - [2, 2]
+      - [2, 3]
       - [3, 1]
       - [3, 2]
-      - [3, 3]
     - {Target: extract_np_info, Type: InnerCall}
-    Description: 尼禄2, 骑凛12, 尼托123
+    Description: 助战骑凛12, 西行者23, 骑凛12
   # 充能
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [1, 1]
-    - {Target: extract_np_info, Type: InnerCall}
-    Condition:
-    - $lt
-    - [NP1]
-    - 100
-    Description: 尼禄1
+  # - Actions:
+  #   - Target: use_skills
+  #     Type: InnerCall
+  #     args:
+  #     - [1, 1]
+  #   - {Target: extract_np_info, Type: InnerCall}
+  #   Condition:
+  #   - $lt
+  #   - [NP1]
+  #   - 100
+  #   Description: 
   # 宝具准备
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [0, 2, 1]
-      - [1, 3, 1]
+      - [0, 2, 2]
+      - [2, 1]
     Condition:
     - $all
     - - - $ge
-        - [NP1]
-        - 100
+        - [NP2]
+        - 25
       - - $le
         - [BattleLeft]
         - 0
-    Description: 3面-尼禄宝具准备
+    Description: 西行者1
   UseNP:
   - Condition:
     - $le
     - [BattleLeft]
     - 0
-    Description: 尼托
-    Target: 3
+    Description: 西行者
+    Target: 2
   - Condition: 
     - $le
     - [BattleLeft]
     - 1
     Description: 骑凛
-    Target: 2
-  - Condition:
+    Target: 3
+  - Condition: 
     - $le
     - [BattleLeft]
     - 0
-    Description: 尼禄
+    Description: 骑凛
     Target: 1

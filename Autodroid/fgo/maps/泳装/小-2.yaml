@@ -8,7 +8,7 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 2]
+      - [$method, resource_in_screen, 队伍选择, 1]
       Target: 队伍选择
       Index: 2
       Type: Click
