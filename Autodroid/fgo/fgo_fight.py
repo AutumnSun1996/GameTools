@@ -176,7 +176,7 @@ class FateGrandOrder(SimulatorControl):
         hp_max_idx = 0
         for i in range(3):
             img = self.crop_resource("战斗-敌人血量", index=i)
-            check = img.mean(2).max(0)[::-1]
+            check = img[:10].mean(2).max(0)[::-1]
             if check.max() < 200 or img.std() < 50:
                 hp = 0
             else:

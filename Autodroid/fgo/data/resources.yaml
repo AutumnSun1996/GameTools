@@ -520,9 +520,9 @@ Quick:
   MainSize: [1280, 720]
   Name: 战斗-敌人血量
   Positions:
-  - [88, 43]
-  - [329, 43]
-  - [568, 43]
+  - [90, 43]
+  - [331, 43]
+  - [570, 43]
   Type: MultiStatic
 战斗菜单:
   Image: 战斗菜单.png
