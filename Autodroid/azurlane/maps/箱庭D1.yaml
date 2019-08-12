@@ -1,0 +1,239 @@
+Anchors:
+  箱庭D1/D2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/D2.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/D2
+    OnMap: D2
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/E2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/E2.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/E2
+    OnMap: E2
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/E3:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/E3.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/E3
+    OnMap: E3
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/H1:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/H1.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/H1
+    OnMap: H1
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/H2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/H2.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/H2
+    OnMap: H2
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/B6:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/B6.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/B6
+    OnMap: B6
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/C6:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/C6.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/C6
+    OnMap: C6
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/H6:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/H6.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/H6
+    OnMap: H6
+    Size: [60, 60]
+    Type: Anchor
+  箱庭D1/A6:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 箱庭D1/A6.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/A6
+    OnMap: A6
+    Size: [60, 60]
+    Type: Anchor
+FightCount: 6
+Map: 
+- NNNENNNO
+- NENOOENO
+- NNNBONNO
+- EENNNENE
+- NNESEENN
+- OOONNEEO
+- NNNFFNNN
+Resources:
+  Clear@D1:
+    Image: Clear.png
+    MainSize: [1280, 720]
+    Name: Clear
+    Size: [80, 80]
+    Offset: [149, 240]
+    ClickSize: [120, 40]
+    ClickOffset: [30, 16]
+    Type: Static
+  Boss队伍:
+    Image: 北卡.png
+    MainSize: [1280, 720]
+    Name: Boss队伍-北卡
+    Offset: [20, 138]
+    Size: [86, 50]
+    Type: Static
+  补给商店:
+    Image: 补给商店.png
+    MainSize: [1280, 720]
+    Name: 补给商店
+    Offset: [110, 0]
+    Size: [130, 50]
+    Type: Static
+  箱庭D1/Enemy-威奇塔:
+    CropOffset: [-40, -100]
+    CropSize: [80, 110]
+    Image: 箱庭D1/Enemy-威奇塔.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/Enemy-威奇塔
+    Offset: [-30, -90]
+    Size: [60, 90]
+    Type: Dynamic
+  箱庭D1/Enemy-鱼:
+    CropOffset: [-40, -100]
+    CropSize: [80, 110]
+    Image: 箱庭D1/Enemy-鱼.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/Enemy-鱼
+    Offset: [-30, -90]
+    Size: [60, 90]
+    Type: Dynamic
+Scenes:
+  商店:
+    Actions:
+    - {Target: 返回, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [补给商店]
+    Name: 商店
+    Next: [外部地图]
+    Global: true
+  外部地图:
+    Actions:
+    - {Target: Clear@D1, Type: Click}
+    - {Time: 2, Type: Wait}
+    Condition: [Clear@D1]
+    Name: 外部地图
+    Next: [外部地图, 进入地图确认, 商店]
+  战斗准备:
+    Actions:
+    - {Target: mood_detect, Type: InnerCall}
+    - {Target: 出击, Type: Click}
+    - {Time: 1, Type: Wait}
+    Condition: [出击]
+    Name: 战斗准备
+    Next: [加载中, 船坞已满]
+  战斗地图:
+    Actions:
+    - {Target: fight, Type: InnerCall}
+    - {Time: 1, Type: Wait}
+    Condition: [迎击]
+    Name: 战斗地图
+    Next: [战斗准备, 战斗地图, 获得道具, 外部地图]
+  获得经验:
+    Actions:
+    - {Target: 确认经验, Type: Click}
+    - {Time: 0.5, Type: Wait}
+    - Time: 3
+      Type: Wait
+      Condition:
+      - $eq
+      - [$getitem, [$method, get_fight_status], FightIndexMod]
+      - 0
+    Condition: [COMMANDER]
+    Name: 获得经验
+    Next: [获得经验, 外部地图, 战斗地图]
+Strategy:
+- Actions:
+  - {Time: 1, Type: Wait}
+  - {Target: toggle_fleet, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Break: true
+  Condition:
+  - $any
+  - - - $all
+      - - - $ge
+          - [FightIndexMod]
+          - 5
+        - - $not_
+          - [$method, resource_in_screen, Boss队伍]
+    - - $all
+      - - - $lt
+          - [FightIndexMod]
+          - 5
+        - [$method, resource_in_screen, Boss队伍]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [B5]
+  Break: true
+  Condition:
+  - $eq
+  - 0
+  - [FightIndexMod]
+- Actions:
+  - Target: click_at_map
+    Type: InnerCall
+    args: [H4]
+  Break: true
+  Condition:
+  - $eq
+  - 1
+  - [FightIndexMod]
+- Actions:
+  - Target: normal_fight
+    Type: InnerCall
+    MaxRetry: 0
+  - {Time: 1, Type: Wait}
+  Break: true
+  Condition:
+  - $lt
+  - 5
+  - [FightIndexMod]
+- Actions:
+  - Target: goto_res_on_map
+    Type: InnerCall
+    MaxRetry: 0
+    args: [[Boss]]
+  - {Time: 1, Type: Wait}
+  Break: true
+  Condition:
+  - $ge
+  - 5
+  - [FightIndexMod]
+ViewPoints: [D3, C5, E5, E3]
+EnemyMarkers: [Enemy1, Enemy2, Enemy3, 箱庭D1/Enemy-威奇塔, 箱庭D1/Enemy-鱼]
+CurFleetMarkers: [Pointer]
+FleetMarkers: [Ammo]
