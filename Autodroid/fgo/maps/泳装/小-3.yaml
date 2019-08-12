@@ -10,7 +10,7 @@ Scenes:
       - $not_
       - [$method, resource_in_screen, 队伍选择, 2]
       Target: 队伍选择
-      Index: 3
+      Index: 2
       Type: Click
     - Condition:
       - $le
