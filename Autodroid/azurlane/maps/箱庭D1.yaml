@@ -195,24 +195,6 @@ Strategy:
           - 5
         - [$method, resource_in_screen, Boss队伍]
 - Actions:
-  - Target: click_at_map
-    Type: InnerCall
-    args: [B5]
-  Break: true
-  Condition:
-  - $eq
-  - 0
-  - [FightIndexMod]
-- Actions:
-  - Target: click_at_map
-    Type: InnerCall
-    args: [H4]
-  Break: true
-  Condition:
-  - $eq
-  - 1
-  - [FightIndexMod]
-- Actions:
   - Target: normal_fight
     Type: InnerCall
     MaxRetry: 0
