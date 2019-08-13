@@ -142,6 +142,16 @@ Resources:
     Size: [60, 90]
     Type: Dynamic
     MaxDiff: 0.04
+  箱庭D1/Enemy-圣地亚哥:
+    CropOffset: [-40, -100]
+    CropSize: [80, 110]
+    Image: 箱庭D1/Enemy-圣地亚哥.png
+    MainSize: [1280, 720]
+    Name: 箱庭D1/Enemy-圣地亚哥
+    Offset: [-30, -90]
+    Size: [60, 90]
+    Type: Dynamic
+    MaxDiff: 0.04
 Scenes:
   商店:
     Actions:
