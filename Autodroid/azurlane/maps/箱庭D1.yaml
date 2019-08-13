@@ -8,6 +8,7 @@ Anchors:
     OnMap: D2
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/E2:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -17,6 +18,7 @@ Anchors:
     OnMap: E2
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/E3:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -26,6 +28,7 @@ Anchors:
     OnMap: E3
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/H1:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -35,6 +38,7 @@ Anchors:
     OnMap: H1
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/H2:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -44,6 +48,7 @@ Anchors:
     OnMap: H2
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/B6:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -53,6 +58,7 @@ Anchors:
     OnMap: B6
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/C6:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -62,6 +68,7 @@ Anchors:
     OnMap: C6
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/H6:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -71,6 +78,7 @@ Anchors:
     OnMap: H6
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
   箱庭D1/A6:
     CropOffset: [-40, -40]
     CropSize: [80, 80]
@@ -80,6 +88,7 @@ Anchors:
     OnMap: A6
     Size: [60, 60]
     Type: Anchor
+    MaxDiff: 0.05
 FightCount: 6
 Map: 
 - NNNENNNO
@@ -122,6 +131,7 @@ Resources:
     Offset: [-30, -90]
     Size: [60, 90]
     Type: Dynamic
+    MaxDiff: 0.1
   箱庭D1/Enemy-鱼:
     CropOffset: [-40, -100]
     CropSize: [80, 110]
@@ -131,6 +141,7 @@ Resources:
     Offset: [-30, -90]
     Size: [60, 90]
     Type: Dynamic
+    MaxDiff: 0.04
 Scenes:
   商店:
     Actions:
@@ -201,18 +212,16 @@ Strategy:
   - {Time: 1, Type: Wait}
   Break: true
   Condition:
-  - $lt
+  - $gt
   - 5
   - [FightIndexMod]
 - Actions:
-  - Target: goto_res_on_map
+  - Target: click_at_map
     Type: InnerCall
-    MaxRetry: 0
-    args: [[Boss]]
-  - {Time: 1, Type: Wait}
+    args: [D3]
   Break: true
   Condition:
-  - $ge
+  - $eq
   - 5
   - [FightIndexMod]
 ViewPoints: [D3, C5, E5, E3]
