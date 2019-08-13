@@ -217,6 +217,9 @@ class CommonMap(FightMap):
             return self.next_enemy(source)
         for f in source:
             for b in self.boss + self.resource_points:
+                if f == b:
+                    logger.debug("Ignore current pos %s", f)
+                    continue
                 path = self.shortest_path(f, b)
                 enemies = self.enemies_on_path(path)
                 if enemies:
