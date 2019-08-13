@@ -408,8 +408,8 @@ New:
   MainSize: [1280, 720]
   Name: 舰队选择-黄脸
   Offset: [420, 430]
-  Size: [30, 30]
+  Size: [16, 16]
   Type: MultiDynamic
   SearchArea:
-  - [200, 240]
-  - [700, 240]
+  - [380, 140]
+  - [630, 400]
