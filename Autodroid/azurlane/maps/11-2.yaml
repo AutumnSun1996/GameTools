@@ -163,7 +163,7 @@ Strategy:
   - $eq
   - 6
   - [FightIndexMod]
-ViewPoints: [D3, D4, H4, H3]
+ViewPoints: [D3, D5, H5, H3]
 EnemyMarkers: [Enemy1, Enemy2, Enemy3, 箱庭D1/Enemy-威奇塔, 箱庭D1/Enemy-鱼]
 CurFleetMarkers: [Pointer]
 FleetMarkers: [Ammo]
