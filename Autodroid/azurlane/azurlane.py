@@ -18,6 +18,7 @@ class AzurLaneControl(SimulatorControl):
     """碧蓝航线通用控制
     """
     section = "AzurLane"
+    scene_check_max_repeat = 10
     status_path = "%s/data/fightStatus.json" % section
     retire_choices = {
         # 驱逐-普通
