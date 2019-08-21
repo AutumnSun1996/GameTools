@@ -161,7 +161,7 @@
       - [$method, get_fight_status]
       - FightIndexMod
     - 0
-    Time: 3
+    Time: 6
     Type: Wait
     # Boss战后FightIndexMod为0, 延长等待时间
   Condition: [COMMANDER]
