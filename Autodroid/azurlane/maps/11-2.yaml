@@ -108,8 +108,8 @@ Resources:
     Image: Clear.png
     MainSize: [1280, 720]
     Name: Clear@11-2
-    Offset: [393, 491]
-    Size: [70, 50]
+    Offset: [379, 517]
+    Size: [80, 80]
     Type: Static
   Boss队伍:
     Image: 南达科他.png
@@ -137,13 +137,13 @@ Strategy:
   - - - $all
       - - - $ge
           - [FightIndexMod]
-          - 5
+          - 6
         - - $not_
           - [$method, resource_in_screen, Boss队伍]
     - - $all
       - - - $lt
           - [FightIndexMod]
-          - 5
+          - 6
         - [$method, resource_in_screen, Boss队伍]
 - Actions:
   - Target: normal_fight
