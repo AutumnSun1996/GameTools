@@ -1,124 +1,105 @@
 Anchors:
-  11-2-A1:
-    Image: 11-2-A1.png
+  11-2/B5:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/B5.png
     MainSize: [1280, 720]
-    Name: 11-2-A1
-    Offset: [44, 29]
-    OnMap: A1
-    Size: [122, 24]
-    Type: Anchor
-  11-2-B5:
-    Image: 11-2-B5.png
-    MainSize: [1280, 720]
-    Name: 11-2-B5
-    Offset: [40, 32]
+    Name: 11-2/B5
     OnMap: B5
-    Size: [106, 72]
+    Size: [60, 60]
     Type: Anchor
-  11-2-C1:
-    Image: 11-2-C1.png
+    MaxDiff: 0.001
+  11-2/C3:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/C3.png
     MainSize: [1280, 720]
-    Name: 11-2-C1
-    Offset: [42, 31]
-    OnMap: C1
-    Size: [82, 63]
-    Type: Anchor
-  11-2-C3:
-    Image: 11-2-C3.png
-    MainSize: [1280, 720]
-    Name: 11-2-C3
-    Offset: [47, 24]
+    Name: 11-2/C3
     OnMap: C3
-    Size: [94, 64]
+    Size: [60, 60]
     Type: Anchor
-  11-2-C4:
-    Image: 11-2-C4.png
+    MaxDiff: 0.005
+  11-2/C4:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/C4.png
     MainSize: [1280, 720]
-    Name: 11-2-C4
-    Offset: [48, 44]
+    Name: 11-2/C4
     OnMap: C4
-    Size: [91, 67]
+    Size: [60, 60]
     Type: Anchor
-  11-2-C5:
-    Image: 11-2-C5.png
+    MaxDiff: 0.005
+  11-2/C5:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/C5.png
     MainSize: [1280, 720]
-    Name: 11-2-C5
-    Offset: [57, 38]
+    Name: 11-2/C5
     OnMap: C5
-    Size: [119, 79]
+    Size: [60, 60]
     Type: Anchor
-  11-2-D5:
-    Image: 11-2-D5.png
+    MaxDiff: 0.005
+  11-2/D5:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/D5.png
     MainSize: [1280, 720]
-    Name: 11-2-D5
-    Offset: [62, 38]
+    Name: 11-2/D5
     OnMap: D5
-    Size: [112, 81]
+    Size: [60, 60]
     Type: Anchor
-  11-2-F1:
-    Image: 11-2-F1.png
+    MaxDiff: 0.005
+  11-2/F1:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/F1.png
     MainSize: [1280, 720]
-    Name: 11-2-F1
-    Offset: [40, 35]
+    Name: 11-2/F1
     OnMap: F1
-    Size: [82, 61]
+    Size: [60, 60]
     Type: Anchor
-  11-2-F6:
-    Image: 11-2-F6.png
+    MaxDiff: 0.005
+  11-2/G4:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/G4.png
     MainSize: [1280, 720]
-    Name: 11-2-F6
-    Offset: [56, 38]
-    OnMap: F6
-    Size: [116, 91]
-    Type: Anchor
-  11-2-G4:
-    Image: 11-2-G4.png
-    MainSize: [1280, 720]
-    Name: 11-2-G4
-    Offset: [50, 29]
+    Name: 11-2/G4
     OnMap: G4
-    Size: [105, 57]
+    Size: [60, 60]
     Type: Anchor
-  11-2-H2:
-    Image: 11-2-H2.png
+    MaxDiff: 0.005
+  11-2/H2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/H2.png
     MainSize: [1280, 720]
-    Name: 11-2-H2
-    Offset: [3, 30]
+    Name: 11-2/H2
     OnMap: H2
-    Size: [84, 56]
+    Size: [60, 60]
     Type: Anchor
-  11-2-I2:
-    Image: 11-2-I2.png
+    MaxDiff: 0.005
+  11-2/I2:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/I2.png
     MainSize: [1280, 720]
-    Name: 11-2-I2
-    Offset: [51, 27]
+    Name: 11-2/I2
     OnMap: I2
-    Size: [100, 62]
+    Size: [60, 60]
     Type: Anchor
-  11-2-I3:
-    Image: 11-2-I3.png
+    MaxDiff: 0.005
+  11-2/F6:
+    CropOffset: [-40, -40]
+    CropSize: [80, 80]
+    Image: 11-2/F6.png
     MainSize: [1280, 720]
-    Name: 11-2-I3
-    Offset: [52, 44]
-    OnMap: I3
-    Size: [102, 75]
+    Name: 11-2/F6
+    OnMap: F6
+    Size: [60, 60]
     Type: Anchor
-  11-2-I5:
-    Image: 11-2-I5.png
-    MainSize: [1280, 720]
-    Name: 11-2-I5
-    Offset: [62, 44]
-    OnMap: I5
-    Size: [126, 85]
-    Type: Anchor
-  11-2-K5:
-    Image: 11-2-K5.png
-    MainSize: [1280, 720]
-    Name: 11-2-K5
-    Offset: [63, 41]
-    OnMap: K5
-    Size: [114, 87]
-    Type: Anchor
+    MaxDiff: 0.005
+
 FightCount: 7
 Map: [OOONNONENEN, NNNENSEOOEN, 'FNONNEE?ONE', FNONeNOENBB, NOOOSEENOOO, NNENNONENNB]
 Name: 11-2
@@ -130,28 +111,12 @@ Resources:
     Offset: [393, 491]
     Size: [70, 50]
     Type: Static
-  Lv:
-    Image: lv_label.png
+  Boss队伍:
+    Image: 南达科他.png
     MainSize: [1280, 720]
-    MaxDiff: 0.1
-    Name: Lv
-    Offset: [-8, -25]
-    Size: [36, 32]
-    Type: MultiDynamic
-  Lv2:
-    Image: lv_label.png
-    MainSize: [1280, 720]
-    MaxDiff: 0.1
-    Name: Lv2
-    Offset: [-8, -25]
-    Size: [27, 24]
-    Type: MultiDynamic
-  道中队伍:
-    Image: 君主.png
-    MainSize: [1280, 720]
-    Name: 道中队伍
-    Offset: [22, 102]
-    Size: [80, 50]
+    Name: Boss队伍-南达科他
+    Offset: [20, 138]
+    Size: [86, 50]
     Type: Static
 Scenes:
   外部地图:
@@ -161,56 +126,44 @@ Scenes:
     Condition: [Clear@11-2]
     Name: 外部地图
     Next: [外部地图, 进入地图确认]
-  战斗准备:
-    Actions:
-    - Condition:
-      - $eq
-      - - $getattr
-        - [$]
-        - last_scene_name
-      - 遭遇伏击
-      Target: inc_fight_index
-      Type: InnerCall
-      args: [-1]
-    - {Target: mood_detect, Type: InnerCall}
-    - {Target: 出击, Type: Click}
-    - {Time: 1, Type: Wait}
-    Condition: [出击]
-    Name: 战斗准备
-    Next: [加载中, 船坞已满]
 Strategy:
 - Actions:
+  - {Time: 1, Type: Wait}
   - {Target: toggle_fleet, Type: InnerCall}
   - {Time: 1, Type: Wait}
+  Break: true
   Condition:
   - $any
   - - - $all
-      - - - $le
+      - - - $ge
           - [FightIndexMod]
-          - 6
+          - 5
         - - $not_
-          - [$method, resource_in_screen, 道中队伍]
+          - [$method, resource_in_screen, Boss队伍]
     - - $all
-      - - - $gt
+      - - - $lt
           - [FightIndexMod]
-          - 6
-        - [$method, resource_in_screen, 道中队伍]
+          - 5
+        - [$method, resource_in_screen, Boss队伍]
 - Actions:
-  - {Target: search_for_bonus, Type: InnerCall}
-  Condition:
-  - $eq
-  - [FightIndexMod]
-  - 5
-- Actions:
-  - {Target: normal_fight, Type: InnerCall}
-  Condition:
-  - $le
-  - [FightIndexMod]
-  - 6
-- Actions:
-  - {Target: search_for_boss, Type: InnerCall}
+  - Target: normal_fight
+    Type: InnerCall
+    MaxRetry: 0
+  - {Time: 1, Type: Wait}
+  Break: true
   Condition:
   - $gt
-  - [FightIndexMod]
   - 6
-ViewPoints: [D3, D5, H5, H3]
+  - [FightIndexMod]
+- Actions:
+  - Target: search_for_boss
+    Type: InnerCall
+  Break: true
+  Condition:
+  - $eq
+  - 6
+  - [FightIndexMod]
+ViewPoints: [D3, D4, H4, H3]
+EnemyMarkers: [Enemy1, Enemy2, Enemy3, 箱庭D1/Enemy-威奇塔, 箱庭D1/Enemy-鱼]
+CurFleetMarkers: [Pointer]
+FleetMarkers: [Ammo]
