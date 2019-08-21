@@ -155,6 +155,15 @@
   Actions:
   - {Target: 确认经验, Type: Click}
   - {Time: 0.5, Type: Wait}
+  - Condition:
+    - $eq
+    - - $getitem
+      - [$method, get_fight_status]
+      - FightIndexMod
+    - 0
+    Time: 3
+    Type: Wait
+    # Boss战后FightIndexMod为0, 延长等待时间
   Condition: [COMMANDER]
   Name: 获得经验
   Next: [获得经验, 外部地图, 战斗地图]
