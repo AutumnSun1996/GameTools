@@ -1,4 +1,4 @@
-LoadTemplate: 泳装/大-4
+LoadTemplate: 泳装/大-1
 OverRide: 
 - [Strategy, AssistCondition]
 - [Scenes, 队伍确认, Actions]
@@ -8,9 +8,9 @@ Scenes:
     - {Time: 1, Type: Wait}
     - Condition:
       - $not_
-      - [$method, resource_in_screen, 队伍选择, 2]
+      - [$method, resource_in_screen, 队伍选择, 3]
       Target: 队伍选择
-      Index: 2
+      Index: 3
       Type: Click
     - Condition:
       - $le
