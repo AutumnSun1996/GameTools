@@ -424,6 +424,7 @@ class CommonMap(FightMap):
             self.error("地图处理失败")
             return
 
+        self.check_map()
         if not self.current_fleet and not self.enemies:
             self.recheck_full_map()
             self.normal_fight(repeat+1)
