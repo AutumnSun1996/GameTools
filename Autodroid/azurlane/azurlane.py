@@ -18,6 +18,7 @@ class AzurLaneControl(SimulatorControl):
     """碧蓝航线通用控制
     """
     section = "AzurLane"
+    scene_check_max_repeat = 10
     status_path = "%s/data/fightStatus.json" % section
     retire_choices = {
         # 驱逐-普通
@@ -28,7 +29,7 @@ class AzurLaneControl(SimulatorControl):
         "黑泽伍德", "霍比", "科尔克", "女将", "热心", "命运女神", "天后",
         "枫", "梓", "柏", "梿", "棭", "蓉", "藮", "榊", "棡", "枨", "萩",
         "槆", "柉", "樇", "栭", "栘", "樋", "Z18", "Z19", "福尔班", "勒马尔",
-        "回声",
+        "回声", "艾尔温",
         # 驱逐-精锐
         "萤火虫", "标枪", "Z23", "拉菲", "柚", "查尔斯·奥斯本",
 
