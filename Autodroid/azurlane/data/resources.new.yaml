@@ -30,7 +30,7 @@ COMMANDER:
   MainSize: [1280, 720]
   Name: 自律提醒
   Size: [600, 420]
-  ClickOffset: [220, 350]
+  ClickOffset: [220, 390]
   ClickSize: [160, 50]
   Type: Dynamic
 舰队选择-立刻前往:
