@@ -196,6 +196,13 @@ Quick:
   Offset: [1124, 10]
   Size: [146, 60]
   Type: Static
+剧情-Skip:
+  Image: 剧情-Skip.png
+  MainSize: [1280, 720]
+  Name: 剧情-Skip
+  Offset: [1124, 10]
+  Size: [146, 60]
+  Type: Static
 剧情-选择框:
   ClickOffset: [80, 20]
   ClickSize: [800, 60]
