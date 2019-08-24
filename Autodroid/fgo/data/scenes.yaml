@@ -32,7 +32,7 @@ AP不足:
     - - $not_
       - [无战斗]
   Name: 关卡选择
-  Next: [助战选择, AP不足, 关卡选择, 无战斗]
+  Next: [助战选择, AP不足, 无战斗, 关卡选择]
 剧情:
   Actions:
   - {Target: 剧情-跳过, Type: Click}

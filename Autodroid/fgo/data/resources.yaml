@@ -629,6 +629,7 @@ Quick:
   Offset: [520, 300]
   Size: [240, 32]
   Type: Static
+  MaxDiff: 0.15
 无战斗-开始任务:
   MainSize: [1280, 720]
   Name: 无战斗-开始任务
