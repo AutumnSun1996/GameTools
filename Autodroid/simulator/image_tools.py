@@ -169,7 +169,7 @@ def get_all_match(image, needle):
     """在image中搜索needle"""
     if len(needle.shape) == 3 and needle.shape[2] == 4:
         needle, mask = split_bgra(needle)
-        match = 1 - np.nan_to_num(cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask))
+        match = 1 - cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask)
     else:
         match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
     return match
@@ -181,26 +181,24 @@ def get_multi_match(image, needle, thresh):
     重合的部分返回重合部分中心对应的坐标
     """
     match = get_all_match(image, needle)
-    # 模拟用背景图片
-    draw = np.zeros(image.shape[:2], dtype='uint8')
+    # 根据阈值划分多个匹配区域
+    _, draw = cv.threshold(match, thresh, 0xff, cv.THRESH_BINARY)
     h, w = needle.shape[:2]
-    for y, x in zip(*np.where(match < thresh)):
-        cv.rectangle(draw, (x, y), (x+w, y+h), 255, -1)
     # 连通域分析
-    _, _, _, centroids = cv.connectedComponentsWithStats(draw)
+    _, _, _, centroids = cv.connectedComponentsWithStats(draw.astype("uint8"))
+    # 删去背景连通域
+    centroids = centroids[1:]
     # 中心坐标转化为左上角坐标
     centroids[:, 0] -= w / 2
     centroids[:, 1] -= h / 2
-    # 删去背景连通域并将数值转化为int型
-    return centroids[1:, :].round().astype('int')
-
+    # 将数值转化为int型
+    return centroids.round().astype('int')
 
 def get_match(image, needle):
     """在image中搜索needle"""
-    match = get_all_match(image, needle)
-    min_val, _, min_loc, _ = cv.minMaxLoc(match)
-    return min_val, np.array(min_loc)
-
+    diff = get_all_match(image, needle)
+    loc = np.unravel_index(np.nanargmin(diff, axis=None), diff.shape)
+    return diff[loc], loc[::-1]
 
 def get_diff(a, b):
     """比较图片差异"""
