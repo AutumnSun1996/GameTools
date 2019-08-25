@@ -169,7 +169,7 @@ def get_all_match(image, needle):
     """在image中搜索needle"""
     if len(needle.shape) == 3 and needle.shape[2] == 4:
         needle, mask = split_bgra(needle)
-        match = 1 - cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask)
+        match = 1 - np.nan_to_num(cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask))
     else:
         match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
     return match
