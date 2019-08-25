@@ -383,7 +383,7 @@ New:
   MainSize: [1280, 720]
   Name: 战斗准备-绿脸
   Size: [30, 30]
-  Type: MultiDynamic
+  Type: Dynamic
   SearchArea:
   - [200, 200]
   - [700, 360]
@@ -392,7 +392,7 @@ New:
   MainSize: [1280, 720]
   Name: 战斗准备-黄脸
   Size: [30, 30]
-  Type: MultiDynamic
+  Type: Dynamic
   SearchArea:
   - [200, 200]
   - [700, 360]
@@ -401,7 +401,7 @@ New:
   MainSize: [1280, 720]
   Name: 战斗准备-红脸
   Size: [30, 30]
-  Type: MultiDynamic
+  Type: Dynamic
   SearchArea:
   - [200, 200]
   - [700, 360]
@@ -411,7 +411,7 @@ New:
   Name: 舰队选择-黄脸
   Offset: [420, 430]
   Size: [16, 16]
-  Type: MultiDynamic
+  Type: Dynamic
   SearchArea:
   - [380, 140]
   - [630, 400]
