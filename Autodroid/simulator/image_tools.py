@@ -181,9 +181,14 @@ def get_multi_match(image, needle, thresh):
     重合的部分返回重合部分中心对应的坐标
     """
     match = get_all_match(image, needle)
-    # 根据阈值划分多个匹配区域
-    _, draw = cv.threshold(match, thresh, 0xff, cv.THRESH_BINARY)
+    # 将所有nan变为1
+    match = 1 - np.nan_to_num(1- match)
     h, w = needle.shape[:2]
+    # 模拟填充所有找到的匹配位置
+    draw = np.zeros(image.shape[:2], dtype='uint8')
+    h, w = needle.shape[:2]
+    for y, x in zip(*np.where(match < thresh)):
+        cv.rectangle(draw, (x, y), (x+w, y+h), 255, -1)
     # 连通域分析
     _, _, _, centroids = cv.connectedComponentsWithStats(draw.astype("uint8"))
     # 删去背景连通域
