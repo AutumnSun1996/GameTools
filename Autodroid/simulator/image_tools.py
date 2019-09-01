@@ -169,9 +169,12 @@ def get_all_match(image, needle):
     """在image中搜索needle"""
     if len(needle.shape) == 3 and needle.shape[2] == 4:
         needle, mask = split_bgra(needle)
-        match = 1 - cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask)
+        # 将所有nan变为1
+        match = 1 - np.nan_to_num(cv.matchTemplate(image, needle, cv.TM_CCORR_NORMED, mask=mask))
     else:
         match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
+        # 将所有nan变为1
+        match = 1 - np.nan_to_num(1- match)
     return match
 
 
@@ -181,8 +184,6 @@ def get_multi_match(image, needle, thresh):
     重合的部分返回重合部分中心对应的坐标
     """
     match = get_all_match(image, needle)
-    # 将所有nan变为1
-    match = 1 - np.nan_to_num(1- match)
     h, w = needle.shape[:2]
     # 模拟填充所有找到的匹配位置
     draw = np.zeros(image.shape[:2], dtype='uint8')
@@ -202,7 +203,7 @@ def get_multi_match(image, needle, thresh):
 def get_match(image, needle):
     """在image中搜索needle"""
     diff = get_all_match(image, needle)
-    loc = np.unravel_index(np.nanargmin(diff, axis=None), diff.shape)
+    loc = np.unravel_index(np.argmin(diff, axis=None), diff.shape)
     return diff[loc], loc[::-1]
 
 def get_diff(a, b):
