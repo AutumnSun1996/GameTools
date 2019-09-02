@@ -84,6 +84,20 @@ Strategy:
       Type: InnerCall
       args:
       - [0, 2, 1]
+      - [0, 3, 1] # 御主闪避技能，保证4T无意外
+    Condition:
+    - $all
+    - - - $eq
+        - [TurnOfBattle]
+        - 1
+      - - $le
+        - [BattleLeft]
+        - 0
+    Description: 御主技能
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
       - [3, 2]
       - [3, 3, 1]
     Condition:
