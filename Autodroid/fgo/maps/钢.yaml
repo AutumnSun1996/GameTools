@@ -48,13 +48,13 @@ Strategy:
   CardChoice:
   - Choice:
     - - 0
-      - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
+      - [^Q克制, ^B克制, ^A克制, ^B0, ^A0, ^Q0, ^Q抵抗, ^B抵抗, ^A抵抗]
     - - 2
-      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+      - [^Q克制, ^B克制, ^A克制, ^B0, ^A0, ^Q0, ^Q抵抗, ^B抵抗, ^A抵抗]
     - - 1
-      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+      - [^Q克制, ^B克制, ^A克制, ^B0, ^A0, ^Q0, ^Q抵抗, ^B抵抗, ^A抵抗]
     Condition: true
-    Description: 红卡优先
+    Description: 绿卡优先
   Skills:
   - Actions:
     - Target: use_skills
