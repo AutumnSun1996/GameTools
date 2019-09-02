@@ -1,4 +1,4 @@
-Description: '队伍: 阿克琉斯@80NP, 迦尔纳@80NP, 助战孔明'
+Description: '队伍: 清姬@80NP, 助战, 孔明'
 Name: 熊轶小号-狗粮本
 Resources: {}
 Scenes:
@@ -24,10 +24,7 @@ Scenes:
     Name: 选择指令卡
     Next: [选择技能, 获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装, 获得物品, 战斗失败]
 Strategy:
-  AssistCondition:
-  - $all
-  - - [助战-从者满破]
-    - [助战/孔明]
+  AssistCondition: true
   AssistRange: 0.99
   CardChoice:
   - Choice:
@@ -60,38 +57,10 @@ Strategy:
     - [NP1]
     - 100
     Description: 孔明1
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [1, 1]
-    Condition:
-    - $ge
-    - [NP1]
-    - 100
-    Description: 宝具准备1
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [0, 2, 2]
-      - [2, 2]
-    Condition:
-    - $all
-    - - - $ge
-        - [NP2]
-        - 100
-      - - $le
-        - [BattleLeft]
-        - 1
-    Description: 宝具准备2
   UseNP:
   - Condition: true
     Target: 3
   - Condition: true
     Target: 1
-  - Condition:
-    - $le
-    - [BattleLeft]
-    - 1
+  - Condition: true
     Target: 2
