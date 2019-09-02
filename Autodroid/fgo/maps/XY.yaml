@@ -24,8 +24,8 @@ Scenes:
     Name: 选择指令卡
     Next: [选择技能, 获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装, 获得物品, 战斗失败]
 Strategy:
-  AssistCondition: true
-  AssistRange: 0.99
+  AssistCondition: [$not_, [助战-宝具可用]]
+  AssistRange: 0.6
   CardChoice:
   - Choice:
     - - 0
