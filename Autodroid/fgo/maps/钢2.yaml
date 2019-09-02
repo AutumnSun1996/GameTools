@@ -1,0 +1,11 @@
+LoadTemplate: 钢
+OverRide: 
+- [Strategy, AssistCondition]
+Strategy:
+  AssistCondition:
+  - - $all
+    - - [礼装/万华镜]
+      - [助战-从者满破]
+      - [助战-宝具可用]
+      - [助战/海伦娜]
+  AssistRange: 0.7
