@@ -44,6 +44,7 @@ Strategy:
       - [助战-宝具可用]
       - [助战/兰斯洛特]
       - [$not_, [助战-戈多]] # 不使用此人的80级一宝狂兰
+  AssistRange: 0.7
   CardChoice:
   - Choice:
     - - 0
