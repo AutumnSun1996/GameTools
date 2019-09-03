@@ -24,7 +24,7 @@ Scenes:
     Name: 选择指令卡
     Next: [选择技能, 获得羁绊, 获得经验, 羁绊加深, 获得羁绊礼装, 获得物品, 战斗失败]
 Strategy:
-  AssistCondition: [$not_, [助战-宝具可用]]
+  AssistCondition: true
   AssistRange: 0.6
   CardChoice:
   - Choice:
@@ -41,20 +41,23 @@ Strategy:
     - Target: use_skills
       Type: InnerCall
       args:
+      - [2, 1]
+      - [2, 2]
+      - [2, 3]
       - [3, 2]
       - [3, 3]
-    Description: 孔明23
+    Description: 孔明23, 助战123
   - Actions:
     - {Target: extract_np_info, Type: InnerCall}
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [3, 1, 1]
+      - [3, 1, 2]
     - {Target: extract_np_info, Type: InnerCall}
     Condition:
     - $lt
-    - [NP1]
+    - [NP2]
     - 100
     Description: 孔明1
   UseNP:
