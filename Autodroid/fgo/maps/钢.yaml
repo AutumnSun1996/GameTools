@@ -106,6 +106,16 @@ Strategy:
     - [BattleLeft]
     - 0
     Description: CBA充能狂兰, CBA 2
+  - Actions:
+    - Target: use_skills
+      Type: InnerCall
+      args:
+      - [1, 1]
+    Condition:
+    - $ge
+    - [Turn]
+    - 5
+    Description: 第5T, 狂兰开启集星
   UseNP:
   - Condition: true
     Description: 海伦娜
