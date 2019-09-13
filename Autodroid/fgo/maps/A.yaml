@@ -1,5 +1,5 @@
-Description: '队伍: 清姬@80NP, 助战, 孔明'
-Name: 熊轶小号-狗粮本
+Description: '队伍: 任意配置，全员平A'
+Name: 平A
 Resources: {}
 Scenes:
   选择指令卡:
@@ -28,38 +28,29 @@ Strategy:
   AssistRange: 0.6
   CardChoice:
   - Choice:
-    - - 0
-      - [^B克制, ^B0, ^A克制, ^A0, ^Q克制, ^Q0, ^B抵抗, ^A抵抗, ^Q抵抗]
     - - 2
-      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+      - [^B.+助战, ^A.+助战, ^Q.+助战, ^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+    - - 0
+      - [^B.+助战, ^A.+助战, ^Q.+助战, ^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
     - - 1
-      - [^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
+      - [^B.+助战, ^A.+助战, ^Q.+助战, ^B克制, ^A克制, ^Q克制, ^B0, ^A0, ^Q0, ^A抵抗, ^Q抵抗, ^B抵抗]
     Condition: true
-    Description: 红卡优先
+    Description: 助战&红卡优先
   Skills:
   - Actions:
     - Target: use_skills
       Type: InnerCall
       args:
-      - [2, 1]
-      - [2, 2]
-      - [2, 3]
-      - [3, 2]
-      - [3, 3]
-    Description: 孔明23, 助战123
-  - Actions:
-    - {Target: extract_np_info, Type: InnerCall}
-  - Actions:
-    - Target: use_skills
-      Type: InnerCall
-      args:
-      - [3, 1, 2]
-    - {Target: extract_np_info, Type: InnerCall}
-    Condition:
-    - $lt
-    - [NP2]
-    - 100
-    Description: 孔明1
+      - [1, 1, 1]
+      - [1, 2, 1]
+      - [1, 3, 1]
+      - [2, 1, 1]
+      - [2, 2, 1]
+      - [2, 3, 1]
+      - [3, 1, 1]
+      - [3, 2, 1]
+      - [3, 3, 1]
+    Description: 所有技能有就给1号
   UseNP:
   - Condition: true
     Target: 3
