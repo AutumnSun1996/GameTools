@@ -128,7 +128,7 @@
   - {Time: 2, Type: Wait}
   Condition: [战斗评价]
   Name: 战斗评价
-  Next: [获得道具, 战斗评价]
+  Next: [获得道具, 战斗评价, 获得经验]
 获得道具:
   Actions:
   - {Time: 0.2, Type: Wait}
