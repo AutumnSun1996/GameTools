@@ -1,0 +1,12 @@
+LoadTemplate: A
+OverRide: 
+- [Strategy, AssistCondition]
+Strategy:
+  AssistCondition:
+  - - $all
+    - - [助战-从者满破]
+      - [助战-宝具可用]
+      # - [礼装/水光潋滟] # 同人活动力
+      - [礼装/绘画之夏] # 同人探求力
+      # - [礼装/狐狸女士] # 同人空想力
+  AssistRange: 0.7
