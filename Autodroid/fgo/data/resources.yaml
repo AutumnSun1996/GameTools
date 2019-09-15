@@ -652,9 +652,9 @@ Quick:
 无法行动:
   Image: 无法行动.png
   MainSize: [1280, 720]
-  MaxDiff: 0.04
+  MaxDiff: 0.25
   Name: 无法行动
-  Size: [126, 57]
+  Size: [188, 55]
   Type: Dynamic
 滚动条-上:
   Image: 滚动条-上.png
