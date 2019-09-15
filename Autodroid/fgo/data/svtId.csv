@@ -215,10 +215,10 @@ svtId	class_link	id	name_cn
 0         	Saber     	213	齐格鲁德
 0         	Lancer    	214	瓦尔基里
 0         	Caster    	215	斯卡哈・丝卡蒂
-0         	Archer    	216	贞德
-0         	Lancer    	217	茨木童子
-0         	Assassin  	218	牛若丸
-0         	Berserker 	219	贞德(Alter)
+203200    	Archer    	216	贞德
+303400    	Lancer    	217	茨木童子
+603400    	Assassin  	218	牛若丸
+703100    	Berserker 	219	贞德(Alter)
 0         	MoonCancer	220	BB
 0         	Saber     	221	女王梅芙
 0         	Foreigner 	222	谜之女主角XX
