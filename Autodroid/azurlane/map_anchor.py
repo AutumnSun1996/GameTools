@@ -70,15 +70,7 @@ class FightMap(AzurLaneControl):
     map_name = None
 
     def __init__(self, map_name=None):
-        super().__init__()
-        if map_name is None:
-            return
-        self.map_name = map_name
-        self.data = load_map(self.map_name, self.section)
-        logger.info("Update Resources %s", self.data['Resources'].keys())
-        self.resources.update(self.data['Resources'])
-        logger.info("Update Scenes %s", self.data['Scenes'].keys())
-        self.scenes.update(self.data['Scenes'])
+        super().__init__(map_name)
         self._pos_in_screen = None
 
     def save_record(self, prefix=None, area=None, **extra_kwargs):

@@ -20,7 +20,7 @@ import win32api
 
 from config_loader import config, set_logging_dir
 from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
-    cv_save, load_scenes, load_resources, load_image, update_resource, save_jpeg
+    cv_save, load_map, load_image, update_resource, save_jpeg
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 import logging
@@ -83,16 +83,18 @@ class SimulatorControl:
     section = "Main"
     scene_check_max_repeat = 5
 
-    def __init__(self):
+    def __init__(self, map_name):
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
         set_logging_dir(os.path.join(self.section, "logs"))
+        self.map_name = map_name
+        self.data = load_map(self.map_name, self.section)
         self.scene_history = deque(maxlen=50)
         self.scene_history_count = defaultdict(lambda: 0)
         self.last_change = time.time()
         self.screen = None
         self.actions_done = False
-        self.scenes = load_scenes(self.section)
-        self.resources = load_resources(self.section)
+        self.scenes = self.data["Scenes"]
+        self.resources = self.data["Resources"]
         self.last_manual = 0
         self.stop = False
         self.resource_pos_buffer = {}
@@ -168,9 +170,12 @@ class SimulatorControl:
             raise TypeError("Invalid resource: {}".format(info))
 
         name = info["Name"]
-        if info.get("ImageData") is None:
-            self.error("No ImageData for %s" % info)
-            return False, []
+        if info.get("ImageData", None) is None:
+            if info.get("Image", None) is None:
+                self.error("No ImageData for %s" % info)
+                return False, []
+            else:
+                update_resource(info, self.section)
         if image is None:
             image = self.screen
         else:
@@ -489,7 +494,7 @@ class SimulatorControl:
             return self.fallback_scene
 
         if candidates is None:
-            if self.current_scene is None or self.current_scene.get("Next") is None:
+            if self.current_scene is None or self.current_scene.get("Next", None) is None:
                 logger.debug("update candidates to full list")
                 candidates = list(self.scenes.keys())
             else:
@@ -523,7 +528,7 @@ class SimulatorControl:
 
         for key in self.scenes:
             scene = self.scenes[key]
-            if scene.get("Global"):
+            if scene.get("Global", None):
                 if self.scene_match_check(scene, False):
                     self.scene_history.append(scene)
                     self.scene_history_count[scene["Name"]] += 1
@@ -592,7 +597,7 @@ class SimulatorControl:
             else:
                 self.critical("Invalid Action %s" % action)
 
-            if action.get("Break"):
+            if action.get("Break", None):
                 break
 
     @property

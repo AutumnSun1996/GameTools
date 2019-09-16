@@ -30,3 +30,6 @@ def init_map(name):
     const["s"].make_screen_shot()
     reset_log()
     return const["s"]
+
+def save_enemy(name, pos, info):
+    s = const["s"]

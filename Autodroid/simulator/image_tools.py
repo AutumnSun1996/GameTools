@@ -5,6 +5,7 @@ import re
 import yaml
 import datetime
 
+from pyhocon import ConfigFactory
 import piexif
 from PIL import Image, ImageFont, ImageDraw
 import cv2.cv2 as cv
@@ -14,6 +15,7 @@ import win32gui
 import win32ui
 
 from config_loader import config
+from config import hocon
 
 import logging
 logger = logging.getLogger(__name__)
@@ -149,6 +151,10 @@ def load_map(name, section):
         items = base_items
     return items
 
+
+def load_map(name, section):
+    path = os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".conf")
+    return hocon.load(path)
 
 def cv_crop(data, rect):
     """图片裁剪"""
