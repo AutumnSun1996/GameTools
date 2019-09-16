@@ -52,6 +52,7 @@ Strategy:
       - [3, 3, 1]
     Description: 所有技能有就给1号
   UseNP:
+  # 所有宝具准备就绪就用
   - Condition: true
     Target: 3
   - Condition: true
