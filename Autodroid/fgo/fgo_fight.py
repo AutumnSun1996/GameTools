@@ -19,16 +19,10 @@ class FateGrandOrder(SimulatorControl):
     section = "FGO"
 
     def __init__(self, map_name="CommonConfig"):
-        super().__init__()
-        self.map_name = map_name
+        super().__init__(map_name)
         logger.warning("Init %s", self)
         self.combat_info = defaultdict(lambda: 0)
         self.best_equips = []
-        self.data = load_map(map_name, self.section)
-        logger.info("Update Resources %s", list(self.data['Resources'].keys()))
-        self.resources.update(self.data['Resources'])
-        logger.info("Update Scenes %s", list(self.data['Scenes'].keys()))
-        self.scenes.update(self.data['Scenes'])
 
     def __str__(self):
         return "<{}: {}>".format(self.__class__.__name__, self.map_name)
