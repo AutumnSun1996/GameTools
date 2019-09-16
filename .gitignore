@@ -18,6 +18,7 @@ build
 Autodroid/PlayerSimulate/
 WarFrame/scripts/shot*.png
 *.apk
+*.zip
 
 **/dump/
 **/logs/
