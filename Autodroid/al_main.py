@@ -1,12 +1,12 @@
 import os
 import sys
-import pyhocon
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 
 import argparse
 
 import logging
+from config import hocon
 logger = logging.getLogger(__name__)
 
 
@@ -24,7 +24,7 @@ def make_stop_checker(args):
 
 def main(args):
     config_file = os.path.join("azurlane", "maps", args.map_name + ".conf")
-    info = pyhocon.ConfigFactory.parse_file(config_file)
+    info = hocon.load(config_file)
     if "MapClass" in info:
         import importlib
         module_path, cls_name = info["MapClass"]
