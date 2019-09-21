@@ -99,7 +99,7 @@ def update_resource(resource, section):
         for key in resource:
             if re.search("Offset|Position|Size", key):
                 resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
-    if resource.get("Image") is not None or resource.get("ImageData") is not None:
+    if resource.get("Image", None) is not None or resource.get("ImageData", None) is not None:
         load_image(resource, section)
 
 
@@ -154,7 +154,13 @@ def load_map(name, section):
 
 def load_map(name, section):
     path = os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".conf")
-    return hocon.load(path)
+    data = hocon.load(path)
+    for item in data["Resources"].values():
+        update_resource(item, section)
+    if "Anchors" in data:
+        for val in data["Anchors"].values():
+            update_resource(val, section)
+    return data
 
 def cv_crop(data, rect):
     """图片裁剪"""
