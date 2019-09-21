@@ -39,10 +39,12 @@ def cv_save(path, image):
         os.makedirs(dirname)
     data.tofile(path)
 
+
 def get_xp_info(text):
     if not isinstance(text, str):
         text = json.dumps(text, ensure_ascii=False, separators=(',', ':'))
     return tuple((text+"\x00").encode("UTF-16-LE"))
+
 
 def save_jpeg(path, image, now=None, title=None, subject=None, comment=None, keywords=None):
     if not path.endswith((".jpg", ".jpeg")):
@@ -130,29 +132,6 @@ def load_resources(section):
 
 
 def load_map(name, section):
-    with open(os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".yaml"), "r", -1, "UTF-8") as fl:
-        items = yaml.load(fl)
-    for val in items.get("Resources", {}).values():
-        update_resource(val, section)
-    if "Anchors" in items:
-        for val in items["Anchors"].values():
-            update_resource(val, section)
-    if "LoadTemplate" in items:
-        base_items = load_map(items["LoadTemplate"], section)
-        logger.info("LoadTemplate %s", items["LoadTemplate"])
-        for item_path in items["OverRide"]:
-            cur = base_items
-            cur_new = items
-            for part in item_path[:-1]:
-                cur = cur[part]
-                cur_new = cur_new[part]
-            cur[item_path[-1]] = cur_new[item_path[-1]]
-            logger.info("UpdateTemplate %s", item_path)
-        items = base_items
-    return items
-
-
-def load_map(name, section):
     path = os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".conf")
     data = hocon.load(path)
     for item in data["Resources"].values():
@@ -161,6 +140,7 @@ def load_map(name, section):
         for val in data["Anchors"].values():
             update_resource(val, section)
     return data
+
 
 def cv_crop(data, rect):
     """图片裁剪"""
@@ -186,7 +166,7 @@ def get_all_match(image, needle):
     else:
         match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
         # 将所有nan变为1
-        match = 1 - np.nan_to_num(1- match)
+        match = 1 - np.nan_to_num(1 - match)
     return match
 
 
@@ -212,11 +192,13 @@ def get_multi_match(image, needle, thresh):
     # 将数值转化为int型
     return centroids.round().astype('int')
 
+
 def get_match(image, needle):
     """在image中搜索needle"""
     diff = get_all_match(image, needle)
     loc = np.unravel_index(np.argmin(diff, axis=None), diff.shape)
     return diff[loc], loc[::-1]
+
 
 def get_diff(a, b):
     """比较图片差异"""
