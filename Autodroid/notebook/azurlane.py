@@ -25,11 +25,13 @@ def check_map_anchor(anchor):
     cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
     show(draw)
 
+
 def init_map(name):
     const["s"] = AzurLane(name)
     const["s"].make_screen_shot()
     reset_log()
     return const["s"]
+
 
 def get_grid_center(self, offx, offy):
     """返回格子中心点坐标列表，包括棋盘坐标和屏幕坐标"""
@@ -51,6 +53,7 @@ def get_grid_center(self, offx, offy):
     pos_in_screen = cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
     print(pos_in_screen)
     return pos_in_screen[0]
+
 
 def crop_in_map(center, offset, size):
     s = const["s"]
@@ -94,7 +97,7 @@ def save_enemy(pos, info):
     show(part[0])
     part = crop_in_map((x, y), info["Offset"], info["Size"])
     show(part[0])
-    
+
     path = "%s/resources/%s" % (const["section"], info["Image"])
     cv_save(path, part[0])
     logger.info("%s Saved.", os.path.realpath(path))
