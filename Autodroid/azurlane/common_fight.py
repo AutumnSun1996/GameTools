@@ -398,7 +398,7 @@ class CommonMap(FightMap):
             if self.parse_fight_condition(item['Condition']):
                 logger.info("战斗策略：%s", item)
                 self.do_actions(item['Actions'])
-                if item.get("Break"):
+                if item.get("Break", None):
                     break
 
     def click_at_map(self, target):
