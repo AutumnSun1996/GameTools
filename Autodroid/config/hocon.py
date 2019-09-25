@@ -374,6 +374,9 @@ def load(path):
     tree = MyConfigFactory.parse_file(path)
     return tree
 
+def loads(text):
+    return MyConfigFactory.parse_string(text)
+
 def dump(obj, path=None):
     if not isinstance(obj, pyhocon.ConfigTree):
         obj = pyhocon.ConfigFactory.from_dict(obj)
