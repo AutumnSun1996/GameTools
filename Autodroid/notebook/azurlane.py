@@ -68,6 +68,17 @@ def crop_in_map(center, offset, size):
     part = cv_crop(s.screen, (*lt.astype("int"), *rb.astype("int")))
     return part, lt, rb
 
+'''
+Example:
+save_enemy((3, 2), """
+    CropOffset: [-40, -100]
+    CropSize: [80, 110]
+    Image: Enemy/E2.png
+    Offset: [-30, -90]
+    Size: [60, 90]
+    Type: Dynamic
+""")
+'''
 def save_enemy(pos, info):
     s = const["s"]
     if isinstance(info, str):
