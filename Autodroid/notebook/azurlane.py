@@ -31,5 +31,59 @@ def init_map(name):
     reset_log()
     return const["s"]
 
-def save_enemy(name, pos, info):
+def get_grid_center(self, offx, offy):
+    """返回格子中心点坐标列表，包括棋盘坐标和屏幕坐标"""
+    warped = cv.warpPerspective(self.screen, trans_matrix, target_size)
+    filtered_map = cv.filter2D(warped, 0, filter_kernel)
+    _, poses = self.search_resource("Corner", image=filtered_map)
+    if len(poses) < 3:
+        raise RuntimeError("Less than 4 anchors found. ")
+
+    poses = np.array(poses)
+    poses += self.resources["Corner"]["Offset"]
+    diff = (poses % 100)
+    dx = np.argmax(np.bincount(diff[:, 0]))
+    dy = np.argmax(np.bincount(diff[:, 1]))
+
+    res = dx+100*offx, dy+100*offy
+    res = (np.array(list(res), dtype="float") + 50).reshape(1, -1, 2)
+
+    pos_in_screen = cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
+    print(pos_in_screen)
+    return pos_in_screen[0]
+
+def crop_in_map(center, offset, size):
     s = const["s"]
+    x, y = center
+    wh = np.array(list(reversed(s.screen.shape[:2])))
+    coef = 0.0005907301142274507
+    r = coef * y + 1
+    lt = np.asarray(offset) * r + [x, y]
+    rb = lt + np.asarray(size) * r
+    if lt.min() < 0:
+        return None
+    if np.any(rb > wh):
+        return None
+    print("lt/rb", lt, rb)
+    part = cv_crop(s.screen, (*lt.astype("int"), *rb.astype("int")))
+    return part, lt, rb
+
+def save_enemy(pos, info):
+    s = const["s"]
+    if isinstance(info, str):
+        info = yaml.load(info)
+    offset = info["CropOffset"]
+    size = info["CropSize"]
+
+    diff_s = []
+    results = []
+    x, y = get_grid_center(s, *pos)
+    part = crop_in_map((x, y), info["CropOffset"], info["CropSize"])
+#     part = cv.resize(part, tuple(size))
+    show(part[0])
+    part = crop_in_map((x, y), info["Offset"], info["Size"])
+    show(part[0])
+    
+    path = "%s/resources/%s" % (const["section"], info["Image"])
+    cv_save(path, part[0])
+    logger.info("%s Saved.", os.path.realpath(path))
