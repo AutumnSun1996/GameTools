@@ -422,6 +422,7 @@ class SimulatorControl:
         if "keywords" not in extra_kwargs:
             extra_kwargs["keywords"] = self.current_scene_name
         save_jpeg(name, image, now=now, **extra_kwargs)
+        logger.info("%s saved", name)
 
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
