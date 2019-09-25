@@ -120,9 +120,20 @@ class FightMap(AzurLaneControl):
         return cv.perspectiveTransform(square_pos, inv_trans).reshape((2))
 
     def get_map_pos(self, anchor_name, anchor_pos, target_name):
-        """根据锚点的像素坐标、锚点的棋盘坐标、目标点的棋盘坐标，计算目标点的像素坐标"""
-        dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
-        dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
+        """根据锚点的像素坐标、锚点的棋盘坐标、目标点的棋盘坐标，计算目标点的像素坐标
+        棋盘坐标名与棋盘坐标转换关系为"A1" => [0, 0], "B2" => [100, 100]
+        """
+        if isinstance(target_name, str):
+            target_name = tuple(target_name)
+
+        if isinstance(target_name[0], str):
+            dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
+        else:
+            dx = target_name[0] - (ord(anchor_name[0]) - ord('A')) * 100
+        if isinstance(target_name[1], str):
+            dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
+        else:
+            dy = target_name[1] - (ord(anchor_name[1]) - ord('1')) * 100
         virtual_anchor_pos = self.screen2grid(anchor_pos)
         virtual_target_pos = np.add(virtual_anchor_pos, [dx, dy])
         target_pos = self.grid2screen(virtual_target_pos)
