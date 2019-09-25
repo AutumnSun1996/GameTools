@@ -85,7 +85,7 @@ svtId	class_link	id	name_cn
 0         	Caster    	83	所罗门
 201500    	Archer    	84	阿周那
 300400    	Lancer    	85	迦尔纳
-0         	Assassin  	86	谜之女主角X
+601800         	Assassin  	86	谜之女主角X
 0         	Lancer    	87	芬恩・麦克库尔
 301200    	Lancer    	88	布伦希尔德
 700800    	Berserker 	89	贝奥武夫
@@ -129,7 +129,7 @@ svtId	class_link	id	name_cn
 500900    	Caster    	127	莱昂纳多・达・芬奇
 302400    	Lancer    	128	玉藻前
 202600    	Archer    	129	阿尔托莉雅・潘德拉贡
-0         	Caster    	130	玛丽・安托瓦内特
+502700         	Caster    	130	玛丽・安托瓦内特
 0         	Archer    	131	安妮・伯妮＆玛莉・瑞德
 402400    	Rider     	132	莫德雷德
 602400    	Assassin  	133	斯卡哈
@@ -155,7 +155,7 @@ svtId	class_link	id	name_cn
 101700    	Saber     	153	宫本武藏
 602500    	Assassin  	154	“山中老人”
 702400    	Berserker 	155	谜之女主角X(Alter)
-0         	Archer    	156	新宿的Archer
+202300         	Archer    	156	新宿的Archer
 0         	Archer    	157	卫宫(Alter)
 1100500   	Avenger   	158	新宿的Avenger
 602600    	Assassin  	159	新宿的Assassin
@@ -180,7 +180,7 @@ svtId	class_link	id	name_cn
 702900    	Berserker 	178	织田信长
 402700    	Rider     	179	阿尔托莉雅・潘德拉贡(Alter)
 202800    	Archer    	180	海伦娜・布拉瓦茨基
-0         	Lancer    	181	源赖光
+302900         	Lancer    	181	源赖光
 402600    	Rider     	182	伊什塔尔
 303000    	Lancer    	183	帕尔瓦蒂
 202100    	Archer    	184	Archer Inferno
@@ -203,23 +203,23 @@ svtId	class_link	id	name_cn
 0         	Caster    	201	阿纳斯塔西娅
 0         	Berserker 	202	阿塔兰忒(Alter)
 0         	Caster    	203	阿维斯布隆
-0         	Avenger   	204	安东尼奥・萨列里
+1100600         	Avenger   	204	安东尼奥・萨列里
 0         	Rider     	205	伊凡雷帝
 0         	Rider     	206	阿喀琉斯
 0         	Archer    	207	喀戎
 0         	Caster    	208	齐格
 0         	Alterego  	209	冲田总司(Alter)
-0         	Assassin  	210	冈田以藏
+603300         	Assassin  	210	冈田以藏
 0         	Rider     	211	坂本龙马
-0         	Archer    	212	拿破仑
+203100         	Archer    	212	拿破仑
 0         	Saber     	213	齐格鲁德
 0         	Lancer    	214	瓦尔基里
-0         	Caster    	215	斯卡哈・丝卡蒂
+503900         	Caster    	215	斯卡哈・丝卡蒂
 203200    	Archer    	216	贞德
 303400    	Lancer    	217	茨木童子
 603400    	Assassin  	218	牛若丸
 703100    	Berserker 	219	贞德(Alter)
-0         	MoonCancer	220	BB
+2300200         	MoonCancer	220	BB
 0         	Saber     	221	女王梅芙
 0         	Foreigner 	222	谜之女主角XX
 0         	Saber     	223	迪尔姆德・奥迪那
