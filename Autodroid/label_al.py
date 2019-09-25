@@ -107,7 +107,7 @@ def key(event):
             anchors.remove(anchors[-1])
     elif event.char == "s":
         result = extract_anchors(anchors)
-        text = toyaml(result)
+        text = hocon.dump(result)
         print(text)
         set_clip(text)
 
