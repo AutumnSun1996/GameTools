@@ -374,8 +374,12 @@ def load(path):
     tree = MyConfigFactory.parse_file(path)
     return tree
 
-def dump(obj, path):
+def dump(obj, path=None):
+    if not isinstance(obj, pyhocon.ConfigTree):
+        obj = pyhocon.ConfigFactory.from_dict(obj)
     text = to_hocon(obj)
+    if path is None:
+        return text
     with open(path, "w", -1, "UTF8") as fl:
         fl.write(text)
 
