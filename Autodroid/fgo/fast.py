@@ -2,7 +2,7 @@ import re
 from collections import defaultdict
 
 from simulator.control import parse_condition
-from simulator.win32_tools import rand_click
+from simulator.win32_tools import rand_click, rand_drag
 from fgo.fgo_simple import FGOSimple as FGOBase
 from ocr.baidu_ocr import ocr
 
@@ -237,6 +237,16 @@ class FGOSimple(FGOBase):
         for rect in card_rects:
             rand_click(self.hwnd, rect)
             self.wait(0.5)
+
+    def choose_exp_cards(self, cols=3, rows=7, stop=False):
+        info = self.resources["卡位列表"]
+        x0, y0 = info["Offset"]
+        dx, dy = info["PositionDelta"]
+        start = (x0, y0)
+        end = (x0+dx*7, y0+dy*3)
+        rand_drag(self.hwnd, start, end, start_delay=1)
+        self.wait(1)
+
 
 
 if __name__ == "__main__":
