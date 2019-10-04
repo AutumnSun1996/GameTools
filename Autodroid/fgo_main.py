@@ -1,11 +1,11 @@
+import os
 import sys
 from datetime import datetime, timedelta
 from dateutil.parser import parse
-from fgo.fast import FGOSimple
-
 import argparse
-
 import logging
+
+from config import hocon
 logger = logging.getLogger(__name__)
 
 
@@ -28,8 +28,19 @@ def make_stop_checker(args):
 
 
 def main(args):
-    FGOSimple.section = args.section
-    fgo = FGOSimple(args.map_name)
+    config_file = os.path.join("fgo", "maps", args.map_name + ".conf")
+    info = hocon.load(config_file)
+    if "MapClass" in info:
+        import importlib
+        module_path, cls_name = info["MapClass"]
+        m = importlib.import_module(module_path)
+        map_cls = getattr(m, cls_name)
+    else:
+        from fgo.fast import FGOSimple as map_cls
+    logger.warning("Use class %r", map_cls)
+
+    map_cls.section = args.section
+    fgo = map_cls(args.map_name)
     try:
         fgo.main_loop(make_stop_checker(args))
         # input("Pause...")
