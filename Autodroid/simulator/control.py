@@ -98,6 +98,7 @@ class SimulatorControl:
         self.last_manual = 0
         self.stop = False
         self.resource_pos_buffer = {}
+        self.call_once_history = set()
 
     @property
     def since_last_manual(self):
@@ -601,6 +602,15 @@ class SimulatorControl:
             if action.get("Break", None):
                 break
 
+    def call_once_at_scene(self, func_name, *args, **kwargs):
+        """在连续场景中单次调用指定函数"""
+        key = (self.current_scene_name, func_name, str(args), str(kwargs))
+        if key in self.call_once_history:
+            return
+        func = getattr(self, func_name)
+        func(*args, **kwargs)
+        self.call_once_history.add(key)
+
     @property
     def since_last_change(self):
         """返回从上次场景变化到当前时间的秒数"""
@@ -615,6 +625,7 @@ class SimulatorControl:
         if self.scene_changed:
             nochange = ""
             self.last_change = now
+            self.call_once_history = set()
         else:
             nochange = "(No Change)"
 
