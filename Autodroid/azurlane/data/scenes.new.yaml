@@ -190,15 +190,6 @@
       - [伏击-迎击]
   Name: 受到伏击
   Next: [战斗准备, 战斗地图]
-非自律战斗中:
-  Actions:
-  - {Target: 自律战斗, Type: Click}
-  - {Time: 0.5, Type: Wait}
-  - {Target: 右侧空白区域, Type: Click}
-  - {Time: 1, Type: Wait}
-  Condition: [自律战斗]
-  Name: 非自律战斗中
-  Next: [正常战斗中]
 自律提醒:
   Actions:
   - {Target: 自律提醒, Type: Click}
