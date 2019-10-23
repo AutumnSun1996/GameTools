@@ -159,10 +159,10 @@ class SimulatorControl:
             if info not in self.resources:
                 logger.warning("No resource: %s", info)
                 return False, []
-            info = self.resources[info]
             if image is None:
                 use_buffer = True
                 buffer_key = (info, index)
+            info = self.resources[info]
         elif isinstance(info, dict):
             try:
                 update_resource(info, self.section)
