@@ -208,6 +208,7 @@ class FightMap(AzurLaneControl):
                 continue
             pos = found[np.argmin(diff)]
             return anchor["OnMap"], pos
+        self.reset_map()
         raise RuntimeError("No Valid Anchor")
 
     def find_on_map(self, anchor_name, anchor_pos, target_name, reshot=True):

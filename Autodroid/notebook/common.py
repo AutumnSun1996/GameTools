@@ -130,7 +130,7 @@ def save_crop(name, cropped, offset):
     }
 
     # set_clip('{}: {},'.format(tojson(name), tojson(info)))
-    set_clip(toyaml({name: info}))
+    set_clip(hocon.dump({name: info}))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)
@@ -164,7 +164,7 @@ def save_anchor(name, cropped, offset):
         "Image": name + '.png'
     }
     # set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
-    set_clip(toyaml({name: anchor}))
+    set_clip(hocon.dump({name: anchor}))
 
     path = "%s/resources/%s.png" % (section, name)
     cv_save(path, cropped)

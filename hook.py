@@ -1,19 +1,32 @@
-import PyHook3
+"""
+Python Hook
+
+By AutumnSun
+
+"""
+
+from collections import defaultdict
+
+from autopy import bitmap
+import PyHook3 as pyhook
 import pythoncom
 import win32api
-from autopy import bitmap
-from collections import defaultdict
 
 
 class KeyEvent(object):
+    """KeyEvent
+    """
     def __init__(self, ctrlDown, shiftDown, event):
-        self.Ctrl = ctrlDown
-        self.Shift = shiftDown
-        self.Alt = event.Alt
+        self.ctrl = ctrlDown
+        self.shift = shiftDown
+        self.alt = event.Alt
+>>>>>>> a8c89b51872dc8d0349a8741b09e31eb0eb0aa3f
         self.event = event
 
 
 class KeyBoardManager(object):
+    """KeyBoardManager
+    """
     mouseKeys = {"LButton", "RButton", "MButton", "WheelDown", "WheelUp"}
     def __init__(self, *args, **kwargs):
         self.ctrlDown = False
@@ -105,6 +118,7 @@ if __name__ == "__main__":
     manager.on("Escape", manager.exit)
     manager.on("Escape", manager.show)
 
+    manager.on("Capslock", print)
     manager.waitKeys()
     # print(help(key))
     # screen = bitmap.capture_screen()

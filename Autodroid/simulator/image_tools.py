@@ -113,7 +113,7 @@ def load_image(resource, section):
             resource["ImageData"] = cv.resize(resource["ImageData"], tuple(resource["Size"]), cv.INTER_CUBIC)
         else:
             h, w = resource["ImageData"].shape[:2]
-            resource["Size"] = (w, h)
+            resource["Size"] = [w, h]
     return resource["ImageData"]
 
 

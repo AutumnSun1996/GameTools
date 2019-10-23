@@ -46,6 +46,22 @@ class AssistInfo(dict):
         self[name] = self.fgo.resource_in_image(info, image=self.image)
         logger.info("check_servant_equip %s: %s", name, self[name])
 
+    def extract_skill_level(self, name):
+        idx = int(name[name.find("/")+1:])
+        skill_img = self.fgo.crop_resource("助战-技能", image=self.image, index=idx-1)
+        for lvl in range(10, 0, -1):
+            info = {
+                "MainSize": [1280, 720],
+                "Name": "技能{} vs Lv.{}".format(idx, lvl),
+                "Image": "助战/技能/{}.png".format(lvl),
+                "Type": "Dynamic",
+                "MaxDiff": 0.1
+            }
+            if self.fgo.resource_in_image(info, image=skill_img):
+                self[name] = lvl
+                return
+        self[name] = 0
+
     def check(self, name):
         """判断助战从者是否满足指定条件"""
         if name in self:
@@ -68,7 +84,8 @@ class AssistInfo(dict):
             self.check_servant_name(name)
         elif name.startswith("礼装/"):
             self.check_servant_equip(name)
-
+        elif name.startswith("技能/"):
+            self.extract_skill_level(name)
         return self[name]
 
 

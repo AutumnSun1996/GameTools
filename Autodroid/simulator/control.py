@@ -98,6 +98,7 @@ class SimulatorControl:
         self.last_manual = 0
         self.stop = False
         self.resource_pos_buffer = {}
+        self.call_once_history = set()
 
     @property
     def since_last_manual(self):
@@ -153,19 +154,21 @@ class SimulatorControl:
         found: 是否找到
         pos: 找到目标的左上角坐标
         """
+        use_buffer = False
         if isinstance(info, str):
             if info not in self.resources:
                 logger.warning("No resource: %s", info)
                 return False, []
+            if image is None:
+                use_buffer = True
+                buffer_key = (info, index)
             info = self.resources[info]
-            use_buffer = True
         elif isinstance(info, dict):
             try:
                 update_resource(info, self.section)
             except FileNotFoundError:
                 logger.exception("No resource: %s", info)
                 return False, []
-            use_buffer = False
         else:
             raise TypeError("Invalid resource: {}".format(info))
 
@@ -178,12 +181,11 @@ class SimulatorControl:
                 update_resource(info, self.section)
         if image is None:
             image = self.screen
-        else:
-            use_buffer = False
 
-        if use_buffer and name in self.resource_pos_buffer:
-            logger.debug("Check Resource With Buffer: %s=%s", name, self.resource_pos_buffer[name])
-            return self.resource_pos_buffer[name]
+        if use_buffer and buffer_key in self.resource_pos_buffer:
+            buffered = self.resource_pos_buffer[buffer_key]
+            logger.debug("Check Resource With Buffer: %s=%s", name, buffered)
+            return buffered
 
         if info["Type"] == "Static":
             x, y = info["Offset"]
@@ -251,7 +253,7 @@ class SimulatorControl:
             self.critical("Invalid Type %s", info['Type'])
             return False, []
         if use_buffer:
-            self.resource_pos_buffer[name] = (ret, pos)
+            self.resource_pos_buffer[buffer_key] = (ret, pos)
         logger.debug("Check Resource: %s=%s", name, (ret, pos))
         return ret, pos
 
@@ -601,6 +603,15 @@ class SimulatorControl:
             if action.get("Break", None):
                 break
 
+    def call_once_at_scene(self, func_name, *args, **kwargs):
+        """在连续场景中单次调用指定函数"""
+        key = (self.current_scene_name, func_name, str(args), str(kwargs))
+        if key in self.call_once_history:
+            return
+        func = getattr(self, func_name)
+        func(*args, **kwargs)
+        self.call_once_history.add(key)
+
     @property
     def since_last_change(self):
         """返回从上次场景变化到当前时间的秒数"""
@@ -615,6 +626,7 @@ class SimulatorControl:
         if self.scene_changed:
             nochange = ""
             self.last_change = now
+            self.call_once_history = set()
         else:
             nochange = "(No Change)"
 

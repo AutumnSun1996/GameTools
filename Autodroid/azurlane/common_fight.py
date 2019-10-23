@@ -358,8 +358,8 @@ class CommonMap(FightMap):
         if scene['Name'] == '获得道具':
             self.do_actions(scene['Actions'])
             self.wait(1)
-            if self.resource_in_screen('收起右侧菜单'):
-                self.click_at_resource('收起右侧菜单')
+            if not self.resource_in_screen('右侧菜单'):
+                self.click_at_resource('右侧菜单')
             self.update_current_scene(['战斗地图'])
 
     def search_for_bonus(self, repeat=0):
@@ -471,6 +471,14 @@ class CommonMap(FightMap):
             return
         self.click_at_map(list(targets)[0])
 
+    def goto_bonus(self, positions=None):
+        if positions is None:
+            self.goto_res_on_map([['问号点']])
+            self.after_bonus()
+            return
+        for loc in positions:
+            self.click_at_map(loc)
+            self.after_bonus()
 
 if __name__ == "__main__":
     import datetime
