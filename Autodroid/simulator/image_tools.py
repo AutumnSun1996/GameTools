@@ -169,7 +169,7 @@ def get_all_match(image, needle):
         match = 1 - np.nan_to_num(1 - match)
     best = match.min()
     if best < 0:
-        logger.warning("MatchError for size {0[1]}x{0[0]}({0[2]}) in {1[1]}x{1[0]}: {}".format(needle.shape, image.shape, best))
+        logger.warning("MatchError for size {0[1]}x{0[0]}({0[2]}) in {1[1]}x{1[0]}: {2}".format(needle.shape, image.shape, best))
         import pickle
         with open("logs/MatchError-{0:%Y%m%dT%H%M%S}.pkl".format(datetime.datetime.now()), 'wb') as fl:
             pickle.dump({
