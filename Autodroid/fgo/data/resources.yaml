@@ -16,7 +16,16 @@ Arts:
   Image: Arts.png
   MainSize: [1280, 720]
   Name: Arts
-  Size: [125, 75]
+  Type: Dynamic
+Buster:
+  Image: Buster.png
+  MainSize: [1280, 720]
+  Name: Buster
+  Type: Dynamic
+Quick:
+  Image: Quick.png
+  MainSize: [1280, 720]
+  Name: Quick
   Type: Dynamic
 Attack:
   MainSize: [1280, 720]
@@ -24,12 +33,6 @@ Attack:
   Offset: [1070, 540]
   Size: [130, 130]
   Type: Static
-Buster:
-  Image: Buster.png
-  MainSize: [1280, 720]
-  Name: Buster
-  Size: [189, 75]
-  Type: Dynamic
 Cards:
   ClickOffset: [30, 100]
   ClickSize: [130, 160]
@@ -43,12 +46,6 @@ Cards:
   - [1065, 320]
   Size: [200, 310]
   Type: MultiStatic
-Quick:
-  Image: Quick.png
-  MainSize: [1280, 720]
-  Name: Quick
-  Size: [170, 94]
-  Type: Dynamic
 下一个:
   ClickOffset: [5, 150]
   ClickSize: [100, 40]
