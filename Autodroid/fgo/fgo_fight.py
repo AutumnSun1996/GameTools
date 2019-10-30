@@ -18,8 +18,8 @@ class FateGrandOrder(SimulatorControl):
     scene_check_max_repeat = 60
     section = "FGO"
 
-    def __init__(self, map_name="CommonConfig"):
-        super().__init__(map_name)
+    def __init__(self, map_name="CommonConfig", extra_property=None):
+        super().__init__(map_name, extra_property)
         logger.warning("Init %s", self)
         self.combat_info = defaultdict(lambda: 0)
         self.best_equips = []
