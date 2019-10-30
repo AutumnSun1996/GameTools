@@ -40,16 +40,15 @@ def main(args):
     logger.warning("Use class %r", map_cls)
 
     map_cls.section = args.section
-    fgo = map_cls(args.map_name)
+    fgo = map_cls(args.map_name, args.property)
     try:
         fgo.main_loop(make_stop_checker(args))
         # input("Pause...")
-    except KeyboardInterrupt as e:
-        logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
+    except KeyboardInterrupt:
+        pass
     except Exception as e:
-        logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
-        raise e
-
+        logger.exception("Exit for %s", e)
+    logger.warning("(OnExit) Scene Count: %s", fgo.scene_history_count)
 
     # if datetime.now() > target_time:
     #     fgo.wait(10)
@@ -72,6 +71,7 @@ if __name__ == "__main__":
     parser.add_argument("--end_in", "-t", metavar="HH[:MM[:SS]]", type=parse_end_in, default=None,
                            help="脚本最大运行时间。")
     parser.add_argument("--fight_count", "-n", type=int, default=None, help="自动战斗次数。")
+    parser.add_argument('--property', '-D', action='append', help="额外的自定义属性，hocon格式")
 
     args = parser.parse_args()
 
