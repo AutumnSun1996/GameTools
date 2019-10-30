@@ -83,11 +83,11 @@ class SimulatorControl:
     section = "Main"
     scene_check_max_repeat = 5
 
-    def __init__(self, map_name):
+    def __init__(self, map_name, extra_property=None):
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
         set_logging_dir(os.path.join(self.section, "logs"))
         self.map_name = map_name
-        self.data = load_map(self.map_name, self.section)
+        self.data = load_map(self.map_name, self.section, extra_property)
         self.scene_history = deque(maxlen=50)
         self.scene_history_count = defaultdict(lambda: 0)
         self.last_change = time.time()
@@ -438,7 +438,7 @@ class SimulatorControl:
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDYES:
             self.go_top()
-        exit(0)
+        self.close()
 
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
@@ -452,7 +452,7 @@ class SimulatorControl:
         res = win32api.MessageBox(0, info, title, flag)
         if res == win32con.IDNO:
             self.go_top()
-            exit(0)
+            self.close()
 
     def wait_mannual(self, message=None, title="", action="继续"):
         """等待手动操作"""
@@ -467,7 +467,7 @@ class SimulatorControl:
             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
         if res == win32con.IDNO:
             self.go_top()
-            exit(0)
+            self.close()
         else:
             input("Paused...")
 
@@ -481,7 +481,7 @@ class SimulatorControl:
             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
         if res == win32con.IDNO:
             self.go_top()
-            exit(0)
+            self.close()
 
     def update_current_scene(self, candidates=None, repeat=None):
         """等待指定的场景或全局场景"""
