@@ -131,9 +131,12 @@ def load_resources(section):
     return items
 
 
-def load_map(name, section):
+def load_map(name, section, extra_property):
     path = os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".conf")
     data = hocon.load(path)
+    if extra_property:
+        new_args = hocon.loads('\n'.join(extra_property))
+        data = new_args.with_fallback(data)
     for item in data["Resources"].values():
         update_resource(item, section)
     if "Anchors" in data:
