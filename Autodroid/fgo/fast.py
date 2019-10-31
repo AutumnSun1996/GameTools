@@ -49,7 +49,8 @@ class AssistInfo(dict):
     def extract_skill_level(self, name):
         idx = int(name[name.find("/")+1:])
         skill_img = self.fgo.crop_resource("助战-技能", image=self.image, index=idx-1)
-        for lvl in range(10, 0, -1):
+        # TODO: 截图lvl 1-6资源
+        for lvl in range(10, 6, -1):
             info = {
                 "MainSize": [1280, 720],
                 "Name": "技能{} vs Lv.{}".format(idx, lvl),
