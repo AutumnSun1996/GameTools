@@ -129,7 +129,7 @@ class FGOSimple(FGOBase):
             return False
         return False
 
-    def use_skills(self, *skills, no_check=False):
+    def use_skills(self, *skills, check=True):
         for skill in skills:
             if self.stop:
                 return
@@ -142,7 +142,7 @@ class FGOSimple(FGOBase):
                 index = skill[1] - 1
 
                 self.make_screen_shot()
-                if no_check or not self.is_skill_ready(index, "御主"):
+                if check and not self.is_skill_ready(index, "御主"):
                     # 为保证连续使用御主技能时不出错, 再次点击收回御主技能菜单
                     self.click_at_resource("御主技能")
                     self.wait(1)
@@ -152,7 +152,7 @@ class FGOSimple(FGOBase):
                 target = "从者技能列表"
                 index = (skill[0]-1) * 3 + (skill[1] - 1)
 
-                if no_check or not self.is_skill_ready(index, "从者"):
+                if check and not self.is_skill_ready(index, "从者"):
                     logger.info("Ignore 从者技能: %s: %s %s", skill, target, index)
                     continue
 
