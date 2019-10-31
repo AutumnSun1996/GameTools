@@ -120,8 +120,6 @@ class FGOSimple(FGOBase):
 
     def is_skill_ready(self, index, name="从者"):
         """根据技能截图检查技能是否可用"""
-        if self.data.get("NoSkillCheck", None):
-            return True
         skill_img = self.crop_resource(name+"技能列表", index=index)
         line = self.crop_resource(name+"技能状态", image=skill_img)
         line = line.mean(axis=2)
@@ -131,7 +129,7 @@ class FGOSimple(FGOBase):
             return False
         return False
 
-    def use_skills(self, *skills):
+    def use_skills(self, *skills, no_check=False):
         for skill in skills:
             if self.stop:
                 return
@@ -144,7 +142,7 @@ class FGOSimple(FGOBase):
                 index = skill[1] - 1
 
                 self.make_screen_shot()
-                if not self.is_skill_ready(index, "御主"):
+                if no_check or not self.is_skill_ready(index, "御主"):
                     # 为保证连续使用御主技能时不出错, 再次点击收回御主技能菜单
                     self.click_at_resource("御主技能")
                     self.wait(1)
@@ -154,7 +152,7 @@ class FGOSimple(FGOBase):
                 target = "从者技能列表"
                 index = (skill[0]-1) * 3 + (skill[1] - 1)
 
-                if not self.is_skill_ready(index, "从者"):
+                if no_check or not self.is_skill_ready(index, "从者"):
                     logger.info("Ignore 从者技能: %s: %s %s", skill, target, index)
                     continue
 
