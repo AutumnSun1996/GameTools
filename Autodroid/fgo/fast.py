@@ -108,6 +108,8 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(3)
         for item in self.data["Strategy"]["Skills"]:
+            if self.stop:
+                return
             self.make_screen_shot()
             if parse_condition(item.get("Condition", True), self, self.combat_info.__getitem__):
                 logger.info("Skill Strategy Passed: %s", item)
@@ -130,6 +132,8 @@ class FGOSimple(FGOBase):
 
     def use_skills(self, *skills):
         for skill in skills:
+            if self.stop:
+                return
             self.make_screen_shot()
             self.combat_info["SkillCheck<{0}-{1}>".format(*skill)] = self.combat_info["Turn"]
             if skill[0] == 0:

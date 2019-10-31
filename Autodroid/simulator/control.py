@@ -552,6 +552,8 @@ class SimulatorControl:
         if actions is None:
             actions = self.current_scene["Actions"]
         for action in actions:
+            if self.stop:
+                return
             if "Condition" in action and not parse_condition(action["Condition"], self):
                 continue
 
