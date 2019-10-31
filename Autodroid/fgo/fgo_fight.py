@@ -234,7 +234,7 @@ class FateGrandOrder(SimulatorControl):
             if match:
                 self.combat_info["Turn"] = int(match.group(1))
         except (AttributeError, IndexError, ValueError) as err:
-            if not self.combat_info["Turn"]:
+            if not self.combat_info.get("Turn"):
                 self.combat_info["Turn"] = 1
             else:
                 self.combat_info["Turn"] += 1
@@ -243,7 +243,7 @@ class FateGrandOrder(SimulatorControl):
         self.extract_np_info(False)
         # self.extract_enemy_hp()
         if errors:
-            self.notice("OCR Errors %s" % errors)
+            logger.warning("OCR Errors %s", errors)
             self.wait(1)
             self.make_screen_shot()
             self.extract_combat_info(repeat+1)
