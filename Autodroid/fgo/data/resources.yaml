@@ -273,7 +273,7 @@ Cards:
   - [32, 32]
   Size: [24, 24]
   Type: Dynamic
-  MaxDiff: 0.01
+  MaxDiff: 0.02
 助战-职阶选择:
   MainSize: [1280, 720]
   Name: 助战-职阶选择
@@ -511,7 +511,7 @@ Cards:
   Type: MultiStatic
 战斗-敌人位置:
   ClickOffset: [10, 10]
-  ClickSize: [200, 50]
+  Size: [200, 50]
   MainSize: [1280, 720]
   Name: 战斗-敌人位置
   Positions:
