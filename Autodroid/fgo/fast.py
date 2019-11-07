@@ -175,8 +175,8 @@ class FGOSimple(FGOBase):
             self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
 
-            if self.parse_scene_condition([["无法使用"]]):
-                self.click_at_resource("关闭")
+            if self.parse_scene_condition(["技能-关闭"]):
+                self.click_at_resource("技能-关闭")
                 self.wait(0.5)
             elif self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
                 self.click_at_resource("右侧空白区域")
@@ -267,7 +267,6 @@ class FGOSimple(FGOBase):
         end = (x0+dx*7, y0+dy*3)
         rand_drag(self.hwnd, start, end, start_delay=1)
         self.wait(1)
-
 
 
 if __name__ == "__main__":

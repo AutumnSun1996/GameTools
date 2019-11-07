@@ -172,6 +172,12 @@ Cards:
   Offset: [540, 540]
   Size: [200, 45]
   Type: Static
+技能-关闭:
+  Image: 关闭.png
+  MainSize: [1280, 720]
+  Name: 技能-关闭
+  Size: [200, 45]
+  Type: Dynamic
 剧情-对话框:
   Image: 剧情-对话框.png
   MainSize: [1280, 720]
