@@ -43,6 +43,9 @@ def reset_log():
         fgo:
             level   : DEBUG
             handlers: [console]
+    root:
+        level   : DEBUG
+        handlers: [console]
     """))
 
 
@@ -123,7 +126,7 @@ def save_crop(name, cropped, offset):
     info = {
         "Name": name,
         "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
-        "Offset": offset,
+        "Offset": list(offset),
         "Size": [w, h],
         "Type": "Static",
         "Image": name + '.png'
