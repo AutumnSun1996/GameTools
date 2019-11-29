@@ -8,6 +8,7 @@ import datetime
 from pyhocon import ConfigFactory
 import piexif
 from PIL import Image, ImageFont, ImageDraw
+import requests
 import cv2.cv2 as cv
 import numpy as np
 import win32con
@@ -160,28 +161,16 @@ def split_bgra(bgra):
     return bgr, mask
 
 
-def get_all_match(image, needle):
-    """在image中搜索needle"""
-    if len(needle.shape) == 3 and needle.shape[2] == 4:
-        bgr, a = split_bgra(needle)
-        # 将所有nan变为1
-        match = 1 - np.nan_to_num(cv.matchTemplate(image, bgr, cv.TM_CCORR_NORMED, mask=a))
-    else:
-        match = cv.matchTemplate(image, needle, cv.TM_SQDIFF_NORMED)
-        # 将所有nan变为1
-        match = 1 - np.nan_to_num(1 - match)
-    best = match.min()
-    if best < 0:
-        logger.warning("MatchError for size {0[1]}x{0[0]}({0[2]}) in {1[1]}x{1[0]}: {2}".format(needle.shape, image.shape, best))
-        import pickle
-        with open("logs/MatchError-{0:%Y%m%dT%H%M%S}.pkl".format(datetime.datetime.now()), 'wb') as fl:
-            pickle.dump({
-                "image": image,
-                "needle": needle,
-                "result": match
-            }, fl)
-        match = np.ones_like(match)
-    return match
+def image_process_request(image, needle, params):
+    response = requests.post(
+        "http://192.168.1.224:9192/match",
+        files={
+            "image": cv.imencode(".png", image)[1].tobytes(),
+            "needle": cv.imencode(".png", needle)[1].tobytes(),
+        },
+        params=params,
+    )
+    return response.json()["res"]
 
 
 def get_multi_match(image, needle, thresh):
@@ -189,29 +178,16 @@ def get_multi_match(image, needle, thresh):
 
     重合的部分返回重合部分中心对应的坐标
     """
-    match = get_all_match(image, needle)
-    h, w = needle.shape[:2]
-    # 模拟填充所有找到的匹配位置
-    draw = np.zeros(image.shape[:2], dtype='uint8')
-    h, w = needle.shape[:2]
-    for y, x in zip(*np.where(match < thresh)):
-        cv.rectangle(draw, (x, y), (x+w, y+h), 255, -1)
-    # 连通域分析
-    _, _, _, centroids = cv.connectedComponentsWithStats(draw.astype("uint8"))
-    # 删去背景连通域
-    centroids = centroids[1:]
-    # 中心坐标转化为左上角坐标
-    centroids[:, 0] -= w / 2
-    centroids[:, 1] -= h / 2
-    # 将数值转化为int型
-    return centroids.round().astype('int')
+    result = image_process_request(
+        image, needle, {"method": "get_multi_match", "thresh": thresh}
+    )
+    return result["pos"]
 
 
 def get_match(image, needle):
     """在image中搜索needle"""
-    diff = get_all_match(image, needle)
-    loc = np.unravel_index(np.argmin(diff, axis=None), diff.shape)
-    return diff[loc], loc[::-1]
+    result = image_process_request(image, needle, {"method": "get_match"})
+    return result["diff"], result["pos"]
 
 
 def get_diff(a, b):
