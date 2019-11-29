@@ -19,7 +19,7 @@ import win32con
 import win32api
 
 from config_loader import config, set_logging_dir
-from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, get_all_match, \
+from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, \
     cv_save, load_map, load_image, update_resource, save_jpeg
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
