@@ -102,10 +102,7 @@
 加载中:
   Actions:
   - {Time: 1, Type: Wait}
-  Condition:
-  - $all
-  - - [加载进度条]
-    - [加载进度条2]
+  Condition: [Loading]
   Name: 加载中
   Next: [加载中, 正常战斗中]
 正常战斗中:

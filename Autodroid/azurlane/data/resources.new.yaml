@@ -24,7 +24,8 @@ COMMANDER:
   Offset: [1041, 605]
   Size: [202, 64]
   Type: Static
-  
+  MaxDiff: 0.01
+
 自律提醒:
   Image: 自律提醒.jpg
   MainSize: [1280, 720]
@@ -102,20 +103,14 @@ COMMANDER:
   Offset: [0, 0]
   Size: [300, 45]
   Type: Static
-加载进度条:
-  Image: 加载进度条.png
+Loading:
+  Name: "Loading"
   MainSize: [1280, 720]
-  Name: 加载进度条
-  Offset: [33, 676]
-  Size: [16, 4]
-  Type: Static
-加载进度条2:
-  Image: 加载进度条2.png
-  MainSize: [1280, 720]
-  Name: 加载进度条2
-  Offset: [1230, 676]
-  Size: [16, 4]
-  Type: Static
+  Offset: [1072, 694]
+  Size: [84, 20]
+  Type: "Static"
+  Image: "Loading.png"
+  MaxDiff: 0.02
 暂停:
   Image: 暂停.png
   MainSize: [1280, 720]
