@@ -395,7 +395,7 @@ Cards:
   Offset: [1040, 0]
   Size: [240, 80]
   Type: Static
-  MaxDiff: 0.1
+  MaxDiff: 0.01
 右下-菜单:
   Image: 右下-菜单.png
   MainSize: [1280, 720]
@@ -831,7 +831,7 @@ Cards:
   Offset: [1040, 0]
   Size: [240, 80]
   Type: Static
-  MaxDiff: 0.1
+  MaxDiff: 0.01
 队伍确认2:
   Image: 队伍确认2.png
   MainSize: [1280, 720]
@@ -839,7 +839,7 @@ Cards:
   Offset: [1040, 0]
   Size: [240, 80]
   Type: Static
-  MaxDiff: 0.02
+  MaxDiff: 0.01
 
 魔术礼装等级:
   Image: 魔术礼装等级.png
