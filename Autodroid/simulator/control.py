@@ -432,12 +432,12 @@ class SimulatorControl:
         title = "自动脚本%s - %s错误" % (self.section, title)
         self.save_record("Critical", comment={"message": message}, title=title)
 
-        info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
-        flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
-            | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        res = win32api.MessageBox(0, info, title, flag)
-        if res == win32con.IDYES:
-            self.go_top()
+#         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
+#         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
+#             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+#         res = win32api.MessageBox(0, info, title, flag)
+#         if res == win32con.IDYES:
+#             self.go_top()
         self.close()
 
     def error(self, message=None, title="", action="继续"):
@@ -447,11 +447,13 @@ class SimulatorControl:
         self.save_record("Error", comment={"message": message}, title=title)
 
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
-        flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
-            | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
-        res = win32api.MessageBox(0, info, title, flag)
-        if res == win32con.IDNO:
-            self.go_top()
+#         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
+#             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
+#         res = win32api.MessageBox(0, info, title, flag)
+#         if res == win32con.IDNO:
+#             self.go_top()
+#             self.close()
+        if input(info).lower() != 'y':
             self.close()
 
     def wait_mannual(self, message=None, title="", action="继续"):
@@ -461,27 +463,29 @@ class SimulatorControl:
         info = "等待手动指令:\n%s" % message
         # flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
         #     | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        flag = win32con.MB_YESNO | win32con.MB_SETFOREGROUND
-        title = "自动脚本 - 等待手动指令"
-        res = ctypes.windll.user32.MessageBoxTimeoutA(
-            0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
-        if res == win32con.IDNO:
-            self.go_top()
-            self.close()
-        else:
-            input("Paused...")
+#         flag = win32con.MB_YESNO | win32con.MB_SETFOREGROUND
+#         title = "自动脚本 - 等待手动指令"
+#         res = ctypes.windll.user32.MessageBoxTimeoutA(
+#             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
+#         if res == win32con.IDNO:
+#             self.go_top()
+#             self.close()
+#         else:
+#             input("Paused...")
+        input("Paused...")
 
     def notice(self, message=None, title="", action="继续"):
         """提醒"""
         logger.warning(message)
-        info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
-        flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
-        title = "自动脚本%s - %s提醒" % (self.section, title)
-        res = ctypes.windll.user32.MessageBoxTimeoutA(
-            0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
-        if res == win32con.IDNO:
-            self.go_top()
-            self.close()
+#         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
+#         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
+#         title = "自动脚本%s - %s提醒" % (self.section, title)
+#         res = ctypes.windll.user32.MessageBoxTimeoutA(
+#             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
+#         if res == win32con.IDNO:
+#             self.go_top()
+#             self.close()
+        time.sleep(3)
 
     def update_current_scene(self, candidates=None, repeat=None):
         """等待指定的场景或全局场景"""
