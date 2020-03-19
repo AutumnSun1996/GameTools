@@ -1,0 +1,42 @@
+Description: 礼装升级
+Name: 礼装升级
+Resources:
+  礼装升级:
+    Image: 礼装升级.png
+    MainSize: [1280, 720]
+    Name: 礼装升级
+    Offset: [1040, 0]
+    Size: [240, 80]
+    Type: Static
+  选择目标:
+    Image: 选择目标.png
+    MainSize: [1280, 720]
+    Name: 选择目标
+    Offset: [50, 200]
+    Size: [300, 280]
+    Type: Static
+  选择材料:
+    Image: 选择材料.png
+    MainSize: [1280, 720]
+    Name: 选择材料
+    Offset: [400, 150]
+    Size: [200, 220]
+    ClickOffset: [20, 50]
+    ClickSize: [800, 160]
+    Type: Static
+  筛选:
+    Image: 筛选.png
+    MainSize: [1280, 720]
+    Name: 筛选
+    Offset: [943, 110]
+    Size: [70, 40]
+    Type: Static
+  筛选-决定:
+    Image: 决定.png
+    MainSize: [1280, 720]
+    Name: 筛选-决定
+    Offset: [740, 610]
+    Size: [200, 50]
+    Type: Static
+Scenes: {}
+Strategy: {}
