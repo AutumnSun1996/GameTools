@@ -1,0 +1,4860 @@
+致残突击
+Maiming Strike
+急进猛突
+Blood Rush
+伏打电能
+Voltaic Strike
+持久力 PRIME
+Primed Continuity
+瞬时坚毅
+Transient Fortitude
+生命力
+Vitality
+川流不息 PRIME
+Primed Flow
+电光冲刺
+Lightning Dash
+心志偏狭
+Narrow Minded
+盲怒
+Blind Rage
+钢铁纤维
+Steel Fiber
+蓄能重划
+Redirection
+能量转换
+Energy Conversion
+持久力
+Continuity
+预言 启示
+Augur Message
+弹指瞬技
+Fleeting Expertise
+简化
+Streamline
+延伸
+Stretch
+过度延展
+Overextended
+力量窜升
+Power Drift
+聚精会神
+Intensify
+预言 神密
+Augur Secrets
+腐蚀投射
+Corrosive Projection
+协力窜升
+Coaction Drift
+钻石皮肤
+Diamond Skin
+敌人感应
+Enemy Sense
+私法 追踪
+Vigilante Pursuit
+返老还童
+Rejuvenation
+体魄
+Physique
+角斗士 决心
+Gladiator Resolve
+战利品探测器
+Loot Detector
+盗贼天赋
+Thief's Wit
+坚忍窜升
+Endurance Drift
+川流不息
+Flow
+能量虹吸
+Energy Siphon
+极速复元
+Rapid Resilience
+活力
+Vigor
+狡诈窜升
+Cunning Drift
+磁浮
+Maglev
+灵活装甲
+Armored Agility
+入侵者
+Intruder
+穿刺步伐
+Piercing Step
+随机应变
+Quick Thinking
+步枪增幅
+Rifle Amp
+死亡之眼
+Dead Eye
+流线外形
+Streamlined Form
+钢铁充能
+Steel Charge
+冲刺
+Rush
+天赋
+Natural Talent
+狂暴化
+Rage
+百折不挠
+Constitution
+翻筋斗
+Handspring
+快速充能
+Fast Deflection
+保温服
+Warm Coat
+强化刀锋
+Empowered Blades
+成长之力
+Growing Power
+生命转换
+Health Conversion
+快速休整
+Brief Respite
+预言 通灵
+Augur Reach
+团结一致
+Stand United
+角斗士 圣盾
+Gladiator Aegis
+反射防御
+Reflex Guard
+不朽意志
+Undying Will
+猎人 肾上腺素
+Hunter Adrenaline
+减震器
+Shock Absorbers
+毒抗
+Antitoxin
+毒素抵抗
+Toxin Resistance
+火焰防护
+Flame Repellent
+矫捷窜升
+Agility Drift
+避雷针
+Lightning Rod
+隔热
+Insulation
+飞行员
+Aviator
+侦敌雷达
+Enemy Radar
+匿踪窜升
+Stealth Drift
+震地冲击
+Heavy Impact
+不屈不挠
+Fortitude
+顶天立地
+Sure Footed
+痛苦阈值
+Pain Threshold
+盗贼大师
+Master Thief
+感染者阻抗
+Infested Impedance
+电磁脉冲场
+EMP Aura
+均衡点
+Equilibrium
+惩戒
+Retribution
+护盾瓦解
+Shield Disruption
+预言 协约
+Augur Accord
+私法 活力
+Vigilante Vigor
+速度窜升
+Speed Drift
+全面驱动
+Mobilize
+冰冷跃动
+Ice Spring
+剧毒飞腾
+Toxic Flight
+撕裂翻转
+Rending Turn
+机动冲撞
+Battering Maneuver
+火焰行者
+Firewalker
+翼膜
+Patagium
+角斗士 灵巧
+Gladiator Finesse
+手枪弹药搜集者
+Pistol Scavenger
+步枪弹药搜集者
+Rifle Scavenger
+狙击枪弹药搜集者
+Sniper Scavenger
+霰弹枪弹药搜集者
+Shotgun Scavenger
+手枪增幅
+Pistol Amp
+激怒
+Provoked
+霰弹枪增幅
+Shotgun Amp
+快速切换
+Speed Holster
+充能反弹
+Reflection
+二元性状
+Duality
+共鸣地震
+Resonating Quake
+冰封护罩
+Chilling Globe
+冷静与疯狂
+Calm & Frenzy
+华彩刀剑
+Chromatic Blade
+巨大石者
+Titanic Rumbler
+幸存生灵
+Soul Survivor
+幽影之护
+Shield of Shadows
+急流
+Jet Stream
+恶怨厅
+Hall of Malevolence
+掠夺
+Despoil
+救星诱饵
+Savior Decoy
+构造裂缝
+Tectonic Fracture
+永恒战意
+Eternal War
+汲能榨取
+Vampire Leech
+漏斗状云
+Funnel Clouds
+神针腾跃
+Iron Vault
+致命传送
+Fatal Teleport
+贪夺触角
+Pilfering Swarm
+践踏加固
+Reinforcing Stomp
+辐射缴械
+Irradiating Disarm
+驱逐力场
+Repelling Bastille
+中子星爆
+Neutron Star
+元素沙暴
+Elemental Sandstorm
+全蚀
+Total Eclipse
+冰冷雪崩
+Icy Avalanche
+凤凰新生
+Phoenix Renewal
+刺骨战吼
+Piercing Roar
+削甲手里剑
+Seeking Shuriken
+化像之道
+Path of Statues
+原始暴怒
+Primal Rage
+反物质吸收
+Antimatter Absorb
+同化
+Assimilate
+和平挑衅
+Peaceful Provocation
+圣域爆发
+Hallowed Eruption
+失衡护盾
+Staggering Shield
+寒冰之力
+Freeze Force
+导路龙骸
+Guided Effigy
+庇护烟幕
+Smoke Shadow
+弹道靶心
+Ballistic Bullseye
+怨怒报复
+Vexing Retaliation
+惊惧热浪
+Fire Fright
+惩击洗礼
+Smite Infusion
+感染毒雾
+Contagion Cloud
+抚慰之风
+Pacifying Bolts
+护卫传送
+Safeguard Switch
+护盾转移
+Shield Transference
+抵消虫群
+Negation Swarm
+摆荡钩索
+Swing Line
+晶管屏障
+Transistor Shield
+枪口闪焰
+Muzzle Flash
+欺幻魔灯
+Beguiling Lantern
+残响共鸣
+Resonance
+残酷无息
+Savage Silence
+永动旋涡
+Perpetual Vortex
+永恒之护
+Everlasting Ward
+涌流突进
+Surging Dash
+涡卷俯冲
+Divebomb Vortex
+混乱领域
+Chaos Sphere
+渗透
+Infiltrate
+滞痕冰浪
+Ice Wave Impedance
+潮汐涌净
+Tidal Impunity
+火成碎流
+Pyroclastic Flow
+火绫守护
+Safeguard
+灾变连连
+Cataclysmic Continuum
+烈焰爆震
+Firequake
+爆炸戏法
+Explosive Legerdemain
+特斯拉陷阱
+Tesla Link
+狂化突击
+Hysterical Assault
+狂怒标枪
+Furious Javelin
+狂热火球
+Fireball Frenzy
+猛毒附加
+Venom Dose
+生命之池
+Pool of Life
+电击加速
+Shocking Speed
+电击奇兵
+Shock Trooper
+电容
+Capacitance
+疗愈漩涡
+Curative Undertow
+矿石凝视
+Ore Gaze
+破碎声波
+Sonic Fracture
+碎铁弹片
+Iron Shrapnel
+磁吸释放
+Magnetized Discharge
+神圣清算
+Hallowed Reckoning
+穿刺抛体
+Piercing Navigator
+精神狂怒
+Mind Freak
+终结闪光
+Radiant Finish
+续燃
+Afterburn
+缓动惊骇
+Creeping Terrify
+耗弱链接
+Abating Link
+脱离速度
+Escape Velocity
+腐蚀弹幕
+Corroding Barrage
+蜕化再生
+Regenerative Molt
+裂隙洪流
+Rift Torrent
+贪婪吸引
+Greedy Pull
+避难所
+Haven
+铁甲冲锋
+Ironclad Charge
+长时瘫痪
+Prolonged Paralysis
+闪耀助燃
+Flash Accelerant
+静谧无踪
+Hushed Invisibility
+风起云涌
+Rising Storm
+高压粉碎
+Fracturing Crush
+低温弹头 PRIME
+Primed Cryo Rounds
+抵近射击 PRIME
+Primed Point Blank
+灭亡 CORPUS PRIME
+Primed Bane of Corpus
+灭亡 GRINEER PRIME
+Primed Bane of Grineer
+灭亡 INFESTED PRIME
+Primed Bane of Infested
+灭亡堕落者 PRIME
+Primed Bane of Corrupted
+爆发装填 PRIME
+Primed Fast Hands
+破灭 PRIME
+Primed Ravage
+全面接触
+Full Contact
+关键延迟
+Critical Delay
+冰冷疾风
+Frigid Blast
+凝胶爆破
+Adhesive Blast
+分裂膛室
+Split Chamber
+加速冲击
+Accelerated Blast
+动力回弹
+Kinetic Ricochet
+卑劣加速
+Vile Acceleration
+合金钻头
+Metal Auger
+地狱弹膛
+Hell's Chamber
+填弹上膛
+Lock and Load
+尖牙连射
+Fanged Fusillade
+弱点感应
+Vital Sense
+恒稳枪杆
+Gun Glide
+恶性扩散
+Vicious Spread
+扫荡锯齿
+Sweeping Serration
+抵消正义
+Neutralizing Justice
+撕裂
+Shred
+散射正义
+Scattered Justice
+机动装填
+Tactical Reload
+极恶精准
+Vile Precision
+步枪弹药转换
+Rifle Ammo Mutation
+毒素弹幕
+Toxic Barrage
+氩晶瞄具
+Argon Scope
+永恒纯净
+Lasting Purity
+污秽弹药
+Tainted Shell
+游离双管
+Double-Barrel Drift
+激冷装填
+Chilling Reload
+灼热光束
+Combustion Beam
+炼狱轰击
+Scattering Inferno
+烈焰
+Blaze
+烈焰风暴
+Firestorm
+熵数爆发
+Entropy Burst
+狂暴追猎
+Seeking Fury
+狭窄枪膛
+Narrow Barrel
+猎人 追踪
+Hunter Track
+电冲弹药
+Shell Shock
+电压数列
+Voltage Sequence
+白霜弹头
+Rime Rounds
+破灭
+Ravage
+破碎正义
+Shattering Justice
+破裂填装
+Breach Loader
+私法 侵犯
+Vigilante Offense
+私法 补给
+Vigilante Supplies
+稳定
+Stabilizer
+穿甲口径
+Piercing Caliber
+穿透力
+Seeking Force
+箭矢转换
+Arrow Mutation
+簧压猎箭
+Spring-Loaded Broadhead
+系绳榴弹
+Tether Grenades
+纳米涂覆
+Nano-Applicator
+缴械纯净
+Disarming Purity
+耗竭装填
+Depleted Reload
+腐败弹匣
+Tainted Mag
+致命数列
+Deadly Sequence
+致命火力
+Malignant Force
+虚弱动能
+Frail Momentum
+过载弹匣
+Burdened Magazine
+连续冲击
+Crash Course
+通量射线步枪超载
+Flux Overdrive
+重口径
+Heavy Caliber
+重锤射击
+Hammer Shot
+野火
+Wildfire
+铝热焊弹
+Thermite Rounds
+锁定目标
+Target Acquired
+镀金真相
+Gilded Truth
+降速暴击
+Critical Deceleration
+雷火
+Thunderbolt
+霰弹枪弹药转换
+Shotgun Ammo Mutation
+高压电流
+High Voltage
+传染蔓延
+Contagious Spread
+低温弹头
+Cryo Rounds
+充电弹头
+Charged Shell
+净化CORPUS
+Cleanse Corpus
+净化GRINEER
+Cleanse Grineer
+净化INFESTED
+Cleanse Infested
+净化堕落者
+Cleanse Corrupted
+凶恶延伸
+Sinister Reach
+制导弹药
+Guided Ordinance
+压缩弹药
+Shell Compression
+地狱火
+Hellfire
+夜巡燃烧弹
+Nightwatch Napalm
+寂静炮组
+Silent Battery
+尖刃弹头
+Bladed Rounds
+巨人促进剂
+Fomorian Accelerant
+广域之视
+Broad Eye
+急冻控场
+Chilling Grasp
+战术上膛
+Tactical Pump
+抵近射击
+Point Blank
+暴风使者
+Stormbringer
+机动瞄准
+Agile Aim
+极限速度
+Terminal Velocity
+步枪才能
+Rifle Aptitude
+污染弹匣
+Infected Clip
+灭亡CORPUS
+Bane of Corpus
+灭亡GRINEER
+Bane of Grineer
+灭亡INFESTED
+Bane of Infested
+灭亡堕落者
+Bane Of Corrupted
+灵敏扳机
+Speed Trigger
+燃烧外壳
+Incendiary Coat
+猎人 战备
+Hunter Munitions
+私法 热诚
+Vigilante Fervor
+簧压膛室
+Spring-Loaded Chamber
+精湛快手
+Soft Hands
+综观全局
+Overview
+膛线
+Serration
+致死加速
+Fatal Acceleration
+蓄力装填
+Charged Chamber
+表演时间
+Shotgun Spazz
+转轮弹匣
+Repeater Clip
+迅速抽换
+Twitch
+通晓霰弹枪
+Shotgun Savvy
+速射
+Snap Shot
+酸性弹药
+Acid Shells
+雷射瞄具
+Laser Sight
+霰弹扩充
+Ammo Stock
+鹰眼
+Eagle Eye
+冲击干扰
+Disruptor
+弹匣增幅
+Magazine Warp
+弹鼓
+Ammo Drum
+恒久折磨
+Lingering Torment
+无尽苦难
+Continuous Misery
+消音器
+Hush
+爆发装填
+Fast Hands
+破片射击
+Shrapnel Shot
+破裂
+Rupture
+私法 军备
+Vigilante Armaments
+穿甲伤害
+Piercing Hit
+箭型弹头
+Flechette
+粉碎器
+Shredder
+致命一击
+Point Strike
+触媒连动
+Catalyzer Link
+锯齿弹链
+Sawtooth Clip
+雷筒
+Blunderbuss
+串联弹匣 PRIME
+Primed Slip Magazine
+弱点专精 PRIME
+Primed Target Cracker
+手枪精通 PRIME
+Primed Pistol Gambit
+火焰装填 PRIME
+Primed Heated Charge
+乏能迅敏
+Anemic Agility
+侵蚀毁坏
+Eroding Blight
+冰风暴
+Ice Storm
+内置炸药
+Concealed Explosives
+匍匐靶心
+Creeping Bullseye
+延烧数列
+Sequence Burn
+增压弹匣
+Pressurized Magazine
+弹匣置换
+Eject Magazine
+弹头导引
+Seeker
+弹头扩散
+Barrel Diffusion
+强力猛击
+Pummel
+感染弹匣
+Tainted Clip
+慑人神速
+Stunning Speed
+手枪弹药转换
+Pistol Ammo Mutation
+枪膛
+Bore
+毒素数列
+Toxic Sequence
+滑行扫射
+Strafing Slide
+灼痕焦点
+Scorch
+热磁弹药
+Thermagnetic Shells
+熵数尖钉
+Entropy Spike
+猛烈爆发
+Fulmination
+电流震击
+Jolt
+瘟疫手枪
+Pistol Pestilence
+积存毁坏
+Stockpiled Blight
+稳定枪手
+Steady Hands
+空尖弹
+Hollow Point
+纯净之风
+Winds of Purity
+结霜侵蚀
+Frostbite
+致命洪流
+Lethal Torrent
+致残枪弹
+Maim
+过激真相
+Stinging Truth
+重装火力
+Magnum Force
+预言 探求
+Augur Seeker
+内置触媒
+Embedded Catalyzer
+准确射手
+Sure Shot
+剃刀射击
+Razor Shot
+反射拔枪
+Reflex Draw
+定位辅助
+Targeting Subsystem
+尖锐子弹
+Sharpened Bullets
+弱点专精
+Target Cracker
+有去无回
+No Return
+毁灭扩展
+Ruinous Extension
+深层冷冻
+Deep Freeze
+火焰装填
+Heated Charge
+病原弹头
+Pathogen Rounds
+痉挛
+Convulsion
+神枪手
+Gunslinger
+空中侦察
+Air Recon
+致命动量
+Lethal Momentum
+迅敏视觉
+Spry Sights
+隼目
+Hawk Eye
+震荡弹头
+Concussion Rounds
+驱逐CORPUS
+Expel Corpus
+驱逐GRINEER
+Expel Grineer
+驱逐INFESTED
+Expel Infested
+驱逐堕落者
+Expel Corrupted
+黄蜂蛰刺
+Hornet Strike
+串联弹匣
+Slip Magazine
+戏法增幅
+Trick Mag
+手枪精通
+Pistol Gambit
+持续火力
+Quickdraw
+永恒苦痛
+Perpetual Agony
+消音
+Suppress
+液压准心
+Hydraulic Crosshairs
+预言 契约
+Augur Pact
+剑风 PRIME
+Primed Reach
+压迫点 PRIME
+Primed Pressure Point
+热病打击 PRIME
+Primed Fever Strike
+狂暴 PRIME
+Primed Fury
+重创 PRIME
+Primed Heavy Trauma
+光明纯净
+Bright Purity
+冲击巨力
+Collision Force
+剧毒灾害
+Virulent Scourge
+加速
+Quickening
+复仇真相
+Avenging Truth
+奋力一掷
+Power Throw
+奚落守护
+Guardian Derision
+异况超量
+Condition Overload
+撕裂打击
+Rending Strike
+旋风
+Whirlwind
+正义刀锋
+Justice Blades
+毁坏微光
+Gleaming Blight
+毁坏毒素
+Toxic Blight
+治愈归复
+Healing Return
+漂移接触
+Drifting Contact
+熵数起爆
+Entropy Detonation
+爆裂刀刃
+Volcanic Edge
+狂战士
+Berserker
+生命打击
+Life Strike
+真相之刃
+Blade of Truth
+破甲
+Sundering Strike
+簧压刀刃
+Spring-Loaded Blade
+聚焦能量
+Focus Energy
+能量导引
+Energy Channel
+腐坏打击
+Spoiled Strike
+致命匿杀
+Covert Lethality
+蚀骨寒霜
+Vicious Frost
+螺钻打击
+Auger Strike
+角斗士 钳制
+Gladiator Vice
+败兴虐杀
+Buzz Kill
+邪恶蓄力
+Corrupt Charge
+重创
+Heavy Trauma
+锯刃
+Jagged Edge
+静电释放
+Static Discharge
+飞逝熵数
+Entropy Flight
+一击必杀
+Killing Blow
+创口溃烂
+Weeping Wounds
+北风
+North Wind
+增幅线圈
+Reflex Coil
+残酷组合
+Relentless Combination
+毁灭CORPUS
+Smite Corpus
+毁灭GRINEER
+Smite Grineer
+毁灭INFESTED
+Smite Infested
+毁灭堕落者
+Smite Corrupted
+火神闪击
+Vulcan Blitz
+热病打击
+Fever Strike
+熔岩冲击
+Molten Impact
+狂暴
+Fury
+猎人骨锯
+Hunter's Bonesaw
+电击触点
+Shocking Touch
+电磁屏障
+Electromagnetic Shielding
+画龙点睛
+Finishing Touch
+裂缝打击
+Rift Strike
+角斗士 威猛
+Gladiator Might
+超速击杀
+Dispatch Overdrive
+长时苦难
+Enduring Affliction
+震波
+Seismic Wave
+不朽打击
+Enduring Strike
+压迫点
+Pressure Point
+弹跳
+Rebound
+快速收回
+Quick Return
+斩铁
+True Steel
+未完之刺
+Lasting Sting
+杀伤计数
+Body Count
+格挡
+Blocking
+真实惩罚
+True Punishment
+碎裂冲击
+Shattering Impact
+肢解
+Organ Shatter
+角斗士 猛突
+Gladiator Rush
+重点防御
+Focused Defense
+非凡技巧
+Melee Prowess
+割裂羽翼
+Slicing Feathers
+刀锋弹舞
+Bullet Dance
+双蛇牙突
+Crossing Snakes
+回转尖峰
+Twirling Spire
+复仇亡灵
+Vengeful Revenant
+多流抽击
+Flailing Branch
+天启异象
+Four Riders
+尖锐之风
+Pointed Wind
+弧刃回天
+Cleaving Whirlwind
+微光利爪
+Gleaming Talon
+恶毒猛禽
+Malicious Raptor
+星界微光
+Astral Twilight
+月落乌啼
+Crushing Ruin
+朱红暴风
+Vermilion Storm
+果断裁决
+Decisive Judgement
+正午
+High Noon
+残暴浪潮
+Brutal Tide
+母神悲歌
+Gaia's Tragedy
+毒蛇螺旋
+Coiling Viper
+狡狐诈面
+Vulpine Mask
+狼鱼咬咬
+Gnashing Payara
+猎鹰俯击
+Swooping Falcon
+皇家节奏
+Tempo Royale
+秋风落叶
+Tranquil Cleave
+积秽骁龙
+Defiled Snapdragon
+缠旋风切
+Stalking Fan
+至尊浪人
+Sovereign Outcast
+蛰刺狂棘
+Stinging Thorn
+血色万柳
+Bleeding Willow
+赤红狂舞
+Crimson Dervish
+钢铁凤凰
+Iron Phoenix
+雕斩螳螂
+Carving Mantis
+震撼冲拳
+Seismic Palm
+飓风海怪
+Cyclone Kraken
+云暴山碎
+Shattering Storm
+冷面狂怒
+Grim Fury
+分裂编织
+Sundering Weave
+巨林冲击
+Clashing Forest
+撕裂鹤击
+Rending Crane
+收割螺旋
+Reaping Spiral
+旋压刺针
+Spinning Needle
+旋风虎击
+Swirling Tiger
+无明制裁
+Blind Justice
+最终先驱
+Final Harbinger
+沉没之爪
+Sinking Talon
+深渊之火
+Atlantis Vulcan
+炙热黄蜂
+Burning Wasp
+破碎之风
+Fracturing Wind
+纵横双子
+Gemini Cross
+终焉风暴
+Eleventh Storm
+连牙追袭
+Homing Fang
+非晶变压器 PRIME
+Primed Morphic Transformer
+加力燃烧
+Afterburner
+动力转移
+Kinetic Diversion
+寒流来袭
+Cold Snap
+系统重划
+System Reroute
+能量力场
+Energy Field
+超越推进
+Hyperion Thrusters
+非晶变压器
+Morphic Transformer
+高效传输
+Efficient Transferral
+卓越防御
+Superior Defenses
+耐久强化
+Enhanced Durability
+能量扩散
+Energy Amplifier
+辅助动力
+Auxiliary Power
+氩晶装甲
+Argon Plating
+能量转化
+Energy Inversion
+中空子弹
+Hollowed Bullets
+双重弹头
+Dual Rounds
+彗星爆发
+Comet Blast
+熔岩弹膛
+Magma Chamber
+类星钻体
+Quasar Drill
+自动扳机
+Automatic Trigger
+黄道碎裂
+Zodiac Shred
+填弹加速
+Shell Rush
+带电枪管
+Electrified Barrel
+弹药改良
+Modified Munitions
+恶毒弹匣
+Venomous Clip
+极地弹仓
+Polar Magazine
+燃烧弹头
+Combustion Rounds
+红晶枪管
+Rubedo-Lined Barrel
+扩充弹匣
+Magazine Extension
+视差瞄具
+Parallax Scope
+星云钻孔
+Nebula Bore
+星体切砍
+Astral Slash
+星界剖解
+Astral Autopsy
+流星撞击
+Meteor Crash
+炽燃钢铁
+Searing Steel
+冰冷刃缘
+Glacial Edge
+剧毒螯刺
+Poisonous Sting
+炽烈坚刃
+Blazing Steel
+狂怒
+Furor
+通电刀刃
+Galvanized Blade
+切割刃缘
+Cutting Edge
+延展
+Extend
+强化刀片
+Tempered Blade
+瞬间冲击
+Sudden Impact
+血色刃缘
+Bleeding Edge
+重生 PRIME
+Primed Regen
+冷却液外泄
+Coolant Leak
+动物本能
+Animal Instinct
+守护光罩
+Sanctuary
+弱点侦测
+Detect Vulnerability
+护盾充能
+Shield Charger
+搜刮者
+Looter
+牺牲
+Sacrifice
+自爆
+Self Destruct
+过热射击
+Fired Up
+加速充能
+Accelerated Deflection
+医疗射线
+Medi-Ray
+残余
+Spare Parts
+人群驱散
+Crowd Dispersion
+侦察
+Investigator
+分子转化
+Molecular Conversion
+前锋
+Striker
+吸取
+Vacuum
+复仇
+Revenge
+守护者
+Guardian
+幽灵
+Ghost
+弹药储转箱
+Ammo Case
+战士
+Warrior
+构造强化
+Enhanced Vitality
+汽化
+Vaporize
+电光脉冲
+Electro Pulse
+电弧线圈
+Arc Coil
+目标感应
+Targeting Receptor
+瞬杀
+Swift Deth
+精算射击
+Calculated Shot
+精算蓄能
+Calculated Redirection
+致命诱惑
+Fatal Attraction
+重击者
+Thumper
+重定向
+Retarget
+重生
+Regen
+金属纤维
+Steel Fiber
+保护
+Protect
+凶恶终结
+Ferocity
+反射
+Reflect
+咬碎
+Bite
+啃咬压制
+Neutralize
+嚎声
+Howl
+宠物治疗套件
+Medi-Pet Kit
+招福
+Charm
+挖掘
+Dig
+狩猎
+Hunt
+猎人 命令
+Hunter Command
+猫眼
+Cat's Eye
+释放
+Unleashed
+野蛮压制
+Savagery
+隐秘追踪
+Stalk
+顽皮
+Mischief
+侵略领土
+Territorial Aggression
+危机感知
+Sense Danger
+庇护
+Shelter
+急速偏斜
+Hastened Deflection
+护甲连结
+Link Armor
+挥击
+Swipe
+捶击
+Maul
+猎人 协力
+Hunter Synergy
+猛扑
+Pounce
+生命值连结
+Link Health
+磨锋之爪
+Sharpened Claws
+嗅索取物
+Retrieve
+忠实搭档
+Loyal Companion
+搜集
+Scavenge
+猎人 复元
+Hunter Recovery
+领袖
+Pack Leader
+长吻
+Proboscis
+DEX 达克拉双剑
+Dex Dakra
+MK1-玻之武杖
+MK1-Bo
+三叶坚韧
+Endura
+佐伦双斧
+Dual Zoren
+侍刃
+Nikana
+侍刃 PRIME
+Nikana Prime
+保障 勒克塔
+Secura Lecta
+克洛诺斯
+Cronus
+克鲁古尔
+Krohkur
+关刀
+Guandao
+军扇
+Gunsen
+凯旋之爪
+Venka
+凯旋之爪 PRIME
+Venka Prime
+凯洛斯特
+Karyst
+分裂斩斧
+Scindo
+分裂斩斧 PRIME
+Scindo Prime
+创伤
+Volnus
+加扎勒反曲刀
+Gazal Machete
+勇气 恶龙
+Vaykor Sydon
+勒克塔
+Lecta
+双头蛇
+Amphis
+双子克鲁古尔
+Twin Krohkur
+双子巴萨克
+Twin Basolk
+双短柄战镰
+Dual Kamas
+双短柄战镰 PRIME
+Dual Kamas Prime
+双节尺棍
+Shaku
+哈利卡
+Halikar
+喷射战锤
+Jat Kittag
+喷射锁镰
+Jat Kusar
+圣洁 执法者
+Sancti Magistar
+夺魂死神
+Anku
+奥比克斯
+Obex
+嵴椎节鞭
+Scoliac
+希芙
+Sheev
+席瓦 & 神盾
+Silva & Aegis
+席瓦 & 神盾 PRIME
+Silva & Aegis Prime
+弗拉克斯
+Furax
+弧电振子锤
+Arca Titron
+怯薛
+Kesheg
+恶脓双斧
+Dual Ichor
+恶龙
+Sydon
+悲痛之刃
+Lacera
+憎恨
+Hate
+战争之剑
+War
+战刃 PRIME
+Glaive Prime
+执法者
+Magistar
+技巧之剑
+Destreza
+提佩多
+Tipedo
+收割者 PRIME
+Reaper Prime
+救赎者
+Redeemer
+斩肉双刀
+Dual Cleavers
+普罗沃
+Prova
+普罗沃 破坏者
+Prova Vandal
+暗黑分合剑
+Dark Split-Sword
+暗黑长剑
+Dark Sword
+枢议 赫利俄光锤
+Synoid Heliocor
+格拉姆
+Gram
+棱晶 奥比克斯
+Prisma Obex
+棱晶 斩肉双刀
+Prisma Dual Cleavers
+棱晶空刃
+Prisma Skana
+欧特鲁斯
+Orthos
+欧特鲁斯 PRIME
+Orthos Prime
+欧玛
+Ohma
+海波单剑
+Nami Solo
+海波斯库拉对剑
+Nami Skyla
+海波斯库拉对剑 PRIME
+Nami Skyla Prime
+灵枢
+Orvius
+烈焰短剑
+Heat Dagger
+牝狮神
+Mios
+狼牙
+Fang
+狼牙 PRIME
+Fang Prime
+玻之武杖
+Bo
+玻之武杖 PRIME
+Bo Prime
+甲龙双拳
+Ankyros
+甲龙双拳 PRIME
+Ankyros Prime
+电能斩锯
+Serro
+病变
+Lesion
+皇家拐刃
+Kronen
+短柄战镰
+Kama
+破损珽杖
+Broken Scepter
+破碎的战争之剑
+Broken-War
+科加基
+Kogake
+科加基 PRIME
+Kogake Prime
+空刃
+Skana
+空刃 PRIME
+Skana Prime
+空刃双刀
+Dual Skana
+红隼
+Kestrel
+终极 螺钉拐刃
+Telos Boltace
+绯红 暗黑匕首
+Rakta Dark Dagger
+翁
+Okina
+苍穹之剑
+Ether Sword
+苍穹匕首
+Ether Daggers
+苍穹双剑
+Dual Ether
+苍穹死神
+Ether Reaper
+蚂蝗
+Hirudo
+蛇刃
+Sarpa
+蛇颚刀
+Jaw Sword
+蜻蛉薙
+Tonbo
+螺钉拐刃
+Boltace
+裸鳃刃
+Cerata
+西伯利亚冰锤
+Sibear
+认知&冲击
+Ack & Brunt
+赫利俄光锤
+Heliocor
+达克拉 PRIME
+Dakra Prime
+迦伦提恩
+Galatine
+迦伦提恩 PRIME
+Galatine Prime
+重击巨锤
+Fragor
+重击巨锤 PRIME
+Fragor Prime
+铁钩手甲
+Tekko
+锋月双斧
+Dual Raza
+锐卡斯
+Ripkas
+阿特拉克斯
+Atterax
+降灵追猎者
+Ninkondi
+马谢特砍刀
+Machete
+马谢特砍刀 亡魂
+Machete Wraith
+鲮鲤剑
+Pangolin Sword
+鹤鸵长戟
+Cassowar
+龙之侍刃
+Dragon Nikana
+半人马
+Centaur
+奥努里克斯
+Onorix
+拉斯波恩
+Rathbone
+棱晶 真理巨剑
+Prisma Veritux
+真理巨剑
+Veritux
+驯象钩刃
+Agkuza
+死亡使徒
+Kaszas
+暗黑匕首
+Dark Dagger
+烈焰双剑
+Dual Heat Swords
+陶瓷匕首
+Ceramic Dagger
+等离子长剑
+Plasma Sword
+战刃
+Glaive
+米尔
+Mire
+烈焰长剑
+Heat Sword
+弗拉克斯 亡魂
+Furax Wraith
+灼蚀变体镰
+Caustacyst
+西格玛 & 南极座
+Sigma & Octantis
+克纳克斯
+Knux
+ZAW
+ZAW
+DEX 席芭莉丝
+Dex Sybaris
+MK1-布莱顿
+MK1-Braton
+MK1-帕里斯
+MK1-Paris
+MK1-斯特朗
+MK1-Strun
+伊格尼斯
+Ignis
+伊格尼斯 亡魂
+Ignis Wraith
+伯斯顿
+Burston
+伯斯顿 PRIME
+Burston Prime
+保障 潘塔
+Secura Penta
+兰卡
+Lanka
+冷冻光束步枪
+Glaxion
+勇气 海克
+Vaykor Hek
+卡拉克
+Karak
+卡拉克 亡魂
+Karak Wraith
+双簧管
+Tenora
+哈帕克
+Harpak
+噬菌者
+Phage
+圣洁 猛虎
+Sancti Tigris
+大久和弓
+Daikyu
+夸塔克
+Quartakk
+奥堤克光子枪
+Opticor
+守望者
+Vectis
+守望者 PRIME
+Vectis Prime
+安培克斯
+Amprex
+寇恩热能枪
+Kohm
+导热聚焦枪
+Convectrix
+巴兹火枪
+Buzlok
+布莱顿
+Braton
+布莱顿 PRIME
+Braton Prime
+帕里斯
+Paris
+布莱顿 破坏者
+Braton Vandal
+帕里斯 PRIME
+Paris Prime
+席芭莉丝
+Sybaris
+席芭莉丝 PRIME
+Sybaris Prime
+异融 西诺斯
+Mutalist Cernos
+异融量子枪
+Mutalist Quanta
+弧电离子枪
+Arca Plasmor
+征服榴炮
+Tonkor
+德拉
+Dera
+德拉 破坏者
+Dera Vandal
+恐惧
+Dread
+托里德
+Torid
+拉特昂
+Latron
+拉特昂 PRIME
+Latron Prime
+拉特昂 亡魂
+Latron Wraith
+斯特拉迪瓦
+Stradavar
+斯特朗
+Strun
+斯特朗 亡魂
+Strun Wraith
+月神
+Soma
+月神 PRIME
+Soma Prime
+枢议 重力奇点拟成枪
+Synoid Simulor
+棱晶 特拉
+Prisma Tetra
+棱晶 蛇发女妖
+Prisma Gorgon
+棱晶 葛拉卡达
+Prisma Grakata
+楞次弓
+Lenz
+氩格纳克
+Argonak
+沙皇
+Zarr
+海克
+Hek
+潘塔
+Penta
+燃焰标枪
+Javlok
+特拉
+Tetra
+狂鲨
+Tiberon
+狙击特昂
+Snipetron
+狙击特昂 破坏者
+Snipetron Vandal
+猎豹
+Panthera
+猛虎
+Tigris
+猛虎 PRIME
+Tigris Prime
+碎裂者
+Astilla
+祸根
+Scourge
+科林斯
+Corinth
+米特尔
+Miter
+终极 螺钉步枪
+Telos Boltor
+绝路
+Rubico
+绯红 西诺斯
+Rakta Cernos
+苍鹰
+Baza
+苏普拉
+Supra
+葛恩火枪
+Grinlok
+葛拉卡达
+Grakata
+蛇发女妖
+Gorgon
+蛇发女妖 亡魂
+Gorgon Wraith
+螺钉步枪 PRIME
+Boltor Prime
+血肢
+Hema
+西诺斯
+Cernos
+西诺斯 PRIME
+Cernos Prime
+诸葛连弩
+Zhuge
+通量射线步枪
+Flux Rifle
+重力奇点拟成枪
+Simulor
+野猪
+Boar
+野猪 PRIME
+Boar Prime
+量子切割器
+Quanta
+量子切割器 破坏者
+Quanta Vandal
+金工火神
+Vulkar
+金工火神 亡魂
+Vulkar Wraith
+铁晶磁轨炮
+Ferrox
+阿提卡
+Attica
+附肢寄生者
+Paracyst
+雌鹿
+Hind
+食人女魔
+Ogris
+鳄神
+Sobek
+龙骑兵
+Drakgoon
+什长双枪
+Dual Decurion
+凯旋将军
+Imperator
+凯旋将军 破坏者
+Imperator Vandal
+合成燃气炮
+Cyngas
+巨浪
+Fluctus
+极速电磁步枪
+Velocitus
+菲德菈
+Phaedra
+黑鸦
+Corvas
+螺钉步枪
+Boltor
+突触生化枪
+Synapse
+苏普拉 破坏者
+Supra Vandal
+葛拉特勒
+Grattler
+DEX 盗贼双枪
+Dex Furis
+MK1-盗贼
+MK1-Furis
+MK1-苦无
+MK1-Kunai
+丧钟
+Knell
+保障 锡斯特双枪
+Secura Dual Cestra
+光谱切割器
+Spectra
+努寇微波枪
+Nukor
+勇气 玛瑞火枪
+Vaykor Marelok
+北海巨妖
+Kraken
+原子矿融炮
+Atomos
+双子寇恩霰机枪
+Twin Kohmak
+双子小精灵
+Twin Gremlins
+双子罗格
+Twin Rogga
+双子葛拉卡达
+Twin Grakata
+双子蝰蛇
+Twin Vipers
+双子蝰蛇 亡魂
+Wraith Twin Vipers
+史度巴
+Stubba
+史提托双枪
+Akstiletto
+史提托双枪 PRIME
+Akstiletto Prime
+史特克
+Stug
+咖玛腕甲枪
+Gammacor
+啐沫者
+Tysis
+圣洁 雷爆信标
+Sancti Castanas
+安柏勒斯
+Embolist
+安格斯壮
+Angstrum
+寇恩霰机枪
+Kohmak
+布拉克
+Brakk
+布里斯提卡
+Ballistica
+布里斯提卡 PRIME
+Ballistica Prime
+弧电探知者
+Arca Scisco
+循环离子枪
+Cycron
+德特昂
+Detron
+悦音 PRIME
+Euphona Prime
+手鼓
+Pandero
+拉托双枪
+Aklato
+方位角
+Azima
+旋刃飞刀
+Spira
+旋刃飞刀 PRIME
+Spira Prime
+暗杀者
+Sicarus
+暗杀者 PRIME
+Sicarus Prime
+杀星
+Kulstar
+枢议 咖玛腕甲枪
+Synoid Gammacor
+棱晶 安格斯壮
+Prisma Angstrum
+毒囊双枪
+Dual Toxocyst
+毒芽
+Zakti
+玛瑞火枪
+Marelok
+瓦斯托
+Vasto
+瓦斯托 PRIME
+Vasto Prime
+瓦斯托双枪
+Akvasto
+盗贼
+Furis
+盗贼双枪
+Afuris
+终极 螺钉双枪
+Telos Akbolto
+绝望
+Despair
+绯红 布里斯提卡
+Rakta Ballistica
+脓痘
+Pox
+苦无
+Kunai
+苦痛 德特昂
+Detron Mara
+荒谬双枪
+AkZani
+蝰蛇
+Viper
+蝰蛇 亡魂
+Viper Wraith
+螺钉双枪
+Akbolto
+螺钉双枪 PRIME
+Akbolto Prime
+螺钉手枪
+Bolto
+觉醒双枪
+AkJagara
+超音波冲击枪
+Sonicor
+轻灵月神双枪
+Aksomati
+野马
+Bronco
+野马 PRIME
+Bronco Prime
+野马双枪
+Akbronco
+野马双枪 PRIME
+Akbronco Prime
+锡斯特
+Cestra
+锡斯特双枪
+Dual Cestra
+阿克里德
+Acrid
+雷克斯
+Lex
+雷克斯 PRIME
+Lex Prime
+雷克斯双枪
+Aklex
+雷克斯双枪 PRIME
+Aklex Prime
+雷爆信标
+Castanas
+静电能量导引枪
+Staticor
+预言者
+Seer
+飞扬
+Hikou
+飞扬 PRIME
+Hikou Prime
+食人鱼
+Pyrana
+鹰爪
+Talons
+麦格努斯
+Magnus
+麦格努斯双枪
+Akmagnus
+齐射玻刃
+Fusilai
+拉托
+Lato
+拉托 PRIME
+Lato Prime
+拉托 破坏者
+Lato Vandal
+天顶之星
+Zenistar
+天穹之顶
+Zenith
+分离
+Deconstructor
+分离 PRIME
+Deconstructor Prime
+扫除者
+Sweeper
+扫除者 PRIME
+Sweeper Prime
+死亡机枪
+Deth Machine Rifle
+毒刺
+Stinger
+激光步枪
+Laser Rifle
+激光步枪 PRIME
+Prime Laser Rifle
+激光点发
+Burst Laser
+金工火枪
+Vulklok
+阿塔克斯
+Artax
+棱晶 激光点发
+Prisma Burst Laser
+铁氧体
+Ferrite
+纳米孢子
+Nano Spores
+合金板
+Alloy Plate
+回收金属
+Salvage
+聚合物束
+Polymer Bundle
+永冻晶矿
+Cryotic
+电路
+Circuits
+生物质
+Plastids
+红化结晶
+Rubedo
+氩结晶
+Argon Crystal
+控制模块
+Control Module
+镓
+Gallium
+非晶态合金
+Morphics
+神经传感器
+Neural Sensors
+神经元
+Neurodes
+OROKIN电池
+Orokin Cell
+奥席金属
+Oxium
+碲
+Tellurium
+爆燃安瓿
+Detonite Ampule
+电磁力场装置样本
+Fieldron Sample
+样本突变原
+Mutagen Sample
+亚铜
+Coprun
+亚铜合金
+Coprite Alloy
+兄弟之石
+Devar
+伊舍兄弟之石
+Esher Devar
+伊莱体
+Iradite
+克苏尔卷须
+Cuthol Tendrils
+卡其那触须
+Karkina Antenna
+古泊拉脾脏
+Goopolla Spleen
+喉鱼骨骼
+Mawfish Bones
+合成刺激质
+Synthula
+塔洛鱼眼
+Tralok Eyes
+夜灵之息
+Breath Of The Eidolon
+女侯爵翠萤石
+Marquise Veridos
+尼蒐荚
+Nistlepod
+希图斯幽魂
+Cetus Wisp
+库特-库特毒囊
+Khut-Khut Venom Sac
+库阿卡脊爪
+Kuaka Spinal Claw
+异融ALAD V刺杀钥匙
+Mutalist Alad V Assassinate Key
+弧度心智晶核
+Radian Sentirum
+心形灵息石
+Heart Nyth
+心智晶核
+Sentirum
+摩图斯角
+Mortus Horn
+查克放电腺体
+Charc Electroplax
+泥炭萃取物
+Nitain Extract
+泪滴形石青
+Tear Azurite
+灵息石
+Nyth
+炎晶
+Pyrol
+炎晶合金
+Pyrotic Alloy
+爆燃喷射器
+Detonite Injector
+电磁力场装置
+Fieldron
+突变原聚合物
+Mutagen Mass
+石青
+Azurite
+约格温鱼胃
+Yogwun Stomach
+秃鹰翅膀
+Condroc Wing
+绯红石
+Crimzian
+翠萤石
+Veridos
+葛克度
+Grokdrul
+虚空光体
+Void Traces
+诺格鱼脑
+Norg Brain
+赤毒
+Kuva
+金辉
+Auron
+金辉合金
+Auroxium Alloy
+钢化铁岩
+Fersteel Alloy
+铁岩
+Ferros
+阴暗鳐肝脏
+Murkray Liver
+马利可
+Maprico
+鲨客牙齿
+Sharrac Teeth
+喉鱼
+Mawfish
+查克鳗
+Charc Eel
+库特-库特
+Khut-Khut
+约格温
+Yogwun
+摩图斯肺鱼
+Mortus Lungfish
+古泊拉
+Goopolla
+塔洛
+Tralok
+鲨客
+Sharrac
+卡其那
+Karkina
+克苏尔
+Cuthol
+阴暗鳐
+Murkray
+诺格
+Norg
+盖拉佩德
+Glappid
+靴子
+Boot
+侍刃 PRIME 握柄
+Nikana Prime Hilt
+侍刃 PRIME 刀刃
+Nikana Prime Blade
+侍刃 PRIME 蓝图
+Nikana Prime Blueprint
+凯旋之爪 PRIME 手套
+Venka Prime Gauntlet
+凯旋之爪 PRIME 爪刃
+Venka Prime Blades
+凯旋之爪 PRIME 蓝图
+Venka Prime Blueprint
+分裂斩斧 PRIME 蓝图
+Scindo Prime Blueprint
+分裂斩斧 PRIME 刀刃
+Scindo Prime Blade
+分裂斩斧 PRIME 握柄
+Scindo Prime Handle
+双短柄战镰 PRIME 蓝图
+Dual Kamas Prime Blueprint
+双短柄战镰 PRIME 刀刃
+Dual Kamas Prime Blade
+双短柄战镰 PRIME 握柄
+Dual Kamas Prime Handle
+希芙 刀刃
+Sheev Blade
+希芙 散热器
+Sheev Heatsink
+希芙 握柄
+Sheev Hilt
+希芙 蓝图
+Sheev Blueprint
+席瓦 & 神盾 PRIME 蓝图
+Silva & Aegis Prime Blueprint
+席瓦 & 神盾 PRIME 刀刃
+Silva & Aegis Prime Blade
+席瓦 & 神盾 PRIME 护手
+Silva & Aegis Prime Guard
+席瓦 & 神盾 PRIME 握柄
+Silva & Aegis Prime Hilt
+战刃 PRIME 蓝图
+Glaive Prime Blueprint
+战刃 PRIME 圆盘
+Glaive Prime Disc
+战刃 PRIME 刀刃
+Glaive Prime Blade
+收割者 PRIME 蓝图
+Reaper Prime Blueprint
+收割者 PRIME 刀刃
+Reaper Prime Blade
+收割者 PRIME 握柄
+Reaper Prime Handle
+欧特鲁斯 PRIME 蓝图
+Orthos Prime Blueprint
+欧特鲁斯 PRIME 刀刃
+Orthos Prime Blade
+欧特鲁斯 PRIME 握柄
+Orthos Prime Handle
+海波斯库拉对剑 PRIME 蓝图
+Nami Skyla Prime Blueprint
+海波斯库拉对剑 PRIME 刀刃
+Nami Skyla Prime Blade
+海波斯库拉对剑 PRIME 握柄
+Nami Skyla Prime Handle
+狼牙 PRIME 刀刃
+Fang Prime Blade
+狼牙 PRIME 握柄
+Fang Prime Handle
+狼牙 PRIME 蓝图
+Fang Prime Blueprint
+玻之武杖 PRIME 饰物
+Bo Prime Ornament
+玻之武杖 PRIME 握柄
+Bo Prime Handle
+玻之武杖 PRIME 蓝图
+Bo Prime Blueprint
+甲龙双拳 PRIME 刀刃
+Ankyros Prime Blade
+甲龙双拳 PRIME 拳套
+Ankyros Prime Gauntlet
+甲龙双拳 PRIME 蓝图
+Ankyros Prime Blueprint
+科加基 PRIME 拳套
+Kogake Prime Gauntlet
+科加基 PRIME 靴子
+Kogake Prime Boot
+科加基 PRIME 蓝图
+Kogake Prime Blueprint
+达克拉 PRIME 刀刃
+Dakra Prime Blade
+达克拉 PRIME 握柄
+Dakra Prime Handle
+达克拉 PRIME 蓝图
+Dakra Prime Blueprint
+迦伦提恩 PRIME 刀刃
+Galatine Prime Blade
+迦伦提恩 PRIME 握柄
+Galatine Prime Handle
+迦伦提恩 PRIME 蓝图
+Galatine Prime Blueprint
+重击巨锤 PRIME 锤头
+Fragor Prime Head
+重击巨锤 PRIME 握柄
+Fragor Prime Handle
+重击巨锤 PRIME 蓝图
+Fragor Prime Blueprint
+半人马 刀刃
+Centaur Blade
+半人马 盾
+Centaur Aegis
+半人马 握柄
+Centaur Handle
+奥努里克斯 刀刃
+Onorix Blade
+奥努里克斯 握柄
+Onorix Handle
+拉斯波恩 锤头
+Rathbone Head
+拉斯波恩 握柄
+Rathbone Handle
+驯象钩刃 刀刃
+Agkuza Blade
+驯象钩刃 握柄
+Agkuza Handle
+驯象钩刃 护手
+Agkuza Guard
+死亡使徒 刀刃
+Kaszas Blade
+死亡使徒 握柄
+Kaszas Handle
+弗拉克斯亡魂 蓝图
+Furax Wraith Blueprint
+弗拉克斯亡魂 左拳套
+Furax Wraith Left Gauntlet
+弗拉克斯亡魂 右拳套
+Furax Wraith Right Gauntlet
+伯斯顿 PRIME 蓝图
+Burston Prime Blueprint
+伯斯顿 PRIME 枪管
+Burston Prime Barrel
+伯斯顿 PRIME 枪机
+Burston Prime Receiver
+伯斯顿 PRIME 枪托
+Burston Prime Stock
+卡拉克 亡魂 蓝图
+Karak Wraith Blueprint
+卡拉克 亡魂 枪管
+Karak Wraith Barrel
+卡拉克 亡魂 枪机
+Karak Wraith Receiver
+卡拉克 亡魂 枪托
+Karak Wraith Stock
+守望者 PRIME 蓝图
+Vectis Prime Blueprint
+守望者 PRIME 枪管
+Vectis Prime Barrel
+守望者 PRIME 枪机
+Vectis Prime Receiver
+守望者 PRIME 枪托
+Vectis Prime Stock
+布莱顿 PRIME 蓝图
+Braton Prime Blueprint
+布莱顿 PRIME 枪管
+Braton Prime Barrel
+布莱顿 PRIME 枪机
+Braton Prime Receiver
+布莱顿 PRIME 枪托
+Braton Prime Stock
+帕里斯 PRIME 蓝图
+Paris Prime Blueprint
+帕里斯 PRIME 上弓臂
+Paris Prime Upper Limb
+帕里斯 PRIME 下弓臂
+Paris Prime Lower Limb
+帕里斯 PRIME 弓身
+Paris Prime Grip
+帕里斯 PRIME 弓弦
+Paris Prime String
+席芭莉丝 PRIME 蓝图
+Sybaris Prime Blueprint
+席芭莉丝 PRIME 枪管
+Sybaris Prime Barrel
+席芭莉丝 PRIME 枪机
+Sybaris Prime Receiver
+席芭莉丝 PRIME 枪托
+Sybaris Prime Stock
+德拉 破坏者 蓝图
+Dera Vandal Blueprint
+德拉 破坏者 枪管
+Dera Vandal Barrel
+德拉 破坏者 枪机
+Dera Vandal Receiver
+德拉 破坏者 枪托
+Dera Vandal Stock
+拉特昂 PRIME 蓝图
+Latron Prime Blueprint
+拉特昂 PRIME 枪管
+Latron Prime Barrel
+拉特昂 PRIME 枪机
+Latron Prime Receiver
+拉特昂 PRIME 枪托
+Latron Prime Stock
+拉特昂 亡魂 蓝图
+Latron Wraith Blueprint
+拉特昂 亡魂 枪管
+Latron Wraith Barrel
+拉特昂 亡魂 枪机
+Latron Wraith Receiver
+拉特昂 亡魂 枪托
+Latron Wraith Stock
+斯特朗 亡魂 蓝图
+Strun Wraith Blueprint
+斯特朗 亡魂 枪管
+Strun Wraith Barrel
+斯特朗 亡魂 枪机
+Strun Wraith Receiver
+斯特朗 亡魂 枪托
+Strun Wraith Stock
+月神 PRIME 蓝图
+Soma Prime Blueprint
+月神 PRIME 枪管
+Soma Prime Barrel
+月神 PRIME 枪机
+Soma Prime Receiver
+月神 PRIME 枪托
+Soma Prime Stock
+狙击特昂 破坏者 蓝图
+Snipetron Vandal Blueprint
+狙击特昂 破坏者 枪管
+Snipetron Vandal Barrel
+狙击特昂 破坏者 枪机
+Snipetron Vandal Receiver
+狙击特昂 破坏者 枪托
+Snipetron Vandal Stock
+猛虎 PRIME 蓝图
+Tigris Prime Blueprint
+猛虎 PRIME 枪管
+Tigris Prime Barrel
+猛虎 PRIME 枪机
+Tigris Prime Receiver
+猛虎 PRIME 枪托
+Tigris Prime Stock
+蛇发女妖 亡魂 枪管
+Gorgon Wraith Barrel
+蛇发女妖 亡魂 枪机
+Gorgon Wraith Receiver
+蛇发女妖 亡魂 枪托
+Gorgon Wraith Stock
+蛇发女妖 亡魂 蓝图
+Gorgon Wraith Blueprint
+螺钉步枪 PRIME 蓝图
+Boltor Prime Blueprint
+螺钉步枪 PRIME 枪管
+Boltor Prime Barrel
+螺钉步枪 PRIME 枪机
+Boltor Prime Receiver
+螺钉步枪 PRIME 枪托
+Boltor Prime Stock
+西诺斯 PRIME 蓝图
+Cernos Prime Blueprint
+西诺斯 PRIME 上弓臂
+Cernos Prime Upper Limb
+西诺斯 PRIME 下弓臂
+Cernos Prime Lower Limb
+西诺斯 PRIME 弓身
+Cernos Prime Grip
+西诺斯 PRIME 弓弦
+Cernos Prime String
+野猪 PRIME 蓝图
+Boar Prime Blueprint
+野猪 PRIME 枪管
+Boar Prime Barrel
+野猪 PRIME 枪机
+Boar Prime Receiver
+野猪 PRIME 枪托
+Boar Prime Stock
+什长双枪 枪管
+Dual Decurion Barrel
+什长双枪 枪机
+Dual Decurion Receiver
+凯旋将军 破坏者 蓝图
+Imperator Vandal Blueprint
+凯旋将军 破坏者 枪管
+Imperator Vandal Barrel
+凯旋将军 破坏者 枪机
+Imperator Vandal Receiver
+合成燃气炮 枪管
+Cyngas Barrel
+合成燃气炮 枪机
+Cyngas Receiver
+合成燃气炮 枪托
+Cyngas Stock
+巨浪 枪托
+Fluctus Stock
+巨浪 枪管
+Fluctus Barrel
+巨浪 弓臂
+Fluctus Limbs
+极速电磁步枪 枪管
+Velocitus Barrel
+极速电磁步枪 枪机
+Velocitus Receiver
+极速电磁步枪 枪托
+Velocitus Stock
+菲德菈 枪管
+Phaedra Barrel
+菲德菈 枪机
+Phaedra Receiver
+菲德菈 枪托
+Phaedra Stock
+黑鸦 枪管
+Corvas Barrel
+黑鸦 枪机
+Corvas Receiver
+黑鸦 枪托
+Corvas Stock
+双子蝰蛇 亡魂 枪机
+Wraith Twin Vipers Receiver
+双子蝰蛇 亡魂 枪管
+Wraith Twin Vipers Barrel
+双子蝰蛇 亡魂 连接器
+Wraith Twin Vipers Link
+双子蝰蛇 亡魂 蓝图
+Wraith Twin Vipers Blueprint
+史提托双枪 PRIME 蓝图
+Akstiletto Prime Blueprint
+史提托双枪 PRIME 枪管
+Akstiletto Prime Barrel
+史提托双枪 PRIME 枪机
+Akstiletto Prime Receiver
+史提托双枪 PRIME 连接器
+Akstiletto Prime Link
+布里斯提卡 PRIME 蓝图
+Ballistica Prime Blueprint
+布里斯提卡 PRIME 上弓臂
+Ballistica Prime Upper Limb
+布里斯提卡 PRIME 下弓臂
+Ballistica Prime Lower Limb
+布里斯提卡 PRIME 枪机
+Ballistica Prime Receiver
+布里斯提卡 PRIME 弓弦
+Ballistica Prime String
+悦音 PRIME 蓝图
+Euphona Prime Blueprint
+悦音 PRIME 枪管
+Euphona Prime Barrel
+悦音 PRIME 枪机
+Euphona Prime Receiver
+旋刃飞刀 PRIME 蓝图
+Spira Prime Blueprint
+旋刃飞刀 PRIME 刀刃
+Spira Prime Blade
+旋刃飞刀 PRIME 镖袋
+Spira Prime Pouch
+暗杀者 PRIME 蓝图
+Sicarus Prime Blueprint
+暗杀者 PRIME 枪管
+Sicarus Prime Barrel
+暗杀者 PRIME 枪机
+Sicarus Prime Receiver
+瓦斯托 PRIME 蓝图
+Vasto Prime Blueprint
+瓦斯托 PRIME 枪管
+Vasto Prime Barrel
+瓦斯托 PRIME 枪机
+Vasto Prime Receiver
+螺钉双枪 PRIME 蓝图
+Akbolto Prime Blueprint
+螺钉双枪 PRIME 枪管
+Akbolto Prime Barrel
+螺钉双枪 PRIME 枪机
+Akbolto Prime Receiver
+螺钉双枪 PRIME 连接器
+Akbolto Prime Link
+野马 PRIME 蓝图
+Bronco Prime Blueprint
+野马 PRIME 枪管
+Bronco Prime Barrel
+野马 PRIME 枪机
+Bronco Prime Receiver
+野马双枪 PRIME 连接器
+Akbronco Prime Link
+雷克斯 PRIME 蓝图
+Lex Prime Blueprint
+雷克斯 PRIME 枪管
+Lex Prime Barrel
+雷克斯 PRIME 枪机
+Lex Prime Receiver
+雷克斯双枪 PRIME 连接器
+Aklex Prime Link
+飞扬 PRIME 蓝图
+Hikou Prime Blueprint
+飞扬 PRIME 星镖
+Hikou Prime Stars
+飞扬 PRIME 镖袋
+Hikou Prime Pouch
+ASH PRIME 头部神经光元
+ASH PRIME NEUROPTICS
+ASH PRIME 系统
+ASH PRIME SYSTEMS
+ASH PRIME 机体
+ASH PRIME CHASSIS
+ASH PRIME 蓝图
+ASH PRIME BLUEPRINT
+BANSHEE PRIME 头部神经光元
+BANSHEE PRIME NEUROPTICS
+BANSHEE PRIME 系统
+BANSHEE PRIME SYSTEMS
+BANSHEE PRIME 机体
+BANSHEE PRIME CHASSIS
+BANSHEE PRIME 蓝图
+BANSHEE PRIME BLUEPRINT
+EMBER PRIME 头部神经光元
+EMBER PRIME NEUROPTICS
+EMBER PRIME 系统
+EMBER PRIME SYSTEMS
+EMBER PRIME 机体
+EMBER PRIME CHASSIS
+EMBER PRIME 蓝图
+EMBER PRIME BLUEPRINT
+FROST PRIME 头部神经光元
+FROST PRIME NEUROPTICS
+FROST PRIME 系统
+FROST PRIME SYSTEMS
+FROST PRIME 机体
+FROST PRIME CHASSIS
+FROST PRIME 蓝图
+FROST PRIME BLUEPRINT
+HYDROID PRIME 头部神经光元
+HYDROID PRIME NEUROPTICS
+HYDROID PRIME 系统
+HYDROID PRIME SYSTEMS
+HYDROID PRIME 机体
+HYDROID PRIME CHASSIS
+HYDROID PRIME 蓝图
+HYDROID PRIME BLUEPRINT
+LOKI PRIME 头部神经光元
+LOKI PRIME NEUROPTICS
+LOKI PRIME 系统
+LOKI PRIME SYSTEMS
+LOKI PRIME 机体
+LOKI PRIME CHASSIS
+LOKI PRIME 蓝图
+LOKI PRIME BLUEPRINT
+MAG PRIME 头部神经光元
+MAG PRIME NEUROPTICS
+MAG PRIME 系统
+MAG PRIME SYSTEMS
+MAG PRIME 机体
+MAG PRIME CHASSIS
+MAG PRIME 蓝图
+MAG PRIME BLUEPRINT
+MIRAGE PRIME 头部神经光元
+MIRAGE PRIME NEUROPTICS
+MIRAGE PRIME 系统
+MIRAGE PRIME SYSTEMS
+MIRAGE PRIME 机体
+MIRAGE PRIME CHASSIS
+MIRAGE PRIME 蓝图
+MIRAGE PRIME BLUEPRINT
+NEKROS PRIME 头部神经光元
+NEKROS PRIME NEUROPTICS
+NEKROS PRIME 系统
+NEKROS PRIME SYSTEMS
+NEKROS PRIME 机体
+NEKROS PRIME CHASSIS
+NEKROS PRIME 蓝图
+NEKROS PRIME BLUEPRINT
+NOVA PRIME 头部神经光元
+NOVA PRIME NEUROPTICS
+NOVA PRIME 系统
+NOVA PRIME SYSTEMS
+NOVA PRIME 机体
+NOVA PRIME CHASSIS
+NOVA PRIME 蓝图
+NOVA PRIME BLUEPRINT
+OBERON PRIME 头部神经光元
+OBERON PRIME NEUROPTICS
+OBERON PRIME 系统
+OBERON PRIME SYSTEMS
+OBERON PRIME 机体
+OBERON PRIME CHASSIS
+OBERON PRIME 蓝图
+OBERON PRIME BLUEPRINT
+NYX PRIME 头部神经光元
+NYX PRIME NEUROPTICS
+NYX PRIME 系统
+NYX PRIME SYSTEMS
+NYX PRIME 机体
+NYX PRIME CHASSIS
+NYX PRIME 蓝图
+NYX PRIME BLUEPRINT
+RHINO PRIME 头部神经光元
+RHINO PRIME NEUROPTICS
+RHINO PRIME 系统
+RHINO PRIME SYSTEMS
+RHINO PRIME 机体
+RHINO PRIME CHASSIS
+RHINO PRIME 蓝图
+RHINO PRIME BLUEPRINT
+SARYN PRIME 头部神经光元
+SARYN PRIME NEUROPTICS
+SARYN PRIME 系统
+SARYN PRIME SYSTEMS
+SARYN PRIME 机体
+SARYN PRIME CHASSIS
+SARYN PRIME 蓝图
+SARYN PRIME BLUEPRINT
+TRINITY PRIME 头部神经光元
+TRINITY PRIME NEUROPTICS
+TRINITY PRIME 系统
+TRINITY PRIME SYSTEMS
+TRINITY PRIME 机体
+TRINITY PRIME CHASSIS
+TRINITY PRIME 蓝图
+TRINITY PRIME BLUEPRINT
+VALKYR PRIME 头部神经光元
+VALKYR PRIME NEUROPTICS
+VALKYR PRIME 系统
+VALKYR PRIME SYSTEMS
+VALKYR PRIME 机体
+VALKYR PRIME CHASSIS
+VALKYR PRIME 蓝图
+VALKYR PRIME BLUEPRINT
+VAUBAN PRIME 头部神经光元
+VAUBAN PRIME NEUROPTICS
+VAUBAN PRIME 系统
+VAUBAN PRIME SYSTEMS
+VAUBAN PRIME 机体
+VAUBAN PRIME CHASSIS
+VAUBAN PRIME 蓝图
+VAUBAN PRIME BLUEPRINT
+VOLT PRIME 头部神经光元
+VOLT PRIME NEUROPTICS
+VOLT PRIME 系统
+VOLT PRIME SYSTEMS
+VOLT PRIME 机体
+VOLT PRIME CHASSIS
+VOLT PRIME 蓝图
+VOLT PRIME BLUEPRINT
+AMESHA
+AMESHA
+ELYTRON
+ELYTRON
+ITZAL
+ITZAL
+ODONATA
+ODONATA
+ODONATA PRIME
+ODONATA PRIME
+塔克桑
+Taxon
+引灵
+Djinn
+搬运者
+Carrier Sentinel
+死亡魔方
+Dethcube
+电气浮囊
+Diriga
+蛟龙
+Wyrm
+赫利俄斯
+Helios Sentinel
+阴影
+Shade Sentinel
+搬运者 PRIME
+Carrier Prime
+蛟龙 PRIME
+Wyrm Prime
+赫利俄斯 PRIME
+Helios Prime
+匿踪型库狛
+Huras Kubrow
+寻猎型库狛
+Chesa Kubrow
+HELMINTH 疾冲者
+HELMINTH Charger
+猎杀型库狛
+Sunika Kubrow
+突击型库狛
+Sahasa Kubrow
+防护型库狛
+Raksa Kubrow
+镜像型库娃
+Adarza Kavat
+笑面型库娃
+Smeeta Kavat
+棱晶 阴影
+Prisma Shade
+优雅 赋能
+Arcane Grace
+加速 赋能
+Arcane Acceleration
+神盾 赋能
+Arcane Aegis
+灵敏 赋能
+Arcane Agility
+蜘蛛 赋能
+Arcane Arachne
+复仇者 赋能
+Arcane Avenger
+觉醒 赋能
+Arcane Awakening
+壁垒 赋能
+Arcane Barrier
+结果 赋能
+Arcane Consequence
+偏折 赋能
+Arcane Deflection
+充沛 赋能
+Arcane Energize
+爆发 赋能
+Arcane Eruption
+狂怒 赋能
+Arcane Fury
+保卫者 赋能
+Arcane Guardian
+复原 赋能
+Arcane Healing
+冰冷 赋能
+Arcane Ice
+动量 赋能
+Arcane Momentum
+消磁 赋能
+Arcane Nullifier
+幻象 赋能
+Arcane Phantasm
+精确 赋能
+Arcane Precision
+生机 赋能
+Arcane Pulse
+愤怒 赋能
+Arcane Rage
+电阻 赋能
+Arcane Resistance
+速攻 赋能
+Arcane Strike
+诡计 赋能
+Arcane Trickery
+通牒 赋能
+Arcane Ultimatum
+迅速 赋能
+Arcane Velocity
+胜利 赋能
+Arcane Victory
+温暖 赋能
+Arcane Warmth
+魔导 活力
+Magus Vigor
+正直 空无
+Virtuos Null
+魔导 外壳
+Magus Husk
+正直 节奏
+Virtuos Tempo
+正直 狂怒
+Virtuos Fury
+魔导 游云
+Magus Cloud
+正直 打击
+Virtuos Strike
+魔导 韵律
+Magus Cadence
+正直 鬼魅
+Virtuos Ghost
+魔导 充盈
+Magus Replenish
+正直 暗影
+Virtuos Shadow
+魔导 振奋
+Magus Elevate
+魔导 滋养
+Magus Nourish
+神威 勇武
+Exodia Brave
+神威 勇猛
+Exodia Valor
+神威 力量
+Exodia Might
+神威 凯旋
+Exodia Triumph
+神威 狩猎
+Exodia Hunt
+神威 气力
+Exodia Force
+神威 流行病
+Exodia Epidemic
+神威 触染
+Exodia Contagion
+阿耶檀识 AYR 塑像
+Ayr Ayatan Sculpture
+阿耶檀识 PIV 塑像
+Piv Ayatan Sculpture
+阿耶檀识 SAH 塑像
+Sah Ayatan Sculpture
+阿耶檀识 ORTA 塑像
+Orta Ayatan Sculpture
+阿耶檀识 VAYA 塑像
+Vaya Ayatan Sculpture
+阿耶檀识 ANASA 塑像
+Anasa Ayatan Sculpture
+阿耶檀识 VALANA 塑像
+Valana Ayatan Sculpture
+喀婆萨 PRIME 库狛项圈
+Kavasa Prime Collar
+SCIMITAR
+SCIMITAR
+LISET
+LISET
+XIPHOS
+XIPHOS
+MANTIS
+MANTIS
+喀婆萨 PRIME 项圈 蓝图
+Kavasa Prime Collar Blueprint
+喀婆萨 PRIME 项圈 项圈带
+Kavasa Prime Collar Band
+喀婆萨 PRIME 项圈 项圈扣
+Kavasa Prime Collar Buckle
+搬运者 PRIME 蓝图
+Carrier Prime Blueprint
+蛟龙 PRIME 蓝图
+Wyrm Prime Blueprint
+赫利俄斯 PRIME 蓝图
+Helios Prime Blueprint
+搬运者 PRIME 头部神经光元
+Carrier Prime Cerebrum
+蛟龙 PRIME 头部神经光元
+Wyrm Prime Cerebrum
+赫利俄斯 PRIME 头部神经光元
+Helios Prime Cerebrum
+搬运者 PRIME 外壳
+Carrier Prime Carapace
+蛟龙 PRIME 外壳
+Wyrm Prime Carapace
+赫利俄斯 PRIME 外壳
+Helios Prime Carapace
+搬运者 PRIME 系统
+Carrier Prime Systems
+蛟龙 PRIME 系统
+Wyrm Prime Systems
+赫利俄斯 PRIME 系统
+Helios Prime Systems
+野马双枪 PRIME 蓝图
+Akbronco Prime Blueprint
+雷克斯双枪 PRIME 蓝图
+Aklex Prime Blueprint
+ODONATA PRIME 蓝图
+Odonata Prime Blueprint
+ODONATA PRIME 机翼
+Odonata Prime Wings
+ODONATA PRIME 外甲
+Odonata Prime Harness
+ODONATA PRIME 系统
+Odonata Prime Systems
+SCIMITAR 机身
+Scimitar Fuselage
+SCIMITAR 引擎
+Scimitar Engines
+SCIMITAR 飞航系统
+Scimitar Avionics
+XIPHOS 机身
+Xiphos Fuselage
+XIPHOS 引擎
+Xiphos Engines
+XIPHOS 飞航系统
+Xiphos Avionics
+MANTIS 机身
+Mantis Fuselage
+MANTIS 引擎
+Mantis Engines
+MANTIS 飞航系统
+Mantis Avionics
+星币
+cr
+内融核心
+Endo
+库狛蛋
+Kubrow Egg
+库娃遗传密码
+Kavat Genetic Code
+OROKIN催化剂
+Orokin Catalyst
+OROKIN反应堆
+Orokin Reactor
+FORMA
+FORMA
+ASH PRIME
+ASH PRIME
+BANSHEE PRIME
+BANSHEE PRIME
+EMBER PRIME
+EMBER PRIME
+FROST PRIME
+FROST PRIME
+HYDROID PRIME
+HYDROID PRIME
+LOKI PRIME
+LOKI PRIME
+MAG PRIME
+MAG PRIME
+MIRAGE PRIME
+MIRAGE PRIME
+NEKROS PRIME
+NEKROS PRIME
+NOVA PRIME
+NOVA PRIME
+OBERON PRIME
+OBERON PRIME
+NYX PRIME
+NYX PRIME
+RHINO PRIME
+RHINO PRIME
+SARYN PRIME
+SARYN PRIME
+TRINITY PRIME
+TRINITY PRIME
+VALKYR PRIME
+VALKYR PRIME
+VAUBAN PRIME
+VAUBAN PRIME
+VOLT PRIME
+VOLT PRIME
+阿什 PRIME
+ASH PRIME
+音妈 PRIME
+BANSHEE PRIME
+火鸡 PRIME
+EMBER PRIME
+冰男 PRIME
+FROST PRIME
+水男 PRIME
+HYDROID PRIME
+洛基 PRIME
+LOKI PRIME
+磁妹 PRIME
+MAG PRIME
+小丑 PRIME
+MIRAGE PRIME
+摸尸 PRIME
+NEKROS PRIME
+诺娃 PRIME
+NOVA PRIME
+奶爸 PRIME
+OBERON PRIME
+脑溢血 PRIME
+NYX PRIME
+犀牛 PRIME
+RHINO PRIME
+毒妈 PRIME
+SARYN PRIME
+奶妈 PRIME
+TRINITY PRIME
+女汉子 PRIME
+VALKYR PRIME
+工程 PRIME
+VAUBAN PRIME
+电男 PRIME
+VOLT PRIME
+ASH
+ASH
+BANSHEE
+BANSHEE
+EMBER
+EMBER
+FROST
+FROST
+HYDROID
+HYDROID
+LOKI
+LOKI
+MAG
+MAG
+MIRAGE
+MIRAGE
+NEKROS
+NEKROS
+NOVA
+NOVA
+OBERON
+OBERON
+NYX
+NYX
+RHINO
+RHINO
+SARYN
+SARYN
+TRINITY
+TRINITY
+VALKYR
+VALKYR
+VAUBAN
+VAUBAN
+VOLT
+VOLT
+阿什
+ASH
+音妈
+BANSHEE
+火鸡
+EMBER
+冰男
+FROST
+水男
+HYDROID
+洛基
+LOKI
+磁妹
+MAG
+小丑
+MIRAGE
+摸尸
+NEKROS
+诺娃
+NOVA
+奶爸
+OBERON
+脑溢血
+NYX
+犀牛
+RHINO
+毒妈
+SARYN
+奶妈
+TRINITY
+女汉子
+VALKYR
+工程
+VAUBAN
+电男
+VOLT
+ATLAS
+ATLAS
+土甲
+ATLAS
+CHROMA
+CHROMA
+龙甲
+CHROMA
+EQUINOX
+EQUINOX
+扶她
+EQUINOX
+咖喱
+EXCALIBUR
+EXCALIBUR
+EXCALIBUR
+GARA
+GARA
+玻璃甲
+GARA
+HARROW
+HARROW
+主教
+HARROW
+INAROS
+INAROS
+沙甲
+INAROS
+IVARA
+IVARA
+弓妹
+IVARA
+LIMBO
+LIMBO
+李明博
+LIMBO
+MESA
+MESA
+女枪
+MESA
+NEZHA
+NEZHA
+哪吒
+NEZHA
+NIDUS
+NIDUS
+蛆甲
+NIDUS
+OCTAVIA
+OCTAVIA
+音乐甲
+OCTAVIA
+蝶甲
+TITANIA
+蝶妹
+TITANIA
+WUKONG
+WUKONG
+悟空
+WUKONG
+ZEPHYR
+ZEPHYR
+鸟姐
+ZEPHYR
+MADURAI晶体
+Madurai Lens
+NARAMON晶体
+Naramon Lens
+VAZARIN晶体
+Vazarin Lens
+UNAIRU晶体
+Unairu Lens
+ZENURIK晶体
+Zenurik Lens
+夜灵晶体
+Eidolon Lens
+MADURAI高级晶体
+Greater Madurai Lens
+VAZARIN高级晶体
+Greater Vazarin Lens
+NARAMON高级晶体
+Greater Naramon Lens
+UNAIRU高级晶体
+Greater Unairu Lens
+ZENURIK高级晶体
+Greater Zenurik Lens
+CRESSA的驻扎处场景
+Cressa's Garrison Scene
+仲裁者法庭场景
+Arbiter's Tribunal Scene
+苏达数据景观场景
+Suda's Datascape Scene
+HUNHOW的数据景观场景
+Hunhow's Datascape Scene
+ERGO的会议室场景
+Ergo's Boardroom Scene
+VEIL的拘束台场景
+Veil's Binding Scene
+HARROW神庙场景
+Harrow's Temple Scene
+AMARYN的避难所场景
+Amaryn's Retreat Scene
+GRINEER森林工厂场景
+Grineer Forest Factory Scene
+GRINEER森林工业场景
+Grineer Forest Industry Scene
+GRINEER森林水泵场景
+Grineer Forest Water Pump Scene
+INAROS古墓场景
+Inaros Tomb Scene
+夜灵平野场景
+Plains of Eidolon Scene
+色键场景
+Color Key Scene
+棱晶 代达罗斯
+Prisma Daedalus
+棱晶纹章
+Prisma Sigil
+棱晶 机甲头盔面具
+Prisma Mech Head Sentinel Mask
+棱晶 朔月女神披饰
+Prisma Hecate Syandana
+棱晶 喷射机翼
+Prisma Jet Sentinel Wings
+棱晶 山越披饰
+Prisma Yamako Syandana
+棱晶箭矢
+Prisma Arrows
+棱晶 喷射尾翼
+Prisma Koi Sentinel Tail
+棱晶 江户
+Prisma Edo
+棱晶 恶魔纳贝流士
+Prisma Naberus
+BARO KI'TEER 摇头娃娃
+Baro Ki'Teer Noggle
+3天经验加成
+3 Day Affinity Booster
+3天现金加成
+3 Day Credit Booster
+3天资源数量加成
+3 Day Resource Booster
+三霸信标
+Grustrag Three Beacon
+STALKER信标
+Stalker Beacon
+ZANUKA信标
+Zanuka Hunter Beacon
+INAROS之沙
+Sands of Inaros Blueprint
+猎鹰MOD包
+Falcon Mod Pack
+恶龙MOD包
+Dragon Mod Pack
+KI'TEER头像
+Ki'teer Glyph
+BARO KI'TEER 色板
+Baro Ki'teer Colors
+基座 PRIME
+Pedestal Prime
+KI'TEER 烟花
+Ki'Teer Fireworks
+堕落轰击者魅影
+Corrupted Bombard Specter
+纳瑟斯基因伪装包
+Nexus Gene-Masking Kit
+KI'TEER 姿态
+Ki'Teer Presence
+展示图-菱形
+Display - Argyle
+KI'TEER 致敬浮印
+Ki'Teer Tribute Glyph
+库娃守护面具
+Kavat Sentinel Mask
+库娃守护飞翼
+Kavat Sentinel Wings
+库娃守护尾翼
+Kavat Sentinel Tail
+KI'TEER 守护面具
+Ki'Teer Sentinel Mask
+KI'TEER 守护飞翼
+Ki'Teer Sentinel Wings
+KI'TEER 守护尾翼
+Ki'Teer Sentinel Tail
+KI'TEER 披饰
+Ki'Teer Syandana
+KI'TEER 箭矢外观
+Ki'Teer Arrow Skin
+KI'TEER 库狛装甲
+Ki'Teer Kubrow Armor
+KI'TEER 大亚披饰
+Ki'Teer Diax Syandana
+KI'TEER 饰冠
+Ki'Teer Sekhara
+KI'TEER 耳饰
+Ki'Teer Earpiece
+KI'TEER 单个耳饰
+Ki'Teer Solo Earpiece
+纳瑟斯毛皮花纹
+Nexus Fur Pattern
+KI'TEER 库娃护甲
+Ki'Teer Kavat Armor
+KI'TEER 冬至披饰
+Solstice Ki'teer Syandana
+KI'TEER 坠饰
+Ki'Teer Sugatra
+KI'TEER 类种披饰
+Ki'Teer Razza Syandana
+KI'TEER 福罗斯
+Ki'Teer Foros
+曙光女神 PRIME
+Eos Prime Armor
+佩拉坠饰
+Pyra Sugatra
+幼体爆发
+Larva Burst
+持久誓约
+Lasting Covenant
+刀翼闪击
+Razorwing Blitz
+NIDUS 朊毒头盔
+Nidus Prion Helmet
+FROST 飑风头盔
+Frost Squall Helmet
+BANSHEE 返响头盔
+Banshee Reverb Helmet
+VALKYR 狂者头盔
+Valkyr Kara Helmet
+EMBER 复燃头盔
+Ember Backdraft Helmet
+LOKI 本质头盔
+Loki Essence Helmet
+MAG 线圈头盔
+Mag Coil Helmet
+TRINITY 经络头盔
+Trinity Meridian Helmet
+OCTAVIA 华彩乐章头盔
+Octavia Cadenza Helmet
+FROST 极光头盔
+Frost Aurora Helmet
+ATLAS 兜围头盔
+Atlas Shikoro Helmet
+VOLT 风暴头盔
+Volt Storm Helmet
+SARYN 铁杉头盔
+Saryn Hemlock Helmet
+NYX 灭神头盔
+Nyx Menticide Helmet
+BANSHEE 合音头盔
+Banshee Chorus Helmet
+HYDROID 海怪头盔
+Hydroid Ketos Helmet
+CHROMA 龙蛇头盔
+Chroma Drac Helmet
+EMBER 凤凰头盔
+Ember Phoenix Helmet
+VALKYR 芭丝特头盔
+Valkyr Bastet Helmet
+NOVA 通量头盔
+Nova Flux Helmet
+ASH 毒蝎头盔
+Ash Scorpion Helmet
+MAG 高斯头盔
+Mag Gauss Helmet
+VOLT 脉冲头盔
+Volt Pulse Helmet
+CHROMA 羽蛇神头盔
+Chroma Amaru Helmet
+HYDROID 鳁鲸头盔
+Hydroid Rorqual Helmet
+LIMBO 画家头盔
+Limbo Magrite Helmet
+LIMBO 诗人头盔
+Limbo Aristeas Helmet
+NYX 黄蜂头盔
+Nyx Vespa Helmet
+ATLAS 炼狱头盔
+Atlas Tartarus Helmet
+HYDROID 海之信使头盔
+Hydroid Triton Helmet
+ASH 飞蝗头盔
+Ash Locust Helmet
+RHINO 震击头盔
+Rhino Thrak Helmet
+RHINO 先锋头盔
+Rhino Vanguard Helmet
+IVARA 头罩头盔
+Ivara Zirastra Helmet
+IVARA 洛克斯利头盔
+Ivara Loxley Helmet
+WUKONG 大圣头盔
+Wukong Dasheng Helmet
+WUKONG 猕猴头盔
+Wukong Macak Helmet
+EQUINOX 至点头盔
+Equinox Solstice Helmet
+EXCALIBUR 潘德拉冈头盔
+Excalibur Pendragon Helmet
+EXCALIBUR 莫德雷头盔
+Excalibur Mordred Helmet
+EXCALIBUR 阿瓦隆头盔
+Excalibur Avalon Helmet
+GARA 悍妇头盔
+Gara Virago Helmet
+INAROS 阿努比斯头盔
+Inaros Anubis Helmet
+INAROS 卡诺比斯头盔
+Inaros Canopic Helmet
+LOKI 谜样头盔
+Loki Enigma Helmet
+LOKI 诈欺头盔
+Loki Swindle Helmet
+MESA 长角头盔
+Mesa Longhorn Helmet
+MESA 角羊头盔
+Mesa Ovis Helmet
+MIRAGE 丑角头盔
+Mirage Harlequin Helmet
+MIRAGE 丑仆头盔
+Mirage Trivelin Helmet
+NEKROS 古墓头盔
+Nekros Raknis Helmet
+NEKROS 裹尸布头盔
+Nekros Shroud Helmet
+NEZHA 奇尔卡头盔
+Nezha Circa Helmet
+NOVA 量子头盔
+Nova Quantum Helmet
+NOVA 气流头盔
+Nova Slipstream Helmet
+OBERON 捻角山羊头盔
+Oberon Markhor Helmet
+OBERON 羚羊头盔
+Oberon Oryx Helmet
+SARYN 氯毒头盔
+Saryn Chlora Helmet
+TITANIA 风之妖精头盔
+Titania Aurai Helmet
+TRINITY 预言头盔
+Trinity Aura Helmet
+VAUBAN 休战头盔
+Vauban Armistice Helmet
+VAUBAN 沙佩隆头盔
+Vauban Chapelon Helmet
+VAUBAN 机敏头盔
+Vauban Esprit Helmet
+VAUBAN 策略头盔
+Vauban Gambit Helmet
+ZEPHYR 西熟风头盔
+Zephyr Cierzo Helmet
+ZEPHYR 天狗头盔
+Zephyr Tengu Helmet
+HARROW 副主教头盔
+Harrow Suffragan Helmet
+重击巨锤 布洛克外观
+Fragor Brokk Skin
+佐轮双斧 戈刃外观
+Dagger Axe Zoren Skin
+分裂战斧 蝎尾狮外观
+Scindo Manticore Skin
+分裂斩斧 戈刃外观
+Dagger Axe Scindo Skin
+后纪 A1
+Axi A1
+后纪 A2
+Axi A2
+后纪 A3
+Axi A3
+后纪 B1
+Axi B1
+后纪 B2
+Axi B2
+后纪 C1
+Axi C1
+后纪 C2
+Axi C2
+后纪 E1
+Axi E1
+后纪 E2
+Axi E2
+后纪 G1
+Axi G1
+后纪 H1
+Axi H1
+后纪 H2
+Axi H2
+后纪 K1
+Axi K1
+后纪 N1
+Axi N1
+后纪 N2
+Axi N2
+后纪 N3
+Axi N3
+后纪 N4
+Axi N4
+后纪 N5
+Axi N5
+后纪 O1
+Axi O1
+后纪 R1
+Axi R1
+后纪 S1
+Axi S1
+后纪 T1
+Axi T1
+后纪 V1
+Axi V1
+后纪 V2
+Axi V2
+后纪 V3
+Axi V3
+后纪 V4
+Axi V4
+后纪 V5
+Axi V5
+后纪 V6
+Axi V6
+后纪 V7
+Axi V7
+古纪 A1
+Lith A1
+古纪 A2
+Lith A2
+古纪 B1
+Lith B1
+古纪 B2
+Lith B2
+古纪 C1
+Lith C1
+古纪 C2
+Lith C2
+古纪 F1
+Lith F1
+古纪 F2
+Lith F2
+古纪 G1
+Lith G1
+古纪 H1
+Lith H1
+古纪 K1
+Lith K1
+古纪 M1
+Lith M1
+古纪 N1
+Lith N1
+古纪 N2
+Lith N2
+古纪 N3
+Lith N3
+古纪 S1
+Lith S1
+古纪 S2
+Lith S2
+古纪 S3
+Lith S3
+古纪 S4
+Lith S4
+古纪 S5
+Lith S5
+古纪 S6
+Lith S6
+古纪 S7
+Lith S7
+古纪 T1
+Lith T1
+古纪 V1
+Lith V1
+古纪 V2
+Lith V2
+古纪 V3
+Lith V3
+古纪 V4
+Lith V4
+前纪 B1
+Meso B1
+前纪 C1
+Meso C1
+前纪 C2
+Meso C2
+前纪 C3
+Meso C3
+前纪 D1
+Meso D1
+前纪 F1
+Meso F1
+前纪 F2
+Meso F2
+前纪 G1
+Meso G1
+前纪 H1
+Meso H1
+前纪 K1
+Meso K1
+前纪 M1
+Meso M1
+前纪 N1
+Meso N1
+前纪 N2
+Meso N2
+前纪 N3
+Meso N3
+前纪 N4
+Meso N4
+前纪 N5
+Meso N5
+前纪 O1
+Meso O1
+前纪 S1
+Meso S1
+前纪 S2
+Meso S2
+前纪 S3
+Meso S3
+前纪 S4
+Meso S4
+前纪 S5
+Meso S5
+前纪 S6
+Meso S6
+前纪 V1
+Meso V1
+前纪 V2
+Meso V2
+前纪 V3
+Meso V3
+前纪 V4
+Meso V4
+前纪 V5
+Meso V5
+中纪 A1
+Neo A1
+中纪 B1
+Neo B1
+中纪 B2
+Neo B2
+中纪 B3
+Neo B3
+中纪 D1
+Neo D1
+中纪 H1
+Neo H1
+中纪 M1
+Neo M1
+中纪 N1
+Neo N1
+中纪 N2
+Neo N2
+中纪 N3
+Neo N3
+中纪 N4
+Neo N4
+中纪 N5
+Neo N5
+中纪 N6
+Neo N6
+中纪 N7
+Neo N7
+中纪 S1
+Neo S1
+中纪 S2
+Neo S2
+中纪 S3
+Neo S3
+中纪 S5
+Neo S5
+中纪 S6
+Neo S6
+中纪 S7
+Neo S7
+中纪 S8
+Neo S8
+中纪 T1
+Neo T1
+中纪 V1
+Neo V1
+中纪 V2
+Neo V2
+中纪 V3
+Neo V3
+中纪 V4
+Neo V4
+中纪 V5
+Neo V5
+中纪 V6
+Neo V6
+特殊功能槽连接器
+Exilus Adapter
+古纪 G2
+Lith G2
+前纪 E1
+Meso E1
+前纪 F3
+Meso F3
+中纪 E1
+Neo E1
+中纪 F1
+Neo F1
+后纪 L1
+Axi L1
+后纪 S2
+Axi S2
+霰弹枪 未开紫卡
+Shotgun Riven Mod (Veiled)
+近战 未开紫卡
+Melee Riven Mod (Veiled)
+步枪 未开紫卡
+Rifle Riven Mod (Veiled)
+手枪 未开紫卡
+Pistol Riven Mod (Veiled)
+加密的日记碎片
+Encrypted Journal Fragment
+水星
+Mercury
+月球
+Lua
+金星
+Venus
+地球
+Earth
+火星
+Mars
+木星
+Jupiter
+土星
+Saturn
+天王星
+Uranus
+海王星
+Neptune
+冥王星
+Pluto
+火卫一
+Phobos
+谷神星
+Ceres
+欧罗巴
+Europa
+赛德娜
+Sedna
+赤毒要塞
+Kuva Fortress
+阋神星
+Eris
+虚空
+Void
+刺杀
+Assassination
+强袭
+Assault
+捕获
+Capture
+防御
+Defense
+叛逃
+Defection
+挖掘
+Excavation
+清巢
+Hive
+间谍
+Spy
+自由漫步
+Free Roam
+移动防御
+Mobile Defense
+武形秘仪
+Conclave
+救援
+Rescue
+劫持
+Hijack
+破坏
+Sabotage
+黑暗地带
+Dark Sector
+生存
+Survival
+拦截
+Interception
+古纪
+Lith
+前纪
+Meso
+中纪
+Neo
+后纪
+Axi
+超音波冲击枪 镀铜外观
+Sonicor Exilis Skin
+棱晶 代达罗斯 左护膝板
+Left Prisma Daedalus Knee Plates
+棱晶 代达罗斯 右护膝板
+Right Prisma Daedalus Knee Plates
+棱晶 代达罗斯 左护肩
+Left Prisma Daedalus Shoulderguard
+棱晶 代达罗斯 右护肩
+Right Prisma Daedalus Shoulderguard
+ZEPHYR 不朽外观
+Zephyr Immortal Skin
+BARO KI'TEER 摇头娃娃
+Noggle Statue - Baro Ki'teer
+Twin Grakata Towsun Skin
+双子葛拉卡达 夏至外观
+KI'TEER 腿部护甲
+Ki'teer Leg Plates
+KI'TEER 肩部护甲
+Ki'teer Shoulder Plates
+KI'TEER 胸部护甲
+Ki'teer Chest Plate
+手枪弹药转换 PRIME
+Primed Pistol Ammo Mutation
+双子葛拉卡达 夏至外观
+Twin Grakata Towsun Skin
+歼灭
+Extermination
+虚空破坏
+Orokin Sabotage
+EXCALIBUR PRIME
+EXCALIBUR PRIME
+咖喱 PRIME
+EXCALIBUR PRIME
+库娃护甲 亡灵节外观
+Day Of The Dead Kavat Armor
+Ki'Teer 大气面罩
+Ki'teer Atmos Mask
+Ki'Teer 大气耳饰
+Ki'teer Atmos Earpiece
+Ki'Teer 饰冠
+Baro Kiteer Sekhara
+棱晶 恶魔纳贝流士
+Prisma Naberus Arm Armor
+LISET 亡灵节外观
+Liset Scarf
+救赎者 镀铜外观
+Redeemer Elixis Skin
+SCIMITAR 棱晶外观
+Scimitar Prisma Skin
+棱晶 江户 左肩甲
+Left Prisma Edo Shoulder Armor
+棱晶 江户 右肩甲
+Right Prisma Edo Shoulder Armor
+棱晶 江户 右膝甲
+Right Prisma Edo Knee Plates
+棱晶 江户 左膝甲
+Left Prisma Edo Knee Plates
+棱晶 江户 胸甲
+Prisma Edo Chest Plate
+安普长棍外观
+Anpu Staff Skin
+安普坠饰
+Anpu Sugatra
+Hydroid 不朽外观
+Hydroid Immortal Skin
+LISET 棱晶外观
+Liset Prisma Skin
+朱红暴风
+Vermillion Storm
+KI'TEER 大气头饰
+Ki'teer Atmos Diadem
+KI'TEER 类种披饰
+Ki'teer Razza Synadana
+后纪 V8
+Axi V8
+中纪 O1
+Neo O1
+活力 PRIME
+Primed Vigor
+传说核心
+Legendary Fusion Core
+古纪 H2
+Lith H2
+古纪 Z1
+Lith Z1
+前纪 O2
+Meso O2
+前纪 T1
+Meso T1
+前纪 T2
+Meso T2
+中纪 B4
+Neo B4
+中纪 K1
+Neo K1
+中纪 Z1
+Neo Z1
+后纪 H3
+Axi H3
+后纪 K2
+Axi K2
+后纪 Q2
+Axi Q2
+ZEPHYR PRIME
+Zephyr Prime
+皇家拐刃 PRIME
+Kronen Prime
+狂鲨 PRIME
+Tiberon Prime
+鸟姐 PRIME
+Zephyr Prime
+OROKIN堡垒撤离点场景
+Photobooth Tile Orokin Extraction
+量子切割器 积冰外观
+Quanta Aufeis Skin
+MANTIS 棱晶外观
+Mantis Prisma Skin
+KI'TEER的仪态
+Baro Emote
+节奏 赋能
+Arcane Tempo
+NEZHA 金吒头盔
+Nezha Jinza Helmet
+阿耶檀识青蓝星
+Cyan Ayatan Star
+阿耶檀识琥珀星
+Amber Ayatan Star
+ODONATA 镀铜外观
+Elixis Odonata Skin
+摇头娃娃-装备ODONATA的EXCALIBUR
+Excalibur Archwing Bobble Head
+步枪弹药转换 PRIME
+Primed Rifle Ammo Mutation
+霰弹枪弹药转换 PRIME
+Primed Shotgun Ammo Mutation
+曙光女神 PRIME 装甲组合
+Eos Prime Armor Set
+曙光女神 PRIME 胸甲
+Eos Prime Chest Plate
+曙光女神 PRIME 左肩甲
+Left Eos Prime Shoulder Plates
+曙光女神 PRIME 右肩甲
+Right Eos Prime Shoulder Plates
+曙光女神 PRIME 左马刺
+Left Eos Prime Spurs
+曙光女神 PRIME 右马刺
+Right Eos Prime Spurs
+棱晶 代达罗斯 胸甲
+Prisma Daedalus Chest Plate
+堕落轰击者魅影 蓝图
+Corrupted Bombard Specter Blueprint
+家宅披饰
+Domus Syandana
+能量转移
+Energy Transfer
+割魂火圈
+Reaping Chakram
+Mesa的华尔兹
+Mesa’s Waltz
+集中箭矢
+Concentrated Arrow
+宝拉
+Balla
+西亚什
+Cyath
+德塔特
+Dehtat
+客隆什
+Kronsh
+密丸
+Mewan
+乌尔萨
+Ooltha
+瘟疫 奇沃
+Plague Keewar
+瘟疫 克里帕丝
+Plague Kripath
+查亚普
+Jayap
+克鲁斯查
+Kroostra
+库阿斯
+Kwath
+拉卡
+Laka
+佩耶
+Peye
+斯卡拉
+Seekalla
+瘟疫 艾克文
+Plague Akwin
+瘟疫 柏克文
+Plague Bokwin
+如杭
+Ruhang
+翟
+Jai
+如杭 II
+Ruhang II
+翟 II
+Jai II
+瓦吉特 如杭
+Vargeet Ruhang
+伊克瓦纳 如杭
+Ekwana Ruhang
+瓦吉特 翟
+Vargeet Jai
+伊克瓦纳 翟
+Ekwana Jai
+伊克瓦纳 II 如杭
+Ekwana II Ruhang
+瓦吉特 II 如杭
+Vargeet II Ruhang
+瓦吉特 II 翟
+Vargeet II Jai
+伊克瓦纳 II 翟
+Ekwana II Jai
+瓦吉特 如杭 II
+Vargeet Ruhang II
+伊克瓦纳 如杭 II
+Ekwana Ruhang II
+瓦吉特 翟 II
+Vargeet Jai II
+伊克瓦纳 翟 II
+Ekwana Jai II
+应急备案
+Plan B
+豪猪
+Hystrix
+双持凯瑞斯
+Dual Keres
+草原猎手
+Veldt
+KHORA
+Khora
+蜘蛛甲
+Khora
+瑟普梵
+Sephahn
+拉比威
+Rabvee
+多克拉姆
+Dokrahm
+花开怪奇
+Peculiar Bloom
+KHORA 德尔菲头盔
+Khora Delphi Helmet
+GRINEER驻扎地火炮场景
+Grineer Settlement Artillery Scene
+月球楼厅场景
+Lua Balcony Scene
+GRINEER海底实验室离心机场景
+Grineer Sealab Centrifuge Scene
+CORPUS船货场景
+Corpus Ship Freight Scene
+赤毒要塞裂缝场景
+Kuva Fortress Crevice Scene
+OROKIN荒废广场场景
+Orokin Derelict Plaza Scene
+GRINEER居住点反应炉场景
+Grineer Settlement Reactor Scene
+月球苗圃场景
+Lua Nursery Scene
+CORPUS冰封星球残骸场景
+Corpus Ice Planet Wreckage Scene
+CORPUS集气城市管道场景
+Corpus Gas City Conduit Scene
+INFESTED舰桥场景
+Infested Ship Bridge Scene
+GRINEER造船厂场景
+Grineer Shipyards Manufactory Scene
+KI'TEER 福罗斯 胸部护甲
+Ki'teer Foros Shoulder Plates
+KI'TEER 福罗斯 腿部护甲
+Ki'teer Foros Leg Plates
+KI'TEER 福罗斯 肩部护甲
+Ki'teer Foros Chest Plate
+堕落重型机枪兵魅影
+Corrupted Heavy Gunner Ball
+KHORA 德尔菲头盔
+Khora Alt Helmet Blueprint
+异融ALAD V导航座标
+Mutalist Alad V Nav Coordinate
+抵消
+Negate
+再启动
+Reawaken
+生长怪奇
+Peculiar Growth
+EQUINOX 晨昏恶魔头盔
+Equinox Clisthert Helmet
+XIPHOS 棱晶外观
+Xiphos Prisma Skin
+奥堤克光子枪 镀铜外观
+Elixis Opticor
+VOR 上尉
+Captain Vor
+Vay Hek议员
+Councilor Vay Hek
+RUK将军
+General Sargus Ruk
+LECH KRIL中尉
+Lech Kril
+豺狼
+Jackal
+鬣狗群
+Hyena Pack
+猛禽
+Raptor
+异融者ALAD V
+Mutalist Alad V
+突击步枪
+Assault Rifle
+武器限定
+Weapon Restriction
+手枪
+Pistol
+近战
+Melee
+弓箭
+Bow
+霰弹枪
+Shotgun
+狙击枪
+Sniper
+敌人元素强化
+Enemy Elemental Enhancement
+腐蚀
+Corrosive
+电击
+Electricity
+爆炸
+Blast
+火焰
+Heat
+冰冻
+Cold
+毒气
+Gas
+磁力
+Magnetic
+毒素
+Toxin
+辐射
+Radiation
+病毒
+Viral
+冲击
+Impact
+穿刺
+Puncture
+敌人物理强化
+Enemy Physical Enhancement
+切割
+Slash
+敌人护甲强化
+Augmented Enemy Armor
+卓越者大本营
+Eximus Stronghold
+能量上限减少
+Energy Reduction
+敌人护盾强化
+Enhanced Enemy Shields
+环境改变
+Environmental Effect
+环境灾害
+Environmental Hazard
+极寒
+Extreme Cold
+火灾
+Fire
+浓雾
+Dense Fog
+冷却液泄露
+Cryogenic Leakage
+电磁异常
+Electromagnetic Anomalies
+辐射灾害
+Radiation Pockets
+领袖纹章
+Pack Leader Sigil
+耀目纹章
+Glaring Sigil
+Excalibur Umbra
+Excalibur Umbra
+暗影咖喱
+Excalibur Umbra
+KI'TEER 大气眼饰
+Ki'teer Atmos Oculus
+LIMBO PRIME
+Limbo Prime
+李明博 PRIME
+Limbo Prime
+技巧之剑 PRIME
+Destreza Prime
+食人鱼 PRIME
+Pyrana Prime
+影生
+Skiajati
+强化箭袋
+Empowered Quiver
+不竭贪婪
+Insatiable
+庇护焚炉
+Warding Thurible
+分裂槌音
+Partitioned Mallet
+暗影 聚精会神
+Umbral Intensify
+暗影 生命力
+Umbral Vitality
+暗影 纤维
+Umbral Fiber
+牺牲 斩铁
+Sacrificial Steel
+牺牲 压迫点
+Sacrificial Pressure
+蛇发女妖 夏至外观
+Gorgon Towsun Skin
+棱晶 乌鲁披饰
+Prisma Uru Syandana
+近战伤害
+Melee Damage
+物理伤害
+Physical Damage
+暴击率
+Critical Chance
+暴击伤害
+Critical Damage
+元素伤害
+Elemental Damage
+触发几率
+Status Chance
+状态持续时间
+Status Duration
+对派系伤害
+Damage to Faction
+攻击速度
+Attack Speed
+充能效率
+Channeling Efficiency
+充能伤害
+Channeling Damage
+处决伤害
+Finisher Damage
+攻击范围
+Range
+滑行攻击造成暴击几率
+Chance to be a Critical Hit
+连击持续时间
+Combo Duration
+多重射击
+Multishot
+射速（弓类武器效果加倍）
+Fire Rate (x2 for Bows)
+弹匣容量
+Magazine Capacity
+弹药最大值
+Ammo Maximum
+弹道飞行速度
+Flight Speed
+装填速度
+Reload Speed
+武器后坐力
+Weapon Recoil
+变焦
+Zoom
+穿透
+Punch Through
+射速
+Fire Rate
+冰冻伤害
+Cold Damage
+电击伤害
+Electricity Damage
+火焰伤害
+Heat Damage
+毒素伤害
+Toxin Damage
+冲击伤害
+Impact Damage
+穿刺伤害
+Puncture Damage
+切割伤害
+Slash Damage
+对G系伤害
+Damage to Grineer
+对I系伤害
+Damage to Infested
+对C系伤害
+Damage to Corpus
+步枪
+Rifle
+伤害
+Damage
+歼灭
+Exterminate
+小钱钱
+Little Money
+有点积蓄
+So So
+成功人士
+Success Man
+赚钱能手
+Earn Money
+身揣巨款
+Lots Money
+土豪
+Iron Man
+大财阀
+Batman
+积分至尊
+Score Master
+信用极低
+ExLow Credit
+信用偏低
+Low Credit
+信用普通
+Normal Credit
+信用优秀
+Good Credit
+值得信赖
+Credit Master
+启蒙者
+Initiate
+信徒
+Novice
+探求者
+Disciple
+巡猎者
+Hunter
+苍鹰
+Eagle
+猎虎
+Tiger
+天龙
+Dragon
+圣者
+Sage
+大师
+Master
+宗师
+Grand Master
+内测者
+Internal Man
+UWP玩家
+UWP Player
+WEB玩家
+WEB Player
+创始人
+Founder
+KI'TEER 室内壁纸
+Baro Wallpaper
+利刃豺狼舰队
+Corpus Razorback Project
+尸鬼入侵
+Ghoul Purge
+Lotus的礼物 - 失窃!
+Gifts Of The Lotus - Stolen!
+瘟疫之星
+Plague Star
+巨人战舰
+Balor Fomorian
+机械叛乱
+Tac Alert Proxy Rebellion
+焦虑
+Angst
+怨恨
+Malice
+躁狂
+Mania
+苦难
+Misery
+折磨
+Torment
+暴力
+Violence
+显赫 色板
+Colour Picker Twitch B Item A
+棱晶 双子小精灵
+Prisma Twin Gremlins
+REVENANT
+REVENANT
+幻离子
+Phantasma
+烈焰计划（重建中继站）
+Relay Title
+MIRAGE 不朽外观
+Mirage Alternate Skin
+包覆游云
+Enveloping Cloud
+蓄积长鞭
+Accumulating Whipclaw
+指挥家
+Conductor
+治愈玻片
+Mending Splinters
+席尔火枪
+ZYLOK
+TITANIA
+TITANIA
+顶天立地 PRIME
+Primed Sure Footed
+充电弹头 PRIME
+Primed Charged Shell
+塔克桑 沙漠迷彩外观
+Taxon Desert-camo Skin
+CHROMA PRIME
+CHROMA PRIME
+龙甲 PRIME
+Chroma Prime
+格拉姆 PRIME
+Gram Prime
+绝路 PRIME
+Rubico Prime
+GARA 机体蓝图
+Gara Chassis Blueprint
+现金匣
+Credits Cache
+GARA 系统蓝图
+Gara Systems Blueprint
+Gara 头部神经光元蓝图
+Gara Neuroptics Blueprint
+REVENANT 系统蓝图
+Revenant System Blueprint
+REVENANT 机体蓝图
+Revenant Chassis Blueprint
+夜灵晶体 蓝图
+Eidolon Lens Blueprint
+REVENANT 头部神经光元蓝图
+Revenant Neuroptics Blueprint
+飞光荒疫
+Shimmering Blight
+弗拉克斯 亡魂 拳套
+Furax Wraith Gauntlet
+弗拉克斯 亡魂 蓝图
+Furax Wraith Blueprint
+暗黑长剑 亡灵节外观
+Dark Sword Day Of The Dead Skin
+哈库纳亡魂斗篷
+Harkonar Wraith Cloak
+驱逐CORPUS PRIME
+Primed Expel Corpus
+驱逐堕落者 PRIME
+Primed Expel Corrupted
+驱逐GRINEER PRIME
+Primed Expel Grineer
+驱逐INFESTED PRIME
+Primed Expel Infested
+猎鹰轮
+Falcor
+毒囊骨茧
+Pupacyst
+心智之殁
+Paracesis
+谨慎射击
+Cautious Shot
+献出力量
+Power Donation
+神射手
+Sharpshooter
+强力切换
+Vigorous Swap
+翻滚防护
+Rolling Guard
+适应
+Adaptation
+哈库纳亡魂臂甲
+Harkonar Wraith Arm Armor
+战术警报-万圣噩梦
+Hallowed Nightmares Tactical Alert
+战术警报-万圣噩梦
+Hallowed Nightmares-Time Attack
+持续火力 PRIME
+Primed Quickdraw
+哈库纳亡魂胸甲
+Harkonar Wraith Chestbuard
+GARUDA
+GARUDA
+噬蛇弩
+Nagantaka
+武使之力
+Battacor
+视使之触
+Ocucor
+直镐
+Kreska
+奥克绪罗斯
+Oxylus
+哈库纳亡魂腿甲
+Harkonar Wraith Leg Armor
+合成 解构
+Synth Deconstruct
+合成 纤维
+Synth Fiber
+合成 充能
+Synth Charge
+合成 反射
+Synth Reflex
+机甲 超载
+Mecha Overdrive
+机甲 充能
+Mecha Recharge
+机甲 脉冲
+Mecha Pulse
+机甲 强化
+Mecha Empowered
+技法 连带
+Tek Collateral
+技法 强化
+Tek Enhance
+技法 引力
+Tek Gravity
+技法 猛袭
+Tek Assault
+墓指
+Tombfinger
+捕月
+Catchmoon
+凝目
+Gaze
+响胆
+Rattleguts
+猛虎 镀铜外观
+Tigris Elixis Skin
+饼干库娃浮印
+Avatar Image Glyph Cookie Kavat
+饼干库狛浮印
+Avatar Image Glyph Cookie Kubrow
+培训债务债券
+Training Debt-Bond
+庇护债务债券
+Shelter Debt-Bond
+医疗债务债券
+Medical Debt-Bond
+热能软泥
+Thermal Sludge
+缇帕瘤
+Tepa Nodule
+家族债务债券
+Familial Debt-Bond
+光滑翡斯敏石
+Smooth Phasmin
+铁镍矿
+Travoride
+铁镍合金
+Travocyte Alloy
+翡斯敏石
+Phasmin
+夜石
+Noctrul
+心形夜石
+Heart Noctrul
+酸化矿物
+Axidite
+酸化合金
+Axidrol Alloy
+填充细石
+Goblite
+泪滴形填充细石
+Goblite Tears
+启明矿石
+Venerol
+启明合金
+Venerdo Alloy
+紫苋石
+Amarast
+星形紫苋石
+Star Amarast
+长庚矿石
+Hesperon
+长庚合金
+Hespazym Alloy
+黄道宝石
+Zodian
+发光的黄道宝石
+Radiant Zodian
+赤色水晶
+Thyst
+女侯爵赤色水晶
+Marquise Thyst
+奥布山谷
+Orb Vallis
+液集者
+Sapcaddy
+回声环绕者
+Echowinder
+砖瓦匠
+Brickie
+洗涤者
+Scrubber
+修补机
+Tink
+目-目
+Eye-Eye
+磷虾杀手
+Kriller
+污泥环绕者
+Mirewinder
+长型环绕者
+Longwinder
+重筑虾
+Charamote
+多目鳗
+Tromyzon
+海龙
+Synathid
+艾脑
+Exa Brain
+维内多箱
+Venedo Case
+废料
+Scrap
+消散线圈
+Dissipator Coil
+并联生物二极体
+Parallel Biode
+旋叶片
+Rotoblade
+缪子电池
+Muon Battery
+神经中继器
+Neural Relay
+熵离子体
+Entroplasma
+微孔视觉感应器
+Anoscopic Sensor
+热能激光
+Thermal Laser
+车床凝冻液
+Lathe Coogulant
+萨根模块
+Sagan Module
+环境合成分析器
+Ecosynth Analyzer
+心肌菌孢子
+Mytocardia Spore
+葛嘉里菌孢子
+Gorgaricus Spore
+冲刺提升
+Sprint Boost
+MESA PRIME
+Mesa Prime
+觉醒双枪 PRIME
+Akjagara Prime
+救赎者 PRIME
+Redeemer Prime
+棱晶 洛斯塔姆库狛护甲
+Kubrow Armor Prisma
+KI'TEER 角形头冠
+Ki'teer Cornu Diadem
+低温外壳
+Hypothermic Shell
+带电子弹
+Charged Bullets
+毒染套管
+Contamination Casing
+传染性注射
+Infectious Injection
+冷冻包覆
+Cryo Coating
+离子注入
+Ion Infusion
+覆壳弹药
+Sabot Rounds
+关键焦点
+Critical Focus
+晶能放射器
+Exergis
+漫射者
+Plinx
+电流刺索
+Galvacord
+Arch-枪械行家
+Arch-Gun Ace
+LISET 塞冬尼亚外观
+Liset Cydonia Skin
+标记目标
+Marked Target
+古纪 O1
+Lith O1
+棱晶 库娃浮印
+Prisma Kavat Glyph
+棱晶 库狛浮印
+Prisma Kubrow Glyph
+ASH 毒蝎秘奥头盔
+Arcane Scorpion Ash Helmet
+ASH 飞蝗秘奥头盔
+Arcane Locust Ash Helmet
+BANSHEE 返响秘奥头盔
+Arcane Reverb Banshee Helmet
+BANSHEE 合音秘奥头盔
+Arcane Chorus Banshee Helmet
+EMBER 凤凰秘奥头盔
+Arcane Phoenix Ember Helmet
+EMBER 复燃秘奥头盔
+Arcane Backdraft Ember Helmet
+EXCALIBUR 阿瓦隆秘奥头盔
+Arcane Avalon Excalibur Helmet
+EXCALIBUR 潘德拉冈秘奥头盔
+Arcane Pendragon Excalibur Helmet
+FROST 极光秘奥头盔
+Arcane Aurora Frost Helmet
+FROST 飑风秘奥头盔
+Arcane Squall Frost Helmet
+LOKI 本质秘奥头盔
+Arcane Essence Loki Helmet
+LOKI 诈欺秘奥头盔
+Arcane Swindle Loki Helmet
+MAG 线圈秘奥头盔
+Arcane Coil Mag Helmet
+MAG 高斯秘奥头盔
+Arcane Gauss Mag Helmet
+NOVA 通量秘奥头盔
+Arcane Flux Nova Helmet
+NYX 灭神秘奥头盔
+Arcane Menticide Nyx Helmet
+NYX 黄蜂秘奥头盔
+Arcane Vespa Nyx Helmet
+RHINO 震击秘奥头盔
+Arcane Thrak Rhino Helmet
+RHINO 先锋秘奥头盔
+Arcane Vanguard Rhino Helmet
+SARYN 铁杉秘奥头盔
+Arcane Hemlock Saryn Helmet
+SARYN 氯毒秘奥头盔
+Arcane Chlora Saryn Helmet
+TRINITY 预言秘奥头盔
+Arcane Aura Trinity Helmet
+TRINITY 经络秘奥头盔
+Arcane Meridian Trinity Helmet
+VAUBAN 策略秘奥头盔
+Arcane Gambit Vauban Helmet
+VOLT 风暴秘奥头盔
+Arcane Storm Volt Helmet
+VOLT 脉冲秘奥头盔
+Arcane Pulse Volt Helmet
+Grineer战争
+War on Grineer
+快速装填
+Quick Reload
+ZAW 未开紫卡
+Zaw Riven Mod (Veiled)
+组合枪 未开紫卡
+Kitgun Riven Mod (Veiled)
+Corpus战争
+War on Corpus
+铜质库狛半身像
+Bronze Kubrow Bust
+正直 突波
+Virtuos Surge
+正直 尖刺
+Virtuos Spike
+正直 熔炉
+Virtuos Forge
+正直 特洛伊
+Virtuos Trojan
+和平 电闪
+Pax Bolt
+和平 电充
+Pax Charge
+和平 追寻者
+Pax Seeker
+和平 高飞
+Pax Soar
+猛烈发狂
+Wild Frenzy
+爆发质量
+Bursting Mass
+凝固汽油榴弹
+Napalm Grenades
+膛室 PRIME
+Primed Chamber
+Infested战争
+War on Infested
+恶狼战锤
+Wolf Sledge
+HILDRYN
+HILDRYN
+龙辰
+Tatsu
+棱晶 葛恩火枪
+Prisma Grinlok
+热美亚裂缝
+Thermia Fractures
+行动代号：雪藏的恩怨
+Operation: Buried Debts
+BARO KI'TEER 浮印
+Baro Ki'teer Glyph
+魔导 超载
+Magus Overload
+魔导 干扰
+Magus Glitch
+魔导 复位
+Magus Revert
+魔导 防火墙
+Magus Firewall
+魔导 驱动
+Magus Drive
+魔导 封锁
+Magus Lockdown
+魔导 穿破
+Magus Destruct
+魔导 近点
+Magus Anomaly
+魔导 热熔
+Magus Melt
+魔导 触媒
+Magus Accelerant
+魔导 修复
+Magus Repair
+乘空时间
+Air Time
+轨上燃焰
+Trail Blazer
+磁吸固锁
+Mag Locks
+护轨器
+Rail Guards
+纵横天际
+Poppin Vert
+瞬满
+Pop Top
+完美平衡
+Prefect Balance
+动能摩擦
+Kinetic Friction
+启明物悬浮驱动
+Venerdo Hoverdrive
+惯性减震
+Inertia Dampeners
+斩杀悬浮板
+Slay Board
+冷抵步
+Cold Arrival
+狂堆速
+Mad Stack
+迅逃夭
+Quick Escape
+声波提升
+Sonic Boost
+极限加速
+Extreme Velocity
+氮气喷射
+Nitro Boost
+收尾痛击
+Thrash Landing
+Tenno 血缘小地毯
+Tenno Kindred Rug
+显赫
+Eminence
+SCIMITAR 赛冬尼亚外观
+Scimitar Cydonia Skin
+翠雀
+Larkspur
