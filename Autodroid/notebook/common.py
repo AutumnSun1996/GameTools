@@ -57,6 +57,7 @@ def get_clip():
 
 
 def set_clip(text):
+    print(text)
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text.encode("UTF-16-LE") + b"\x00")
