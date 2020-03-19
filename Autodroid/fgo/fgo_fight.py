@@ -187,7 +187,10 @@ class FateGrandOrder(SimulatorControl):
         self.extract_enemy_hp()
         if self.combat_info["EnemyMaxHP"] > thresh:
             self.click_at_resource("战斗-敌人位置", index=self.combat_info["MaxHPEnemyIdx"]-1)
-        self.wait(2)
+            self.wait(0.5)
+            # 消除弹出框
+            self.click_at_resource("右侧空白区域")
+        self.wait(1)
 
     def extract_combat_info(self, repeat=0):
         """提取战斗轮次、从者NP、敌人HP等信息"""
