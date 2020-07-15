@@ -146,9 +146,8 @@ Cards:
   Image: 获得报酬.png
   MainSize: [1280, 720]
   Name: 获得报酬
-  Offset: [800, 50]
-  Size: [400, 160]
-  Type: Static
+  Size: [150, 80]
+  Type: Dynamic
 克制:
   Image: 克制.png
   MainSize: [1280, 720]

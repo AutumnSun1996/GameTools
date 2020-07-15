@@ -14,7 +14,7 @@ def set_logging_dir(log_dir="logs"):
         content = f.read()
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
-    conf = yaml.load(content.format(base_log_dir=log_dir))
+    conf = yaml.safe_load(content.format(base_log_dir=log_dir))
     logging.config.dictConfig(conf)
 
 logger = logging.getLogger(__name__)

@@ -41,13 +41,17 @@ class BaiduOCR:
             self.get_token()
         if params is None:
             params = {}
-
-        ret, data = cv.imencode('.jpg', image)
+        
+        if isinstance(image, np.ndarray):
+            ret, data = cv.imencode('.jpg', image)
+            data = data.tobytes()
+        else:
+            data = image
 
         params.update({"access_token": self.token})
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         body = urlencode({
-            "image": base64.encodebytes(data.tobytes())
+            "image": base64.encodebytes(data)
         })
         res = requests.post(
             "https://aip.baidubce.com/rest/2.0/ocr/v1/"+name,
