@@ -19,11 +19,22 @@ import win32con
 import win32api
 
 from config_loader import config, set_logging_dir
-from .image_tools import get_window_shot, cv_crop, get_diff, get_match, get_multi_match, \
-    cv_save, load_map, load_image, update_resource, save_jpeg
+from .image_tools import (
+    get_window_shot,
+    cv_crop,
+    get_diff,
+    get_match,
+    get_multi_match,
+    cv_save,
+    load_map,
+    load_image,
+    update_resource,
+    save_jpeg,
+)
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -75,10 +86,11 @@ def parse_condition(cond, obj, extra=None):
 class SimulatorControl:
     """模拟器通用控制
     """
+
     fallback_scene = {
         "Name": "无匹配场景",
         "Condition": True,
-        "Actions": [{"Type": "Wait", "Time": 1}]
+        "Actions": [{"Type": "Wait", "Time": 1}],
     }
     section = "Main"
     scene_check_max_repeat = 5
@@ -190,37 +202,37 @@ class SimulatorControl:
         if info["Type"] == "Static":
             x, y = info["Offset"]
             w, h = info["Size"]
-            target = info['ImageData']
-            part = cv_crop(image, (x, y, x+w, y+h))
+            target = info["ImageData"]
+            part = cv_crop(image, (x, y, x + w, y + h))
             diff = get_diff(part, target)
             # 有位置限制, 可以使用较为宽松的阈值
             logger.debug("Diff for %s@%s=%.3f", name, (x, y), diff)
-            ret = diff <= info.get('MaxDiff', 0.06)
+            ret = diff <= info.get("MaxDiff", 0.06)
             if ret:
                 pos = [x, y]
             else:
                 pos = []
         elif info["Type"] in {"Dynamic", "Anchor"}:
-            target = info['ImageData']
+            target = info["ImageData"]
             if "SearchArea" in info:
                 xy, wh = info["SearchArea"]
                 logger.debug("Search in %s+%s", xy, wh)
                 x, y = xy
                 w, h = wh
-                part = cv_crop(image, (x, y, x+w, y+h))
+                part = cv_crop(image, (x, y, x + w, y + h))
             else:
                 x = y = 0
                 part = image
             diff, pos = get_match(part, target)
             logger.debug("Diff for %s@%s=%.3f", name, pos, diff)
-            if diff > info.get('MaxDiff', 0.02):
+            if diff > info.get("MaxDiff", 0.02):
                 ret = False
                 pos = []
             else:
                 ret = True
                 pos = np.add(pos, [x, y])
         elif info["Type"] == "MultiStatic":
-            target = info['ImageData']
+            target = info["ImageData"]
             w, h = info["Size"]
             pos = []
             ret = False
@@ -229,28 +241,28 @@ class SimulatorControl:
             else:
                 positions = info["Positions"]
             for x, y in positions:
-                cropped = cv_crop(image, (x, y, x+w, y+h))
+                cropped = cv_crop(image, (x, y, x + w, y + h))
                 diff = get_diff(cropped, target)
                 logger.debug("Diff for %s@%s=%.3f", name, (x, y), diff)
-                if diff <= info.get('MaxDiff', 0.03):
+                if diff <= info.get("MaxDiff", 0.03):
                     pos.append((x, y))
                     ret = True
         elif info["Type"] == "MultiDynamic":
-            target = info['ImageData']
+            target = info["ImageData"]
             if "SearchArea" in info:
                 xy, wh = info["SearchArea"]
                 logger.debug("Search in %s+%s", xy, wh)
                 x, y = xy
                 w, h = wh
-                part = cv_crop(image, (x, y, x+w, y+h))
+                part = cv_crop(image, (x, y, x + w, y + h))
             else:
                 x = y = 0
                 part = image
             pos = get_multi_match(part, target, info.get("MaxDiff", 0.02))
-            pos = [[dx+x, dy+y] for dx, dy in pos]
+            pos = [[dx + x, dy + y] for dx, dy in pos]
             ret = bool(pos)
         else:
-            self.critical("Invalid Type %s", info['Type'])
+            self.critical("Invalid Type %s", info["Type"])
             return False, []
         if use_buffer:
             self.resource_pos_buffer[buffer_key] = (ret, pos)
@@ -288,7 +300,7 @@ class SimulatorControl:
         if self.resource_in_screen(name):
             return True
         self.wait(interval)
-        return self.wait_resource(name, interval, repeat-1)
+        return self.wait_resource(name, interval, repeat - 1)
 
     def click_at_resource(self, name, wait=False, index=None, offset=None, hold=0):
         """点击资源
@@ -300,32 +312,32 @@ class SimulatorControl:
                 return
         res = self.resources[name]
         logger.info("Click at <%s> resource: %s", res["Type"], name)
-        if res['Type'] == 'Static':
-            x, y = res['Offset']
+        if res["Type"] == "Static":
+            x, y = res["Offset"]
             dx, dy = res.get("ClickOffset", (0, 0))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
-        elif res['Type'] == 'MultiStatic':
+            rand_click(self.hwnd, (x + dx, y + dy, x + dx + cw, y + dy + ch), hold)
+        elif res["Type"] == "MultiStatic":
             logger.info("index=%s", index)
-            x, y = res['Positions'][index]
+            x, y = res["Positions"][index]
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
-        elif res['Type'] == 'Dynamic':
+            rand_click(self.hwnd, (x + dx, y + dy, x + dx + cw, y + dy + ch), hold)
+        elif res["Type"] == "Dynamic":
             if offset is None:
                 _, offset = self.search_resource(name)
             x, y = offset
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
-        elif res['Type'] == 'MultiDynamic':
+            rand_click(self.hwnd, (x + dx, y + dy, x + dx + cw, y + dy + ch), hold)
+        elif res["Type"] == "MultiDynamic":
             if offset is None:
                 _, pos = self.search_resource(name)
                 offset = pos[index]
             x, y = offset
             dx, dy = res.get("ClickOffset", res.get("Offset", (0, 0)))
             cw, ch = res.get("ClickSize", res.get("Size"))
-            rand_click(self.hwnd, (x+dx, y+dy, x+dx+cw, y+dy+ch), hold)
+            rand_click(self.hwnd, (x + dx, y + dy, x + dx + cw, y + dy + ch), hold)
         else:
             self.error("Want to click at <%s> resource: %s", res["Type"], name)
 
@@ -358,13 +370,14 @@ class SimulatorControl:
 
         dx, dy = res.get("CropOffset", res.get("Offset", (0, 0)))
         w, h = res.get("CropSize", res["Size"])
-        bbox = (x+dx, y+dy, x+w+dx, y+h+dy)
+        bbox = (x + dx, y + dy, x + w + dx, y + h + dy)
         logger.info("crop_resource<%s>[%s] %s", res["Type"], name, bbox)
         return cv_crop(image, bbox)
 
     def parse_scene_condition(self, condition):
         def resource_check(name):
             return self.resource_in_screen(name)
+
         try:
             res = parse_condition(condition, self, resource_check)
         except Exception as err:
@@ -381,12 +394,12 @@ class SimulatorControl:
         if self.parse_scene_condition(condition):
             return True
         time.sleep(interval)
-        return self.wait_till(condition, interval, repeat-1)
+        return self.wait_till(condition, interval, repeat - 1)
 
     def wait_till_scene(self, name, interval=1, repeat=5):
         """等待给定场景"""
         condition = self.scenes[name]["Condition"]
-        return self.wait_till(condition, interval, repeat-1)
+        return self.wait_till(condition, interval, repeat - 1)
 
     def scene_match_check(self, scene, reshot):
         """检查场景是否与画面一致
@@ -401,7 +414,9 @@ class SimulatorControl:
         if res:
             logger.info("Check scene %s: %s=%s", scene["Name"], scene["Condition"], res)
         elif logger.isEnabledFor(logging.DEBUG):
-            logger.debug("Check scene %s: %s=%s", scene["Name"], scene["Condition"], res)
+            logger.debug(
+                "Check scene %s: %s=%s", scene["Name"], scene["Condition"], res
+            )
         return res
 
     def go_top(self):
@@ -418,9 +433,11 @@ class SimulatorControl:
             if isinstance(area, dict):
                 area = area["Name"]
             if isinstance(area, str):
-                prefix += '-%s' % area
+                prefix += "-%s" % area
         now = datetime.datetime.now()
-        name = "{0}/shots/{2:%Y%m%d}/{1}@{2:%Y%m%d_%H%M%S}.jpg".format(self.section, prefix, now)
+        name = "{0}/shots/{2:%Y%m%d}/{1}@{2:%Y%m%d_%H%M%S}.jpg".format(
+            self.section, prefix, now
+        )
         if "keywords" not in extra_kwargs:
             extra_kwargs["keywords"] = self.current_scene_name
         save_jpeg(name, image, now=now, **extra_kwargs)
@@ -432,12 +449,12 @@ class SimulatorControl:
         title = "自动脚本%s - %s错误" % (self.section, title)
         self.save_record("Critical", comment={"message": message}, title=title)
 
-#         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
-#         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
-#             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-#         res = win32api.MessageBox(0, info, title, flag)
-#         if res == win32con.IDYES:
-#             self.go_top()
+        #         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
+        #         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
+        #             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
+        #         res = win32api.MessageBox(0, info, title, flag)
+        #         if res == win32con.IDYES:
+        #             self.go_top()
         self.close()
 
     def error(self, message=None, title="", action="继续"):
@@ -447,13 +464,13 @@ class SimulatorControl:
         self.save_record("Error", comment={"message": message}, title=title)
 
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
-#         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
-#             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
-#         res = win32api.MessageBox(0, info, title, flag)
-#         if res == win32con.IDNO:
-#             self.go_top()
-#             self.close()
-        if input(info).lower() != 'y':
+        #         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
+        #             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
+        #         res = win32api.MessageBox(0, info, title, flag)
+        #         if res == win32con.IDNO:
+        #             self.go_top()
+        #             self.close()
+        if input(info).lower() != "y":
             self.close()
 
     def wait_mannual(self, message=None, title="", action="继续"):
@@ -463,28 +480,28 @@ class SimulatorControl:
         info = "等待手动指令:\n%s" % message
         # flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
         #     | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-#         flag = win32con.MB_YESNO | win32con.MB_SETFOREGROUND
-#         title = "自动脚本 - 等待手动指令"
-#         res = ctypes.windll.user32.MessageBoxTimeoutA(
-#             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
-#         if res == win32con.IDNO:
-#             self.go_top()
-#             self.close()
-#         else:
-#             input("Paused...")
+        #         flag = win32con.MB_YESNO | win32con.MB_SETFOREGROUND
+        #         title = "自动脚本 - 等待手动指令"
+        #         res = ctypes.windll.user32.MessageBoxTimeoutA(
+        #             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
+        #         if res == win32con.IDNO:
+        #             self.go_top()
+        #             self.close()
+        #         else:
+        #             input("Paused...")
         input("Paused...")
 
     def notice(self, message=None, title="", action="继续"):
         """提醒"""
         logger.warning(message)
-#         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
-#         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
-#         title = "自动脚本%s - %s提醒" % (self.section, title)
-#         res = ctypes.windll.user32.MessageBoxTimeoutA(
-#             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
-#         if res == win32con.IDNO:
-#             self.go_top()
-#             self.close()
+        #         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
+        #         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
+        #         title = "自动脚本%s - %s提醒" % (self.section, title)
+        #         res = ctypes.windll.user32.MessageBoxTimeoutA(
+        #             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
+        #         if res == win32con.IDNO:
+        #             self.go_top()
+        #             self.close()
         time.sleep(3)
 
     def update_current_scene(self, candidates=None, repeat=None):
@@ -501,7 +518,10 @@ class SimulatorControl:
             return self.fallback_scene
 
         if candidates is None:
-            if self.current_scene is None or self.current_scene.get("Next", None) is None:
+            if (
+                self.current_scene is None
+                or self.current_scene.get("Next", None) is None
+            ):
                 logger.debug("update candidates to full list")
                 candidates = list(self.scenes.keys())
             else:
@@ -509,16 +529,24 @@ class SimulatorControl:
                 if isinstance(candidates, dict):
                     repeat = candidates.get("Repeat", repeat)
                     candidates = candidates["Candidates"]
-                logger.debug("update candidates: Next for %s: %s", self.current_scene["Name"], candidates)
+                logger.debug(
+                    "update candidates: Next for %s: %s",
+                    self.current_scene["Name"],
+                    candidates,
+                )
 
         self.make_screen_shot()
         for key in candidates:
             if isinstance(key, (list, tuple)):
                 if key[0] == "History":
                     if len(self.scene_history) > key[1]:
-                        scene = self.scene_history[-key[1]-1]
+                        scene = self.scene_history[-key[1] - 1]
                     else:
-                        logger.warning("Ignore %s for len(history)=%d", key, len(self.scene_history))
+                        logger.warning(
+                            "Ignore %s for len(history)=%d",
+                            key,
+                            len(self.scene_history),
+                        )
                         continue
                 else:
                     self.error("Invalid Scene %s", key)
@@ -541,15 +569,17 @@ class SimulatorControl:
                     self.scene_history_count[scene["Name"]] += 1
                     return scene
 
-        self.do_actions(self.current_scene.get("ActionsWhenWait", [{"Type": "Wait", "Time": 1}]))
+        self.do_actions(
+            self.current_scene.get("ActionsWhenWait", [{"Type": "Wait", "Time": 1}])
+        )
 
-        return self.update_current_scene(candidates, repeat-1)
+        return self.update_current_scene(candidates, repeat - 1)
 
     def get_resource_rect(self, key):
         """获取资源的bbox"""
         x, y = self.resources[key]["Offset"]
         w, h = self.resources[key]["Size"]
-        return (x, y, x+w, y+h)
+        return (x, y, x + w, y + h)
 
     def do_actions(self, actions=None):
         """执行指定的操作"""
@@ -561,27 +591,30 @@ class SimulatorControl:
             if "Condition" in action and not parse_condition(action["Condition"], self):
                 continue
 
-            if 'WaitCondition' in action:
-                self.wait_till(action['WaitCondition'])
-            elif 'WaitScene' in action:
-                self.wait_till_scene(action['WaitScene'])
+            if "WaitCondition" in action:
+                self.wait_till(action["WaitCondition"])
+            elif "WaitScene" in action:
+                self.wait_till_scene(action["WaitScene"])
 
-            if action['Type'] == 'Wait':
-                self.wait(action['Time'])
-            elif action['Type'] == 'InnerCall':
-                target = getattr(self, action['Target'])
+            if action["Type"] == "Wait":
+                self.wait(action["Time"])
+            elif action["Type"] == "InnerCall":
+                target = getattr(self, action["Target"])
                 args = action.get("args", [])
                 kwargs = action.get("kwargs", {})
                 max_retry = action.get("MaxRetry", 5)
                 # 保证 max_retry被设置为0或负值时会执行一次
-                retry = min(0, max_retry-1)
+                retry = min(0, max_retry - 1)
                 while retry < max_retry:
                     try:
                         target(*args, **kwargs)
                     except RuntimeError as e:
                         logger.info("do_actions: Got %r", e)
                         if not self.scene_match_check(self.current_scene_name, True):
-                            logger.warning("Scene changed from %s, abort left actions", self.current_scene_name)
+                            logger.warning(
+                                "Scene changed from %s, abort left actions",
+                                self.current_scene_name,
+                            )
                             return
                         retry += 1
                         if retry > max_retry:
@@ -594,15 +627,15 @@ class SimulatorControl:
                         max_retry = -1
                     else:
                         max_retry = -1
-            elif action['Type'] == 'Click':
+            elif action["Type"] == "Click":
                 self.click_at_resource(
-                    name=action['Target'],
+                    name=action["Target"],
                     wait=action.get("Wait", False),
                     index=action.get("Index", None),
-                    hold=action.get("Hold", 0)
+                    hold=action.get("Hold", 0),
                 )
-            elif action['Type'] == 'MultiActions':
-                self.do_actions(action['Actions'])
+            elif action["Type"] == "MultiActions":
+                self.do_actions(action["Actions"])
             else:
                 self.critical("Invalid Action %s" % action)
 
@@ -636,11 +669,11 @@ class SimulatorControl:
         else:
             nochange = "(No Change)"
 
-        logger.info("%s - %s%s", scene['Name'], scene['Actions'], nochange)
+        logger.info("%s - %s%s", scene["Name"], scene["Actions"], nochange)
         if stop_checker and stop_checker(self):
             # 执行动作前预先判断是否已处于停止条件
             return
-        self.do_actions(scene['Actions'])
+        self.do_actions(scene["Actions"])
         self.actions_done = True
 
     def main_loop(self, stop_checker=None):

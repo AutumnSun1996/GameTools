@@ -19,6 +19,7 @@ from config_loader import config
 from config import hocon
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,7 +27,7 @@ def cv_imread(file_path):
     """读取图片
     为支持中文文件名, 不能使用cv.imread
     """
-    return cv.imdecode(np.fromfile(file_path, dtype='uint8'), cv.IMREAD_UNCHANGED)
+    return cv.imdecode(np.fromfile(file_path, dtype="uint8"), cv.IMREAD_UNCHANGED)
 
 
 def cv_save(path, image):
@@ -43,11 +44,13 @@ def cv_save(path, image):
 
 def get_xp_info(text):
     if not isinstance(text, str):
-        text = json.dumps(text, ensure_ascii=False, separators=(',', ':'))
-    return tuple((text+"\x00").encode("UTF-16-LE"))
+        text = json.dumps(text, ensure_ascii=False, separators=(",", ":"))
+    return tuple((text + "\x00").encode("UTF-16-LE"))
 
 
-def save_jpeg(path, image, now=None, title=None, subject=None, comment=None, keywords=None):
+def save_jpeg(
+    path, image, now=None, title=None, subject=None, comment=None, keywords=None
+):
     if not path.endswith((".jpg", ".jpeg")):
         path = path + ".jpg"
     image = Image.fromarray(cv.cvtColor(image, cv.COLOR_BGR2RGB))
@@ -59,8 +62,12 @@ def save_jpeg(path, image, now=None, title=None, subject=None, comment=None, key
     exif_dict["0th"][piexif.ImageIFD.Software] = "AutoDroid"
     if now is None:
         now = datetime.datetime.now()
-    exif_dict["Exif"][piexif.ExifIFD.DateTimeDigitized] = now.strftime("%Y:%m:%d %H:%M:%S")
-    exif_dict["Exif"][piexif.ExifIFD.SubSecTimeDigitized] = "{:.0f}".format(now.microsecond)
+    exif_dict["Exif"][piexif.ExifIFD.DateTimeDigitized] = now.strftime(
+        "%Y:%m:%d %H:%M:%S"
+    )
+    exif_dict["Exif"][piexif.ExifIFD.SubSecTimeDigitized] = "{:.0f}".format(
+        now.microsecond
+    )
 
     if title is not None:
         exif_dict["0th"][piexif.ImageIFD.ImageDescription] = title.encode("UTF-8")
@@ -101,17 +108,24 @@ def update_resource(resource, section):
     if dw != sdw or dh != sdh:
         for key in resource:
             if re.search("Offset|Position|Size", key):
-                resource[key] = rescale_item(resource[key], dw/sdw, dh/sdh)
-    if resource.get("Image", None) is not None or resource.get("ImageData", None) is not None:
+                resource[key] = rescale_item(resource[key], dw / sdw, dh / sdh)
+    if (
+        resource.get("Image", None) is not None
+        or resource.get("ImageData", None) is not None
+    ):
         load_image(resource, section)
 
 
 def load_image(resource, section):
     if "ImageData" not in resource:
-        img_path = os.path.join(config.get(section, "ResourcesFolder"), "Resources", resource["Image"])
+        img_path = os.path.join(
+            config.get(section, "ResourcesFolder"), "Resources", resource["Image"]
+        )
         resource["ImageData"] = cv_imread(img_path)
         if "Size" in resource:
-            resource["ImageData"] = cv.resize(resource["ImageData"], tuple(resource["Size"]), cv.INTER_CUBIC)
+            resource["ImageData"] = cv.resize(
+                resource["ImageData"], tuple(resource["Size"]), cv.INTER_CUBIC
+            )
         else:
             h, w = resource["ImageData"].shape[:2]
             resource["Size"] = [w, h]
@@ -136,7 +150,7 @@ def load_map(name, section, extra_property):
     path = os.path.join(config.get(section, "ResourcesFolder"), "maps", name + ".conf")
     data = hocon.load(path)
     if extra_property:
-        new_args = hocon.loads('\n'.join(extra_property))
+        new_args = hocon.loads("\n".join(extra_property))
         data = new_args.with_fallback(data)
     for item in data["Resources"].values():
         update_resource(item, section)
@@ -187,9 +201,13 @@ def get_all_match(image, needle):
             )
         )
         import pickle
+        import datetime
         from utils import torch_imgdiff
 
-        with open("log/{}.pkl", "wb") as f:
+        with open(
+            "log/{:MatchError@%Y-%m-%d_%H%M%S}.pkl".format(datetime.datetime.now()),
+            "wb",
+        ) as f:
             pickle.dump({"image": image, "needle": needle, "match": match}, f)
 
         return torch_imgdiff.get_all_match(image, needle)
@@ -252,7 +270,7 @@ def get_window_shot(hwnd):
     w = config.getint("Device", "MainWidth")
     h = config.getint("Device", "MainHeight")
     window_w, window_h = detect_window_size(hwnd)
-    if dx+w > window_w or dy+h > window_h:
+    if dx + w > window_w or dy + h > window_h:
         raise ValueError("截图区域超出窗口! 请检查配置文件")
     # logger.debug("截图: %dx%d at %dx%d", w, h, dx, dy)
 
@@ -272,8 +290,8 @@ def get_window_shot(hwnd):
     bmpinfo = saveBitMap.GetInfo()
     bmpdata = saveBitMap.GetBitmapBits(True)
     # 生成图像
-    image_data = np.frombuffer(bmpdata, 'uint8')
-    image_data = image_data.reshape((bmpinfo['bmHeight'], bmpinfo['bmWidth'], 4))
+    image_data = np.frombuffer(bmpdata, "uint8")
+    image_data = image_data.reshape((bmpinfo["bmHeight"], bmpinfo["bmWidth"], 4))
     image_data = cv.cvtColor(image_data, cv.COLOR_BGRA2BGR)
     # 内存释放
     win32gui.DeleteObject(saveBitMap.GetHandle())
@@ -285,7 +303,7 @@ def get_window_shot(hwnd):
 
 
 def make_text(text, size, color="#FFFFFF", background="#000000"):
-    font = ImageFont.truetype('resources/FGO-Main-Font.ttf', size)
+    font = ImageFont.truetype("resources/FGO-Main-Font.ttf", size)
     # 根据文字大小创建图片
     img = Image.new("RGB", font.getsize(text), background)
     drawBrush = ImageDraw.Draw(img)  # 创建画刷，用来写文字到图片img上
@@ -293,7 +311,7 @@ def make_text(text, size, color="#FFFFFF", background="#000000"):
     return cv.cvtColor(np.array(img), cv.COLOR_RGBA2BGRA)
 
 
-def extract_text(image, font_size, text='0123456789/'):
+def extract_text(image, font_size, text="0123456789/"):
     result = []
     for char in text:
         number = make_text(char, font_size)
@@ -304,35 +322,23 @@ def extract_text(image, font_size, text='0123456789/'):
                 result.append((x, char))
             last = x
     result.sort(key=lambda a: a[0])
-    return ''.join(item[1] for item in result)
+    return "".join(item[1] for item in result)
 
 
 class Affine:
     @staticmethod
     def move(dx, dy):
-        return np.mat([
-            [1, 0, dx],
-            [0, 1, dy],
-            [0, 0, 1]
-        ])
+        return np.mat([[1, 0, dx], [0, 1, dy], [0, 0, 1]])
 
     @staticmethod
     def scale(fx, fy):
-        return np.mat([
-            [fx, 0, 0],
-            [0, fy, 0],
-            [0, 0, 1]
-        ])
+        return np.mat([[fx, 0, 0], [0, fy, 0], [0, 0, 1]])
 
     @staticmethod
     def rotate(theta):
         cos = np.cos(theta)
         sin = np.sin(theta)
-        return np.mat([
-            [cos, -sin, 0],
-            [sin, cos, 0],
-            [0, 0, 1]
-        ])
+        return np.mat([[cos, -sin, 0], [sin, cos, 0], [0, 0, 1]])
 
     @staticmethod
     def warp(src, mat, outsize):
@@ -342,10 +348,13 @@ class Affine:
 if __name__ == "__main__":
     import win32_tools
     import datetime
+
     logger.setLevel("DEBUG")
     nox_hwnd = win32_tools.get_window_hwnd("碧蓝航线模拟器")
     print(nox_hwnd)
     screen = get_window_shot(nox_hwnd)
-    cv_save("images/shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen)
+    cv_save(
+        "images/shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen
+    )
     cv.imshow("ScreenShot", screen)
     cv.waitKey(0)

@@ -10,19 +10,19 @@ def check_map_anchor(anchor):
     s = const["s"]
     if isinstance(anchor, str):
         anchor = s.data["Anchors"][anchor]
-    if 'ImageData' not in anchor:
+    if "ImageData" not in anchor:
         load_image(anchor, s.section)
-    diff, pos = get_match(s.screen, anchor['ImageData'])
+    diff, pos = get_match(s.screen, anchor["ImageData"])
     print(diff, pos)
     x, y = pos
     w, h = anchor["Size"]
     dx, dy = anchor["Offset"]
     draw = s.screen.copy()
     for node_name in s.g.nodes:
-        nx, ny = s.get_map_pos(anchor["OnMap"], (x+dx, y+dy), node_name)
+        nx, ny = s.get_map_pos(anchor["OnMap"], (x + dx, y + dy), node_name)
         cv.circle(draw, (nx, ny), 3, (0, 0, 0), -1)
-    cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 2)
-    cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
+    cv.rectangle(draw, (x, y), (x + w, y + h), (255, 255, 255), 2)
+    cv.circle(draw, (x + dx, y + dy), 5, (255, 255, 255), -1)
     show(draw)
 
 
@@ -43,11 +43,11 @@ def get_grid_center(self, offx, offy):
 
     poses = np.array(poses)
     poses += self.resources["Corner"]["Offset"]
-    diff = (poses % 100)
+    diff = poses % 100
     dx = np.argmax(np.bincount(diff[:, 0]))
     dy = np.argmax(np.bincount(diff[:, 1]))
 
-    res = dx+100*offx, dy+100*offy
+    res = dx + 100 * offx, dy + 100 * offy
     res = (np.array(list(res), dtype="float") + 50).reshape(1, -1, 2)
 
     pos_in_screen = cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
@@ -94,7 +94,7 @@ def save_enemy(pos, info):
     results = []
     x, y = get_grid_center(s, *pos)
     part = crop_in_map((x, y), info["CropOffset"], info["CropSize"])
-#     part = cv.resize(part, tuple(size))
+    #     part = cv.resize(part, tuple(size))
     show(part[0])
     part = crop_in_map((x, y), info["Offset"], info["Size"])
     show(part[0])

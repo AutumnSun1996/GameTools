@@ -17,9 +17,9 @@ class FGOUpgrade(FGOSimple):
         w, h = info["Size"]
         for i in range(rows):
             for j in range(cols):
-                x, y = (x0+dx*i, y0+dy*j)
-                logger.info("ClickAt %s", (x, y, x+w, y+h))
-                rand_click(self.hwnd, (x, y, x+w, y+h))
+                x, y = (x0 + dx * i, y0 + dy * j)
+                logger.info("ClickAt %s", (x, y, x + w, y + h))
+                rand_click(self.hwnd, (x, y, x + w, y + h))
                 self.wait(0.3)
                 if stop is not None:
                     self.make_screen_shot()
@@ -31,10 +31,9 @@ class FGOUpgrade(FGOSimple):
         x0, y0 = info["Offset"]
         dx, dy = info["PositionDelta"]
         start = (x0, y0)
-        end = (x0+dx*7, y0+dy*3)
+        end = (x0 + dx * 7, y0 + dy * 3)
         rand_drag(self.hwnd, start, end, start_delay=1)
         self.wait(1)
-
 
 
 if __name__ == "__main__":

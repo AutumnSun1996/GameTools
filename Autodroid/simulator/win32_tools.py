@@ -11,6 +11,7 @@ import numpy as np
 from config_loader import config
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,8 +27,7 @@ def click_at(hwnd, x, y, hold=0):
     # 向后台窗口发送单击事件，(x, y)为相对于窗口左上角的位置
     x, y = rescale_point(hwnd, (x, y))
     pos = win32api.MAKELONG(int(x), int(y))
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
-                         win32con.MK_LBUTTON, pos)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, pos)
     time.sleep(hold)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
@@ -54,25 +54,25 @@ def rand_point(p, diff=0.2):
 def rand_drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
-                         win32con.MK_LBUTTON, win32api.MAKELONG(*start))
+    win32gui.SendMessage(
+        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(*start)
+    )
     time.sleep(start_delay)
 
-    dx = abs(start[0]-end[0])
-    dy = abs(start[1]-end[1])
-    dist = np.sqrt(dx**2+dy**2)
-    delta = [max(5, int(0.2*dx)), max(5, int(0.2*dy))]
+    dx = abs(start[0] - end[0])
+    dy = abs(start[1] - end[1])
+    dist = np.sqrt(dx ** 2 + dy ** 2)
+    delta = [max(5, int(0.2 * dx)), max(5, int(0.2 * dy))]
     # 最少需要2个坐标
     count = max(int(dist / step), 2)
     points = np.zeros((count, 2))
     points[:, 0] = np.linspace(start[0], end[0], count)
     points[:, 1] = np.linspace(start[1], end[1], count)
-    points = points.astype('int')
+    points = points.astype("int")
     for point in points:
         time.sleep(0.05)
         target = win32api.MAKELONG(*[int(n) for n in rand_point(point, delta)])
-        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
-                             win32con.MK_LBUTTON, target)
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, target)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
@@ -80,8 +80,9 @@ def rand_drag(hwnd, start, end, step=100, start_delay=0):
 def drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
-                         win32con.MK_LBUTTON, win32api.MAKELONG(*start))
+    win32gui.SendMessage(
+        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(*start)
+    )
     time.sleep(start_delay)
 
     count = int(np.linalg.norm(np.array(start) - np.array(end)) / step)
@@ -90,12 +91,11 @@ def drag(hwnd, start, end, step=100, start_delay=0):
     points = np.zeros((count, 2))
     points[:, 0] = np.linspace(start[0], end[0], count)
     points[:, 1] = np.linspace(start[1], end[1], count)
-    points = points.astype('int')
+    points = points.astype("int")
     for point in points:
         time.sleep(0.05)
         target = win32api.MAKELONG(*point)
-        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
-                             win32con.MK_LBUTTON, target)
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, target)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
@@ -115,7 +115,7 @@ def make_foreground(hwnd, retry=True):
         logger.warning(err)
         if retry:
             shell = win32com.client.Dispatch("WScript.Shell")
-            shell.SendKeys('%')
+            shell.SendKeys("%")
             make_foreground(hwnd, False)
 
 
@@ -137,4 +137,4 @@ def heartbeat():
 if __name__ == "__main__":
     nox_hwnd = get_window_hwnd("夜神模拟器")
     x0, y0, x1, y1 = (630, 370, 680, 420)
-    click_at(nox_hwnd, (x0+x1) / 2, (y0+y1)/2)
+    click_at(nox_hwnd, (x0 + x1) / 2, (y0 + y1) / 2)

@@ -17,10 +17,11 @@ class Status(IntEnum):
     LineStart = auto()
     LineEnd = auto()
 
+
 anchors = []
 cur_anchor = {"Status": Status.LineEnd, "Points": []}
 
-   
+
 def key(event):
     global anchors, cur_anchor
     print("pressed", event.keycode)
@@ -36,6 +37,7 @@ def key(event):
     elif event.char == "s":
         print(anchors)
 
+
 def on_click(event):
     global anchors, cur_anchor
     print("on_click", event.x, event.y)
@@ -47,12 +49,14 @@ def on_click(event):
     else:
         print("Ignore", cur_anchor["Status"])
 
+
 def on_move(event):
     global anchors, cur_anchor
     print("on_move", event.x, event.y)
     print(anchors)
     if cur_anchor["Status"] == Status.LineStart:
         cur_anchor["Points"][1] = (event.x, event.y)
+
 
 def on_release(event):
     global anchors, cur_anchor
@@ -63,13 +67,14 @@ def on_release(event):
         cur_anchor["Status"] = Status.LineEnd
     # print()
 
+
 def render():
     img = base_img.copy()
     for anchor in anchors:
         if anchor["Status"] >= Status.LineStart:
-            cv.line(img, anchor["Points"][0], anchor["Points"][1], (0,255,0), 1)
+            cv.line(img, anchor["Points"][0], anchor["Points"][1], (0, 255, 0), 1)
 
-    cv2image = cv.cvtColor(img, cv.COLOR_BGR2RGBA)#转换颜色从BGR到RGBA
+    cv2image = cv.cvtColor(img, cv.COLOR_BGR2RGBA)  # 转换颜色从BGR到RGBA
     current_image = Image.fromarray(cv2image)
     imgtk = ImageTk.PhotoImage(image=current_image)
     panel.imgtk = imgtk

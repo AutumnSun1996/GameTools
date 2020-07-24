@@ -6,6 +6,7 @@ import argparse
 import logging
 
 from config import hocon
+
 logger = logging.getLogger(__name__)
 
 
@@ -16,14 +17,22 @@ def make_stop_checker(args):
                 s.click_at_resource("AP不足-关闭")
                 return True
             now = datetime.now()
-            if args.end_in is not None and not s.actions_done and now - args.start_time > args.end_in:
+            if (
+                args.end_in is not None
+                and not s.actions_done
+                and now - args.start_time > args.end_in
+            ):
                 s.click_at_resource("AP不足-关闭")
                 return True
         if s.current_scene_name == "关卡选择" and not s.actions_done:
             logger.warning("On 关卡选择; %s", s.scene_history_count)
-            if args.fight_count is not None and s.scene_history_count["获得物品"] >= args.fight_count:
+            if (
+                args.fight_count is not None
+                and s.scene_history_count["获得物品"] >= args.fight_count
+            ):
                 return True
         return False
+
     return stop_checker
 
 
@@ -32,6 +41,7 @@ def main(args):
     info = hocon.load(config_file)
     if "MapClass" in info:
         import importlib
+
         module_path, cls_name = info["MapClass"]
         m = importlib.import_module(module_path)
         map_cls = getattr(m, cls_name)
@@ -58,7 +68,7 @@ def main(args):
 def parse_end_in(text):
     dt = [3, 0, 0]
     for idx, item in enumerate(text.split(":")):
-        dt[idx] = int('0'+item)
+        dt[idx] = int("0" + item)
     return timedelta(**dict(zip(["hours", "minutes", "seconds"], dt)))
 
 
@@ -67,11 +77,19 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("section", nargs="?", default="FGO", help="模拟器ID")
     parser.add_argument("map_name", nargs="?", default="通用配置", help="地图名")
-    parser.add_argument("--add_ap", "-ap", type=int, default=None, help="补充AP次数。默认为0，不补充")
-    parser.add_argument("--end_in", "-t", metavar="HH[:MM[:SS]]", type=parse_end_in, default=None,
-                           help="脚本最大运行时间。")
+    parser.add_argument(
+        "--add_ap", "-ap", type=int, default=None, help="补充AP次数。默认为0，不补充"
+    )
+    parser.add_argument(
+        "--end_in",
+        "-t",
+        metavar="HH[:MM[:SS]]",
+        type=parse_end_in,
+        default=None,
+        help="脚本最大运行时间。",
+    )
     parser.add_argument("--fight_count", "-n", type=int, default=None, help="自动战斗次数。")
-    parser.add_argument('--property', '-D', action='append', help="额外的自定义属性，hocon格式")
+    parser.add_argument("--property", "-D", action="append", help="额外的自定义属性，hocon格式")
 
     args = parser.parse_args()
 

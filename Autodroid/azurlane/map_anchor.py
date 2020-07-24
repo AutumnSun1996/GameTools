@@ -15,11 +15,13 @@ from simulator.win32_tools import drag, click_at, rand_click
 from .azurlane import AzurLaneControl
 
 
-trans_matrix = np.mat([
-    [0.9433189178530791, 0.2679732964804766, -158.43695741776074],
-    [1.3417181644390942e-05, 1.5656008796635157, -92.70256198000683],
-    [7.711117850185767e-07, 0.0005944962831996344, 1.0]
-])
+trans_matrix = np.mat(
+    [
+        [0.9433189178530791, 0.2679732964804766, -158.43695741776074],
+        [1.3417181644390942e-05, 1.5656008796635157, -92.70256198000683],
+        [7.711117850185767e-07, 0.0005944962831996344, 1.0],
+    ]
+)
 filter_kernel = np.array([[-4, -2, -4], [-2, 24, -2], [-4, -2, -4]])
 target_size = (980, 725)
 _, inv_trans = cv.invert(trans_matrix)
@@ -55,7 +57,9 @@ def search_on_map(info, screen, pos_in_screen):
         if diff < info.get("MaxDiff", 0.2):
             diff_s.append(diff)
             results.append([x, y])
-    logger.debug("search_on_map found %s with diff%sfor %s", results, diff_s, info["Name"])
+    logger.debug(
+        "search_on_map found %s with diff%sfor %s", results, diff_s, info["Name"]
+    )
     return diff_s, results
 
 
@@ -67,6 +71,7 @@ def on_map_offset(name):
 
 class FightMap(AzurLaneControl):
     """地图操作"""
+
     map_name = None
 
     def __init__(self, map_name=None):
@@ -89,14 +94,18 @@ class FightMap(AzurLaneControl):
 
         poses = np.array(poses)
         poses += self.resources["Corner"]["Offset"]
-        diff = (poses % 100)
+        diff = poses % 100
         dx = np.argmax(np.bincount(diff[:, 0]))
         dy = np.argmax(np.bincount(diff[:, 1]))
 
-        res = itertools.product(range(dx, target_size[0], 100), range(dy, target_size[1], 100))
+        res = itertools.product(
+            range(dx, target_size[0], 100), range(dy, target_size[1], 100)
+        )
         res = (np.array(list(res), dtype="float") + 50).reshape(1, -1, 2)
 
-        pos_in_screen = cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
+        pos_in_screen = (
+            cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
+        )
         return res.reshape(-1, 2), pos_in_screen
 
     @property
@@ -111,12 +120,12 @@ class FightMap(AzurLaneControl):
 
     def screen2grid(self, image_pos):
         """根据透视变换矩阵将像素坐标变换到棋盘坐标"""
-        image_pos = np.array([image_pos], dtype='float32').reshape((1, 1, 2))
+        image_pos = np.array([image_pos], dtype="float32").reshape((1, 1, 2))
         return cv.perspectiveTransform(image_pos, trans_matrix).reshape((2))
 
     def grid2screen(self, square_pos):
         """根据透视变换矩阵将棋盘坐标变换到像素坐标"""
-        square_pos = np.array([square_pos], dtype='float32').reshape((1, 1, 2))
+        square_pos = np.array([square_pos], dtype="float32").reshape((1, 1, 2))
         return cv.perspectiveTransform(square_pos, inv_trans).reshape((2))
 
     def get_map_pos(self, anchor_name, anchor_pos, target_name):
@@ -129,11 +138,11 @@ class FightMap(AzurLaneControl):
         if isinstance(target_name[0], str):
             dx = (ord(target_name[0]) - ord(anchor_name[0])) * 100
         else:
-            dx = target_name[0] - (ord(anchor_name[0]) - ord('A')) * 100
+            dx = target_name[0] - (ord(anchor_name[0]) - ord("A")) * 100
         if isinstance(target_name[1], str):
             dy = (ord(target_name[1]) - ord(anchor_name[1])) * 100
         else:
-            dy = target_name[1] - (ord(anchor_name[1]) - ord('1')) * 100
+            dy = target_name[1] - (ord(anchor_name[1]) - ord("1")) * 100
         virtual_anchor_pos = self.screen2grid(anchor_pos)
         virtual_target_pos = np.add(virtual_anchor_pos, [dx, dy])
         target_pos = self.grid2screen(virtual_target_pos)
@@ -181,20 +190,22 @@ class FightMap(AzurLaneControl):
         if not ret:
             logger.debug("未找到anchor, 重置地图")
             self.reset_map()
-            FightMap.click_at_map(self, target, repeat+1)
+            FightMap.click_at_map(self, target, repeat + 1)
             return
 
         x, y = target_pos
-        points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype("float32")
+        points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype(
+            "float32"
+        )
         # 需要检查四个角落
         for dx, dy in itertools.product([-20, 20], [-30, 10]):
-            if cv.pointPolygonTest(points, (x+dx, y+dy), False) < 0:
+            if cv.pointPolygonTest(points, (x + dx, y + dy), False) < 0:
                 logger.debug("目标不在中间区域")
                 self.move_map_to(x, y)
-                FightMap.click_at_map(self, target, repeat+1)
+                FightMap.click_at_map(self, target, repeat + 1)
                 return
         logger.info("点击%s: (%d, %d)", target, x, y)
-        rand_click(self.hwnd, (x-10, y-20, x+10, y), 0)
+        rand_click(self.hwnd, (x - 10, y - 20, x + 10, y), 0)
 
     def get_best_anchor(self):
         """在屏幕上搜索最佳的锚点
@@ -220,7 +231,9 @@ class FightMap(AzurLaneControl):
         target = self.resources[target_name]
         name_x, name_y = anchor_name
 
-        points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype("float32")
+        points = np.reshape(self.resources["地图区域"]["Points"], (1, -1, 2)).astype(
+            "float32"
+        )
         _, pos = search_on_map(target, self.screen, self.pos_in_screen)
         results = set()
         for x, y in pos:
@@ -228,8 +241,14 @@ class FightMap(AzurLaneControl):
                 # 不在地图区域内, 忽略
                 continue
             offset = self.screen2grid((x, y)) - anchor_pos_grid
-            dx, dy = np.round(offset / 100).reshape((2)).astype('int')
+            dx, dy = np.round(offset / 100).reshape((2)).astype("int")
             name = chr(ord(name_x) + dx) + chr(ord(name_y) + dy)
             results.add(name)
-        logger.debug("find_on_map %s by %s at %s: %s", target_name, anchor_name, anchor_pos, results)
+        logger.debug(
+            "find_on_map %s by %s at %s: %s",
+            target_name,
+            anchor_name,
+            anchor_pos,
+            results,
+        )
         return results

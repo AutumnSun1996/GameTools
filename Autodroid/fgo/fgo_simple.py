@@ -1,9 +1,9 @@
-
 from simulator.control import parse_condition
 from simulator.win32_tools import rand_click
 from fgo.fgo_fight import FateGrandOrder
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -21,7 +21,7 @@ class FGOSimple(FateGrandOrder):
 
     def check_assist(self):
         self.make_screen_shot()
-        for name in self.data['Strategy']['Assist']:
+        for name in self.data["Strategy"]["Assist"]:
             if self.resource_in_screen(name):
                 logger.info("选择助战: %s", name)
                 self.click_at_resource(name)
@@ -68,7 +68,9 @@ class FGOSimple(FateGrandOrder):
 
             self.wait(3)
             self.make_screen_shot()
-            if not parse_condition(self.scenes["选择技能"]["Condition"], self, self.resource_in_screen):
+            if not parse_condition(
+                self.scenes["选择技能"]["Condition"], self, self.resource_in_screen
+            ):
                 self.click_at_resource("右侧空白区域")
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(0.5)
@@ -89,12 +91,12 @@ class FGOSimple(FateGrandOrder):
         cw, ch = cards.get("ClickSize", (w, h))
 
         for x, y in cards["Positions"]:
-            click_rect = (x+cx, y+cy, x+cx+cw, y+cy+ch)
+            click_rect = (x + cx, y + cy, x + cx + cw, y + cy + ch)
             rand_click(self.hwnd, click_rect)
             self.wait(1)
 
 
 # if __name__ == "__main__":
-    # fgo = FGOSimple("每日任务")
-    # while 1:
-        # fgo.check_scene()
+# fgo = FGOSimple("每日任务")
+# while 1:
+# fgo.check_scene()

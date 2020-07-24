@@ -1,4 +1,3 @@
-
 from simulator.control import logger, parse_condition
 from simulator.win32_tools import rand_click
 from fgo.fgo_simple import FGOSimple as FGOBase
@@ -15,16 +14,16 @@ def choose_match(cards, items):
 class FGOSimple(FGOBase):
     section = "FGO2"
     fight_index = 0
-    
+
     def choose_skills(self):
         if self.combat_info["Turn"] == 1:
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(4)
-            
+
         for item in self.data["Strategy"]["Skills"]:
             if parse_condition(item["Condition"], self, self.combat_info.get):
                 self.use_skills(*item["Targets"])
-        
+
         self.enemy_attack = None
 
     def use_skills(self, *skills):
@@ -50,7 +49,7 @@ class FGOSimple(FGOBase):
             self.click_at_resource("右侧空白区域")
             self.wait_till_scene("选择技能", 1, 20)
             self.wait(0.5)
-    
+
     def choose_card(self, card_names, card_rects, order):
         for item in order:
             if item in card_names:
@@ -60,7 +59,7 @@ class FGOSimple(FGOBase):
         card_names.remove(card_names[idx])
         card_rects.remove(card_rects[idx])
         return result
-    
+
     def choose_cards(self):
         self.wait(4)
         if self.combat_info["Turn"] == 1:
@@ -69,29 +68,28 @@ class FGOSimple(FGOBase):
             self.click_at_resource("宝具2")
             self.wait(0.5)
             self.click_at_resource("宝具3")
-        
-        
+
         self.wait(1)
         cards = self.resources["Cards"]
         w, h = cards["Size"]
         cx, cy = cards.get("ClickOffset", (0, 0))
         cw, ch = cards.get("ClickSize", (w, h))
-        
+
         card_names = []
         card_rects = []
         for x, y in cards["Positions"]:
             card_img = self.crop_resource("Cards", offset=[x, y])
-            click_rect = (x+cx, y+cy, x+cx+cw, y+cy+ch)
+            click_rect = (x + cx, y + cy, x + cx + cw, y + cy + ch)
             card_names.append(self.extract_card_info(card_img))
             card_rects.append(click_rect)
-        
+
         logger.info("Found Cards %s", card_names)
-        
+
         choice = [None, None, None]
         for idx, order in self.data["Strategy"]["CardChoice"]:
             choice[idx] = self.choose_card(card_names, card_rects, order)
             logger.info("Choose Card %s for idx %d", choice[idx][0], idx)
-        
+
         for name, rect in choice:
             rand_click(self.hwnd, rect)
             self.wait(0.5)

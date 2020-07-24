@@ -7,6 +7,7 @@ from fgo.fgo_simple import FGOSimple as FGOBase
 from ocr.baidu_ocr import ocr
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,26 +30,20 @@ class AssistInfo(dict):
     def check_servant_name(self, name):
         """确认助战从者是否为指定的从者"""
         info = self.fgo.resources["助战-从者模板"].copy()
-        info.update({
-            "Name": name,
-            "Image": name+".png"
-        })
+        info.update({"Name": name, "Image": name + ".png"})
         self[name] = self.fgo.resource_in_image(info, image=self.image)
         logger.info("check_servant_name %s: %s", name, self[name])
 
     def check_servant_equip(self, name):
         """确认助战从者是否携带指定的礼装"""
         info = self.fgo.resources["助战-礼装模板"].copy()
-        info.update({
-            "Name": name,
-            "Image": name+".png"
-        })
+        info.update({"Name": name, "Image": name + ".png"})
         self[name] = self.fgo.resource_in_image(info, image=self.image)
         logger.info("check_servant_equip %s: %s", name, self[name])
 
     def extract_skill_level(self, name):
-        idx = int(name[name.find("/")+1:])
-        skill_img = self.fgo.crop_resource("助战-技能", image=self.image, index=idx-1)
+        idx = int(name[name.find("/") + 1 :])
+        skill_img = self.fgo.crop_resource("助战-技能", image=self.image, index=idx - 1)
         # TODO: 截图lvl 1-6资源
         for lvl in range(10, 6, -1):
             info = {
@@ -56,7 +51,7 @@ class AssistInfo(dict):
                 "Name": "技能{} vs Lv.{}".format(idx, lvl),
                 "Image": "助战/技能/{}.png".format(lvl),
                 "Type": "Dynamic",
-                "MaxDiff": 0.1
+                "MaxDiff": 0.1,
             }
             if self.fgo.resource_in_image(info, image=skill_img):
                 self[name] = lvl
@@ -96,7 +91,9 @@ class FGOSimple(FGOBase):
         _, pos = self.search_resource("助战从者定位")
         for offset in pos:
             info = AssistInfo(self, offset)
-            if parse_condition(self.data['Strategy']['AssistCondition'], self, info.check):
+            if parse_condition(
+                self.data["Strategy"]["AssistCondition"], self, info.check
+            ):
                 logger.info("选择助战: %s", info)
                 self.combat_info["AssitInfo"] = info
                 self.click_at_resource("助战从者定位", offset=offset)
@@ -112,7 +109,9 @@ class FGOSimple(FGOBase):
             if self.stop:
                 return
             self.make_screen_shot()
-            if parse_condition(item.get("Condition", True), self, self.combat_info.__getitem__):
+            if parse_condition(
+                item.get("Condition", True), self, self.combat_info.__getitem__
+            ):
                 logger.info("Skill Strategy Passed: %s", item)
                 self.do_actions(item["Actions"])
             else:
@@ -120,12 +119,12 @@ class FGOSimple(FGOBase):
 
     def is_skill_ready(self, index, name="从者"):
         """根据技能截图检查技能是否可用"""
-        skill_img = self.crop_resource(name+"技能列表", index=index)
-        line = self.crop_resource(name+"技能状态", image=skill_img)
+        skill_img = self.crop_resource(name + "技能列表", index=index)
+        line = self.crop_resource(name + "技能状态", image=skill_img)
         line = line.mean(axis=2)
         if line.std() < 1 and line.mean() > 100 and skill_img.std() > 10:
             return True
-        if self.resource_in_image(name+"技能CD中", skill_img):
+        if self.resource_in_image(name + "技能CD中", skill_img):
             return False
         return False
 
@@ -134,7 +133,9 @@ class FGOSimple(FGOBase):
             if self.stop:
                 return
             self.make_screen_shot()
-            self.combat_info["SkillCheck<{0}-{1}>".format(*skill)] = self.combat_info["Turn"]
+            self.combat_info["SkillCheck<{0}-{1}>".format(*skill)] = self.combat_info[
+                "Turn"
+            ]
             if skill[0] == 0:
                 self.click_at_resource("御主技能")
                 self.wait(1)
@@ -150,23 +151,25 @@ class FGOSimple(FGOBase):
                     continue
             else:
                 target = "从者技能列表"
-                index = (skill[0]-1) * 3 + (skill[1] - 1)
+                index = (skill[0] - 1) * 3 + (skill[1] - 1)
 
                 if check and not self.is_skill_ready(index, "从者"):
                     logger.info("Ignore 从者技能: %s: %s %s", skill, target, index)
                     continue
 
             logger.debug("Use Skill %s: %s %s", skill, target, index)
-            self.combat_info["SkillUse<{0}-{1}>".format(*skill)] = self.combat_info["Turn"]
+            self.combat_info["SkillUse<{0}-{1}>".format(*skill)] = self.combat_info[
+                "Turn"
+            ]
             self.click_at_resource(target, index=index)
             self.wait(1)
             if len(skill) == 3:
-                self.click_at_resource("技能目标列表", index=skill[2]-1)
+                self.click_at_resource("技能目标列表", index=skill[2] - 1)
                 self.wait(1)
             elif len(skill) == 4:
-                self.click_at_resource("换人目标列表", index=skill[2]-1)
+                self.click_at_resource("换人目标列表", index=skill[2] - 1)
                 self.wait(1)
-                self.click_at_resource("换人目标列表", index=skill[3]-1)
+                self.click_at_resource("换人目标列表", index=skill[3] - 1)
                 self.wait(1)
                 self.click_at_resource("进行更替")
                 self.wait(3)
@@ -178,11 +181,13 @@ class FGOSimple(FGOBase):
             if self.parse_scene_condition(["技能-关闭"]):
                 self.click_at_resource("技能-关闭")
                 self.wait(0.5)
-            elif self.parse_scene_condition(["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]):
+            elif self.parse_scene_condition(
+                ["$any", [["从者信息"], ["技能信息"], ["选择技能目标"], ["选择换人目标"]]]
+            ):
                 self.click_at_resource("右侧空白区域")
                 self.wait(0.5)
 
-            self.wait(0.5+self.data["Strategy"].get("ExtraSkillInterval", 0.5))
+            self.wait(0.5 + self.data["Strategy"].get("ExtraSkillInterval", 0.5))
 
     def choose_card_idx(self, card_names, order):
         """
@@ -216,10 +221,16 @@ class FGOSimple(FGOBase):
 
         for check in self.data["Strategy"]["UseNP"]:
             idx = check["Target"]
-            if self.combat_info["NP%d" % idx] >= 100 and\
-                    parse_condition(check["Condition"], self, self.combat_info.__getitem__):
+            if self.combat_info["NP%d" % idx] >= 100 and parse_condition(
+                check["Condition"], self, self.combat_info.__getitem__
+            ):
                 name = "宝具%s" % (check["Target"])
-                logger.info("使用宝具: %s(NP=%s, Condition=%s)", name, self.combat_info["NP%d" % idx], check["Condition"])
+                logger.info(
+                    "使用宝具: %s(NP=%s, Condition=%s)",
+                    name,
+                    self.combat_info["NP%d" % idx],
+                    check["Condition"],
+                )
                 choice.append(self.get_resource_rect(name))
 
         self.wait(1)
@@ -232,7 +243,7 @@ class FGOSimple(FGOBase):
         card_rects = []
         for x, y in cards["Positions"]:
             card_img = self.crop_resource("Cards", offset=[x, y])
-            click_rect = (x+cx, y+cy, x+cx+cw, y+cy+ch)
+            click_rect = (x + cx, y + cy, x + cx + cw, y + cy + ch)
             card_names.append(self.extract_card_info(card_img))
             card_rects.append(click_rect)
 
@@ -240,7 +251,9 @@ class FGOSimple(FGOBase):
 
         card_choice = []
         for card_choice in self.data["Strategy"]["CardChoice"]:
-            if parse_condition(card_choice["Condition"], self, self.combat_info.__getitem__):
+            if parse_condition(
+                card_choice["Condition"], self, self.combat_info.__getitem__
+            ):
                 break
         logger.info("CardChoice Strategy=%s", card_choice)
         choice += [None, None, None]
@@ -264,7 +277,7 @@ class FGOSimple(FGOBase):
         x0, y0 = info["Offset"]
         dx, dy = info["PositionDelta"]
         start = (x0, y0)
-        end = (x0+dx*7, y0+dy*3)
+        end = (x0 + dx * 7, y0 + dy * 3)
         rand_drag(self.hwnd, start, end, start_delay=1)
         self.wait(1)
 

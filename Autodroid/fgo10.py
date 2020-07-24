@@ -4,8 +4,8 @@ from dateutil.parser import parse
 from fgo.fast import FGOSimple
 
 import logging
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 
 def main(map_name):

@@ -9,6 +9,7 @@ import logging.config
 from configparser import ConfigParser
 import concurrent_log_handler
 
+
 def set_logging_dir(log_dir="logs"):
     with open("config/logging.yaml") as f:
         content = f.read()
@@ -17,16 +18,22 @@ def set_logging_dir(log_dir="logs"):
     conf = yaml.safe_load(content.format(base_log_dir=log_dir))
     logging.config.dictConfig(conf)
 
+
 logger = logging.getLogger(__name__)
 logger.info("Logging Inited...")
 
 config = ConfigParser()
 config.read("config/common.conf", encoding="UTF-8")
 
-text = '\n'.join([os.popen(cmd).read().splitlines()[2] for cmd in [
-    "wmic BaseBoard get Manufacturer,Product,SerialNumber",
-    "wmic CPU get Caption,Manufacturer,Name,ProcessorId,SerialNumber,SystemName",
-]])
+text = "\n".join(
+    [
+        os.popen(cmd).read().splitlines()[2]
+        for cmd in [
+            "wmic BaseBoard get Manufacturer,Product,SerialNumber",
+            "wmic CPU get Caption,Manufacturer,Name,ProcessorId,SerialNumber,SystemName",
+        ]
+    ]
+)
 device_id = hashlib.md5(text.encode()).hexdigest()
 logger.info("Load Device %s:\n%s", device_id, text)
 

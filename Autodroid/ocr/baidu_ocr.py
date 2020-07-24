@@ -12,12 +12,12 @@ from config_loader import config, logger
 def contact_images(*images, sep=1):
     width = max([images.shape[1] for images in images])
     height = sum([images.shape[0] + sep for images in images]) - sep
-    background = np.zeros((height, width, 3), dtype='uint8')
+    background = np.zeros((height, width, 3), dtype="uint8")
     x = 0
     y = 0
     for image in images:
         h, w = image.shape[:2]
-        background[y:y+h, x:x+w, :] = image
+        background[y : y + h, x : x + w, :] = image
         y += h + sep
     return background
 
@@ -27,11 +27,14 @@ class BaiduOCR:
         self.token = None
 
     def get_token(self):
-        res = requests.post("https://aip.baidubce.com/oauth/2.0/token", params={
-            "grant_type": "client_credentials",
-            "client_id": config.get("OCR", "APIKEY"),
-            "client_secret": config.get("OCR", "SecretKey"),
-        })
+        res = requests.post(
+            "https://aip.baidubce.com/oauth/2.0/token",
+            params={
+                "grant_type": "client_credentials",
+                "client_id": config.get("OCR", "APIKEY"),
+                "client_secret": config.get("OCR", "SecretKey"),
+            },
+        )
         self.token = res.json()["access_token"]
         print("Token:", self.token)
 
@@ -41,21 +44,23 @@ class BaiduOCR:
             self.get_token()
         if params is None:
             params = {}
-        
+
         if isinstance(image, np.ndarray):
-            ret, data = cv.imencode('.jpg', image)
+            ret, data = cv.imencode(".jpg", image)
             data = data.tobytes()
         else:
             data = image
 
         params.update({"access_token": self.token})
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        body = urlencode({
-            "image": base64.encodebytes(data)
-        })
+        body = urlencode({"image": base64.encodebytes(data)})
         res = requests.post(
-            "https://aip.baidubce.com/rest/2.0/ocr/v1/"+name,
-            params=params, headers=headers, data=body, timeout=3)
+            "https://aip.baidubce.com/rest/2.0/ocr/v1/" + name,
+            params=params,
+            headers=headers,
+            data=body,
+            timeout=3,
+        )
         return res.json()
 
     def parse_result(self, res):
@@ -86,7 +91,9 @@ class BaiduOCR:
         if isinstance(result, list) and len(result) == len(images):
             return result
 
-        logger.info("Count Not Match(Get %d for %d). Check each one.", len(result), len(images))
+        logger.info(
+            "Count Not Match(Get %d for %d). Check each one.", len(result), len(images)
+        )
         result = []
         for image in images:
             text = self.image2text(image)
@@ -94,12 +101,14 @@ class BaiduOCR:
                 text = self.image2text_accurate(image)
                 logger.info("Use accurate ocr: %s", text)
             if isinstance(text, list):
-                text = '\n'.join(text)
+                text = "\n".join(text)
             result.append(text)
         return result
+
 
 ocr = BaiduOCR()
 if __name__ == "__main__":
     from simulator.image_tools import cv_imread
-    image = cv_imread('ocrtest.png')
+
+    image = cv_imread("ocrtest.png")
     print(ocr.image2text(image))

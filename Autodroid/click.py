@@ -15,12 +15,12 @@ def main(section, rows):
         return
 
     x0, y0 = 100, 200
-    dx, dy = int(800/6), int(430/3)
+    dx, dy = int(800 / 6), int(430 / 3)
     w, h = 80, 80
     for i in range(7):
         for j in range(rows):
-            x, y = (x0+dx*i, y0+dy*j)
-            rand_click(hwnd, (x, y, x+w, y+h))
+            x, y = (x0 + dx * i, y0 + dy * j)
+            rand_click(hwnd, (x, y, x + w, y + h))
             time.sleep(0.3)
 
 
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     else:
         section = "FGO"
 
-    rows = ''
+    rows = ""
     while True:
         if rows:
             rows = int(rows)

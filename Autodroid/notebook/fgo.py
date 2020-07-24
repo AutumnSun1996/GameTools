@@ -13,15 +13,16 @@ def save_assist_equip(name, index=0):
     part = s.crop_resource("助战从者定位", index=index)
     x, y = 8, 136
     w, h = 150, 42
-    equip = cv_crop(part, (x, y, x+w, y+h))
+    equip = cv_crop(part, (x, y, x + w, y + h))
     equip = cv.cvtColor(equip, cv.COLOR_BGR2BGRA)
     mask = np.ones((h, w), dtype="uint8") * 255
-    mask[21:h, 20:90, ] = 0
-    mask[32:h, 90:120, ] = 0
-    mask[16:h, 120:w, ] = 0
+    mask[21:h, 20:90,] = 0
+    mask[32:h, 90:120,] = 0
+    mask[16:h, 120:w,] = 0
     equip[:, :, 3] = mask
     show(equip)
     save_crop(name, equip, (x, y))
+
 
 def save_assist_name(name, index=0):
     s = const["s"]
@@ -39,15 +40,12 @@ def save_assist_name(name, index=0):
     info = {
         "Name": name,
         "MainSize": [1280, 720],
-        "SearchArea": [
-            [x-10, 60],
-            [w+20, 100]
-        ],
+        "SearchArea": [[x - 10, 60], [w + 20, 100]],
         "Size": [w, h],
         "Type": "Dynamic",
-        "Image": name+".png",
+        "Image": name + ".png",
     }
-    path = "fgo/resources/"+name+".png"
+    path = "fgo/resources/" + name + ".png"
     cv_save(path, name_img)
     set_clip(name[3:])
     check_resource(info, part)

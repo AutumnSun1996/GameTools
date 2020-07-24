@@ -18,11 +18,15 @@ class Operation(AzurLaneControl):
         super(Operation, self).__init__()
         self.map_name = map_name
         self.data = load_map(self.map_name, self.section)
-        logger.info("Update Resources %s", self.data['Resources'].keys())
-        self.resources.update(self.data['Resources'])
-        logger.info("Update Scenes %s", self.data['Scenes'].keys())
-        self.scenes.update(self.data['Scenes'])
-        self.oper_info = {"left": 10, "cur_enemy": self.emeny_choices[0], "sl": self.max_sl}
+        logger.info("Update Resources %s", self.data["Resources"].keys())
+        self.resources.update(self.data["Resources"])
+        logger.info("Update Scenes %s", self.data["Scenes"].keys())
+        self.scenes.update(self.data["Scenes"])
+        self.oper_info = {
+            "left": 10,
+            "cur_enemy": self.emeny_choices[0],
+            "sl": self.max_sl,
+        }
 
     def fight(self):
         text = ocr.image2text(self.crop_resource("演习次数"))

@@ -15,7 +15,7 @@ def numpy2json(item):
 
 
 def text_width(text):
-    width = sum([1 if ord(char) < 0x7f else 2 for char in text])
+    width = sum([1 if ord(char) < 0x7F else 2 for char in text])
     return width
 
 
@@ -34,19 +34,19 @@ def encode(obj, prefix, level):
     elif isinstance(obj, dict):
         lines = []
         for key, value in obj.items():
-            key_str = ('  ' * level) + '  ' + dumps(key) + ": "
-            lines.append(encode(value, key_str, level+1))
+            key_str = ("  " * level) + "  " + dumps(key) + ": "
+            lines.append(encode(value, key_str, level + 1))
             # print("For", key, "Get",)
             # print(lines[-1])
-        result = prefix + '{\n' + ',\n'.join(lines) + '\n' + ('  ' * level) + '}'
+        result = prefix + "{\n" + ",\n".join(lines) + "\n" + ("  " * level) + "}"
     elif isinstance(obj, (list, tuple)):
         lines = []
         for value in obj:
-            key_str = ('  ' * level) + '  '
-            lines.append(encode(value, key_str, level+1))
+            key_str = ("  " * level) + "  "
+            lines.append(encode(value, key_str, level + 1))
             # print("F，or", key, "Get",)
             # print(lines[-1])
-        result = prefix + '[\n' + ',\n'.join(lines) + '\n' + ('  ' * level) + ']'
+        result = prefix + "[\n" + ",\n".join(lines) + "\n" + ("  " * level) + "]"
     else:
         raise TypeError("Can't Handle %s" % obj)
     # print('obj:', obj, 'prefix:', prefix, 'level:', level, 'Result:', result, sep='\n')
@@ -58,16 +58,16 @@ def jsonformat(path, backup=True):
     with open(path, "r", -1, "UTF-8") as fl:
         content = fl.read()
     data = json.loads(content)
-    new_content = encode(data, '', 0)
+    new_content = encode(data, "", 0)
     basename, ext = os.path.splitext(path)
-    with open(basename+".yaml", "w", -1, "UTF-8") as f:
+    with open(basename + ".yaml", "w", -1, "UTF-8") as f:
         yaml.dump(data, f, allow_unicode=True)
     if content == new_content:
         print("No Change: ", path)
         return
     if backup:
         basename, ext = os.path.splitext(path)
-        shutil.copy2(path, basename + '.bak' + ext)
+        shutil.copy2(path, basename + ".bak" + ext)
     with open(path, "w", -1, "UTF-8") as fl:
         fl.write(new_content)
     print("Reformated:", path)

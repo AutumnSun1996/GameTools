@@ -15,11 +15,13 @@ from notebook.azurlane import *
 
 import itertools
 
-trans_matrix = np.mat([
-    [0.9433189178530791, 0.2679732964804766, -158.43695741776074],
-    [1.3417181644390942e-05, 1.5656008796635157, -92.70256198000683],
-    [7.711117850185767e-07, 0.0005944962831996344, 1.0]
-])
+trans_matrix = np.mat(
+    [
+        [0.9433189178530791, 0.2679732964804766, -158.43695741776074],
+        [1.3417181644390942e-05, 1.5656008796635157, -92.70256198000683],
+        [7.711117850185767e-07, 0.0005944962831996344, 1.0],
+    ]
+)
 filter_kernel = np.array([[-4, -2, -4], [-2, 24, -2], [-4, -2, -4]])
 target_size = (980, 725)
 _, inv_trans = cv.invert(trans_matrix)
@@ -43,17 +45,19 @@ anchor_template = {
 def get_cadidates(screen):
     warped = cv.warpPerspective(screen, trans_matrix, target_size)
     filtered_map = cv.filter2D(warped, 0, filter_kernel)
-#     show(res)
+    #     show(res)
     _, poses = s.search_resource("Corner", image=filtered_map)
     if len(poses) < 4:
         raise ValueError("Less than 4 anchors found. Stop.")
     poses = np.array(poses)
     poses += s.resources["Corner"]["Offset"]
-    diff = (poses % 100)
+    diff = poses % 100
     dx = np.argmax(np.bincount(diff[:, 0]))
     dy = np.argmax(np.bincount(diff[:, 1]))
 
-    res = itertools.product(range(dx, target_size[0], 100), range(dy, target_size[1], 100))
+    res = itertools.product(
+        range(dx, target_size[0], 100), range(dy, target_size[1], 100)
+    )
     res = (np.array(list(res), dtype="float") + 50).reshape(1, -1, 2)
 
     pos_in_screen = cv.perspectiveTransform(res, inv_trans).reshape(-1, 2).astype("int")
@@ -89,13 +93,12 @@ def extract_anchors(anchors):
         path = "%s/resources/%s.png" % (section, name)
         image_tools.cv_save(path, cropped)
         info = copy.deepcopy(anchor_template)
-        info.update({
-            "Name": name,
-            "OnMap": anchor["Name"],
-            "Image": name+".png",
-        })
+        info.update(
+            {"Name": name, "OnMap": anchor["Name"], "Image": name + ".png",}
+        )
         res[name] = info
     return res
+
 
 def key(event):
     global anchors
@@ -125,11 +128,11 @@ def get_nearest(point, candidates):
 
 def get_name(compare, pos):
     old_ = cv.perspectiveTransform(
-        np.array(compare["Pos"]).reshape(1, -1, 2).astype("float32"),
-        trans_matrix)
+        np.array(compare["Pos"]).reshape(1, -1, 2).astype("float32"), trans_matrix
+    )
     new_ = cv.perspectiveTransform(
-        np.array(pos).reshape(1, -1, 2).astype("float32"),
-        trans_matrix)
+        np.array(pos).reshape(1, -1, 2).astype("float32"), trans_matrix
+    )
     diff = np.round((new_ - old_).reshape(2) / 100).astype("int")
     print(old_, new_, (new_ - old_), diff)
     name = np.add(diff, [ord(i) for i in compare["Name"]])
@@ -146,10 +149,9 @@ def on_click(event):
         name = simpledialog.askstring("Input", "OnMapName")
     else:
         name = get_name(anchors[0], pos)
-    anchors.append({
-        "Name": name,
-        "Pos": tuple(pos),
-    })
+    anchors.append(
+        {"Name": name, "Pos": tuple(pos),}
+    )
 
 
 def render():
@@ -158,7 +160,7 @@ def render():
         cv.circle(img, tuple(pos), 3, (255, 255, 255), -1)
     for anchor in anchors:
         x, y = anchor["Pos"]
-        cv.putText(img, anchor["Name"], (x-20, y), 0, 1, (255, 255, 0), 2)
+        cv.putText(img, anchor["Name"], (x - 20, y), 0, 1, (255, 255, 0), 2)
     cv2image = cv.cvtColor(img, cv.COLOR_BGR2RGBA)  # 转换颜色从BGR到RGBA
     current_image = Image.fromarray(cv2image)
     imgtk = ImageTk.PhotoImage(image=current_image)

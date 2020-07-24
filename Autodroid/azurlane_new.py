@@ -1,6 +1,7 @@
 from azurlane.fight_mainline import MainFight as AzurLaneBase
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 

@@ -23,8 +23,16 @@ class Status(IntEnum):
 
 
 anchors = []
-cur_anchor = {"Status": Status.Line2End, "Name": None, "RectStart": None, "RectEnd": None,
-              "Line1Start": None, "Line1End": None, "Line2Start": None, "Line2End": None}
+cur_anchor = {
+    "Status": Status.Line2End,
+    "Name": None,
+    "RectStart": None,
+    "RectEnd": None,
+    "Line1Start": None,
+    "Line1End": None,
+    "Line2Start": None,
+    "Line2End": None,
+}
 
 section = "AzurLane"
 map_name = sys.argv[1]
@@ -54,9 +62,9 @@ def extract_anchors(anchors):
             "Type": "Anchor",
             "MainSize": [1280, 720],
             "OnMap": anchor["Name"],
-            "Size": [x2-x, y2-y],
-            "Offset": [int(np.round(dx-x)), int(np.round(dy-y))],
-            "Image": name+".png",
+            "Size": [x2 - x, y2 - y],
+            "Offset": [int(np.round(dx - x)), int(np.round(dy - y))],
+            "Image": name + ".png",
         }
 
 
@@ -70,8 +78,16 @@ def key(event):
             anchors.remove(anchors[-1])
     elif event.char == "n" and cur_anchor["Status"] >= Status.Line2End:
         name = simpledialog.askstring("Input", "OnMapName")
-        cur_anchor = {"Status": Status.Init, "Name": name, "RectStart": None, "RectEnd": None,
-                      "Line1Start": None, "Line1End": None, "Line2Start": None, "Line2End": None}
+        cur_anchor = {
+            "Status": Status.Init,
+            "Name": name,
+            "RectStart": None,
+            "RectEnd": None,
+            "Line1Start": None,
+            "Line1End": None,
+            "Line2Start": None,
+            "Line2End": None,
+        }
         anchors.append(cur_anchor)
         print(anchors)
     elif event.char == "s":

@@ -4,6 +4,7 @@ import win32api
 
 from fgo.fgo_simple import FGOSimple
 
+
 class ManualFight(FGOSimple):
     def __init__(self):
         FGOSimple.__init__(self, "手动")

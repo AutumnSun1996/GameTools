@@ -16,7 +16,9 @@ const = {"s": None, "section": None}
 
 
 def reset_log():
-    logging.config.dictConfig(yaml.load("""
+    logging.config.dictConfig(
+        yaml.safe_load(
+            """
     version: 1
     formatters:
         default:
@@ -46,7 +48,9 @@ def reset_log():
     root:
         level   : DEBUG
         handlers: [console]
-    """))
+    """
+        )
+    )
 
 
 def get_clip():
@@ -60,7 +64,9 @@ def set_clip(text):
     print(text)
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text.encode("UTF-16-LE") + b"\x00")
+    win32clipboard.SetClipboardData(
+        win32con.CF_UNICODETEXT, text.encode("UTF-16-LE") + b"\x00"
+    )
     win32clipboard.CloseClipboard()
 
 
@@ -95,7 +101,7 @@ def show(img):
             img = img * 255
     else:
         raise ValueError("Invalid Shape %s" % img.shape)
-    display(Image.fromarray(img.astype('uint8'), mode))
+    display(Image.fromarray(img.astype("uint8"), mode))
 
 
 def show_matches(img, needle, thresh=0.1):
@@ -104,19 +110,19 @@ def show_matches(img, needle, thresh=0.1):
     draw = img.copy()
     for y, x in zip(*np.where(match < thresh)):
         print(x, y)
-        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 1)
+        cv.rectangle(draw, (x, y), (x + w, y + h), (255, 255, 255), 1)
     show(draw)
 
 
 def show_crop(x, y, w, h, img=None, show_full=False):
     if img is None:
         img = const["s"].screen
-    cropped = cv_crop(img, (x, y, x+w, y+h))
+    cropped = cv_crop(img, (x, y, x + w, y + h))
     h, w = cropped.shape[:2]
     show(cropped)
     if show_full:
         draw = img.copy()
-        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 2)
+        cv.rectangle(draw, (x, y), (x + w, y + h), (255, 255, 255), 2)
         show(draw)
     return cropped, (x, y)
 
@@ -126,11 +132,14 @@ def save_crop(name, cropped, offset):
     section = const["section"]
     info = {
         "Name": name,
-        "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
+        "MainSize": [
+            config.getint("Device", "MainWidth"),
+            config.getint("Device", "MainHeight"),
+        ],
         "Offset": list(offset),
         "Size": [w, h],
         "Type": "Static",
-        "Image": name + '.png'
+        "Image": name + ".png",
     }
 
     # set_clip('{}: {},'.format(tojson(name), tojson(info)))
@@ -144,14 +153,14 @@ def save_crop(name, cropped, offset):
 def show_anchor(x, y, w, h, dx, dy, img=None, show_full=True):
     if img is None:
         img = const["s"].screen
-    cropped = cv_crop(img, (x, y, x+w, y+h))
+    cropped = cv_crop(img, (x, y, x + w, y + h))
     h, w = cropped.shape[:2]
     show(cropped)
     if show_full:
         draw = img.copy()
-        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 2)
-        cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
-        cv.circle(draw, (x+dx, y+dy), 3, (0, 0, 0), -1)
+        cv.rectangle(draw, (x, y), (x + w, y + h), (255, 255, 255), 2)
+        cv.circle(draw, (x + dx, y + dy), 5, (255, 255, 255), -1)
+        cv.circle(draw, (x + dx, y + dy), 3, (0, 0, 0), -1)
         show(draw)
     return cropped, (dx, dy)
 
@@ -161,11 +170,14 @@ def save_anchor(name, cropped, offset):
     section = const["section"]
     anchor = {
         "Name": name,
-        "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
+        "MainSize": [
+            config.getint("Device", "MainWidth"),
+            config.getint("Device", "MainHeight"),
+        ],
         "Offset": offset,
         "Size": [w, h],
         "Type": "Anchor",
-        "Image": name + '.png'
+        "Image": name + ".png",
     }
     # set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
     set_clip(hocon.dump({name: anchor}))
@@ -181,12 +193,15 @@ def save_map_anchor(map_name, on_map, cropped, offset):
     name = map_name + "-" + on_map
     anchor = {
         "Name": name,
-        "MainSize": [config.getint("Device", "MainWidth"), config.getint("Device", "MainHeight")],
+        "MainSize": [
+            config.getint("Device", "MainWidth"),
+            config.getint("Device", "MainHeight"),
+        ],
         "Offset": offset,
         "Size": (w, h),
         "Type": "Anchor",
         "OnMap": on_map,
-        "Image": name + '.png'
+        "Image": name + ".png",
     }
     # set_clip('{}: {},'.format(tojson(name), tojson(anchor)))
     set_clip(toyaml({name: anchor}))
@@ -202,16 +217,16 @@ def check_anchor(name):
     if not ret:
         return
     res = const["s"].resources[name]
-    dx, dy = res['Offset']
-    w, h = res['Size']
-    show(res['ImageData'])
+    dx, dy = res["Offset"]
+    w, h = res["Size"]
+    show(res["ImageData"])
     draw = const["s"].screen.copy()
     if len(np.array(pos).shape) == 1:
         pos = [pos]
     for x, y in pos:
-        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 255, 255), 2)
-        cv.circle(draw, (x+dx, y+dy), 5, (255, 255, 255), -1)
-        cv.circle(draw, (x+dx, y+dy), 3, (0, 0, 0), -1)
+        cv.rectangle(draw, (x, y), (x + w, y + h), (255, 255, 255), 2)
+        cv.circle(draw, (x + dx, y + dy), 5, (255, 255, 255), -1)
+        cv.circle(draw, (x + dx, y + dy), 3, (0, 0, 0), -1)
     show(draw)
 
 
@@ -249,8 +264,8 @@ def check_resource(info, image=None):
         update_resource(info, s.section)
         s.resources[name] = info
 
-    if 'ImageData' in info:
-        target = info['ImageData']
+    if "ImageData" in info:
+        target = info["ImageData"]
         print("Target")
         show(target)
 
@@ -258,7 +273,7 @@ def check_resource(info, image=None):
         xy, wh = info["SearchArea"]
         x, y = xy
         w, h = wh
-        cv.rectangle(draw, (x, y), (x+w, y+h), (255, 0, 0), 1)
+        cv.rectangle(draw, (x, y), (x + w, y + h), (255, 0, 0), 1)
 
     if "ImageData" in info:
         ret, offsets = s.search_resource(name, image)
@@ -267,13 +282,13 @@ def check_resource(info, image=None):
             print("best match:", diff, offset)
             dx, dy = offset
             w, h = info["Size"]
-            cv.rectangle(draw, (dx, dy), (dx+w, dy+h), (255, 255, 255), 1)
+            cv.rectangle(draw, (dx, dy), (dx + w, dy + h), (255, 255, 255), 1)
 
     if info["Type"] == "Static":
         offsets = [info["Offset"]]
     elif info["Type"] == "MultiStatic":
         offsets = info["Positions"]
-    elif 'ImageData' in info:
+    elif "ImageData" in info:
         # ret, offsets = s.search_resource(name, image)
         print("search_resource:", ret, offsets)
     else:
@@ -283,17 +298,21 @@ def check_resource(info, image=None):
     for offset in np.reshape(offsets, (-1, 2)):
         dx, dy = offset
         w, h = info["Size"]
-        cv.rectangle(draw, (dx, dy), (dx+w, dy+h), (255, 255, 0), 1)
+        cv.rectangle(draw, (dx, dy), (dx + w, dy + h), (255, 255, 0), 1)
 
         if "ClickOffset" in info or "ClickSize" in info:
             x, y = info.get("ClickOffset", info.get("Offset", (0, 0)))
             w, h = info.get("ClickSize", info["Size"])
-            cv.rectangle(draw, (x+dx, y+dy), (x+dx+w, y+dy+h), (0, 255, 0), 1)
+            cv.rectangle(
+                draw, (x + dx, y + dy), (x + dx + w, y + dy + h), (0, 255, 0), 1
+            )
 
         if "CropOffset" in info or "CropSize" in info:
             x, y = info.get("CropOffset", info.get("Offset", (0, 0)))
             w, h = info.get("CropSize", info["Size"])
-            cv.rectangle(draw, (x+dx, y+dy), (x+dx+w, y+dy+h), (0, 0, 255), 1)
+            cv.rectangle(
+                draw, (x + dx, y + dy), (x + dx + w, y + dy + h), (0, 0, 255), 1
+            )
     show(draw)
 
 
@@ -303,7 +322,7 @@ def image_intersection(imgs):
     result[:, :, :3] = imgs[0]
     mask = np.ones((h, w), dtype="bool")
     for a, b in itertools.combinations(imgs, 2):
-        mask &= ((a == b).sum(axis=2) == 3)
+        mask &= (a == b).sum(axis=2) == 3
         show(mask)
     result[:, :, 3] = mask * 255
     return result

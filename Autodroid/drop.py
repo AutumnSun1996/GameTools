@@ -6,6 +6,8 @@ import sys
 s = CommonMap("Games")
 start_time = time.time()
 last = {}
+
+
 def check():
     global last
     name = "HandleMark"
@@ -14,22 +16,24 @@ def check():
     found, pos = s.search_resource(name)
     if not found:
         last = {}
-#         print("Wait...")
+        #         print("Wait...")
         time.sleep(0.1)
         return
     x = pos[0]
     if last:
-        speed = (x - last['x']) / (t - last['t'])
-#         print("Speed", speed)
+        speed = (x - last["x"]) / (t - last["t"])
+    #         print("Speed", speed)
 
-    last['t'] = t
-    last['x'] = x
+    last["t"] = t
+    last["x"] = x
 
     if 682 < x < 698:
-#         print("CLICK AT", x)
+        #         print("CLICK AT", x)
         rand_click(s.hwnd, (300, 300, 400, 400))
         time.sleep(0.2)
         return True
+
+
 #     print("Skip AT", x)
 
 n = int(sys.argv[1])

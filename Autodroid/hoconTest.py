@@ -3,8 +3,8 @@ import sys
 
 import logging
 from config import hocon
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
