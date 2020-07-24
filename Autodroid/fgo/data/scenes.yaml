@@ -20,7 +20,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [获得报酬]
   Name: 获得报酬
-  Next: [地图选择, 关卡选择, 获得报酬, 剧情]
+  Next: [地图选择, 关卡选择, 获得报酬, 剧情, 活动点数奖励]
 关卡选择:
   Actions:
   - {Target: 默认关卡, Type: Click}
