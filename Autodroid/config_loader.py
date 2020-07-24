@@ -32,6 +32,6 @@ logger.info("Load Device %s:\n%s", device_id, text)
 
 name = "config/%s.conf" % device_id
 if not os.path.exists(name):
-    raise FileNotFoundError("No Config File For This Device!")
+    raise FileNotFoundError("No Config File For This Device %s!" % device_id)
 
 config.read(name, encoding="UTF-8")
