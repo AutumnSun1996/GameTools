@@ -205,7 +205,7 @@ def get_all_match(image, needle):
         from utils import torch_imgdiff
 
         with open(
-            "log/{:MatchError@%Y-%m-%d_%H%M%S}.pkl".format(datetime.datetime.now()),
+            "shots/{:MatchError@%Y-%m-%d_%H%M%S}.pkl".format(datetime.datetime.now()),
             "wb",
         ) as f:
             pickle.dump({"image": image, "needle": needle, "match": match}, f)
