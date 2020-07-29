@@ -16,8 +16,8 @@ If (not WinActive("Warframe")){
 }
 
 MouseGetPos, X, Y
-CursorColor := ColorMatches(X, Y, 0xF3F3F3)
-If (CursorColor){
+ImageSearch, OutputVarX, OutputVarY, X-5, Y+8, X+27, Y+40, *20 Cursor.bmp
+If (ErrorLevel = 0){
     UpdateGameStatus("Using Cursor")
     Return
 }
