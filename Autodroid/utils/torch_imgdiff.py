@@ -11,7 +11,10 @@ import cv2.cv2 as cv
 
 
 def init_tensor(arr):
-    return torch.Tensor(arr.astype("float32")).transpose(0, 2).unsqueeze(0).cuda()
+    t = torch.Tensor(arr.astype("float32")).transpose(0, 2).unsqueeze(0)
+    if torch.cuda.is_available():
+        t = t.cuda()
+    return t
 
 
 def match_template_torch(img, templ, mask=None):
@@ -24,7 +27,6 @@ def match_template_torch(img, templ, mask=None):
         mask = init_tensor(mask)
         mask2 = mask * mask
         templ_mask2 = templ * mask2
-
     result = F.conv2d(img, templ_mask2)
     templ2_mask2_sum = (templ * templ_mask2).sum()
     temp_result = F.conv2d(img * img, mask2)
@@ -51,5 +53,6 @@ def get_all_match(image, needle):
     else:
         bgr = templ
         mask = None
-    match = 1 - np.nan_to_num(match_template_torch(img, bgr, mask))
+    with torch.no_grad():
+        match = 1 - np.nan_to_num(match_template_torch(img, bgr, mask))
     return match
