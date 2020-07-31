@@ -7,7 +7,11 @@ SetTimer, CheckGameStatus, 200
 #If
 ^p::GetStatus(true, -1)
 
-^l::Send, qsy19960105{Enter}
+^l::
+Send, qsy19960105
+Sleep, 500
+Send, {Enter}
+Return
 
 CheckGameStatus:
 If (not WinActive("Warframe")){
