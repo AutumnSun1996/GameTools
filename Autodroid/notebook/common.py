@@ -127,9 +127,14 @@ def show_crop(x, y, w, h, img=None, show_full=False):
     return cropped, (x, y)
 
 
-def save_crop(name, cropped, offset):
-    h, w = cropped.shape[:2]
+def save_crop(name, cropped, offset=None):
     section = const["section"]
+    path = "%s/resources/%s.png" % (section, name)
+    cv_save(path, cropped)
+    logger.info("%s Saved.", os.path.realpath(path))
+    if offset is None:
+        return
+    h, w = cropped.shape[:2]
     info = {
         "Name": name,
         "MainSize": [
@@ -144,10 +149,6 @@ def save_crop(name, cropped, offset):
 
     # set_clip('{}: {},'.format(tojson(name), tojson(info)))
     set_clip(hocon.dump({name: info}))
-
-    path = "%s/resources/%s.png" % (section, name)
-    cv_save(path, cropped)
-    logger.info("%s Saved.", os.path.realpath(path))
 
 
 def show_anchor(x, y, w, h, dx, dy, img=None, show_full=True):
