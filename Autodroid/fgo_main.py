@@ -39,6 +39,7 @@ def make_stop_checker(args):
 def main(args):
     config_file = os.path.join("fgo", "maps", args.map_name + ".conf")
     info = hocon.load(config_file)
+    logger.warning("Target: %s %s %s", args.map_name, info.get("Name"), info.get("Description"))
     if "MapClass" in info:
         import importlib
 
