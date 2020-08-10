@@ -3,7 +3,7 @@ __date__ = '2020/08/04'
 
 import logging
 import time
-from baseproxy.proxy import ReqIntercept, RspIntercept, AsyncMitmProxy
+from baseproxy.proxy import RspIntercept, AsyncMitmProxy
 import base64
 from urllib.parse import unquote
 import threading
@@ -23,45 +23,55 @@ items = Queue()
 db_session = get_session()
 
 
-class DebugInterceptor(ReqIntercept, RspIntercept):
-    def deal_request(self, request):
-        return request
-
+class DebugInterceptor(RspIntercept):
     def deal_response(self, response):
+        """处理响应结果"""
+        # 此处将响应放入队列，然后直接返回
         items.put(response)
-        logger.info("Add One")
+        logger.debug("One response added")
         return response
 
 
-def show_items():
+def check_items():
+    """检查队列
+    """
     while True:
         try:
             resp = items.get(block=True, timeout=1)
         except Empty:
+            # 队列为空，等待1s后重新获取
             time.sleep(1)
             continue
 
         try:
-            show_response(resp)
+            # 尝试处理响应内容
+            handle_response(resp)
         except:
             logger.exception("ParseFailed")
 
 
 def to_json(data):
+    """将python类型转换为json文本"""
     return json.dumps(data, ensure_ascii=False, separators=(',', ':'))
 
 
-def show_response(resp):
+def handle_response(resp):
+    """处理响应内容"""
+    # 获取对应的请求
     req = resp.request
     path = req.path
+    # 提取path和params
     if "?" in path:
         path, params = path.split("?", 1)
     else:
         params = ""
 
-    if path.endswith(("heartbeat", ".bin")):
+    # 忽略部分请求
+    if path.endswith(("heartbeat", ".bin", ".png", ".jpg")):
         logger.info("Ignore %s", path)
         return
+
+    # 输出请求信息
     logger.info(
         "Request: %s %s %s \n%s\n%s",
         req.command,
@@ -70,13 +80,17 @@ def show_response(resp):
         req.get_headers(),
         req.get_body_data()[:200],
     )
+    # 获取响应数据
     body = resp.get_body_data()
+    # 尝试解码
     if body.startswith(b"ey"):
         # 经过Base64编码的JSON
-        # 开头为 b'{"...' -> b'ey...'
+        # 开头为: {"... -> ey...
         body = base64.b64decode(unquote(body.decode()))
+    # 输出响应信息
     logger.info("Response: %s\n%s", resp.get_headers(), body[:200])
 
+    # 保存到数据库
     rec = Record(
         method=req.command,
         path=path,
@@ -99,7 +113,8 @@ def show_response(resp):
 if __name__ == "__main__":
     logging.basicConfig(level="INFO")
 
-    parser = threading.Thread(target=show_items)
+    # 开始监控队列
+    parser = threading.Thread(target=check_items)
     parser.start()
 
     baseproxy = AsyncMitmProxy(https=True)
