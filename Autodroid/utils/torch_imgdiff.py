@@ -18,6 +18,9 @@ def init_tensor(arr):
 
 
 def match_template_torch(img, templ, mask=None):
+    """
+    基于pytorch的模板匹配算法
+    """
     img = init_tensor(img)
     templ = init_tensor(templ)
     if mask is None:
