@@ -1,1 +1,0 @@
-start cmd /c "py main.py && pause"
