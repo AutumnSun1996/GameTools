@@ -195,6 +195,8 @@ if __name__ == "__main__":
     print(hwnd)
     screen = get_window_shot(hwnd)
     print(sys.argv)
+    if not os.path.exists("images"):
+        os.makedirs("images")
     cv_save("images/shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen)
     if len(sys.argv) == 1:
         cv.imshow("ScreenShot", screen)
