@@ -4,7 +4,7 @@ import json
 import re
 from pyhocon.config_parser import *
 
-from pyparsing import ParseBaseException
+from pyparsing import ParseBaseException, printables
 
 
 class MyConfigParser(ConfigParser):
@@ -169,7 +169,7 @@ class MyConfigParser(ConfigParser):
             null_expr = Keyword("null", caseless=True).setParseAction(
                 replaceWith(NoneValue())
             )
-            # key = QuotedString('"', escChar='\\', unquoteResults=False) | Word(alphanums + alphas8bit + '._- /')
+            # key = QuotedString('"', escChar='\\', unquoteResults=False) | Word(printables, excludeChars='$"{}[]:=,+#`^?!@*&\\')
             # key = QuotedString('"', escChar='\\', unquoteResults=False) | CharsNotIn(" +=:$\\'\"{}")
             key = QuotedString('"', escChar="\\", unquoteResults=False) | Word(
                 alphanums + alphas8bit + "._- /"
@@ -337,7 +337,7 @@ class MyConfigFactory(ConfigFactory):
         :return: Config object
         :type return: Config
         """
-        logger.warning("Try to include %s.", filename)
+        logger.debug("include %s.", filename)
         try:
             with codecs.open(filename, "r", encoding=encoding) as fd:
                 content = fd.read()
@@ -385,7 +385,7 @@ class MyConfigFactory(ConfigFactory):
 def to_hocon(config, compact=False, indent=2, level=0):
     """Convert HOCON input into a HOCON output
 
-    :return: JSON string representation
+    :return: HOCON string representation
     :type return: basestring
     """
     lines = ""
