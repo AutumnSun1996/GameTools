@@ -665,6 +665,15 @@ Cards:
   Offset: [16, 0]
   Size: [32, 20]
   Type: Dynamic
+滚动条-上-任务:
+  Image: 滚动条-上.png
+  MainSize: [1280, 720]
+  Name: 滚动条-上-任务
+  Size: [32, 20]
+  SearchArea:
+    - [1240, 40]
+    - [36, 600]
+  Type: Dynamic
 滚动条-下:
   Image: 滚动条-下.png
   MainSize: [1280, 720]
