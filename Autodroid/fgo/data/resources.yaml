@@ -205,6 +205,7 @@ Cards:
   Offset: [1124, 10]
   Size: [146, 60]
   Type: Static
+  MaxDiff: 0.15
 剧情-选择框:
   ClickOffset: [80, 20]
   ClickSize: [800, 60]
