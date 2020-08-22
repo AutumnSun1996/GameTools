@@ -16,9 +16,6 @@ def choose_match(cards, items):
 
 
 class FGOSimple(FateGrandOrder):
-    def at_end(self):
-        _, bot_xy = self.search_resource("滚动条-下")
-
     def check_assist(self):
         self.make_screen_shot()
         for name in self.data["Strategy"]["Assist"]:
