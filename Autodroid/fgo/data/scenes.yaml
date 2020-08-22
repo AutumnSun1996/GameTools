@@ -20,7 +20,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [获得报酬]
   Name: 获得报酬
-  Next: [地图选择, 关卡选择, 获得报酬, 剧情, 活动点数奖励]
+  Next: [地图选择, 连续出击, 关卡选择, 获得报酬, 剧情, 活动点数奖励]
 关卡选择:
   Actions:
   - {Target: 默认关卡, Type: Click}
@@ -32,7 +32,7 @@ AP不足:
     - [滚动条-上-任务]
     - [$not_, [[无战斗]]]
   Name: 关卡选择
-  Next: [助战选择, AP不足, 无战斗, 关卡选择]
+  Next: [助战选择, AP不足, 无战斗, 连续出击, 关卡选择]
 剧情:
   Actions:
   - {Target: 剧情-跳过, Type: Click}
@@ -71,7 +71,7 @@ AP不足:
     - - $not_
       - [助战更新失败]
   Name: 助战选择
-  Next: [队伍确认, 助战选择, 助战更新失败]
+  Next: [队伍确认, 助战选择, 助战更新失败, 加载关卡]
 地图选择:
   Actions:
   - {Target: 下一个, Type: Click}
@@ -152,7 +152,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [活动点数奖励]
   Name: 活动点数奖励
-  Next: [活动点数奖励, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
+  Next: [活动点数奖励, 地图选择, 关卡选择, 连续出击, 获得报酬, 申请好友, 剧情]
 获得物品:
   Actions:
   - {Time: 1, Type: Wait}
@@ -163,7 +163,7 @@ AP不足:
   - {Time: 1, Type: Wait}
   Condition: [获得物品]
   Name: 获得物品
-  Next: [获得物品, 活动点数奖励, 地图选择, 关卡选择, 获得报酬, 申请好友, 剧情]
+  Next: [获得物品, 活动点数奖励, 地图选择, 关卡选择, 连续出击, 获得报酬, 申请好友, 剧情]
 获得经验:
   Actions:
   - {Target: 下一步, Type: Click}
@@ -252,3 +252,10 @@ AP不足:
   Condition: [$any, [[队伍确认], [队伍确认2]]]
   Name: 队伍确认
   Next: [加载关卡, 选择技能, 队伍确认, 剧情]
+连续出击:
+  Actions:
+  - {Target: 连续出击, Type: Click}
+  - {Time: 2, Type: Wait}
+  Condition: [连续出击]
+  Name: 连续出击
+  Next: [助战选择]

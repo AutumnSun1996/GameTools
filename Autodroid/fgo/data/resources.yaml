@@ -890,3 +890,17 @@ Cards:
   - [100, 65]
   - [1080, 50]
   Type: Dynamic
+连续出击:
+  Name: "连续出击"
+  MainSize: [1280, 720]
+  Offset: [740, 540]
+  Size: [200, 50]
+  Type: "Static"
+  Image: "连续出击.png"
+加载中:
+  Name: "加载中"
+  MainSize: [1280, 720]
+  Offset: [920, 670]
+  Size: [120, 50]
+  Type: "Static"
+  Image: "加载中.png"

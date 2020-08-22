@@ -54,6 +54,11 @@ class FateGrandOrder(SimulatorControl):
         logger.info("combat_info Now: %s", self.combat_info)
 
     def refresh_assist(self):
+        loading, _ = self.search_resource("加载中")
+        if loading:
+            logger.info("等待加载")
+            self.wait(3)
+            return
         logger.info("更新助战列表")
         self.click_at_resource("助战更新")
         self.wait(0.8)
