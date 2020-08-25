@@ -675,6 +675,7 @@ Cards:
     - [1240, 40]
     - [36, 600]
   Type: Dynamic
+  MaxDiff: 0.05
 滚动条-下:
   Image: 滚动条-下.png
   MainSize: [1280, 720]
