@@ -258,4 +258,4 @@ AP不足:
   - {Time: 2, Type: Wait}
   Condition: [连续出击]
   Name: 连续出击
-  Next: [助战选择]
+  Next: [助战选择, AP不足]
