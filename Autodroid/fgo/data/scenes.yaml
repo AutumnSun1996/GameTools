@@ -31,8 +31,9 @@ AP不足:
     - [左上-关闭]
     - [滚动条-上-任务]
     - [$not_, [[无战斗]]]
+    - [$not_, [[任务开始]]]
   Name: 关卡选择
-  Next: [助战选择, AP不足, 无战斗, 连续出击, 关卡选择]
+  Next: [助战选择, AP不足, 无战斗, 连续出击, 任务开始]
 剧情:
   Actions:
   - {Target: 剧情-跳过, Type: Click}
@@ -258,4 +259,11 @@ AP不足:
   - {Time: 2, Type: Wait}
   Condition: [连续出击]
   Name: 连续出击
+  Next: [助战选择, AP不足]
+任务开始:
+  Actions:
+  - {Target: 任务开始, Type: Click}
+  - {Time: 2, Type: Wait}
+  Condition: [任务开始]
+  Name: 任务开始
   Next: [助战选择, AP不足]

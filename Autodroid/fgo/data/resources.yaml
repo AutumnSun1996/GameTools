@@ -148,6 +148,7 @@ Cards:
   Name: 获得报酬
   Size: [150, 80]
   Type: Dynamic
+  MaxDiff: 0.05
 克制:
   Image: 克制.png
   MainSize: [1280, 720]
@@ -905,3 +906,10 @@ Cards:
   Size: [120, 50]
   Type: "Static"
   Image: "加载中.png"
+任务开始:
+  Name: "任务开始"
+  MainSize: [1280, 720]
+  Offset: [740, 545]
+  Size: [200, 40]
+  Type: "Static"
+  Image: "任务开始.png"
