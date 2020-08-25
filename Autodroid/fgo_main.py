@@ -24,8 +24,8 @@ def make_stop_checker(args):
             ):
                 s.click_at_resource("AP不足-关闭")
                 return True
-        if s.current_scene_name == "关卡选择" and not s.actions_done:
-            logger.warning("On 关卡选择; %s", s.scene_history_count)
+        if s.current_scene_name in {"关卡选择", "连续出击"} and not s.actions_done:
+            logger.warning("On %s; %s", s.current_scene_name, s.scene_history_count)
             if (
                 args.fight_count is not None
                 and s.scene_history_count["获得物品"] >= args.fight_count
