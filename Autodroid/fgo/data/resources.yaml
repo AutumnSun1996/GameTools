@@ -970,3 +970,12 @@ FREE可进行:
   SearchArea: 
     - [900, 100]
     - [200, 600]
+》可进行:
+  Name: "》可进行"
+  MainSize: [1280, 720]
+  Size: [40, 44]
+  Type: "Dynamic"
+  Image: "》可进行.png"
+  SearchArea: 
+    - [860, 100]
+    - [240, 600]
