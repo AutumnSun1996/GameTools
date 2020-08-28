@@ -258,6 +258,19 @@ def check_resource(info, image=None):
     draw = image.copy()
 
     if isinstance(info, str):
+        if "\n" in info:
+            try:
+                info = hocon.loads(info)
+            except hocon.ParseBaseException:
+                info = yaml.safe_load(info)
+
+            keys = list(info.keys())
+            if len(keys) == 1:
+                info = info[keys[0]]
+                if "Name" not in info:
+                    info["Name"] = keys[0]
+
+    if isinstance(info, str):
         name = info
         info = s.resources[name]
     else:
