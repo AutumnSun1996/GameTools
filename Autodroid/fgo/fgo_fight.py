@@ -250,7 +250,7 @@ class FateGrandOrder(SimulatorControl):
             errors.append(err)
 
         try:
-            now, total = [int(t) for t in re.search(r"^(\d).*?(\d)$", info[0]).groups()]
+            now, total = [int(t) for t in re.search(r"^(\d).*?(\d)0?$", info[0]).groups()]
             if self.combat_info["BattleNow"] != now:
                 self.combat_info["TurnOfBattle"] = 1
             else:
