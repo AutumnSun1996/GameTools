@@ -941,3 +941,32 @@ Cards:
   Size: [120, 40]
   Type: "Static"
   Image: "取消.png"
+剩余任务标记:
+  Name: "剩余任务标记"
+  MainSize: [1280, 720]
+  Offset: [468, 134]
+  Size: [48, 48]
+  ClickOffset: [-65, 20]
+  ClickSize: [95, 55]
+  Type: "MultiDynamic"
+  Image: "剩余任务标记.png"
+  MaxDiff: 0.05
+剩余任务标记-小:
+  Name: "剩余任务标记-小"
+  MainSize: [1280, 720]
+  Offset: [468, 134]
+  Size: [25, 25]
+  ClickOffset: [-35, 10]
+  ClickSize: [50, 30]
+  Type: "MultiDynamic"
+  Image: "剩余任务标记.png"
+  MaxDiff: 0.05
+FREE可进行:
+  Name: "FREE可进行"
+  MainSize: [1280, 720]
+  Size: [56, 42]
+  Type: "Dynamic"
+  Image: "FREE可进行.png"
+  SearchArea: 
+    - [900, 100]
+    - [200, 600]
