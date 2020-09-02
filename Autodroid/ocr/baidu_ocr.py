@@ -85,9 +85,12 @@ class BaiduOCR:
 
     def images2text(self, *images):
         image = contact_images(*images)
+        # 使用image2text处理合并后的图片
         result = self.image2text(image)
-        if not (isinstance(result, list) and len(result) == len(images)):
-            result = self.image2text_accurate(image)
+        if isinstance(result, list) and len(result) == len(images):
+            return result
+        # 使用image2text_accurate处理合并后的图片
+        result = self.image2text_accurate(image)
         if isinstance(result, list) and len(result) == len(images):
             return result
 
