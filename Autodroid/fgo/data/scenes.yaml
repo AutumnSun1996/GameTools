@@ -128,9 +128,9 @@ AP不足:
   Next: [剧情]
 申请好友:
   Actions:
-  - {Target: 申请好友, Type: Click}
+  - {Target: 申请好友-结束, Type: Click}
   - {Time: 1, Type: Wait}
-  Condition: [$all, [[申请好友], [申请好友-界面]]]
+  Condition: [申请好友-界面]
   Name: 申请好友
   Next: [好友申请失败, 地图选择, 关卡选择, 获得报酬, 剧情, 申请好友, 连续出击]
 礼装等级上升:

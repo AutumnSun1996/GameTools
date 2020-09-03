@@ -979,3 +979,10 @@ FREE可进行:
   SearchArea: 
     - [860, 100]
     - [240, 600]
+申请好友-结束:
+  Name: "申请好友-结束"
+  MainSize: [1280, 720]
+  Offset: [240, 595]
+  Size: [200, 40]
+  Type: "Static"
+  Image: "申请好友-结束.png"
