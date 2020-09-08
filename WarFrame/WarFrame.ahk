@@ -181,6 +181,7 @@ UStr(Text){
 NumpadDot::MButton
 
 *^g::
+; G系破解
 SetBatchLines, -1
 Sleep, 300
 SendInput, {LCtrl Down}
@@ -203,6 +204,7 @@ SendInput, {LCtrl Up}
 Return
 
 ^h::
+; 滑砍
 Loop, 10
 {
     Send, {LCtrl Down}
@@ -215,6 +217,7 @@ Return
 *XButton2::MButton
 
 *WheelUp::
+; 跳跃动作
 If (!LastWheelUp){
     ShowTip("Bullet Jump")
     Send, ^{Space}
@@ -227,7 +230,16 @@ If (!LastWheelUp){
     SetTimer, ClearWheelUp, 800
 } Else If (LastWheelUp = 2){
     ShowTip("Shift")
-    Send, {Shift}
+    ShiftIsDown := GetKeyState("Shift")
+    If(ShiftIsDown){
+        Send, {ShiftUp}
+        Sleep, 10
+        Send, {Shift}
+        Sleep, 10
+        Send, {ShiftDown}
+    }Else{
+        Send, {Shift}
+    }
     LastWheelUp := 0
 }
 Return
