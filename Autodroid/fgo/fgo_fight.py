@@ -250,7 +250,16 @@ class FateGrandOrder(SimulatorControl):
             errors.append(err)
 
         try:
-            now, total = [int(t) for t in re.search(r"^(\d).*?(\d)0?$", info[0]).groups()]
+            for checker in [
+                r"^(\d)/(\d)$",
+                r"^(\d)(\d)$",
+                r"(\d)/(\d)$",
+                r"(\d)/(\d)",
+            ]:
+                matched = re.search(checker, info[0])
+                if matched:
+                    now, total = [int(t) for t in matched.groups()]
+                    break
             if self.combat_info["BattleNow"] != now:
                 self.combat_info["TurnOfBattle"] = 1
             else:
@@ -258,7 +267,7 @@ class FateGrandOrder(SimulatorControl):
             self.combat_info["BattleNow"] = now
             self.combat_info["BattleTotal"] = total
             self.combat_info["BattleLeft"] = total - now
-        except (AttributeError, IndexError, ValueError) as err:
+        except (NameError, AttributeError, IndexError, ValueError) as err:
             errors.append(err)
 
         try:
@@ -316,10 +325,10 @@ class FateGrandOrder(SimulatorControl):
 
         color = "AQB" # blue, green, red
         img = cv_crop(image, (30, 100, 160, 300))
-        gray = img.mean(axis=-1)
         diffs = []
         for c in range(3):
-            diff = img[:, :, c] - gray
+            a, b = (c+1) % 3, (c+2) % 3
+            diff = (img[:, :, c] > 140) & (img[:, :, a] < 100) & (img[:, :, b] < 100)
             diffs.append(diff.mean())
         idx = np.argmax(diffs)
         result += color[idx]
