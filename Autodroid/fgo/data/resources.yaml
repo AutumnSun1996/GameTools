@@ -12,21 +12,6 @@ AP不足-关闭:
   Offset: [550, 595]
   Size: [180, 50]
   Type: Static
-Arts:
-  Image: Arts.png
-  MainSize: [1280, 720]
-  Name: Arts
-  Type: Dynamic
-Buster:
-  Image: Buster.png
-  MainSize: [1280, 720]
-  Name: Buster
-  Type: Dynamic
-Quick:
-  Image: Quick.png
-  MainSize: [1280, 720]
-  Name: Quick
-  Type: Dynamic
 Attack:
   MainSize: [1280, 720]
   Name: Attack

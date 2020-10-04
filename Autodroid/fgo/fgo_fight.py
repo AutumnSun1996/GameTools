@@ -314,14 +314,15 @@ class FateGrandOrder(SimulatorControl):
         if self.resource_in_image("无法行动", image):
             result += "无法行动"
 
-        best_diff = 1
-        color = ""
-        for name in ["Buster", "Arts", "Quick"]:
-            diff, _ = get_match(image, self.resources[name]["ImageData"])
-            if diff < best_diff:
-                best_diff = diff
-                color = name[0]
-        result += color
+        color = "AQB" # blue, green, red
+        img = cv_crop(image, (30, 100, 160, 300))
+        gray = img.mean(axis=-1)
+        diffs = []
+        for c in range(3):
+            diff = img[:, :, c] - gray
+            diffs.append(diff.mean())
+        idx = np.argmax(diffs)
+        result += color[idx]
 
         if self.resource_in_image("克制", image):
             relation = "克制"

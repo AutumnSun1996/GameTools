@@ -210,6 +210,7 @@ class FGOSimple(FGOBase):
 
     def choose_cards(self):
         choice = []
+        choice_names = []
         if not self.combat_info:
             self.extract_combat_info()
         else:
@@ -229,6 +230,7 @@ class FGOSimple(FGOBase):
                     check["Condition"],
                 )
                 choice.append(self.get_resource_rect(name))
+                choice_names.append(name)
 
         self.wait(1)
         cards = self.resources["Cards"]
@@ -244,8 +246,7 @@ class FGOSimple(FGOBase):
             card_names.append(self.extract_card_info(card_img))
             card_rects.append(click_rect)
 
-        logger.info("Found Cards %s", card_names)
-
+        found_names = card_names.copy()
         card_choice = []
         for card_choice in self.data["Strategy"]["CardChoice"]:
             if parse_condition(
@@ -254,11 +255,15 @@ class FGOSimple(FGOBase):
                 break
         logger.info("CardChoice Strategy=%s", card_choice)
         choice += [None, None, None]
+        choice_names += ["", "", ""]
         for idx, order in card_choice["Choice"]:
             if choice[idx] is None:
                 name, rect = self.choose_card(card_names, card_rects, order)
                 choice[idx] = rect
-                logger.info("Choose Card %s for idx %d", name, idx)
+                choice_names[idx] = name
+        
+        logger.info("Found Cards %s", found_names)
+        logger.info("Choose Cards %s", choice_names[:3])
 
         for rect in choice:
             if rect is not None:
