@@ -935,7 +935,8 @@ Cards:
   ClickSize: [95, 55]
   Type: "MultiDynamic"
   Image: "剩余任务标记.png"
-  MaxDiff: 0.05
+  MaxDiff: 0.06
+  SearchArea: [[0, 0], [1280, 620]]
 剩余任务标记-小:
   Name: "剩余任务标记-小"
   MainSize: [1280, 720]
@@ -945,7 +946,8 @@ Cards:
   ClickSize: [50, 30]
   Type: "MultiDynamic"
   Image: "剩余任务标记.png"
-  MaxDiff: 0.05
+  MaxDiff: 0.06
+  SearchArea: [[0, 0], [1280, 620]]
 FREE可进行:
   Name: "FREE可进行"
   MainSize: [1280, 720]
