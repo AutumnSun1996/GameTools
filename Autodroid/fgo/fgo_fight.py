@@ -323,12 +323,20 @@ class FateGrandOrder(SimulatorControl):
         if self.resource_in_image("无法行动", image):
             result += "无法行动"
 
-        color = "AQB" # blue, green, red
-        img = cv_crop(image, (30, 100, 160, 300))
+        def is_green(img):
+            return (img[:, :, 1] > 150) & (img[:, :, 0] < 80) & (img[:, :, 2] < 80)
+
+        def is_blue(img):
+            return (img[:, :, 0] > 240) & (img[:, :, 2] < 80)
+
+        def is_red(img):
+            return (img[:, :, 2] > 200) & (img[:, :, 0] < 100) & (img[:, :, 1] < 100)
+
+        img = cv_crop(image, (30, 210, 170, 320))
+        color = "AQB"  # blue, green, red
         diffs = []
-        for c in range(3):
-            a, b = (c+1) % 3, (c+2) % 3
-            diff = (img[:, :, c] > 140) & (img[:, :, a] < 100) & (img[:, :, b] < 100)
+        for is_target in [is_blue, is_green, is_red]:
+            diff = is_target(img)
             diffs.append(diff.mean())
         idx = np.argmax(diffs)
         result += color[idx]
