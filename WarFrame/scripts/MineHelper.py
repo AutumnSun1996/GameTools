@@ -1,9 +1,17 @@
 import time
+
 T0 = time.time()
 import logging
-logging.basicConfig(level="WARNING", filename="tmp.log", format="%(asctime)s:%(levelname)s:%(funcName)s[%(lineno)d]:%(message)s")
+
+DEBUG = True
+logging.basicConfig(
+    level="DEBUG" if DEBUG else "WARNING",
+    filename="tmp.log",
+    format="%(asctime)s:%(levelname)s:%(funcName)s[%(lineno)d]:%(message)s",
+)
 logger = logging.getLogger()
 logger.warning("Inited At %s", T0)
+
 import os
 import sys
 import datetime
@@ -12,22 +20,28 @@ import win32ui
 import win32con
 import numpy as np
 import cv2 as cv
+
 logger.info("Import End")
 
-POS_PER_SEC = 258.07
-CENTER = (1438, 940)
-RADIUS = 300
+# POS_PER_SEC = 258.07
+POS_PER_SEC = 250
+# CENTER = (1438, 940)
+# RADIUS = 300
+CENTER = (959, 530)
+RADIUS = 185
 PRE_RELEASE = 60
-SAVE_SHOTS = False
+SAVE_SHOTS = True
 MAX_PRESSING = 5
 
 checked = 0
+
 
 def get_match(image, needle):
     """在image中搜索needle"""
     match = get_all_match(image, needle)
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, np.array(min_loc)
+
 
 def cv_imread(file_path):
     """读取图片
@@ -36,7 +50,9 @@ def cv_imread(file_path):
     return cv.imdecode(np.fromfile(file_path, dtype='uint8'), cv.IMREAD_UNCHANGED)
 
 
-def get_shot(hwnd, dx, dy, w, h, ):
+def get_shot(
+    hwnd, dx, dy, w, h,
+):
     # 对后台应用程序截图，程序窗口可以被覆盖，但如果最小化后只能截取到标题栏、菜单栏等。
     # 返回句柄窗口的设备环境、覆盖整个窗口，包括非客户区，标题栏，菜单，边框
     hwndDC = win32gui.GetWindowDC(hwnd)
@@ -64,6 +80,7 @@ def get_shot(hwnd, dx, dy, w, h, ):
     win32gui.ReleaseDC(hwnd, hwndDC)
     return image_data
 
+
 def split_bgra(bgra):
     """将BGRA图像分离为BGR图像和Mask"""
     bgr = bgra[:, :, :3]
@@ -72,6 +89,7 @@ def split_bgra(bgra):
     mask = np.concatenate((a, a, a), axis=2)
     return bgr, mask
 
+
 def get_match_x(image, match):
     """在image中搜索needle的横向位置"""
     needle, mask = match
@@ -79,11 +97,12 @@ def get_match_x(image, match):
     min_val, _, min_loc, _ = cv.minMaxLoc(match)
     return min_val, min_loc[0]
 
+
 def check_screen(left, right, extra):
     global checked
     x, y = CENTER
     r = RADIUS
-    screen = get_shot(0, x-r, y-r, 2*r, 2*r)
+    screen = get_shot(0, x - r, y - r, 2 * r, 2 * r)
 
     rotated = cv.rotate(screen, cv.ROTATE_90_COUNTERCLOCKWISE)
     circle = cv.warpPolar(rotated, (300, 1000), (r, r), RADIUS, cv.WARP_POLAR_LINEAR)
@@ -105,12 +124,14 @@ def check_screen(left, right, extra):
     diff1, x1 = get_match_x(ring, right)
     x1 += right[0].shape[1]
     if diff0 > 0.3 or diff1 > 0.3:
-        name = "shots/NoMatch-{}+{}.png".format(T0, time.time()-T0)
+        name = "shots/NoMatch-{}+{}.png".format(T0, time.time() - T0)
         cv.imwrite(name, ring)
-        logger.warning("Not Valid Match. diff=%s, %s, %s for %s", diffe, diff0, diff1, name)
+        logger.warning(
+            "Not Valid Match. diff=%s, %s, %s for %s", diffe, diff0, diff1, name
+        )
         return None
     logger.info("Found left=%s, right=%s", x0, x1)
-    return (x0+x1) / 2
+    return (x0 + x1) / 2
 
 
 def check_mine():
@@ -151,13 +172,14 @@ def check_mine():
         logger.info("Wait.", pos, target_pos)
         # time.sleep(wait)
 
+
 def shot():
     x, y = CENTER
     r = RADIUS
-    screen = get_shot(0, x-r, y-r, 2*r, 2*r)
+    screen = get_shot(0, x - r, y - r, 2 * r, 2 * r)
     logger.info("Screen Capurted")
     cv.imwrite("images/screen.png", screen)
-    
+
     rotated = cv.rotate(screen, cv.ROTATE_90_COUNTERCLOCKWISE)
     logger.info("Rotate End")
     circle = cv.warpPolar(rotated, (300, 1000), (r, r), RADIUS, cv.WARP_POLAR_LINEAR)
@@ -168,6 +190,7 @@ def shot():
     logger.info("All Transform End")
     cv.imwrite("images/ring.png", ring)
     logger.info("Saved")
+
 
 def main():
     logger.info("Start Main")
@@ -186,7 +209,7 @@ if __name__ == "__main__":
     try:
         T1 = T0
         T0 = datetime.datetime.strptime(sys.argv[2], "%Y%m%d%H%M%S.%f").timestamp()
-        logger.info("Recorded T0 - Given T0=%s. Update T0 to %s", T1-T0, T0)
+        logger.info("Recorded T0 - Given T0=%s. Update T0 to %s", T1 - T0, T0)
     except Exception as err:
         logger.warning("Parse failed, use original T0=%s", T0)
 

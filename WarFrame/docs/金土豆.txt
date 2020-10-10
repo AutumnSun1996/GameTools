@@ -1,0 +1,78 @@
+金土豆
+[ ] [x]z Ash Prime(149; 21+5+95+8=129)
+[ ] [x]z Atlas
+[x] [x]z Banshee Prime
+[x] [x]z Chroma
+[x] [x]z Ember Prime
+[x] [x]z Equinox
+[ ] [x]z Excalibur
+[ ] [x]z Frost Prime
+[ ] [x]z Gara
+[ ] [x]z Harrow
+[ ] [x]z Hydroid Prime
+[ ] [x]z Inaros
+[x] [x]z Ivara
+[x] [x]z Khora
+[x] [x]z Limbo
+[x] [x]z Loki Prime
+[ ] [x]z Mag Prime(180; 10+50+60+10=130)
+[x] [x]z Mesa
+[x] [x]z Mirage Prime
+[ ] [x]z Nekros Prime
+[ ] [x]z Nezha
+[ ] [x]z Nidus
+[x] [x]z Nova Prime
+[ ] [ ]z Nyx Prime(360; 79+4+240+20=343)
+[ ] [x]z Oberon Prime
+[x] [x]z Octavia
+[x] [x]z Rhino Prime
+[x] [x]z Saryn Prime
+[x] [x]z Titania
+[x] [x]z Trinity Prime
+[x] [x]z Valkyr Prime
+[ ] [x]z Vauban Prime
+[ ] [x]z Volt Prime
+[x] [x]z Wukong
+[ ] [x]z Zephyr Prime
+
+5种专精
+塞防
+Banshee：
+    战甲 100
+Saryn：
+    战甲 ？
+    武器 ？
+Wukong：
+    战甲 50
+    近战 50
+Trinity(输出)：
+    战甲 100
+Trinity(辅助)：
+    战甲 25
+    武器 75
+Nova：
+    战甲 25
+    武器 75
+
+塞歼
+Ivara：
+    战甲 50
+    武器 50
+Equinox：
+    战甲 50
+    武器 50
+
+日常生存
+Nekros：
+    战甲 25
+    武器 75
+Nova：
+    战甲 25
+    武器 75
+鞭：
+    战甲 50
+    近战 50
+
+N精，只带近战，不输出：
+    战甲 25
+    近战 75 * 1.45
