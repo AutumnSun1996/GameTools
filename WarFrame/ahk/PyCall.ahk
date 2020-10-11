@@ -13,7 +13,7 @@ cmdReturn(command){
 ^=::
 ToolTip, %A_Now%.%A_MSec%
 dt = %A_Now%.%A_MSec%
-RunWait,python.exe MineHelper.py test %dt%,D:\Documents\GameRoutes\WarFrame\scripts,Hide
+RunWait,python.exe MineHelper.py test %dt%,D:\Projects\Entertainment\GameTools\WarFrame\scripts,Hide
 Sleep, 500
 ToolTip,
 Return
@@ -22,7 +22,7 @@ Return
 =::
 ToolTip, Start, 5,5
 Click, down
-RunWait,python.exe MineHelper.py mine %A_Now%.%A_MSec%,D:\Documents\GameRoutes\WarFrame\scripts,Hide
+RunWait,python.exe MineHelper.py mine %A_Now%.%A_MSec%,D:\Projects\Entertainment\GameTools\WarFrame\scripts,Hide
 ToolTip, End.
 Click, up
 Sleep, 500
@@ -31,7 +31,7 @@ Return
 
 -::
 ToolTip, Start.
-RunWait,python.exe MineHelper.py shot %A_Now%.%A_MSec%,D:\Documents\GameRoutes\WarFrame\scripts,Hide
+RunWait,python.exe MineHelper.py shot %A_Now%.%A_MSec%,D:\Projects\Entertainment\GameTools\WarFrame\scripts,Hide
 ToolTip, End.
 Sleep, 500
 ToolTip, 
