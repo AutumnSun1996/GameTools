@@ -3,39 +3,36 @@
 """
 import time
 
+import win32con
+import ctypes
 import win32api
+from win10toast import ToastNotifier
 
-from config import logger
-from map_anchor import FightMap
+import logging
+from .common_fight import CommonMap
+
+logger = logging.getLogger(__name__)
+
+toaster = ToastNotifier()
 
 
-class SP4Control(FightMap):
-    def __init__(self):
-        super().__init__()
-        self.scenes.update(
-            {
-                "进入档案确认": {
-                    "Name": "进入档案确认",
-                    "Condition": "进入档案确认",
-                    "Actions": [
-                        {"Type": "Click", "Target": "进入档案确认"},
-                        {"Type": "Wait", "Time": 0.5},
-                    ],
-                }
-            }
-        )
-
-    def fight(self):
-        if self.last_scene["Name"] in {"战斗地图", "无匹配场景"}:
-            return
-        self.go_top()
-        win32api.MessageBeep()
+class Manual(CommonMap):
+    def manual(self):
+        if self.scene_changed or self.since_last_manual > 60:
+            toaster.show_toast(
+                "需要手动操作",
+                "当前场景: %s" % self.current_scene["Name"],
+                threaded=True,
+                duration=10,
+                callback_on_click=self.go_top,
+            )
+            self.last_manual = time.time()
 
 
 if __name__ == "__main__":
     import datetime
 
-    sp4 = SP4Control()
-    start_index = sp4.get_fight_index()
+    m = Manual()
+    start_index = m.get_fight_index()
     while True:
-        sp4.check_scene()
+        m.check_scene()
