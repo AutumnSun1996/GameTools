@@ -11,7 +11,7 @@
   - {Time: 0.5, Type: Wait}
   Condition: [进入地图-立刻前往]
   Name: 进入地图确认
-  Next: [舰队选择, 船坞已满]
+  Next: [舰队选择, 船坞已满, 进入地图确认]
 舰队选择:
   Actions:
   - {Target: mood_detect, Type: InnerCall}
