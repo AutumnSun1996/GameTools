@@ -28,6 +28,8 @@ class Manual(CommonMap):
             )
             self.last_manual = time.time()
 
+    def fight(self):
+        self.manual()
 
 if __name__ == "__main__":
     import datetime
