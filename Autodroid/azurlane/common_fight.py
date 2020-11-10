@@ -22,7 +22,10 @@ class CommonMap(FightMap):
 
     def get_fight_status(self):
         status = super().get_fight_status()
-        status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
+        if self.data["FightCount"] > 0:
+            status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
+        else:
+            status["FightIndexMod"] = status["FightIndex"]
         return status
 
     def parse_fight_condition(self, condition):
@@ -78,7 +81,8 @@ class CommonMap(FightMap):
         self.reset_map_data()
         status = self.get_fight_status()
         mod = status["TrueFightIndex"] % self.data["FightCount"]
-        logger.warning("Current Fight Index: %d (%d)", status["FightIndex"], mod)
+        logger.warning("Current Fight Index: %d (%d)",
+                       status["FightIndex"], mod)
         if mod != target_mod:
             status["VirtualFightIndex"] = target_mod - mod
             self.save_fight_status(status)
@@ -255,7 +259,8 @@ class CommonMap(FightMap):
             self.click_at_map(self.boss[0])
             return
         if repeat > 5:
-            raise RuntimeError("search_for_boss:Failed after %s attempt", repeat)
+            raise RuntimeError(
+                "search_for_boss:Failed after %s attempt", repeat)
         anchor_name, anchor_pos = self.get_best_anchor()
         names = self.data.get("BossMarkers", ["Boss"])
         boss = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
@@ -283,7 +288,8 @@ class CommonMap(FightMap):
         results = set()
         for name in target_names:
             if name in self.resources:
-                items = self.find_on_map(anchor_name, anchor_pos, name, reshot=reshot)
+                items = self.find_on_map(
+                    anchor_name, anchor_pos, name, reshot=reshot)
                 results = results.union(items)
         return results.intersection(self.g.nodes)
 
@@ -314,7 +320,8 @@ class CommonMap(FightMap):
             names = self.data.get(
                 "CurFleetMarkers", ["Pointer", "Pointer2", "Pointer3"]
             )
-            cur_fleet = self.find_multi_on_map(anchor_name, anchor_pos, names, False)
+            cur_fleet = self.find_multi_on_map(
+                anchor_name, anchor_pos, names, False)
             logger.info("找到当前舰队: %s", cur_fleet)
             if cur_fleet:
                 self.current_fleet = list(cur_fleet)[0]
@@ -448,7 +455,8 @@ class CommonMap(FightMap):
 
     def goto_res_on_map(self, names, viewpoints=None, repeat=0, idx=0):
         if not self.scene_match_check("战斗地图", False):
-            logger.warning("abort goto_res_on_map({}): Not in 战斗地图".format(names))
+            logger.warning(
+                "abort goto_res_on_map({}): Not in 战斗地图".format(names))
             return
         if repeat >= 5:
             self.error("地图处理失败 goto_res_on_map({})".format(names))
