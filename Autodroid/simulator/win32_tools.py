@@ -27,7 +27,8 @@ def click_at(hwnd, x, y, hold=0):
     # 向后台窗口发送单击事件，(x, y)为相对于窗口左上角的位置
     x, y = rescale_point(hwnd, (x, y))
     pos = win32api.MAKELONG(int(x), int(y))
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, pos)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
+                         win32con.MK_LBUTTON, pos)
     time.sleep(hold)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
@@ -55,7 +56,8 @@ def rand_drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(
-        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(*start)
+        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(
+            *start)
     )
     time.sleep(start_delay)
 
@@ -72,7 +74,8 @@ def rand_drag(hwnd, start, end, step=100, start_delay=0):
     for point in points:
         time.sleep(0.05)
         target = win32api.MAKELONG(*[int(n) for n in rand_point(point, delta)])
-        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, target)
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
+                             win32con.MK_LBUTTON, target)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
@@ -81,7 +84,8 @@ def drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(
-        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(*start)
+        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(
+            *start)
     )
     time.sleep(start_delay)
 
@@ -95,7 +99,8 @@ def drag(hwnd, start, end, step=100, start_delay=0):
     for point in points:
         time.sleep(0.05)
         target = win32api.MAKELONG(*point)
-        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, target)
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
+                             win32con.MK_LBUTTON, target)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
@@ -111,6 +116,12 @@ def make_foreground(hwnd, retry=True):
     logger.warning("make foreground")
     try:
         win32gui.SetForegroundWindow(hwnd)
+        win32gui.SetWindowPos(
+            hwnd,
+            win32con.HWND_TOP,
+            0, 0, 0, 0,
+            win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW
+        )
     except pywintypes.error as err:
         logger.warning(err)
         if retry:
@@ -128,10 +139,12 @@ def heartbeat():
     tick = win32api.GetTickCount()
     if tick - info > 30000:
         win32api.keybd_event(win32con.VK_CAPITAL, 0, 0, 0)
-        win32api.keybd_event(win32con.VK_CAPITAL, 0, win32con.KEYEVENTF_KEYUP, 0)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0,
+                             win32con.KEYEVENTF_KEYUP, 0)
         time.sleep(0.1)
         win32api.keybd_event(win32con.VK_CAPITAL, 0, 0, 0)
-        win32api.keybd_event(win32con.VK_CAPITAL, 0, win32con.KEYEVENTF_KEYUP, 0)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0,
+                             win32con.KEYEVENTF_KEYUP, 0)
 
 
 if __name__ == "__main__":
