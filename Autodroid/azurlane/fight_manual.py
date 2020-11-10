@@ -18,18 +18,29 @@ toaster = ToastNotifier()
 
 class Manual(CommonMap):
     def manual(self):
-        if self.scene_changed or self.since_last_manual > 60:
+        if self.no_quiet:
             toaster.show_toast(
                 "需要手动操作",
                 "当前场景: %s" % self.current_scene["Name"],
                 threaded=True,
-                duration=10,
-                callback_on_click=self.go_top,
+                duration=5
             )
+            self.go_top()
             self.last_manual = time.time()
+            return
+        toaster.show_toast(
+            "需要手动操作",
+            "当前场景: %s" % self.current_scene["Name"],
+            threaded=True,
+            duration=10,
+            callback_on_click=self.go_top,
+        )
 
     def fight(self):
-        self.manual()
+        if self.scene_changed or self.since_last_manual > 60:
+            self.manual()
+            self.last_manual = time.time()
+
 
 if __name__ == "__main__":
     import datetime

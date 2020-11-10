@@ -44,6 +44,7 @@ def main(args):
         from azurlane.common_fight import CommonMap as map_cls
     logger.warning("Use class %r", map_cls)
     az = map_cls(args.map_name)
+    az.no_quiet = args.no_quiet
     try:
         az.main_loop(make_stop_checker(args))
         # input("Pause...")
@@ -74,6 +75,7 @@ if __name__ == "__main__":
         help="脚本最大运行时间。",
     )
     parser.add_argument("--fight_count", "-n", type=int, default=None, help="自动战斗次数。")
+    parser.add_argument("--no-quiet", "-Q", action="store_true", help="关闭安静模式。手动模式下将直接置顶游戏窗口")
 
     args = parser.parse_args()
 
