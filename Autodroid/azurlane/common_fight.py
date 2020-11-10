@@ -22,7 +22,10 @@ class CommonMap(FightMap):
 
     def get_fight_status(self):
         status = super().get_fight_status()
-        status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
+        if self.data["FightCount"] > 0:
+            status["FightIndexMod"] = status["FightIndex"] % self.data["FightCount"]
+        else:
+            status["FightIndexMod"] = status["FightIndex"]
         return status
 
     def parse_fight_condition(self, condition):
