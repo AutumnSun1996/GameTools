@@ -1,5 +1,6 @@
 import tkinter as tk
 import threading
+import win32api
 
 
 def _show_toast(title, message, timeout=2000):
@@ -36,7 +37,9 @@ def _show_toast(title, message, timeout=2000):
     return ret[0]
 
 
-def show_toast(title, message, timeout=2000, threaded=False):
+def show_toast(title, message, timeout=2000, beep=True, threaded=False):
+    if beep:
+        win32api.MessageBeep()
     if threaded:
         t = threading.Thread(target=_show_toast, args=(title, message, timeout))
         t.start()
