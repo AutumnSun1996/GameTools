@@ -21,9 +21,11 @@ class Manual(CommonMap):
             reason += ["from {}".format(self.last_scene_name)]
         dt = time.time() - self.last_manual
         if dt > 60:
-            reason += ["dt={:.1f}".format(dt)]
+            reason += ["dt={:.1f}s".format(dt)]
         reason = ",".join(reason)
-        msg = "当前场景: {}\n({})".format(self.current_scene_name, reason)
+        if reason:
+            reason = "\n" + reason
+        msg = "当前场景: {}{}".format(self.current_scene_name, reason)
 
         if self.no_quiet:
             self.go_top()
@@ -36,7 +38,9 @@ class Manual(CommonMap):
 
     def manual(self):
         since_last_manual = time.time() - self.last_manual
-        if since_last_manual < 10:
+        if len(self.scene_history) > 5 and since_last_manual < 10:
+            # 刚开始运行时允许提前触发手动提醒
+            # 否则，保证两次提醒间至少等待10s
             return
         if not self.scene_changed and since_last_manual < 60:
             return
