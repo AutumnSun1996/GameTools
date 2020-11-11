@@ -32,6 +32,7 @@ from .image_tools import (
     save_jpeg,
 )
 from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
+from . import toast
 
 import logging
 
@@ -84,8 +85,7 @@ def parse_condition(cond, obj, extra=None):
 
 
 class SimulatorControl:
-    """模拟器通用控制
-    """
+    """模拟器通用控制"""
 
     fallback_scene = {
         "Name": "无匹配场景",
@@ -270,13 +270,11 @@ class SimulatorControl:
         return ret, pos
 
     def resource_in_image(self, info, image, index=None):
-        """判断资源是否存在于给出的画面内. 可接受资源名字符串或资源定义dict, 返回bool判断
-        """
+        """判断资源是否存在于给出的画面内. 可接受资源名字符串或资源定义dict, 返回bool判断"""
         return self.search_resource(info, image, index)[0]
 
     def resource_in_screen(self, name, index=None):
-        """判断资源是否存在于画面内. 仅接受资源名字符串, 返回bool判断
-        """
+        """判断资源是否存在于画面内. 仅接受资源名字符串, 返回bool判断"""
         if not isinstance(name, str):
             return name
         if name not in self.resources:
@@ -285,9 +283,7 @@ class SimulatorControl:
         return self.search_resource(name, index=index)[0]
 
     def wait(self, dt):
-        """等待固定时间
-
-        """
+        """等待固定时间"""
         # TODO: 加入随机延时
         time.sleep(dt)
 
@@ -402,8 +398,7 @@ class SimulatorControl:
         return self.wait_till(condition, interval, repeat - 1)
 
     def scene_match_check(self, scene, reshot):
-        """检查场景是否与画面一致
-        """
+        """检查场景是否与画面一致"""
         if isinstance(scene, str):
             scene = self.scenes[scene]
 
@@ -449,12 +444,11 @@ class SimulatorControl:
         title = "自动脚本%s - %s错误" % (self.section, title)
         self.save_record("Critical", comment={"message": message}, title=title)
 
-        #         info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
-        #         flag = win32con.MB_ICONERROR | win32con.MB_YESNO | win32con.MB_TOPMOST \
-        #             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        #         res = win32api.MessageBox(0, info, title, flag)
-        #         if res == win32con.IDYES:
-        #             self.go_top()
+        info = "自动战斗脚本将终止:\n%s\n是否将模拟器前置？" % message
+        res = toast.show_toast(title, info, 4000)
+        if res == "SHOW":
+            self.go_top()
+
         self.close()
 
     def error(self, message=None, title="", action="继续"):
@@ -462,47 +456,43 @@ class SimulatorControl:
         logger.error(message)
         title = "自动脚本%s - %s警告" % (self.section, title)
         self.save_record("Error", comment={"message": message}, title=title)
-
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
-        #         flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
-        #             | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL | win32con.MB_DEFBUTTON2
-        #         res = win32api.MessageBox(0, info, title, flag)
-        #         if res == win32con.IDNO:
-        #             self.go_top()
-        #             self.close()
-        if input(info).lower() != "y":
+        res = toast.show_toast(title, info, 2000)
+        if res == "SHOW":
+            self.go_top()
             self.close()
 
-    def wait_mannual(self, message=None, title="", action="继续"):
+    def wait_mannual(self, message=None, title=None, action="继续"):
         """等待手动操作"""
         logger.info("等待手动操作: %s", message)
 
         info = "等待手动指令:\n%s" % message
-        # flag = win32con.MB_ICONINFORMATION | win32con.MB_YESNO | win32con.MB_TOPMOST \
-        #     | win32con.MB_SETFOREGROUND | win32con.MB_SYSTEMMODAL
-        #         flag = win32con.MB_YESNO | win32con.MB_SETFOREGROUND
-        #         title = "自动脚本 - 等待手动指令"
-        #         res = ctypes.windll.user32.MessageBoxTimeoutA(
-        #             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 4000)
-        #         if res == win32con.IDNO:
-        #             self.go_top()
-        #             self.close()
-        #         else:
-        #             input("Paused...")
-        input("Paused...")
+        if title is None:
+            title = "自动脚本 - 等待手动指令"
+
+        if self.no_quiet:
+            self.go_top()
+            toast.show_toast(title, info, 2000, threaded=True)
+            return
+
+        res = toast.show_toast(title, info, 4000)
+        if res == "SHOW":
+            self.go_top()
 
     def notice(self, message=None, title="", action="继续"):
         """提醒"""
         logger.warning(message)
-        #         info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
-        #         flag = win32con.MB_YESNO | win32con.MB_TOPMOST | win32con.MB_SETFOREGROUND
-        #         title = "自动脚本%s - %s提醒" % (self.section, title)
-        #         res = ctypes.windll.user32.MessageBoxTimeoutA(
-        #             0, info.encode("GBK"), title.encode("GBK"), flag, 0, 3000)
-        #         if res == win32con.IDNO:
-        #             self.go_top()
-        #             self.close()
-        time.sleep(3)
+        info = "出现异常情况:\n%s\n是否忽略并%s？" % (message, action)
+        title = "自动脚本%s - %s提醒" % (self.section, title)
+
+        if self.no_quiet:
+            self.go_top()
+            toast.show_toast(title, info, 2000, threaded=True)
+            return
+
+        res = toast.show_toast(title, info, 4000)
+        if res == "SHOW":
+            self.go_top()
 
     def update_current_scene(self, candidates=None, repeat=None):
         """等待指定的场景或全局场景"""
