@@ -14,16 +14,16 @@ logger = logging.getLogger(__name__)
 
 
 class Manual(CommonMap):
-    def manual(self):
+    def _manual(self):
         title = "需要手动操作"
         reason = []
         if self.scene_changed:
-            reason += ["from {}".format(self.last_scene["Name"])]
+            reason += ["from {}".format(self.last_scene_name)]
         dt = time.time() - self.last_manual
         if dt > 60:
             reason += ["dt={:.1f}".format(dt)]
         reason = ",".join(reason)
-        msg = "当前场景: {}\n({})".format(self.current_scene["Name"], reason)
+        msg = "当前场景: {}\n({})".format(self.current_scene_name, reason)
 
         if self.no_quiet:
             self.go_top()
@@ -34,15 +34,17 @@ class Manual(CommonMap):
         if res == "SHOW":
             self.go_top()
 
-    def fight(self):
+    def manual(self):
         since_last_manual = time.time() - self.last_manual
         if since_last_manual < 10:
             return
         if not self.scene_changed and since_last_manual < 60:
             return
-        print("MANUAL", since_last_manual, self.scene_changed)
-        self.manual()
+        self._manual()
         self.last_manual = time.time()
+
+    def fight(self):
+        self.manual()
 
 
 if __name__ == "__main__":
