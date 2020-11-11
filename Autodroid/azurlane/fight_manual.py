@@ -6,40 +6,41 @@ import time
 import win32con
 import ctypes
 import win32api
-from win10toast import ToastNotifier
-
+from simulator import toast
 import logging
 from .common_fight import CommonMap
 
 logger = logging.getLogger(__name__)
 
-toaster = ToastNotifier()
-
 
 class Manual(CommonMap):
     def manual(self):
         if self.no_quiet:
-            toaster.show_toast(
+            self.go_top()
+            toast.show_toast(
                 "需要手动操作",
                 "当前场景: %s" % self.current_scene["Name"],
-                threaded=True,
-                duration=5
+                2000,
             )
-            self.go_top()
-            self.last_manual = time.time()
             return
-        toaster.show_toast(
+
+        res = toast.show_toast(
             "需要手动操作",
             "当前场景: %s" % self.current_scene["Name"],
-            threaded=True,
-            duration=10,
-            callback_on_click=self.go_top,
+            5000,
         )
+        if res == "SHOW":
+            self.go_top()
 
     def fight(self):
-        if self.scene_changed or self.since_last_manual > 60:
-            self.manual()
-            self.last_manual = time.time()
+        since_last_manual = time.time() - self.last_manual
+        if since_last_manual < 10:
+            return
+        if not self.scene_changed and since_last_manual < 60:
+            return
+        print("MANUAL", since_last_manual, self.scene_changed)
+        self.manual()
+        self.last_manual = time.time()
 
 
 if __name__ == "__main__":
