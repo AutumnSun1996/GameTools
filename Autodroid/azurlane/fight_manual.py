@@ -3,9 +3,6 @@
 """
 import time
 
-import win32con
-import ctypes
-import win32api
 from simulator import toast
 import logging
 from .common_fight import CommonMap
