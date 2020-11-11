@@ -107,7 +107,7 @@ class SimulatorControl:
         self.actions_done = False
         self.scenes = self.data["Scenes"]
         self.resources = self.data["Resources"]
-        self.last_manual = 0
+        self.last_manual = time.time()
         self.stop = False
         self.resource_pos_buffer = {}
         self.call_once_history = set()

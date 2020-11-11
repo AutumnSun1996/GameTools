@@ -8,7 +8,7 @@ from fgo.fgo_simple import FGOSimple
 class ManualFight(FGOSimple):
     def __init__(self):
         FGOSimple.__init__(self, "手动")
-        self.last_manual = 0
+        self.last_manual = time.time()
 
     @property
     def since_last_manual(self):
