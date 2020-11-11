@@ -15,20 +15,22 @@ logger = logging.getLogger(__name__)
 
 class Manual(CommonMap):
     def manual(self):
+        title = "需要手动操作"
+        reason = []
+        if self.scene_changed:
+            reason += ["from {}".format(self.last_scene["Name"])]
+        dt = time.time() - self.last_manual
+        if dt > 60:
+            reason += ["dt={:.1f}".format(dt)]
+        reason = ",".join(reason)
+        msg = "当前场景: {}\n({})".format(self.current_scene["Name"], reason)
+
         if self.no_quiet:
             self.go_top()
-            toast.show_toast(
-                "需要手动操作",
-                "当前场景: %s" % self.current_scene["Name"],
-                2000,
-            )
+            toast.show_toast(title, msg, 2000, threaded=True)
             return
 
-        res = toast.show_toast(
-            "需要手动操作",
-            "当前场景: %s" % self.current_scene["Name"],
-            5000,
-        )
+        res = toast.show_toast(title, msg, 5000)
         if res == "SHOW":
             self.go_top()
 
