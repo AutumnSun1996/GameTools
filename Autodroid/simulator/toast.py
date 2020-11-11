@@ -1,7 +1,8 @@
 import tkinter as tk
+import threading
 
 
-def show_toast(title, message, timeout=2000):
+def _show_toast(title, message, timeout=2000):
     ret = ["TIMEOUT"]
     root = tk.Tk()
     root.config(background="black")
@@ -33,3 +34,12 @@ def show_toast(title, message, timeout=2000):
 
     root.mainloop()
     return ret[0]
+
+
+def show_toast(title, message, timeout=2000, threaded=False):
+    if threaded:
+        t = threading.Thread(target=_show_toast, args=(title, message, timeout))
+        t.start()
+        return t
+    else:
+        return _show_toast(title, message, timeout)
