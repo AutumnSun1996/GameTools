@@ -1,0 +1,7 @@
+pyhocon
+pywin32
+concurrent_log_handler
+opencv-python
+piexif
+shapely
+retry

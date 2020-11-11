@@ -18,6 +18,7 @@ class AzurLaneControl(SimulatorControl):
     """碧蓝航线通用控制
     """
 
+    no_quiet = False
     section = "AzurLane"
     scene_check_max_repeat = 10
     status_path = "%s/data/fightStatus.json" % section
@@ -193,7 +194,8 @@ class AzurLaneControl(SimulatorControl):
                 status["VirtualFightIndex"] + status["TrueFightIndex"]
             )
         except FileNotFoundError:
-            status = {"VirtualFightIndex": 0, "TrueFightIndex": 0, "FightIndex": 0}
+            status = {"VirtualFightIndex": 0,
+                      "TrueFightIndex": 0, "FightIndex": 0}
         return status
 
     def inc_fight_index(self, inc=1):
