@@ -103,6 +103,7 @@ COMMANDER:
   Offset: [0, 0]
   Size: [300, 45]
   Type: Static
+  MaxDiff: 0.01
 Loading:
   Name: "Loading"
   MainSize: [1280, 720]
