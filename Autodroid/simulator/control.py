@@ -93,6 +93,7 @@ class SimulatorControl:
         "Actions": [{"Type": "Wait", "Time": 1}],
     }
     section = "Main"
+    no_quiet = False
     scene_check_max_repeat = 5
 
     def __init__(self, map_name, extra_property=None):
