@@ -97,7 +97,7 @@
   Actions:
   - {Target: retire, Type: InnerCall}
   - {Time: 1, Type: Wait}
-  Condition: [选择退役角色]
+  Condition: [一键退役]
   Name: 退役
 加载中:
   Actions:
