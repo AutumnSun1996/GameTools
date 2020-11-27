@@ -304,9 +304,8 @@ class SimulatorControl:
 
         wait 为等待资源出现的时间
         """
-        if wait:
-            if not self.wait_resource(name, 1, wait):
-                return
+        if wait and not self.wait_resource(name, 1, wait):
+            return
         res = self.resources[name]
         logger.info("Click at <%s> resource: %s", res["Type"], name)
         if res["Type"] == "Static":
