@@ -48,6 +48,7 @@ COMMANDER:
   Offset: [1147, 652]
   Size: [116, 54]
   Type: Static
+  MaxDiff: 0.005
 进入地图-立刻前往:
   Image: 立刻前往.png
   MainSize: [1280, 720]
@@ -196,9 +197,8 @@ Loading:
   Size: [140, 24]
   Type: MultiStatic
 退役-确定:
-  Image: 确定-蓝.png
+  Image: 确定.png
   MainSize: [1280, 720]
-  Size: [174, 60]
   Name: 退役-确定
   Type: Dynamic
   SearchArea:
