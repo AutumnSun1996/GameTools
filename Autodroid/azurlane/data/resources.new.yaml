@@ -103,7 +103,7 @@ COMMANDER:
   Offset: [0, 0]
   Size: [300, 45]
   Type: Static
-  MaxDiff: 0.01
+  MaxDiff: 0.05
 Loading:
   Name: "Loading"
   MainSize: [1280, 720]
@@ -155,10 +155,16 @@ Loading:
 船坞已满-整理:
   Image: 船坞已满-整理.png
   MainSize: [1280, 720]
-  Offset: [353, 481]
+  Offset: [355, 482]
   Name: 船坞已满-整理
   Type: Static
   MaxDiff: 0.02
+一键退役:
+  Image: 一键退役.png
+  MainSize: [1280, 720]
+  Name: 一键退役
+  Offset: [650, 640]
+  Type: Static
 选择退役角色:
   Image: 选择退役角色.png
   MainSize: [1280, 720]

@@ -15,8 +15,7 @@ from ocr.baidu_ocr import ocr, contact_images
 
 
 class AzurLaneControl(SimulatorControl):
-    """碧蓝航线通用控制
-    """
+    """碧蓝航线通用控制"""
 
     no_quiet = False
     section = "AzurLane"
@@ -194,8 +193,7 @@ class AzurLaneControl(SimulatorControl):
                 status["VirtualFightIndex"] + status["TrueFightIndex"]
             )
         except FileNotFoundError:
-            status = {"VirtualFightIndex": 0,
-                      "TrueFightIndex": 0, "FightIndex": 0}
+            status = {"VirtualFightIndex": 0, "TrueFightIndex": 0, "FightIndex": 0}
         return status
 
     def inc_fight_index(self, inc=1):
@@ -266,46 +264,27 @@ class AzurLaneControl(SimulatorControl):
     def retire(self):
         """执行退役操作"""
         self.make_screen_shot()
-        # 选择降序显示
-        # if self.resource_in_screen("降序"):
-        #     logger.debug("切换倒序显示")
-        #     self.click_at_resource("降序")
-        #     time.sleep(1)
-        waiting = 1
-        targets = self.select_ships()
-        if not targets:
-            self.critical("自动退役失败")
-        while targets:
-            logger.info("退役舰娘*%d", len(targets))
-            for rect in targets:
-                rand_click(self.hwnd, rect)
-                time.sleep(0.3)
-            time.sleep(0.5)
-            while self.scene_match_check("退役", True):
-                logger.info("In Scene 退役")
-                if self.search_resource("退役-确定"):
-                    logger.info("found 退役-确定, click 退役-确定")
-                    self.click_at_resource("退役-确定")
-                    break
-                self.wait(0.5)
-            logger.info("Leave Scene 退役")
-            time.sleep(0.5)
-            while not self.scene_match_check("退役", True):
-                logger.info("Not in scene 退役")
-                if self.resource_in_screen("退役-确定"):
-                    logger.info("found 退役-确定, click 退役-确定")
-                    self.click_at_resource("退役-确定")
-                elif self.resource_in_screen("获得道具"):
-                    logger.info("found 获得道具, click 退役-右下角")
-                    self.click_at_resource("退役-右下角")
-                self.wait(1)
-            logger.info("Re-enter Scene 退役")
-            targets = self.select_ships()
+        suc = 0
+        while True:
+            self.click_at_resource("一键退役")
+            self.wait(0.5)
+            if self.resource_in_screen("一键退役"):
+                break
+            suc += 1
+            while not self.resource_in_screen("一键退役"):
+                for name in ["退役-确定", "获得道具"]:
+                    if self.resource_in_screen(name):
+                        logger.info("Click %s", name)
+                        self.click_at_resource(name)
+                        self.wait(0.5)
+                        break
 
-        time.sleep(waiting)
+        if not suc:
+            self.critical("自动退役失败")
+        self.wait(1)
         logger.debug("返回之前界面")
         self.click_at_resource("退役-取消", True)
-        time.sleep(3)
+        self.wait(3)
 
 
 if __name__ == "__main__":
