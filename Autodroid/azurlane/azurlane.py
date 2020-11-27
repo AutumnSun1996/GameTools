@@ -282,6 +282,7 @@ class AzurLaneControl(SimulatorControl):
     def retire(self):
         """执行退役操作"""
         self.make_screen_shot()
+        click_remap = {"获得道具": "退役-右下角"}
         suc = 0
         while True:
             self.click_at_resource("一键退役")
@@ -300,8 +301,9 @@ class AzurLaneControl(SimulatorControl):
                     res = self.wait_for_confirm(2)
 
                 if res:
-                    logger.info("Click %s", res)
-                    self.click_at_resource(res)
+                    target = click_remap.get(res, res)
+                    logger.info("Click %s for %s", target, res)
+                    self.click_at_resource(target)
                     self.wait(1)
                 else:
                     self.wait(1)
