@@ -165,6 +165,7 @@ Loading:
   Name: 一键退役
   Offset: [650, 640]
   Type: Static
+  MaxDiff: 0.005
 选择退役角色:
   Image: 选择退役角色.png
   MainSize: [1280, 720]
