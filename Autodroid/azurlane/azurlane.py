@@ -261,23 +261,38 @@ class AzurLaneControl(SimulatorControl):
                 logger.info("select_ship: Skip %s", names[idx])
         return results[:10]
 
+    def wait_for_any_resource(self, names, timeout=5, interval=0.5):
+        """等待资源出现在画面内"""
+        due = time.time() + timeout
+        while time.time() < due:
+            self.make_screen_shot()
+            for name in names:
+                if self.resource_in_screen(name):
+                    return name
+            time.sleep(interval)
+
+        self.error("Can't find resource %s" % names)
+        return None
+
     def retire(self):
         """执行退役操作"""
         self.make_screen_shot()
         suc = 0
         while True:
             self.click_at_resource("一键退役")
-            self.wait(0.5)
-            if self.resource_in_screen("一键退役"):
+            time.sleep(1)
+            self.make_screen_shot()
+            # 未跳转到确认场景
+            if not self.wait_for_any_resource(["退役-确定"], timeout=2):
                 break
             suc += 1
-            while not self.resource_in_screen("一键退役"):
-                for name in ["退役-确定", "获得道具"]:
-                    if self.resource_in_screen(name):
-                        logger.info("Click %s", name)
-                        self.click_at_resource(name)
-                        self.wait(0.5)
-                        break
+            while True:
+                res = self.wait_for_any_resource(["退役-确定", "获得道具"], timeout=3)
+                if res:
+                    logger.info("Click %s", res)
+                    self.click_at_resource(res)
+                else:
+                    break
 
         if not suc:
             self.critical("自动退役失败")
