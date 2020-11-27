@@ -212,8 +212,7 @@ Loading:
 退役-取消:
   Image: 取消.png
   MainSize: [1280, 720]
-  Size: [174, 60]
-  Offset: [773, 640]
+  Offset: [853, 640]
   Name: 退役-取消
   Type: Static
 伏击-规避:
