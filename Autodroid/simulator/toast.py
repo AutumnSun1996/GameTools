@@ -1,7 +1,20 @@
 import tkinter as tk
 import threading
 import win32api
+import win32con
+from ctypes import Structure, c_long, windll, byref
 
+
+class RECT(Structure):
+    _fields_ = [
+        ('left', c_long),
+        ('top', c_long),
+        ('right', c_long),
+        ('bottom', c_long),
+    ]
+
+screen = RECT()
+windll.user32.SystemParametersInfoW(win32con.SPI_GETWORKAREA, 0, byref(screen), 0)
 
 def _show_toast(title, message, timeout=2000):
     ret = ["TIMEOUT"]
@@ -10,8 +23,8 @@ def _show_toast(title, message, timeout=2000):
     root.attributes("-topmost", True)
     # root.wm_attributes("-transparentcolor", "black")
     root.wm_overrideredirect(True)
-    w, h = (300, 120)
-    root.geometry("{}x{}+{}+{}".format(w, h, 1920 - 10 - w, 1080 - 50 - h))
+    w, h = 300, 120
+    root.geometry("{}x{}+{}+{}".format(w, h, screen.right - 10 - w, screen.bottom - 10 - h))
 
     def onclick(evt):
         if evt.x < 150:
@@ -46,3 +59,6 @@ def show_toast(title, message, timeout=2000, beep=True, threaded=False):
         return t
     else:
         return _show_toast(title, message, timeout)
+
+if __name__ == "__main__":
+    show_toast("测试", "测试信息")
