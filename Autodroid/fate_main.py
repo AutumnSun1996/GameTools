@@ -39,7 +39,9 @@ def make_stop_checker(args):
 def main(args):
     config_file = os.path.join("fgo", "maps", args.map_name + ".conf")
     info = hocon.load(config_file)
-    logger.warning("Target: %s %s %s", args.map_name, info.get("Name"), info.get("Description"))
+    logger.warning(
+        "Target: %s %s %s", args.map_name, info.get("Name"), info.get("Description")
+    )
     if "MapClass" in info:
         import importlib
 
@@ -76,8 +78,8 @@ def parse_end_in(text):
 if __name__ == "__main__":
     # help(conflictsparse.conflictsparse)
     parser = argparse.ArgumentParser()
-    parser.add_argument("section", nargs="?", default="FGO", help="模拟器ID")
     parser.add_argument("map_name", nargs="?", default="通用配置", help="地图名")
+    parser.add_argument("section", nargs="?", default="FGO", help="模拟器ID")
     parser.add_argument(
         "--add_ap", "-ap", type=int, default=None, help="补充AP次数。默认为0，不补充"
     )
@@ -98,12 +100,4 @@ if __name__ == "__main__":
     if args.add_ap is None and args.end_in is None and args.fight_count is None:
         args.add_ap = 0
     logger.warning("Start Args: %s", args)
-    # fgo = FGOSimple("刷材料")
-    # fgo = FGOSimple("主号换人礼装速刷")
-    # fgo = FGOSimple("主号赝作速刷")
-    # main("主号剧情推进")
-    # main("情人节/大号弓本")
     main(args)
-    # main("情人节/大号术本")
-    # fgo = FGOSimple("主号赝作速刷-术本")
-    # fgo = FGOSimple("主号赝作速刷-杀本")
