@@ -184,6 +184,15 @@ def split_bgra(bgra):
     return bgr, mask
 
 
+def get_all_match_backup(image, needle):
+    if config.getboolean("Device", "UseTorch"):
+        from utils import torch_imgdiff
+
+        return torch_imgdiff.get_all_match(image, needle)
+
+    return get_all_match(image + 1, needle + 1)
+
+
 def get_all_match(image, needle):
     """在image中搜索needle"""
     if len(needle.shape) == 3 and needle.shape[2] == 4:
@@ -202,7 +211,6 @@ def get_all_match(image, needle):
         )
         import pickle
         import datetime
-        from utils import torch_imgdiff
 
         with open(
             "shots/MatchError@{:%Y-%m-%d_%H%M%S}.pkl".format(datetime.datetime.now()),
@@ -210,7 +218,7 @@ def get_all_match(image, needle):
         ) as f:
             pickle.dump({"image": image, "needle": needle, "match": match}, f)
 
-        return torch_imgdiff.get_all_match(image, needle)
+        return get_all_match_backup(image, needle)
     return match
 
 
