@@ -42,3 +42,6 @@ if not os.path.exists(name):
     raise FileNotFoundError("No Config File For This Device %s!" % device_id)
 
 config.read(name, encoding="UTF-8")
+
+if __name__ == "__main__":
+    print(device_id)
