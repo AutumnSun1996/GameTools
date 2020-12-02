@@ -68,15 +68,15 @@
     - {Target: 自律OFF, Type: Click}
     - {Time: 0.6, Type: Wait}
     - {Target: 战斗准备-左侧空白区域, Type: Click}
-    - {Time: 0.6, Type: Wait}
-    - {Target: 呼叫潜艇OFF, Type: Click}
-  - Condition:
-    - $method
-    - resource_in_screen
-    - 呼叫潜艇OFF
-    Type: MultiActions
-    Actions:
-    - {Target: 呼叫潜艇OFF, Type: Click}
+    # - {Time: 0.6, Type: Wait}
+    # - {Target: 呼叫潜艇OFF, Type: Click}
+  # - Condition:
+  #   - $method
+  #   - resource_in_screen
+  #   - 呼叫潜艇OFF
+  #   Type: MultiActions
+  #   Actions:
+  #   - {Target: 呼叫潜艇OFF, Type: Click}
   - {Time: 2, Type: Wait}
   - {Target: 出击, Type: Click}
   - {Time: 1, Type: Wait}
