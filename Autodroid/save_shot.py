@@ -5,8 +5,10 @@ from datetime import datetime
 import cv2.cv2 as cv
 
 from simulator import image_tools, win32_tools
+from config_loader import config
 
 logging.basicConfig(level="DEBUG")
+basedir = config.get("Path", "StorageDir")
 
 
 def main():
@@ -21,7 +23,7 @@ def main():
     hwnd = win32_tools.get_window_hwnd(args.title)
     img = image_tools.get_window_shot(hwnd)
     path = os.path.join(
-        args.save_dir, "Shot-{:%Y-%m-%d_%H%M%S}.jpg".format(datetime.now())
+        basedir, args.save_dir, "Shot-{:%Y-%m-%d_%H%M%S}.jpg".format(datetime.now())
     )
 
     window_name = "Screen Shot Preview"

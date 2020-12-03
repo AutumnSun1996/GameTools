@@ -54,6 +54,7 @@ def save_jpeg(
     if not path.endswith((".jpg", ".jpeg")):
         path = path + ".jpg"
     image = Image.fromarray(cv.cvtColor(image, cv.COLOR_BGR2RGB))
+    path = os.path.join(config.get("Path", "StorageDir"), path)
     dirname = os.path.dirname(path)
     if not os.path.exists(dirname):
         os.makedirs(dirname)
