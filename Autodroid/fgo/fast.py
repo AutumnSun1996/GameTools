@@ -86,6 +86,9 @@ class AssistInfo(dict):
 
 
 class FGOSimple(FGOBase):
+    def parse_fight_condition(self, condition):
+        return parse_condition(condition, self, self.combat_info.__getitem__)
+
     def check_assist(self):
         self.make_screen_shot()
         _, pos = self.search_resource("助战从者定位")
@@ -109,9 +112,7 @@ class FGOSimple(FGOBase):
             if self.stop:
                 return
             self.make_screen_shot()
-            if parse_condition(
-                item.get("Condition", True), self, self.combat_info.__getitem__
-            ):
+            if self.parse_fight_condition(item.get("Condition", True)):
                 logger.info("Skill Strategy Passed: %s", item)
                 self.do_actions(item["Actions"])
             else:
@@ -188,7 +189,7 @@ class FGOSimple(FGOBase):
 
     def choose_card_idx(self, card_names, order):
         """
-        根据order中的顺序, 在card_names中搜索第一个匹配的指令卡, 
+        根据order中的顺序, 在card_names中搜索第一个匹配的指令卡,
         返回其下标
         """
         for item in order:
@@ -199,7 +200,7 @@ class FGOSimple(FGOBase):
 
     def choose_card(self, card_names, card_rects, order):
         """
-        根据order中的顺序, 在card_names中搜索第一个匹配的指令卡, 
+        根据order中的顺序, 在card_names中搜索第一个匹配的指令卡,
         从选项中删除该卡, 返回该卡的名称、坐标
         """
         idx = self.choose_card_idx(card_names, order)
@@ -219,8 +220,8 @@ class FGOSimple(FGOBase):
 
         for check in self.data["Strategy"]["UseNP"]:
             idx = check["Target"]
-            if self.combat_info["NP%d" % idx] >= 100 and parse_condition(
-                check["Condition"], self, self.combat_info.__getitem__
+            if self.combat_info["NP%d" % idx] >= 100 and self.parse_fight_condition(
+                check["Condition"]
             ):
                 name = "宝具%s" % (check["Target"])
                 logger.info(
@@ -249,9 +250,7 @@ class FGOSimple(FGOBase):
         found_names = card_names.copy()
         card_choice = []
         for card_choice in self.data["Strategy"]["CardChoice"]:
-            if parse_condition(
-                card_choice["Condition"], self, self.combat_info.__getitem__
-            ):
+            if self.parse_fight_condition(card_choice["Condition"]):
                 break
         logger.info("CardChoice Strategy=%s", card_choice)
         choice += [None, None, None]
@@ -261,7 +260,7 @@ class FGOSimple(FGOBase):
                 name, rect = self.choose_card(card_names, card_rects, order)
                 choice[idx] = rect
                 choice_names[idx] = name
-        
+
         logger.info("Found Cards %s", found_names)
         logger.info("Choose Cards %s", choice_names[:3])
 
