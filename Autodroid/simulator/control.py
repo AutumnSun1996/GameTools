@@ -20,7 +20,6 @@ import win32api
 
 from config_loader import config, set_logging_dir
 from .image_tools import (
-    get_window_shot,
     cv_crop,
     get_diff,
     get_match,
@@ -31,12 +30,32 @@ from .image_tools import (
     update_resource,
     save_jpeg,
 )
-from .win32_tools import rand_click, get_window_hwnd, make_foreground, heartbeat
+from .win32_tools import (
+    rand_click,
+    get_window_hwnd,
+    make_foreground,
+    heartbeat,
+    get_window_shot,
+)
+from .adb_tools import get_screencap as get_window_shot_adb
 from . import toast
 
 import logging
 
 logger = logging.getLogger(__name__)
+
+win32cache = None
+
+
+def get_screenshot(control):
+    global win32cache
+    data = get_window_shot(control.hwnd)
+    if win32cache is not None and np.alltrue(data == win32cache):
+        logger.warning("win32api获取到的截图与之前相同，使用adb截图代替")
+        data = get_window_shot_adb(control.adb_name)
+    else:
+        win32cache = data
+    return data
 
 
 def parse_condition(cond, obj, extra=None):
@@ -98,6 +117,7 @@ class SimulatorControl:
 
     def __init__(self, map_name, extra_property=None):
         self.hwnd = get_window_hwnd(config.get(self.section, "WindowTitle"))
+        self.adb_name = config.get(self.section, "AdbName")
         set_logging_dir(os.path.join(self.section, "logs"))
         self.map_name = map_name
         self.data = load_map(self.map_name, self.section, extra_property)
@@ -157,7 +177,7 @@ class SimulatorControl:
     def make_screen_shot(self):
         """获取窗口截图"""
         self.resource_pos_buffer = {}
-        self.screen = get_window_shot(self.hwnd)
+        self.screen = get_screenshot(self)
         return self.screen
 
     def search_resource(self, info, image=None, index=None):
@@ -650,7 +670,7 @@ class SimulatorControl:
         """判断当前场景, 执行对应的操作"""
         self.actions_done = False
         scene = self.update_current_scene()
-        heartbeat()
+        # heartbeat()
         now = time.time()
         if self.scene_changed:
             nochange = ""
