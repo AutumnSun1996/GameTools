@@ -26,6 +26,9 @@ def get_screencap(info):
         devices[info] = init_device(info)
     device = devices[info]
     data = device.shell("screencap -p", decode=False)
+    # 修复换行符转换导致的数据异常
+    if data.startswith(b'\x89PNG\r\r\n'):
+        data = data.replace(b'\r\n', b'\n')
     img = cv.imdecode(np.frombuffer(data, dtype="uint8"), cv.IMREAD_UNCHANGED)
     img = cv.cvtColor(img, cv.COLOR_BGRA2BGR)
     return img
@@ -66,5 +69,6 @@ def drag(x0, y0, x1, y1):
 
 
 if __name__ == "__main__":
-    img = screen_record()
-    click_at(50, 200)
+    init_device("FGO")
+    img = get_screencap("FGO")
+    print(img)
