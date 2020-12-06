@@ -65,7 +65,7 @@ UpdateGameStatus(Status){
 #IfWinActive Warframe
 PrintScreen::
 ShowTip("ScreenShot")
-RunWait, pythonw screenAnalyse.py fromAHK, .\scripts
+RunWait, pythonw screenAnalyse.py fromAHK, ..\scripts
 Return
 
 ^t::

@@ -1,8 +1,34 @@
 import os
 import time
-import cv2 as cv
+import re
+import numpy as np
+import cv2.cv2 as cv
+from adb_shell.adb_device import AdbDeviceTcp, AdbDeviceUsb
+from config_loader import config
 
-ADB_PATH = "D:\\Software\\adb\\adb.exe"
+ADB_PATH = config.get("Path", "ADB")
+
+devices = {}
+
+
+def init_device(name):
+    lines = os.popen("{} devices -l".format(ADB_PATH)).read()
+    mds = re.findall(r"(?m)^([\d\.]+):(\d+).+?model:(\w+) ", lines)
+    mds = {name: (ip, int(port)) for ip, port, name in mds}
+    ip, port = mds[name]
+    device = AdbDeviceTcp(ip, port)
+    device.connect()
+    return device
+
+
+def get_screencap(info):
+    if info not in devices:
+        devices[info] = init_device(info)
+    device = devices[info]
+    data = device.shell("screencap -p", decode=False)
+    img = cv.imdecode(np.frombuffer(data, dtype="uint8"), cv.IMREAD_UNCHANGED)
+    img = cv.cvtColor(img, cv.COLOR_BGRA2BGR)
+    return img
 
 
 def screen_record():

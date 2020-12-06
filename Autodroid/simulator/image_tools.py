@@ -11,9 +11,6 @@ from PIL import Image, ImageFont, ImageDraw
 import requests
 import cv2.cv2 as cv
 import numpy as np
-import win32con
-import win32gui
-import win32ui
 
 from config_loader import config
 from config import hocon
@@ -258,59 +255,6 @@ def get_diff(a, b):
     return get_match(a, b)[0]
 
 
-def detect_window_size(hwnd):
-    """获取窗口的大小信息"""
-    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
-    dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
-    w = right - left
-    h = bottom - top
-    if dpi != 96:
-        w = int(w * dpi / 96)
-        h = int(h * dpi / 96)
-    return w, h
-
-
-def get_window_shot(hwnd):
-    # 对后台应用程序截图，程序窗口可以被覆盖，但如果最小化后只能截取到标题栏、菜单栏等。
-
-    # 使用自定义的窗口边缘和大小设置
-    dx = config.getint("Device", "EdgeOffsetX")
-    dy = config.getint("Device", "EdgeOffsetY")
-    w = config.getint("Device", "MainWidth")
-    h = config.getint("Device", "MainHeight")
-    window_w, window_h = detect_window_size(hwnd)
-    if dx + w > window_w or dy + h > window_h:
-        raise ValueError("截图区域超出窗口! 请检查配置文件")
-    # logger.debug("截图: %dx%d at %dx%d", w, h, dx, dy)
-
-    # 返回句柄窗口的设备环境、覆盖整个窗口，包括非客户区，标题栏，菜单，边框
-    hwndDC = win32gui.GetWindowDC(hwnd)
-    # 创建设备描述表
-    mfcDC = win32ui.CreateDCFromHandle(hwndDC)
-    # 创建内存设备描述表
-    saveDC = mfcDC.CreateCompatibleDC()
-    # 创建位图对象
-    saveBitMap = win32ui.CreateBitmap()
-    saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
-    saveDC.SelectObject(saveBitMap)
-    # 截图至内存设备描述表
-    saveDC.BitBlt((0, 0), (w, h), mfcDC, (dx, dy), win32con.SRCCOPY)
-    # 获取位图信息
-    bmpinfo = saveBitMap.GetInfo()
-    bmpdata = saveBitMap.GetBitmapBits(True)
-    # 生成图像
-    image_data = np.frombuffer(bmpdata, "uint8")
-    image_data = image_data.reshape((bmpinfo["bmHeight"], bmpinfo["bmWidth"], 4))
-    image_data = cv.cvtColor(image_data, cv.COLOR_BGRA2BGR)
-    # 内存释放
-    win32gui.DeleteObject(saveBitMap.GetHandle())
-    saveDC.DeleteDC()
-    mfcDC.DeleteDC()
-    win32gui.ReleaseDC(hwnd, hwndDC)
-
-    return image_data
-
-
 def make_text(text, size, color="#FFFFFF", background="#000000"):
     font = ImageFont.truetype("resources/FGO-Main-Font.ttf", size)
     # 根据文字大小创建图片
@@ -361,7 +305,7 @@ if __name__ == "__main__":
     logger.setLevel("DEBUG")
     nox_hwnd = win32_tools.get_window_hwnd("碧蓝航线模拟器")
     print(nox_hwnd)
-    screen = get_window_shot(nox_hwnd)
+    screen = win32_tools.get_window_shot(nox_hwnd)
     cv_save(
         "images/shot-{:%Y-%m-%d_%H%M%S}.png".format(datetime.datetime.now()), screen
     )

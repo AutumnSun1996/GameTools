@@ -152,15 +152,6 @@ def get_shot(hwnd, box=None):
     return image_data
 
 
-def get_window_shot(hwnd, box=None):
-    # logger.debug("截图: %dx%d at %dx%d", w, h, dx, dy)
-    if box is None:
-        box = [8, 31, 1920, 1017]
-    else:
-        box = np.add(box, [8, 31, 0, 0])
-    return get_shot(hwnd, box)
-
-
 def make_text(text, size, color="#FFFFFF", background="#000000"):
     font = ImageFont.truetype('resources/FGO-Main-Font.ttf', size)
     # 根据文字大小创建图片
@@ -193,7 +184,7 @@ if __name__ == "__main__":
     import datetime
     hwnd = get_window_hwnd("Warframe")
     print(hwnd)
-    screen = get_window_shot(hwnd)
+    screen = get_shot(hwnd)
     print(sys.argv)
     if not os.path.exists("images"):
         os.makedirs("images")

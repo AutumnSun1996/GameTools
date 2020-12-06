@@ -5,9 +5,11 @@ import ctypes
 import pywintypes
 import win32api
 import win32gui
+import win32ui
 import win32com.client
 import numpy as np
-
+import cv2.cv2 as cv
+import numpy as np
 from config_loader import config
 
 import logging
@@ -27,8 +29,7 @@ def click_at(hwnd, x, y, hold=0):
     # 向后台窗口发送单击事件，(x, y)为相对于窗口左上角的位置
     x, y = rescale_point(hwnd, (x, y))
     pos = win32api.MAKELONG(int(x), int(y))
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN,
-                         win32con.MK_LBUTTON, pos)
+    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, pos)
     time.sleep(hold)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, pos)
 
@@ -56,8 +57,7 @@ def rand_drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(
-        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(
-            *start)
+        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(*start)
     )
     time.sleep(start_delay)
 
@@ -74,8 +74,7 @@ def rand_drag(hwnd, start, end, step=100, start_delay=0):
     for point in points:
         time.sleep(0.05)
         target = win32api.MAKELONG(*[int(n) for n in rand_point(point, delta)])
-        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
-                             win32con.MK_LBUTTON, target)
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, target)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
@@ -84,8 +83,7 @@ def drag(hwnd, start, end, step=100, start_delay=0):
     start = rescale_point(hwnd, start)
     end = rescale_point(hwnd, end)
     win32gui.SendMessage(
-        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(
-            *start)
+        hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, win32api.MAKELONG(*start)
     )
     time.sleep(start_delay)
 
@@ -99,8 +97,7 @@ def drag(hwnd, start, end, step=100, start_delay=0):
     for point in points:
         time.sleep(0.05)
         target = win32api.MAKELONG(*point)
-        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE,
-                             win32con.MK_LBUTTON, target)
+        win32gui.SendMessage(hwnd, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, target)
     time.sleep(0.1)
     win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, target)
 
@@ -119,8 +116,11 @@ def make_foreground(hwnd, retry=True):
         win32gui.SetWindowPos(
             hwnd,
             win32con.HWND_TOP,
-            0, 0, 0, 0,
-            win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW
+            0,
+            0,
+            0,
+            0,
+            win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW,
         )
     except pywintypes.error as err:
         logger.warning(err)
@@ -134,17 +134,68 @@ def get_window_hwnd(title):
     return win32gui.FindWindow(None, title)
 
 
+def detect_window_size(hwnd):
+    """获取窗口的大小信息"""
+    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    dpi = ctypes.windll.user32.GetDpiForWindow(hwnd)
+    w = right - left
+    h = bottom - top
+    if dpi != 96:
+        w = int(w * dpi / 96)
+        h = int(h * dpi / 96)
+    return w, h
+
+
+def get_window_shot(hwnd):
+    # 对后台应用程序截图，程序窗口可以被覆盖，但如果最小化后只能截取到标题栏、菜单栏等。
+
+    # 使用自定义的窗口边缘和大小设置
+    dx = config.getint("Device", "EdgeOffsetX")
+    dy = config.getint("Device", "EdgeOffsetY")
+    w = config.getint("Device", "MainWidth")
+    h = config.getint("Device", "MainHeight")
+    window_w, window_h = detect_window_size(hwnd)
+    if dx + w > window_w or dy + h > window_h:
+        raise ValueError("截图区域超出窗口! 请检查配置文件")
+    # logger.debug("截图: %dx%d at %dx%d", w, h, dx, dy)
+
+    # 返回句柄窗口的设备环境、覆盖整个窗口，包括非客户区，标题栏，菜单，边框
+    hwndDC = win32gui.GetWindowDC(hwnd)
+    # 创建设备描述表
+    mfcDC = win32ui.CreateDCFromHandle(hwndDC)
+    # 创建内存设备描述表
+    saveDC = mfcDC.CreateCompatibleDC()
+    # 创建位图对象
+    saveBitMap = win32ui.CreateBitmap()
+    saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
+    saveDC.SelectObject(saveBitMap)
+    # 截图至内存设备描述表
+    saveDC.BitBlt((0, 0), (w, h), mfcDC, (dx, dy), win32con.SRCCOPY)
+    # 获取位图信息
+    bmpinfo = saveBitMap.GetInfo()
+    bmpdata = saveBitMap.GetBitmapBits(True)
+    # 生成图像
+    image_data = np.frombuffer(bmpdata, "uint8")
+    image_data = image_data.reshape((bmpinfo["bmHeight"], bmpinfo["bmWidth"], 4))
+    image_data = cv.cvtColor(image_data, cv.COLOR_BGRA2BGR)
+    # 内存释放
+    win32gui.DeleteObject(saveBitMap.GetHandle())
+    saveDC.DeleteDC()
+    mfcDC.DeleteDC()
+    win32gui.ReleaseDC(hwnd, hwndDC)
+
+    return image_data
+
+
 def heartbeat():
     info = win32api.GetLastInputInfo()
     tick = win32api.GetTickCount()
     if tick - info > 30000:
         win32api.keybd_event(win32con.VK_CAPITAL, 0, 0, 0)
-        win32api.keybd_event(win32con.VK_CAPITAL, 0,
-                             win32con.KEYEVENTF_KEYUP, 0)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0, win32con.KEYEVENTF_KEYUP, 0)
         time.sleep(0.1)
         win32api.keybd_event(win32con.VK_CAPITAL, 0, 0, 0)
-        win32api.keybd_event(win32con.VK_CAPITAL, 0,
-                             win32con.KEYEVENTF_KEYUP, 0)
+        win32api.keybd_event(win32con.VK_CAPITAL, 0, win32con.KEYEVENTF_KEYUP, 0)
 
 
 if __name__ == "__main__":
