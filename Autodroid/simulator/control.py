@@ -286,6 +286,9 @@ class SimulatorControl:
     def wait(self, dt):
         """等待固定时间"""
         # TODO: 加入随机延时
+        if self.stop:
+            # 已结束时不再进行等待
+            return
         time.sleep(dt)
 
     def wait_resource(self, name, interval=1, repeat=5):
