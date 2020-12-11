@@ -21,7 +21,7 @@ def main():
         args.save_dir = args.title + "/shots"
 
     hwnd = win32_tools.get_window_hwnd(args.title)
-    img = image_tools.get_window_shot(hwnd)
+    img = win32_tools.get_window_shot(hwnd)
     path = os.path.join(
         basedir, args.save_dir, "Shot-{:%Y-%m-%d_%H%M%S}.jpg".format(datetime.now())
     )
