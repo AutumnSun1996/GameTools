@@ -37,7 +37,7 @@ text = "\n".join(
 device_id = hashlib.md5(text.encode()).hexdigest()
 logger.info("Load Device %s:\n%s", device_id, text)
 
-name = "config/%s.conf" % device_id
+name = "config/device/%s.conf" % device_id
 if not os.path.exists(name):
     raise FileNotFoundError("No Config File For This Device %s!" % device_id)
 
