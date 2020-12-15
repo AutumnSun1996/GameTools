@@ -293,3 +293,19 @@ SendStroke(key, CtrlFirst)  {
     Return Used
 }
 
+#IfWinActive Warframe
+; 守望者-自动换弹模式
+^s::
+    if (VectisMode) {
+        VectisMode := 0
+    } else {
+        VectisMode := 1
+    }
+    ShowTip("VectisMode " . VectisMode)
+Return
+
+#If WinActive("Warframe") and VectisMode
+LButton::
+Send, {LButton}
+Send, r
+Return
