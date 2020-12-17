@@ -220,8 +220,6 @@ Loop, 10
 }
 Return
 
-*XButton2::MButton
-
 *WheelUp::
 ; 跳跃动作
 If (!LastWheelUp){
@@ -293,7 +291,7 @@ SendStroke(key, CtrlFirst)  {
     Return Used
 }
 
-#IfWinActive Warframe
+#If (GameStatus = "In Mission") or (GameStatus = "In Game")
 ; 守望者-自动换弹模式
 ^s::
     if (VectisMode) {
@@ -304,8 +302,33 @@ SendStroke(key, CtrlFirst)  {
     ShowTip("VectisMode " . VectisMode)
 Return
 
+; 战刃重击模式
+^z::
+    if (GlaiveMode) {
+        GlaiveMode := 0
+    } else {
+        GlaiveMode := 1
+    }
+    ShowTip("GlaiveMode " . GlaiveMode)
+Return
+
 #If WinActive("Warframe") and VectisMode
 LButton::
 Send, {LButton}
-Send, r
+If(VectisMode){
+    Send, r
+}
+Return
+
+#If (GameStatus = "In Mission") or (GameStatus = "In Game")
+*XButton2::
+Send, {MButton}
+If(GlaiveMode){
+    Sleep, 50
+    Send, {e Up}
+    ; 等待战刃返回
+    Sleep, 50
+    ; 再次按E, 连续投掷
+    Send, {e Down}
+}
 Return
