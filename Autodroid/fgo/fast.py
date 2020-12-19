@@ -130,10 +130,10 @@ class FGOSimple(FGOBase):
         return False
 
     def use_skills(self, *skills, check=True):
+        self.make_screen_shot()
         for skill in skills:
             if self.stop:
                 return
-            self.make_screen_shot()
             name = "SkillCheck<{0}-{1}>".format(*skill)
             self.combat_info[name] = self.combat_info["Turn"]
             if skill[0] == 0:
@@ -171,8 +171,9 @@ class FGOSimple(FGOBase):
                 self.wait(1)
                 self.click_at_resource("进行更替")
                 self.wait(3)
+                self.make_screen_shot()
 
-            self.make_screen_shot()
+            # self.make_screen_shot()
             self.wait_till_scene("选择技能", 0.5, 20)
             self.wait(0.5)
 
