@@ -39,7 +39,7 @@ COMMANDER:
   MainSize: [1280, 720]
   Name: 舰队选择-立刻前往
   Size: [202, 64]
-  Offset: [980, 573]
+  Offset: [962, 576]
   Type: Static
 迎击:
   Image: 迎击.png
