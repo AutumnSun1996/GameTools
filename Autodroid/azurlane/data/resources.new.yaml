@@ -54,7 +54,7 @@ COMMANDER:
   MainSize: [1280, 720]
   Name: 进入地图-立刻前往
   Size: [202, 64]
-  Offset: [962, 576]
+  Offset: [852, 486]
   Type: Static
 确认经验:
   Image: 确定.jpg
@@ -360,6 +360,7 @@ Home:
   Offset: [925, 394]
   Size: [120, 50]
   Type: Static
+  MaxDiff: 0.01
 超稀有:
   Image: 超稀有.png
   MainSize: [1280, 720]
@@ -367,6 +368,7 @@ Home:
   Offset: [925, 394]
   Size: [150, 50]
   Type: Static
+  MaxDiff: 0.02
 New:
   Name: New
   Image: NEW.png
