@@ -56,19 +56,19 @@ Cards:
 从者1-NP:
   MainSize: [1280, 720]
   Name: 从者1-NP
-  Offset: [162, 676]
+  Offset: [162, 680]
   Size: [130, 3]
   Type: Static
 从者2-NP:
   MainSize: [1280, 720]
   Name: 从者2-NP
-  Offset: [480, 676]
+  Offset: [480, 680]
   Size: [130, 3]
   Type: Static
 从者3-NP:
   MainSize: [1280, 720]
   Name: 从者3-NP
-  Offset: [798, 676]
+  Offset: [798, 680]
   Size: [130, 3]
   Type: Static
 从者HP:
