@@ -76,7 +76,9 @@ def save_jpeg(
     if keywords is not None:
         exif_dict["0th"][piexif.ImageIFD.XPKeywords] = get_xp_info(keywords)
     exif_bytes = piexif.dump(exif_dict)
+    path = os.path.abspath(path)
     image.save(path, "jpeg", exif=exif_bytes)
+    return path
 
 
 def rescale_item(item, rx, ry):

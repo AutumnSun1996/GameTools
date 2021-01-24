@@ -458,8 +458,8 @@ class SimulatorControl:
         )
         if "keywords" not in extra_kwargs:
             extra_kwargs["keywords"] = self.current_scene_name
-        save_jpeg(name, image, now=now, **extra_kwargs)
-        logger.info("%s saved", name)
+        path = save_jpeg(name, image, now=now, **extra_kwargs)
+        logger.info("%s saved", path)
 
     def critical(self, message=None, title="", action=None):
         """致命错误提醒"""
@@ -705,5 +705,4 @@ if __name__ == "__main__":
     logger.setLevel("DEBUG")
     controler = SimulatorControl()
     print(controler.update_current_scene())
-    # print(controler.select_ships())
     # print(controler.retire())
