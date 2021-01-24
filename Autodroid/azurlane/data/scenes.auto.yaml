@@ -1,0 +1,82 @@
+外部地图:
+  Actions:
+  - {Target: manual, Type: InnerCall}
+  - {Time: 2, Type: Wait}
+  Condition: [外部地图-出击]
+  Name: 外部地图
+  Next: [外部地图, 进入地图确认, 自动战斗中]
+进入地图确认:
+  Actions:
+  - {Target: 进入地图-立刻前往, Type: Click}
+  - {Time: 0.5, Type: Wait}
+  Condition: [进入地图-立刻前往]
+  Name: 进入地图确认
+  Next: [舰队选择, 船坞已满, 进入地图确认]
+舰队选择:
+  Actions:
+  - {Target: mood_detect, Type: InnerCall}
+  - Condition:
+    - $le
+    - - $getitem
+      - - $getattr
+        - [$]
+        - scene_history_count
+      - 舰队选择
+    - 1
+    Time: 4
+    Type: Wait
+    # 首次选择舰队时，加长等待时间
+  - {Target: 舰队选择-立刻前往, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition: [舰队选择-立刻前往]
+  Name: 舰队选择
+信息:
+  Actions:
+  - {Target: 信息-确定, Type: Click}
+  - {Time: 1, Type: Wait}
+  Condition:
+  - $all
+  - - [信息-标题]
+    - [信息-确定]
+  Name: 信息
+  Global: True
+自动战斗中:
+  Actions:
+  - {Time: 5, Type: Wait}
+  Condition: 
+  - $any
+  - - [迎击]
+    - [自律提醒]
+    - [战斗评价]
+    - [获得道具]
+    - [限时]
+    - [暂停]
+    - [精锐]
+    - [超稀有]
+  Name: 自动战斗中
+  Next: [自动战斗中, 外部地图, 船坞已满, 再次前往]
+再次前往:
+  Actions:
+    - {Time: 0.6, Type: Wait}
+    - {Target: save_record, Type: InnerCall}
+    - {Target: 再次前往, Type: Click}
+    - {Time: 0.6, Type: Wait}
+  Condition: [再次前往]
+  Name: 再次前往
+  Next: [自动战斗中, 船坞已满]
+船坞已满:
+  Actions:
+  - {Target: 船坞已满-整理, Type: Click}
+  - {Time: 2, Type: Wait}
+  Condition:
+  - $all
+  - - [船坞已满-整理]
+    - [信息-标题]
+  Name: 船坞已满
+  Next: [退役]
+退役:
+  Actions:
+  - {Target: retire, Type: InnerCall}
+  - {Time: 1, Type: Wait}
+  Condition: [一键退役]
+  Name: 退役

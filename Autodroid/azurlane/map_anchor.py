@@ -78,6 +78,38 @@ class FightMap(AzurLaneControl):
         super().__init__(map_name)
         self._pos_in_screen = None
 
+    def get_fight_status(self):
+        """战斗次数计数"""
+        try:
+            with open(self.status_path, "r") as fl:
+                status = json.load(fl)
+            status["FightIndex"] = (
+                status["VirtualFightIndex"] + status["TrueFightIndex"]
+            )
+        except FileNotFoundError:
+            status = {"VirtualFightIndex": 0, "TrueFightIndex": 0, "FightIndex": 0}
+        return status
+
+    def inc_fight_index(self, inc=1):
+        """增加战斗次数"""
+        status = self.get_fight_status()
+        logger.debug(
+            "增加Fight Index: %d -> %d",
+            status["TrueFightIndex"],
+            status["TrueFightIndex"] + inc,
+        )
+        status["TrueFightIndex"] += inc
+        self.save_fight_status(status)
+
+    def save_fight_status(self, status):
+        """设置战斗次数"""
+        with open(self.status_path, "w") as fl:
+            json.dump(status, fl, ensure_ascii=False)
+
+    def fight(self):
+        """处理战斗内容. 随每个地图变化"""
+        pass
+
     def save_record(self, prefix=None, area=None, **extra_kwargs):
         if "comment" not in extra_kwargs:
             extra_kwargs["comment"] = {}

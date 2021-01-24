@@ -7,7 +7,7 @@ import argparse
 
 import logging
 from config import hocon
-
+from azurlane import load_map
 logger = logging.getLogger(__name__)
 
 
@@ -32,18 +32,7 @@ def make_stop_checker(args):
 
 
 def main(args):
-    config_file = os.path.join("azurlane", "maps", args.map_name + ".conf")
-    info = hocon.load(config_file)
-    if "MapClass" in info:
-        import importlib
-
-        module_path, cls_name = info["MapClass"]
-        m = importlib.import_module(module_path)
-        map_cls = getattr(m, cls_name)
-    else:
-        from azurlane.common_fight import CommonMap as map_cls
-    logger.warning("Use class %r", map_cls)
-    az = map_cls(args.map_name)
+    az = load_map(args.map_name)
     az.no_quiet = args.no_quiet
     try:
         az.main_loop(make_stop_checker(args))

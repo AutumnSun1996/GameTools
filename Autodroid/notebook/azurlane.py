@@ -1,7 +1,7 @@
 from .common import *
 from azurlane.map_anchor import *
 
-from azurlane.fight_event import EventFight as AzurLane
+from azurlane import load_map
 
 const["section"] = "azurlane"
 
@@ -27,7 +27,7 @@ def check_map_anchor(anchor):
 
 
 def init_map(name):
-    const["s"] = AzurLane(name)
+    const["s"] = load_map(name)
     const["s"].make_screen_shot()
     reset_log()
     return const["s"]
