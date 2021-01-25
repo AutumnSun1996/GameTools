@@ -24,7 +24,6 @@ COMMANDER:
   Size: [202, 64]
   Type: Static
   MaxDiff: 0.01
-
 自律提醒:
   Image: 自律提醒.jpg
   MainSize: [1280, 720]
