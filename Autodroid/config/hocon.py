@@ -407,9 +407,7 @@ def to_hocon(config, compact=False, indent=2, level=0):
                     full_key = key
 
                 if not re.match(r"^[a-zA-Z0-9._\- /]+$", full_key):
-                    full_key = '"{value}"'.format(
-                        value=full_key.replace("\n", "\\n").replace('"', '\\"')
-                    )
+                    full_key = json.dumps(full_key)
                 bet_lines.append(
                     "{indent}{key}{assign_sign} {value}".format(
                         indent="".rjust(level * indent, " "),
@@ -458,11 +456,9 @@ def to_hocon(config, compact=False, indent=2, level=0):
                 )
     elif isinstance(config, basestring):
         if "\n" in config:
-            lines = '"""{value}"""'.format(value=config)  # multilines
+            lines = '"""{value}"""'.format(value=config.replace('"""', '\\"""'))  # multilines
         else:
-            lines = '"{value}"'.format(
-                value=config.replace("\n", "\\n").replace('"', '\\"')
-            )
+            lines = json.dumps(config)
     elif isinstance(config, ConfigValues):
         lines = "".join(to_hocon(o, compact, indent, level) for o in config.tokens)
     elif isinstance(config, ConfigSubstitution):
