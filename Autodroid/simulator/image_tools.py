@@ -100,7 +100,7 @@ def rescale_item(item, rx, ry):
     raise ValueError("Invalid Item %s" % item)
 
 
-def update_resource(resource, section):
+def update_resource(resource, section, name=None):
     """根据当前配置更新资源属性, 加载图片并进行缩放"""
     dw = config.getint("Device", "MainWidth")
     dh = config.getint("Device", "MainHeight")
@@ -114,6 +114,8 @@ def update_resource(resource, section):
         or resource.get("ImageData", None) is not None
     ):
         load_image(resource, section)
+    if name is not None and "Name" not in resource:
+        resource["Name"] = name
 
 
 def load_image(resource, section):
@@ -141,8 +143,8 @@ def load_scenes(section):
 def load_resources(section):
     with open(config.get(section, "Resources"), "r", -1, "UTF-8") as fl:
         items = yaml.load(fl)
-    for resource in items.values():
-        update_resource(resource, section)
+    for key, resource in items.items():
+        update_resource(resource, section, key)
     return items
 
 
@@ -152,8 +154,8 @@ def load_map(name, section, extra_property):
     if extra_property:
         new_args = hocon.loads("\n".join(extra_property))
         data = new_args.with_fallback(data)
-    for item in data["Resources"].values():
-        update_resource(item, section)
+    for key, item in data["Resources"].items():
+        update_resource(item, section, key)
     if "Anchors" in data:
         for val in data["Anchors"].values():
             update_resource(val, section)
