@@ -41,7 +41,6 @@ class MMLParser:
 
     def handle_note(self, m, mml, pos, ts):
         logger.debug("handle_note %s %s", m, ts)
-        piece = m.group(0)
         note = m.group(1)
         if note in "PR":
             note_num = 0
@@ -58,24 +57,25 @@ class MMLParser:
         duration = 60 * 4 / self.tempo / divide
         for _ in m.group(4):  # dot
             duration *= 1.5
-        if piece.endswith("&"):  # ':'/'&'
-            m = self.PATTERNS["NOTE"].match(mml[pos:])
-            pos += len(m.group(0))
-            next_note = self.handle_note(m, mml, pos, ts)
-            assert (
-                next_note[2] == note_num
-            ), "Tied notes cannot be different: {}({})".format(pos, mml[pos : pos + 10])
-            duration += next_note[3]
-
-        if m.group(7):  # 和弦, 不增加当前时刻
-            add_ts = 0
+        if m.group(7) == ":":  # 和弦, 不增加当前时刻
+            add_ts = False
         else:
-            add_ts = duration
+            add_ts = True
         return pos, add_ts, note_num, duration
 
     def parse(self, mml, channel_id=0):
         """Parse a single MML string, seq, using states from the channel"""
         # music = re.sub(r"\s+|\|","",music.upper())
+        
+        lines = []
+        for line in mml.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            if line.startswith("#"):
+                continue
+            lines.append(line)
+        mml = "\n".join(lines)
         for char in " |\r\n":
             mml = mml.replace(char, "")
         mml = mml.upper()
@@ -83,6 +83,8 @@ class MMLParser:
         notes = []
         pos = 0
         ts = 0
+        prev_note_num = None
+        prev_duration = 0
         while pos < len(mml):
             logger.debug("Check %s, %s", pos, mml[pos : pos + 10])
             for typ, p in self.PATTERNS.items():
@@ -96,15 +98,29 @@ class MMLParser:
                         pos, mml[pos : pos + 10]
                     )
                 )
-
             piece = m.group(0)
             pos += len(piece)
             if typ == "NOTE":  # note
                 pos, add_ts, note_num, duration = self.handle_note(m, mml, pos, ts)
-                hold = self.get_hold_duration(duration)
-                notes.append([ts, 0x90, channel_id, note_num, self.volume])
-                notes.append([ts + hold, 0x80, channel_id, note_num, 0])
-                ts += add_ts
+                if prev_note_num is not None:
+                    if prev_note_num != note_num:
+                        raise ValueError("Tied notes cannot be different")
+                    duration += prev_duration
+
+                # check for possible following note tie
+                if m.group(7) == "&":
+                    prev_note_num = note_num
+                    prev_duration = duration
+                else:
+                    prev_note_num = None
+                    prev_duration = 0
+
+                    hold = self.get_hold_duration(duration)
+                    notes.append([ts, 0x90, channel_id, note_num, self.volume])
+                    notes.append([ts + hold, 0x80, channel_id, note_num, 0])
+                    if add_ts:
+                        ts += duration
+
             elif piece[0] == "<":  # octave down
                 self.octave -= 1
             elif piece[0] == ">":  # octave up
@@ -237,7 +253,7 @@ class MMLSimplifier:
             elif delta == 2:
                 yield ">>"
             else:
-                yield "O%d" % mark[1]
+                yield "O%d" % octave
             self.octave = octave
 
             yield note
@@ -250,16 +266,13 @@ class MMLSimplifier:
 if __name__ == "__main__":
     logging.basicConfig(level="DEBUG")
     parser = MMLSimplifier()
-    data = """
-    T150V80
-    >D8.D8.C8D8.D8.C8D8.D8.C8D4F4D8.D8.C8D8.D8.C8D4A4G4A4G8A8D16C16D16C16G8A8D16C16D16C16G8A8D16C16D16C16F8E32.F32E32.D8C8G8A8D16C16D16C16G8A8D16C16D16C16G8A8>C8F8E16F16E16D16C8<A8G8A8D16C16D16C16G8A8D16C16D16C16G8A8D16C16D16C16F8E32.F32E32.D8C8D8C16D16F8D16F16G8G16A16>C16F16<A16>C16F8E32.F32E32.D8C8D4D8F8G8A8D16C16D16C16G8A8D16C16D16C16G8A8D16C16D16C16F8E32.F32E32.D8C8G8A8D16C16D16C16G8A8D16C16D16C16G8A8>C8F8E16
-    """
+    data = open("mml/献给爱丽丝.mml").read()
     marks = parser.parse(data)
-
     res = [item for item in parser.build_text(marks)]
     print("RESULT")
     res = "".join(res)
     # check is same
+    
     origin_notes = MMLParser().parse(data)
     new_notes = MMLParser().parse(res)
     print(res)
