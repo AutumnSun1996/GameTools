@@ -14,6 +14,7 @@ def update_volume(all_events):
             min_vol = min(min_vol, vol)
             max_vol = max(max_vol, vol)
     ratio = 90 / max_vol
+    print("update volume", ratio)
     if ratio < 1.5:
         return
     ratio = int(round(ratio))
@@ -30,10 +31,10 @@ def play(mml):
     else:
         midi.open_virtual_port("My virtual output")
 
-    parser = MMLParser()
+    
     all_events = []
     for idx, track in enumerate(mml):
-        events = parser.parse(track, idx)
+        events = MMLParser().parse(track, idx)
         all_events.extend(events)
     all_events.sort()
     update_volume(all_events)
@@ -44,12 +45,12 @@ def play(mml):
             wait = ts - time.perf_counter() + start
             if wait > 0:
                 time.sleep(wait)
-            midi.send_message([evt + channel, note, volume])
             print(
                 "{:6.3f} evt 0x{:02x} chl {} note {} volume {}".format(
                     ts, evt, channel, note, volume
                 )
             )
+            midi.send_message([evt + channel, note, volume])
     del midi
 
 
