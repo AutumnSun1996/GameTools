@@ -208,20 +208,6 @@ class MMLSimplifier:
                 yield sep
                 continue
             _, note, octave, divide, dots = mark
-            delta = octave - self.octave
-            if delta == 0:
-                pass
-            elif delta == -1:
-                yield "<"
-            elif delta == -2:
-                yield "<<"
-            elif delta == 1:
-                yield ">"
-            elif delta == 2:
-                yield ">>"
-            else:
-                yield "O%d" % mark[1]
-            self.octave = octave
 
             if divide != self.divide:
                 # 后续5个音符的
@@ -238,6 +224,21 @@ class MMLSimplifier:
                     self.divide = divide
                     yield "L%d" % divide
                     yield sep
+
+            delta = octave - self.octave
+            if delta == 0:
+                pass
+            elif delta == -1:
+                yield "<"
+            elif delta == -2:
+                yield "<<"
+            elif delta == 1:
+                yield ">"
+            elif delta == 2:
+                yield ">>"
+            else:
+                yield "O%d" % mark[1]
+            self.octave = octave
 
             yield note
             if divide != self.divide:
