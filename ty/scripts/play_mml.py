@@ -2,7 +2,23 @@ import sys
 import os
 from mmlparser import MMLParser
 import rtmidi
+import time
 
+
+def update_volume(all_events):
+    min_vol = 0xFFFF
+    max_vol = 0
+    for note in all_events:
+        if note[1] == 0x90:
+            vol = note[4]
+            min_vol = min(min_vol, vol)
+            max_vol = max(max_vol, vol)
+    ratio = 90 / max_vol
+    if ratio < 1.5:
+        return
+    ratio = int(round(ratio))
+    for note in all_events:
+        note[4] = note[4] * ratio
 
 
 def play(mml):
@@ -14,19 +30,26 @@ def play(mml):
     else:
         midi.open_virtual_port("My virtual output")
 
-    def callback(channel, evt, note, vel):
-        if evt == "on":
-            if midi:
-                midi.send_message([0x90 + channel, note, vel])
-            print("CH{}: plays note {} with vel={}".format(channel, note, vel))
-        elif evt == "off":
-            if midi:
-                midi.send_message([0x80 + channel, note, 0])
-            print("CH{}: stops note {}".format(channel, note))
+    parser = MMLParser()
+    all_events = []
+    for idx, track in enumerate(mml):
+        events = parser.parse(track, idx)
+        all_events.extend(events)
+    all_events.sort()
+    update_volume(all_events)
 
-    parser = MMLParser(len(mml), callback)
     with midi:
-        parser.play(*mml)
+        start = time.perf_counter()
+        for ts, evt, channel, note, volume in all_events:
+            wait = ts - time.perf_counter() + start
+            if wait > 0:
+                time.sleep(wait)
+            midi.send_message([evt + channel, note, volume])
+            print(
+                "{:6.3f} evt 0x{:02x} chl {} note {} volume {}".format(
+                    ts, evt, channel, note, volume
+                )
+            )
     del midi
 
 
@@ -40,18 +63,18 @@ def main(name):
     track = []
     for line in data.splitlines():
         line = line.strip()
+        if not line:
+            continue
         if not line.startswith("#"):
             track.append(line)
             continue
         if "NewTrack" not in line:
             continue
-            if track:
-                mml.append("".join(track))
-                track = []
-
+        if track:
+            mml.append("".join(track))
+            track = []
     if track:
         mml.append("".join(track))
-        track = []
     play(mml)
 
 
