@@ -2,7 +2,9 @@
 import re
 import time
 from heapq import heappush, heappop
+import logging
 
+logger = logging.getLogger(__name__)
 
 class MMLParser:
     """This class provides generator-based parser and mixer to produce musical
@@ -187,3 +189,161 @@ class MMLParser:
                 self.callback(i, "on", note, self.vel[i])
             elif etype == self.EVT_NOTE_OFF:
                 self.callback(i, "off", note, 0)
+
+
+class MMLParser:
+    """This class provides generator-based parser and mixer to produce musical
+    events from single or multiple MML strings.  Currently, supported MML
+    commands are: A-G, MS, MN, ML, L, V, O, T, N, <, >, P, and R.
+    """
+
+    NOTE_MAP = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
+
+    PATTERNS = {
+        "OCTAVE": re.compile(r"(<|>)"),
+        "NOTE": re.compile(r"([A-GPR])([\-\+#]?)(\d*)(\.*)(\*\d+)?(\[[12]\])?([:&]?)"),
+        "CCMD": re.compile(r"([LNOTV]\d+)"),
+        "M": re.compile(r"(M[FBNLS])"),
+    }
+
+    DEFAULT_DIVIDE = 4
+    DEFAULT_OCTAVE = 4
+    DEFAULT_MODE = "n"
+    DEFAULT_TEMPO = 72
+    DEFAULT_VOLUME = 90
+
+    EVT_NOTE_ON = 0
+    EVT_NOTE_OFF = 1
+    EVT_NEXT_NOTE = 2
+
+    def __init__(self):
+        """Create a parser with the specified number of channels.  The given
+        callback function will be used to receive note-on/off event
+        information."""
+        self.octave = self.DEFAULT_OCTAVE
+        self.divide = self.DEFAULT_DIVIDE
+        self.mode = self.DEFAULT_MODE
+        self.volume = self.DEFAULT_VOLUME
+        self.tempo = self.DEFAULT_TEMPO
+        self.state = None
+
+    def reset(self):
+        self.state = {"pos": 0, "ts": 0}
+
+    def handle_note(self, m, mml, pos, ts):
+        logger.debug("handle_note %s %s", m, ts)
+        piece = m.group(0)
+        note = m.group(1)
+        if note in "PR":
+            note_num = 0
+        else:
+            note_num = self.NOTE_MAP[note] + 12 * self.octave
+            acc = m.group(2)
+            if acc:
+                if acc in "+#":
+                    note_num += 1
+                elif acc == "-":
+                    note_num -= 1
+        # divide
+        divide = int(m.group(3) or self.divide)
+        duration = 60 * 4 / self.tempo / divide
+        for _ in m.group(4):  # dot
+            duration *= 1.5
+        if piece.endswith("&"):  # ':'/'&'
+            m = self.PATTERNS["NOTE"].match(mml[pos:])
+            pos += len(m.group(0))
+            next_note = self.handle_note(m, mml, pos, ts)
+            assert next_note[2] == note_num, "Tied notes cannot be different: {}({})".format(
+                        pos, mml[pos:pos+10]
+                    )
+            duration += next_note[3]
+
+        if m.group(7):  # 和弦, 不增加当前时刻
+            add_ts = 0
+        else:
+            add_ts = duration
+        return pos, add_ts, note_num, duration
+
+    def parse(self, mml, channel_id=0):
+        """Parse a single MML string, seq, using states from the channel"""
+        # music = re.sub(r"\s+|\|","",music.upper())
+        for char in " |\r\n":
+            mml = mml.replace(char, "")
+        mml = mml.upper()
+
+        notes = []
+        pos = 0
+        ts = 0
+        while pos < len(mml):
+            logger.debug("Check %s, %s", pos, mml[pos:pos+10])
+            for typ, p in self.PATTERNS.items():
+                m = p.match(mml[pos:])
+                if m is not None:
+                    print("Mateched", m)
+                    break
+            if m is None:
+                raise ValueError(
+                    "Invalid music expression at position {} ({})".format(
+                        pos, mml[pos:pos+10]
+                    )
+                )
+
+            piece = m.group(0)
+            pos += len(piece)
+            if typ == "NOTE":  # note
+                pos, add_ts, note_num, duration = self.handle_note(m, mml, pos, ts)
+                hold = self.get_hold_duration(duration)
+                notes.append([ts, 0x90, channel_id, note_num, self.volume])
+                notes.append([ts + hold, 0x80, channel_id, note_num, 0])
+                ts += add_ts
+            elif piece[0] == "<":  # octave down
+                self.octave -= 1
+            elif piece[0] == ">":  # octave up
+                self.octave += 1
+            elif piece[0] == "L":  # default length
+                self.divide = int(piece[1:])
+            elif piece[0] == "N":  # note number
+                duration = 60 * 4 / self.tempo / self.divide
+                hold = self.get_hold_duration(duration)
+                note_num = int(piece[1:])
+                notes.append([ts, 0x90, channel_id, note_num, self.volume])
+                notes.append([ts + hold, 0x80, channel_id, note_num, 0])
+                ts += duration
+            elif piece[0] == "O":  # default octave
+                self.octave = int(piece[1:])
+            elif piece[0] == "V":  # volume
+                self.volume = int(piece[1:])
+            elif piece[0] == "T":  # tempo
+                self.tempo = int(piece[1:])
+            elif piece == "MN":
+                self.mode = "n"
+            elif piece == "ML":
+                self.mode = "l"
+            elif piece == "MS":
+                self.mode = "s"
+        return notes
+
+    def get_hold_duration(self, duration):
+        """Compute the note-on interval for the given duration and current
+        mode of playing (e.g., staccato, legato)"""
+        if self.mode == "s":  # staccato
+            hold = min(0.1, duration)
+        elif self.mode == "l":  # legato
+            hold = duration
+        else:  # normal
+            hold = duration - min(0.1, duration / 4)
+        return hold
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level="DEBUG")
+    parser = MMLParser()
+    notes = parser.parse("""
+    o4l1 c:d
+    """)
+    notes.sort()
+    for note in notes:
+        if note[0] > 35:
+            print(note)
+        if note[0] > 50:
+            break
