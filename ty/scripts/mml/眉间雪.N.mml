@@ -1,31 +1,6 @@
 #!NUMFORMAT
 #Title 眉间雪
-
-# 0 r
-# 1 c
-# 2 d
-# 3 e
-# 4 f
-# 5 g
-# 6 a
-# 7 b
-# a 0
-# b 1
-# c 2
-# d 3
-# e 4
-# f 5
-# g 6
-# h 7
-# i 8
-# j 9
-# A 1   N - - -
-# B 2   N -
-# C 4   N
-# D 8   下划线*1
-# E 16  下划线*2
-# F 32  下划线*3
-
+#根据 http://www.jianpu.cn/pu/27/271335.htm 重新编写
 #NewTrack
 Tbca
 LD
