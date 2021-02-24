@@ -1,0 +1,50 @@
+#Title 眉间雪
+
+# 0 r
+# 1 c
+# 2 d
+# 3 e
+# 4 f
+# 5 g
+# 6 a
+# 7 b
+# a 0
+# b 1
+# c 2
+# d 3
+# e 4
+# f 5
+# g 6
+# h 7
+# i 8
+# j 9
+# A 1   N - - -
+# B 2   N -
+# C 4   N
+# D 8   下划线*1
+# E 16  下划线*2
+# F 32  下划线*3
+
+#NewTrack
+T120
+L8
+O5
+r>e| c4 <a>e  d4. <b|b4. >c4. <re | L4 b >cd. <d8 | e2. L8 | >e<a>ed4. d&|
+d c4 <b4. r<b | c>c L23 egb > ceg b>cg& | g2. L8 O4 eg| a4 a>edc <b>d| c<baga4 rg|
+a4 >ed d4 ge| e2 r4 <eg | a4 a>e dc <b>d | c<b ag a4 rg | a4 >ed d4 <ba|
+a2 r4 cd| e4 g4 aged | c4 c<b >c4 r<b | a4 >ed d4 ge | e2 r4 cd| e4 g4 aged|
+c4 c<b >c4 r<b | >c4. c cd e| g4 re >c<b ag | a4 ab>c<b ag| g2 reeg|
+ac cc cd dc | de ed de rd | dc c<b >c d4 e | b>c <ba gg rg | a4. a a4 ag|
+g2 >c<b ag | a4 ab >c<b ag | g2 reeg | accccddc | deedderd|
+dc c<b >cd eg | b>c <ba gg rg | a4 aa a4 ag | g1 | r2. <eg |
+a4 a>e dc <b>d | c<b ag a4 rg | a4 >ed d4 ge | e2 r <eg | a4 a>e dc <b>d |
+c<b ag a4 rg | a4 >ed d4 <ba | a2 r2 | >a4 >e4 d<b gb | a1 | L4 a > e d g |
+e d8c16d16 e c8<b8 | a2 >d <b | >c2. L8 cc| f4 c4 d2 | e2. <cd | 
+
+e4 g4 aged | c4 c<b >c4 r<b | a4 >ed d4 ge | e2 r4 cd| e4 g4 aged|
+c4 c<b >c4 r<b | >c4. c cd e| g4 re >c<b ag | a4 ab>c<b ag| g2 reeg|
+ac cc cd dc | de ed de rd | dc c<b >c d4 e | b>c <ba gg rg | a4. a a4 ag|
+g2 >c<b ag | a4 ab >c<b ag | g2 reeg | accccddc | deedderd|
+dc c<b >cd eg | b>c <ba gg rg | a4 aa a4 ag | g1 | r2. <ag |
+a4 a>e dc <b>d | c<b ag a4 rg | a4 >ed d4 ge | e2 r <ag | a4 a>e dc <b>d |
+c<b ag a4 rg | a4 >ed d4 <ba | a2 r4 L8 T100 g| a4 >ed d4 <ba&| a a&a2 |
