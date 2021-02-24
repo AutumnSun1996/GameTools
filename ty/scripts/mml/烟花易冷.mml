@@ -1,0 +1,47 @@
+#Title 烟花易冷
+
+# 0 p
+# 1 c
+# 2 d
+# 3 e
+# 4 f
+# 5 g
+# 6 a
+# 7 b
+# a 0
+# b 1
+# c 2
+# d 3
+# e 4
+# f 5
+# g 6
+# h 7
+# A 1   N - - -
+# B 2   N -
+# C 4   N
+# D 8   下划线*1
+# E 16  下划线*2
+# F 32  下划线*3
+
+#NewTrack
+L8
+
+<<a>e>c<gf+2 |<a>e>c<gf+4 >eg| b2. p>c| d2 p<eeg|
+aga>c<bag4| a16g16e4. peeg|aga>c <baae|&ed4. pa>d4|
+<a>d4 p<a>d8.<a16| b4e4 pded| g4 pdgab>c| <b16a16b4. peeg|
+aga>c<baga|&ae4. peeg| aga>c<baag|&g>e4. p<a>d.<a16|
+>d2 pe<b.a16 | b16>c16<b&b2 a>d | <bea>d<bea.g16| a2. >ge|
+d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16| e2 p4 ee|
+b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c<b4g4| a2.  >ge|
+d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16 | e2 p4 ee|
+b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c< b4 g4 | a2. p|
+# loop 1
+|p2 peeg|
+aga>c<baga&| ae4. peeg|aga>c <baae|&ed4. pa>d4|
+<a>d4 p<a>d8.<a16| b4e4 pded| g4 pdgab>c| <b16a16b4. peeg|
+aga>c<baga|&ae4. peeg| aga>c<baag|&g>e4. p<a>d.<a16|
+>d2 pe<b.a16 | b16>c16<b&b2 a>d | <bea>d<bea.g16| a2. >ge|
+d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16| e2 p4 ee|
+b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c<b4g4| a2.  >ge|
+d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16 | e2 p4 ee|
+b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c< b4 g4 | a2. p|
