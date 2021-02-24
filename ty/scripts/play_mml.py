@@ -31,7 +31,6 @@ def play(mml):
     else:
         midi.open_virtual_port("My virtual output")
 
-    
     all_events = []
     for idx, track in enumerate(mml):
         events = MMLParser().parse(track, idx)
@@ -54,13 +53,46 @@ def play(mml):
     del midi
 
 
+data = """
+0 p
+1 c
+2 d
+3 e
+4 f
+5 g
+6 a
+7 b
+a 0
+b 1
+c 2
+d 3
+e 4
+f 5
+g 6
+h 7
+A 1   N - - -
+B 2   N -
+C 4   N
+D 8   下划线*1
+E 16  下划线*2
+F 32  下划线*3
+"""
+reps = dict([line.split()[:2] for line in data.strip().splitlines()])
+
+
+def convert(text):
+    text = ''.join([reps.get(c, c) for c in text])
+    return text
+
+
 def main(name):
     print("Play", name)
     if not os.path.exists(name):
         return
     with open(name, "r", -1, "UTF8") as f:
         data = f.read()
-    mml = []
+        need_convert = data.startswith("#!NUMFORMAT")
+    tracks = []
     track = []
     for line in data.splitlines():
         line = line.strip()
@@ -72,16 +104,47 @@ def main(name):
         if "NewTrack" not in line:
             continue
         if track:
-            mml.append("".join(track))
+            tracks.append("".join(track))
             track = []
     if track:
-        mml.append("".join(track))
-    play(mml)
+        mml = "".join(track)
+        tracks.append(mml)
+
+    if need_convert:
+        tracks = [convert(t) for t in tracks]
+    play(tracks)
+
+
+def convert_file(data):
+    converted = []
+    for line in data.splitlines()[1:]:  # 删除首行
+        if not line.startswith("#"):
+            line = convert(line)
+        converted.append(line)
+    return "\n".join(converted)
+
+
+def convert_all():
+    for name in os.listdir("mml"):
+        if not name.endswith(".N.mml"):
+            continue
+
+        with open(os.path.join("mml", name), "r", -1, "UTF8") as f:
+            data = f.read()
+        if not data.startswith("#!NUMFORMAT"):
+            continue
+        new_data = convert_file(data)
+        new_path = os.path.join("mml", name[:-6] + ".mml")
+        print("Convert", name, new_path)
+        print(new_data)
+
+        with open(new_path, "w", -1, "UTF8") as f:
+            f.write(new_data)
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         name = sys.argv[1]
+        main(name)
     else:
-        name = "mml/卡农.mml"
-    main(name)
+        convert_all()
