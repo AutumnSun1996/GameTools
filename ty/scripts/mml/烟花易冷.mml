@@ -27,28 +27,28 @@
 
 #NewTrack
 T67 L8
-<<a>e>c<gf+2 |<a>e>c<gf+4 >eg| b2. p>c| d2 p<eeg|
-aga>c<bag4| a16g16e4. peeg|aga>c <baae|&ed4. pa>d4|
-<a>d4 p<a>d8.<a16| b4e4 pded| g4 pdgab>c| <b16a16b4. peeg|
-aga>c<baga|&ae4. peeg| aga>c<baag|&g>e4. p<a>d.<a16|
->d2 pe<b.a16 | b16>c16<b&b2 a>d | <bea>d<bea.g16| a2. >ge|
-d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16| e2 p4 ee|
+<<a>e>c<gf+2 |<a>e>c<gf+4 >eg| b2. r>c| d2 r<eeg|
+aga>c<bag4| a16g16e4. reeg|aga>c <baae|&ed4. ra>d4|
+<a>d4 r<a>d8.<a16| b4e4 rded| g4 rdgab>c| <b16a16b4. reeg|
+aga>c<baga|&ae4. reeg| aga>c<baag|&g>e4. r<a>d.<a16|
+>d2 re<b.a16 | b16>c16<b&b2 a>d | <bea>d<bea.g16| a2. >ge|
+d4 rddecd| e2 r4 ge| d4 rdd<g>e.f16| e2 r4 ee|
 b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c<b4g4| a2.  >ge|
-d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16 | e2 p4 ee|
-b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c< b4 g4 | a2. p|
+d4 rddecd| e2 r4 ge| d4 rdd<g>e.f16 | e2 r4 ee|
+b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c< b4 g4 | a2. r|
 
-|p2 peeg|
-aga>c<baga&| ae4. peeg|aga>c <baae|&ed4. pa>d4|
-<a>d4 p<a>d8.<a16| b4e4 pded| g4 pdgab>c| <b16a16b4. peeg|
-aga>c<baga|&ae4. peeg| aga>c<baag|&g>e4. p<a>d.<a16|
->d2 pe<b.a16 | b16>c16<b&b2 a>d | <bea>d<bea.g16| a2. >ge|
-d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16| e2 p4 ee|
+|r2 reeg|
+aga>c<baga&| ae4. reeg|aga>c <baae|&ed4. ra>d4|
+<a>d4 r<a>d8.<a16| b4e4 rded| g4 rdgab>c| <b16a16b4. reeg|
+aga>c<baga|&ae4. reeg| aga>c<baag|&g>e4. r<a>d.<a16|
+>d2 re<b.a16 | b16>c16<b&b2 a>d | <bea>d<bea.g16| a2. >ge|
+d4 rddecd| e2 r4 ge| d4 rdd<g>e.f16| e2 r4 ee|
 b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c<b4g4| a2.  >ge|
-d4 pddecd| e2 p4 ge| d4 pdd<g>e.f16 | e2 p4 ee|
+d4 rddecd| e2 r4 ge| d4 rdd<g>e.f16 | e2 r4 ee|
 b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c< b4 g4 | a2. 
-L16 >pccc| cccc cccc cccc ccc8 |
+L16 >rccc| cccc cccc cccc ccc8 |
 cc32c32cc cc32c32cc cc32c32cc32c32 cccc | 
-pccc pccc& cccc c8cc| pccc pccc& cccc e8:c8e8:cc|
+rccc rccc& cccc c8cc| rccc rccc& cccc e8:c8e8:cc|
 
 L8 b4. e16d16 d4 c<b | >cdea&a4 <a>c | ed<a>c<b4g4| a2.  a>c|
 ed<a>c<b4 g4| a1|
