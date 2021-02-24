@@ -49,12 +49,14 @@ def play(mml):
                     ts, evt, channel, note, volume
                 )
             )
+            if note == 0:
+                continue
             midi.send_message([evt + channel, note, volume])
     del midi
 
 
 data = """
-0 p
+0 r
 1 c
 2 d
 3 e
