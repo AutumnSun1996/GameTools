@@ -1,0 +1,75 @@
+<script src="http://mohayonao.github.io/mml-emitter/build/mml-emitter.js"></script>
+<textarea name="mml" id="mml" cols="30" rows="10">
+</textarea>
+<button onclick="play_sample()">Play sample</button>
+<script>
+    let input = document.getElementById("mml");
+    const audioContext = new AudioContext();
+    input.value = `
+    // Little Serenade
+    // J.Haydn
+    t105 l8 o5 q75 v100
+    /: ab-> c4c4c4 c4.faf fedc<b-4 [gb-]2 [fa]4 agb-a>c<b- >c+dc<b-ag f2[ea]g f4r4 :/
+    /: [fa][eg] [eg]2[gb-][fa] [fa]2>c<b b>dfd<b>d c4.<b-
+    ab-> c4c4c4 c4.faf fedc<b-4 [gb-]2 [fa]4 agb-a>c<b- >c+dc<b-ag f2[ea]g f4r4 :/
+    ;
+    t105 l8 o4 q75 v75
+    /: r4 f>c<a>c<a>c< f>c<a>c<a>c< g>c<b->c<b->c< [e>c]2 [f>c]4 [b->d]2.^2 [<b->b-]4 [ca]2[cb-]4 [fa]4 <f4> :/
+    /: r4 c4>c4r4< c4>c4r4< [cdf]4[cdf]4[cdf]4 [ce]4r4
+    r4 f>c<a>c<a>c< f>c<a>c<a>c< g>c<b->c<b->c< [e>c]2 [f>c]4 [b->d]2.^2 [<b->b-]4 [ca]2[cb-]4 [fa]4 <f4> :/
+    `
+    function play_sample(){
+        console.log("play_sample", input.value);
+        play(input.value);
+    }
+    function mtof(noteNumber) {
+        return 440 * Math.pow(2, (noteNumber - 69) / 12);
+    }
+
+    function play(mml) {
+        var config = { context: audioContext };
+
+        mmlEmitter = new MMLEmitter(mml, config);
+
+        mmlEmitter.on("note", function (e) {
+            console.log("NOTE: " + JSON.stringify(e));
+            playNote(e);
+        });
+        mmlEmitter.on("end:all", function (e) {
+            console.log("END : " + JSON.stringify(e));
+            mmlEmitter.stop();
+        });
+
+        mmlEmitter.start();
+    }
+
+    function playNote(e) {
+        var t0 = e.playbackTime;
+        var t1 = t0 + e.duration * (e.quantize / 100);
+        var t2 = t1 + 0.5;
+        var osc1 = audioContext.createOscillator();
+        var osc2 = audioContext.createOscillator();
+        var amp = audioContext.createGain();
+        var volume = 0.25 * (e.velocity / 128);
+
+        osc1.frequency.value = mtof(e.noteNumber);
+        osc1.detune.setValueAtTime(+12, t0);
+        osc1.detune.linearRampToValueAtTime(+1, t1);
+        osc1.start(t0);
+        osc1.stop(t2);
+        osc1.connect(amp);
+
+        osc2.frequency.value = mtof(e.noteNumber);
+        osc2.detune.setValueAtTime(-12, t0);
+        osc2.detune.linearRampToValueAtTime(-1, t1);
+        osc2.start(t0);
+        osc2.stop(t2);
+        osc2.connect(amp);
+
+        amp.gain.setValueAtTime(volume, t0);
+        amp.gain.setValueAtTime(volume, t1);
+        amp.gain.exponentialRampToValueAtTime(1e-3, t2);
+        amp.connect(audioContext.destination);
+    }
+
+</script>
