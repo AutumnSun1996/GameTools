@@ -31,6 +31,9 @@ rcdegagfgeedd8.
 
     `;
     function play() {
+        if (synth) {
+            stop();
+        }
         let iter = parse(input.value);
         synth = new Tone.PolySynth().toDestination();
         synth.set({ detune: -1200 });
@@ -49,6 +52,7 @@ rcdegagfgeedd8.
         Tone.Transport.cancel();
         synth.releaseAll();
         synth.dispose();
+        synth = null;
     }
 
 </script>
