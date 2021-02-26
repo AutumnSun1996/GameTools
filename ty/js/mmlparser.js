@@ -97,6 +97,9 @@ function parse(source) {
                 divide = parseInt(m[3]);
             }
             evt.duration = 240 / state.tempo / divide;
+            if (m[4]) {
+                evt.duration = evt.duration * Math.pow(1.5, m[4].length);
+            }
             if (prevNoteNum !== null) {
                 if (prevNoteNum !== noteNum) {
                     throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${noteNum} @${scanner.index} ${scanner.part(-5, 0)}`)
