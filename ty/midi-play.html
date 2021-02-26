@@ -1,58 +1,51 @@
-<button onclick="play()">Play</button><button onclick="stop()">Stop</button>
-<br>
+<!DOCTYPE html>
+<html lang="en">
 
-<textarea name="mml" id="mml" cols="60" rows="50"></textarea>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MML Player</title>
+    <script src="js/mmlparser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
 
-<script src="js/mmlparser.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+</head>
 
-<script>
-    let input = document.getElementById("mml");
-    let synth;
-    const audioContext = new AudioContext();
-    input.value = `
-t56v80
-l16o5
-r2 r4 rdc<a|>c8c<a >c8c<a >c<ag8 r>dc<a|
->c8c<a >c8ce dcc8|
-r<ga>ee8ede8edegee
-reee|ddddd8ce8d8.
-rdc<a>c8c<a>c8c<a>c<ag8
-rga>eg8geg8gedcc8
-rdcdeddcd8c<a>dcc<a>c8cc&c2.
-rggede<a8>deged4
-rggede<g8>degdc4
-rcdegagfgeedd4
-rcdccdcd8e8gee8.
-rggede<a8>deged4
-rggede<g8>degdc4
-rcdegagfgeedd8.
-<g>e8dd8c8.&c2
-
-    `;
-    function play() {
-        if (synth) {
-            stop();
-        }
-        let iter = parse(input.value);
-        synth = new Tone.PolySynth().toDestination();
-        synth.set({ detune: -1200 });
-        synth.sync()
-        for (let e of iter) {
-            if (e.type === "note") {
-                console.log("NOTE: " + JSON.stringify(e));
-                let hold = e.duration - Math.min(0.1, e.duration / 4);
-                synth.triggerAttackRelease(e.note, hold, e.timestamp, e.vel / 127);
+<body>
+    <button onclick="play()">Play</button><button onclick="stop()">Stop</button>
+    <br>
+    <textarea name="mml" id="mml" cols="60" rows="50">
+    </textarea>
+    <script>
+        let input = document.getElementById("mml");
+        let synth;
+        const audioContext = new AudioContext();
+        function play() {
+            if (synth) {
+                stop();
             }
+            let iter = parse(input.value);
+            synth = new Tone.PolySynth().toDestination();
+            synth.set({ detune: -1200 });
+            synth.sync()
+            for (let e of iter) {
+                if (e.type === "note") {
+                    console.log("NOTE: " + JSON.stringify(e));
+                    let hold = e.duration - Math.min(0.1, e.duration / 4);
+                    synth.triggerAttackRelease(e.note, hold, e.timestamp, e.vel / 127);
+                }
+            }
+            Tone.Transport.start();
         }
-        Tone.Transport.start();
-    }
-    function stop(mml) {
-        Tone.Transport.stop();
-        Tone.Transport.cancel();
-        synth.releaseAll();
-        synth.dispose();
-        synth = null;
-    }
+        function stop(mml) {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            synth.releaseAll();
+            synth.dispose();
+            synth = null;
+        }
 
-</script>
+    </script>
+</body>
+
+</html>
