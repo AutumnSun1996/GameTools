@@ -93,18 +93,18 @@ function parse(source) {
             evt.duration = 240 / state.tempo / divide;
             if (prevNoteNum !== null) {
                 if (prevNoteNum !== noteNum) {
-                    throw SyntaxError(`相连的音符必须相同:  ${prevNoteNum} ${noteNum} @ ${scanner.part(-5, 0)}`)
+                    throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${noteNum} @${scanner.index} ${scanner.part(-5, 0)}`)
                 }
                 evt.duration = evt.duration + prevDuration;
             }
-            if (m[8]) {
+            if (m[8]) { // '&'
                 prevNoteNum = noteNum;
                 prevDuration = evt.duration;
                 console.log("pre note", evt);
             } else {
                 prevNoteNum = null;
                 prevDuration = null;
-                if (!m[7]) {
+                if (!m[7]) { // 带':'标记的为和弦, 不增加当前时间戳
                     state.timestamp += evt.duration;
                 }
                 result.push(evt);
@@ -146,7 +146,7 @@ function parse(source) {
             result.push({ type: 'tempo', value: state.vel });
             continue;
         }
-        m = scanner.scan(/^#.+$/m);
+        m = scanner.scan(/^#.+\n/);
         if (m) {
             result.push({ type: 'comment', value: m[0] });
             continue;
@@ -156,7 +156,8 @@ function parse(source) {
             result.push({ type: 'ignore', value: m[0] });
             continue;
         }
-        throw SyntaxError(`无法解析: ${scanner.part()} ${result}`);
+        console.log(result);
+        throw SyntaxError(`无法解析: ${scanner.index} ${scanner.part()}`);
     }
     return result;
 }
