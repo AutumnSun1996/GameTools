@@ -1,14 +1,14 @@
-<textarea name="mml" id="mml" cols="30" rows="10">
-</textarea>
-<button onclick="play_sample()">Play sample</button>
+<button onclick="play()">Play</button><button onclick="stop()">Stop</button>
+<br>
+
+<textarea name="mml" id="mml" cols="60" rows="50"></textarea>
+
 <script src="js/mmlparser.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
 
 <script>
-    const synth = new Tone.PolySynth().toDestination();
-    synth.set({ detune: -1200 });
-
     let input = document.getElementById("mml");
+    let synth;
     const audioContext = new AudioContext();
     input.value = `
 t56v80
@@ -30,28 +30,25 @@ rcdegagfgeedd8.
 <g>e8dd8c8.&c2
 
     `;
-    function play_sample() {
-        console.log("play_sample", input.value);
-        play(input.value);
-    }
-    function mtof(noteNumber) {
-        return 440 * Math.pow(2, (noteNumber - 69) / 12);
-    }
-
-    function play(mml) {
-        let iter = parse(mml);
-        let now = synth.toSeconds();
+    function play() {
+        let iter = parse(input.value);
+        synth = new Tone.PolySynth().toDestination();
+        synth.set({ detune: -1200 });
+        synth.sync()
         for (let e of iter) {
             if (e.type === "note") {
                 console.log("NOTE: " + JSON.stringify(e));
-                playNote(e, now);
+                let hold = e.duration - Math.min(0.1, e.duration / 4);
+                synth.triggerAttackRelease(e.note, hold, e.timestamp, e.vel / 127);
             }
         }
+        Tone.Transport.start();
     }
-
-    function playNote(e, dt) {
-        let hold = e.duration - Math.min(0.1, e.duration / 4);
-        synth.triggerAttackRelease(e.note, hold, e.timestamp + dt, e.vel / 127);
+    function stop(mml) {
+        Tone.Transport.stop();
+        Tone.Transport.cancel();
+        synth.releaseAll();
+        synth.dispose();
     }
 
 </script>
