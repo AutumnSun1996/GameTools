@@ -55,17 +55,21 @@ class Scanner {
 
 const NOTE_MAP = { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 };
 
-function parse(source) {
-    let scanner = new Scanner(source);
-    let result = [];
-    let prevNoteNum = null, prevDuration = 0;
-    let state = {
+function initState() {
+    return {
         tempo: 120,
         divide: 4,
         vel: 90,
         octave: 4,
         timestamp: 0,
     };
+}
+
+function parse(source) {
+    let scanner = new Scanner(source);
+    let result = [];
+    let prevNoteNum = null, prevDuration = 0;
+    let state = initState();
     while (scanner.hasNext()) {
         let m = null;
         // Note
@@ -146,6 +150,12 @@ function parse(source) {
             console.log("set tempo", m);
             state.tempo = parseInt(m[1]);
             result.push({ type: 'tempo', value: state.vel });
+            continue;
+        }
+        m = scanner.scan(/^#\s*NewTrack\n/);
+        if (m) {
+            result.push({ type: 'comment', value: m[0] });
+            state = initState();
             continue;
         }
         m = scanner.scan(/^#.+\n/);
