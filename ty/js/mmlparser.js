@@ -79,12 +79,14 @@ function parse(source) {
                 noteNum = NOTE_MAP[note] + 12 * state.octave;
                 if (m[2]) { // acc
                     if (m[2] === "-") {
+                        note = note + "b";
                         --noteNum;
                     } else {
+                        note = note + "#";
                         ++noteNum;
                     }
                 }
-                evt = { type: "note", note: `${m[1]}${state.octave}`, noteNum: noteNum, timestamp: state.timestamp, vel: state.vel };
+                evt = { type: "note", note: `${note}${state.octave}`, noteNum: noteNum, timestamp: state.timestamp, vel: state.vel };
             }
             let divide = state.divide;
             if (m[3]) {
