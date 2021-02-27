@@ -54,6 +54,8 @@ class Scanner {
 }
 
 const NOTE_MAP = { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 };
+const NOTE_MAP_INV = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const CMD_PREFIX = { vel: "V", tempo: "T" };
 
 function initState() {
     return {
@@ -65,10 +67,9 @@ function initState() {
     };
 }
 
-function parse(source) {
-    let scanner = new Scanner(source);
-    let result = [];
-    let prevNoteNum = null, prevDuration = 0;
+function textToCommands(text) {
+    let scanner = new Scanner(text);
+    let commands = [];
     let state = initState();
     while (scanner.hasNext()) {
         let m = null;
@@ -77,28 +78,105 @@ function parse(source) {
         if (m) {
             let note = m[1].toUpperCase(), noteNum = null, evt = {};
             if (note === "P" || note === "R") {
-                evt = { type: "rest", timestamp: state.timestamp };
+                evt = { type: "rest" };
                 noteNum = "r";
             } else {
                 noteNum = NOTE_MAP[note] + 12 * state.octave;
                 if (m[2]) { // acc
                     if (m[2] === "-") {
-                        note = note + "b";
                         --noteNum;
                     } else {
-                        note = note + "#";
                         ++noteNum;
                     }
                 }
-                evt = { type: "note", note: `${note}${state.octave}`, noteNum: noteNum, timestamp: state.timestamp, vel: state.vel };
+                evt = { type: "note", noteNum: noteNum, vel: state.vel };
             }
-            let divide = state.divide;
+
             if (m[3]) {
-                divide = parseInt(m[3]);
+                evt.divide = parseInt(m[3]);
+            } else {
+                evt.divide = state.divide;
             }
-            evt.duration = 240 / state.tempo / divide;
             if (m[4]) {
-                evt.duration = evt.duration * Math.pow(1.5, m[4].length);
+                evt.dots = m[4].length;
+            }
+            if (m[5] || m[6]) {
+                evt.extra = m[5] + m[6];
+            }
+            if (m[7]) {
+                evt.is_chord = true;
+            }
+            if (m[8]) {
+                evt.is_prefix = true;
+            }
+            commands.push(evt)
+            continue;
+        }
+        if (scanner.scan(/^>/)) {
+            ++state.octave;
+            continue;
+        }
+        if (scanner.scan(/^</)) {
+            --state.octave;
+            continue;
+        }
+        m = scanner.scan(/^O(\d+)/i)
+        if (m) {
+            state.octave = parseInt(m[1]);
+            continue;
+        }
+        m = scanner.scan(/^L(\d+)/i)
+        if (m) {
+            state.divide = parseInt(m[1]);
+            continue;
+        }
+        m = scanner.scan(/^V(\d+)/i);
+        if (m) {
+            state.vel = parseInt(m[1]);
+            commands.push({ type: 'vel', value: state.vel });
+            continue;
+        }
+        m = scanner.scan(/^T(\d+)/i);
+        if (m) {
+            console.log("set tempo", m);
+            state.tempo = parseInt(m[1]);
+            commands.push({ type: 'tempo', value: state.tempo });
+            continue;
+        }
+        m = scanner.scan(/^#\s*NewTrack\n/);
+        if (m) {
+            state = initState();
+            commands.push({ type: 'newtrack', text: m[0] });
+            continue;
+        }
+        m = scanner.scan(/^#.+(\n|$)/);
+        if (m) {
+            commands.push({ type: 'text', text: m[0] });
+            continue;
+        }
+        m = scanner.scan(/^[|\s]+/);
+        if (m) {
+            commands.push({ type: 'text', text: m[0] });
+            continue;
+        }
+        console.log(commands);
+        throw SyntaxError(`无法解析: ${scanner.index} ${scanner.part()}`);
+    }
+    return commands;
+}
+
+function commandsToNotes(commands) {
+    let notes = [];
+    let state = initState();
+    let prevNoteNum = null, prevDuration = 0;
+    for (let cmd of commands) {
+        if (cmd.type === "rest") {
+            state.timestamp += evt.duration;
+        } else if (cmd.type === "note") {
+            let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp };
+            evt.duration = 240 / state.tempo / divide;
+            if (cmd.dots) {
+                evt.duration = evt.duration * Math.pow(1.5, cmd.dots);
             }
             if (prevNoteNum !== null) {
                 if (prevNoteNum !== noteNum) {
@@ -106,73 +184,134 @@ function parse(source) {
                 }
                 evt.duration = evt.duration + prevDuration;
             }
-            if (m[8]) { // '&'
+            if (cmd.is_prefix) { // '&'
                 prevNoteNum = noteNum;
                 prevDuration = evt.duration;
                 console.log("pre note", evt);
             } else {
                 prevNoteNum = null;
                 prevDuration = null;
-                if (!m[7]) { // 带':'标记的为和弦, 不增加当前时间戳
+                if (!cmd.is_chord) { // 和弦不增加当前时间戳
                     state.timestamp += evt.duration;
                 }
-                result.push(evt);
+                evt.hold = evt.duration - Math.min(0.1, evt.duration / 4);
+                notes.push(evt);
             }
-            continue;
-        }
-        if (scanner.scan(/^>/)) {
-            ++state.octave;
-            result.push({ type: 'octave', value: state.octave });
-            continue;
-        }
-        if (scanner.scan(/^</)) {
-            --state.octave;
-            result.push({ type: 'octave', value: state.octave });
-            continue;
-        }
-        m = scanner.scan(/^O(\d+)/i)
-        if (m) {
-            state.octave = parseInt(m[1]);
-            result.push({ type: 'octave', value: state.octave });
-            continue;
-        }
-        m = scanner.scan(/^L(\d+)/i)
-        if (m) {
-            state.divide = parseInt(m[1]);
-            result.push({ type: 'divide', value: state.divide });
-            continue;
-        }
-        m = scanner.scan(/^V(\d+)/i);
-        if (m) {
-            state.vel = parseInt(m[1]);
-            result.push({ type: 'vel', value: state.vel });
-            continue;
-        }
-        m = scanner.scan(/^T(\d+)/i);
-        if (m) {
-            console.log("set tempo", m);
-            state.tempo = parseInt(m[1]);
-            result.push({ type: 'tempo', value: state.vel });
-            continue;
-        }
-        m = scanner.scan(/^#\s*NewTrack\n/);
-        if (m) {
-            result.push({ type: 'comment', value: m[0] });
+        } else if (cmd.type === "newtrack") {
             state = initState();
-            continue;
+        } else if (cmd.type === "vel") {
+            state.vel = cmd.vel;
+        } else if (cmd.type === "tempo") {
+            state.tempo = cmd.tempo;
         }
-        m = scanner.scan(/^#.+\n/);
-        if (m) {
-            result.push({ type: 'comment', value: m[0] });
-            continue;
-        }
-        m = scanner.scan(/^[|\s]+/);
-        if (m) {
-            result.push({ type: 'ignore', value: m[0] });
-            continue;
-        }
-        console.log(result);
-        throw SyntaxError(`无法解析: ${scanner.index} ${scanner.part()}`);
     }
-    return result;
+    return notes;
+}
+
+function serchForDivide(commands, divide, limit = 5) {
+    let found = 0, total = 0;
+    for (let cmd of commands) {
+        if (cmd.type === "note") {
+            ++total;
+            if (total > limit) {
+                break;
+            }
+            if (cmd.divide == divide) {
+                ++found;
+            }
+        }
+    }
+    return found;
+}
+
+function commandsToText(commands) {
+    let text = [];
+    let state = initState();
+    for (let i = 0; i < commands.length; ++i) {
+        let cmd = commands[i];
+        switch (cmd.type) {
+            case "rest":
+                text.push("r");
+                break
+            case "note":
+                // rest
+                let note = "R";
+                // note
+                if (cmd.type === "note") {
+                    // octave
+                    let octave = parseInt(cmd.noteNum / 12);
+                    let noteOffset = cmd.noteNum - octave * 12;
+                    switch (octave - state.octave) {
+                        case 0:
+                            break
+                        case 1:
+                            text.push(">");
+                            break;
+                        case 2:
+                            text.push(">>");
+                            break;
+                        case -1:
+                            text.push("<");
+                            break;
+                        case -2:
+                            text.push("<<");
+                            break;
+                        default:
+                            text.push(`O${octave}`);
+                    }
+                    state.octave = octave;
+                    note = NOTE_MAP_INV[noteOffset];
+                }
+                // divide preset
+                if (state.divide != cmd.divide) {
+                    if (serchForDivide(commands.slice(i), cmd.divide, 5) > 2) {
+                        state.divide = cmd.divide;
+                        text.push(`L${cmd.divide}`);
+                    }
+                }
+                // note
+                text.push(note);
+                // divide
+                if (state.divide != cmd.divide) {
+                    text.push(cmd.divide.toString());
+                }
+                // dots
+                if (cmd.dots) {
+                    for (let i = 0; i < cmd.dots; ++i) {
+                        text.push(".");
+                    }
+                }
+                // extra
+                if (cmd.extra) {
+                    text.push(cmd.extra);
+                }
+                if (cmd.is_chord) { // 和弦不增加当前时间戳
+                    text.push(":");
+                }
+                if (cmd.is_prefix) { // 连接音符
+                    text.push("&");
+                }
+                break;
+            case "newtrack":
+                state = initState();
+            case "text":
+                text.push(cmd.text);
+                break;
+            case "vel":
+            case "tempo":
+                state[cmd.type] = cmd.value;
+                text.push(`${CMD_PREFIX[cmd.type]}${cmd.value}`);
+                break;
+
+        }
+    }
+    return text.join("");
+}
+
+function textToNotes(text) {
+    return commandsToNotes(textToCommands(text));
+}
+
+function simplify(text) {
+    return commandsToText(textToCommands(text));
 }
