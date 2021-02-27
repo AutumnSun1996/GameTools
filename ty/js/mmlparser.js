@@ -234,9 +234,14 @@ function commandsToText(commands) {
                 text.push("r");
                 break
             case "note":
-                // rest
-                let note = "R";
-                // note
+                // divide preset
+                if (state.divide != cmd.divide) {
+                    if (serchForDivide(commands.slice(i), cmd.divide, 5) > 2) {
+                        state.divide = cmd.divide;
+                        text.push(`L${cmd.divide}`);
+                    }
+                }
+                // note / rest
                 if (cmd.type === "note") {
                     // octave
                     let octave = parseInt(cmd.noteNum / 12);
@@ -260,17 +265,10 @@ function commandsToText(commands) {
                             text.push(`O${octave}`);
                     }
                     state.octave = octave;
-                    note = NOTE_MAP_INV[noteOffset];
+                    text.push(NOTE_MAP_INV[noteOffset]);
+                } else {
+                    text.push("R");
                 }
-                // divide preset
-                if (state.divide != cmd.divide) {
-                    if (serchForDivide(commands.slice(i), cmd.divide, 5) > 2) {
-                        state.divide = cmd.divide;
-                        text.push(`L${cmd.divide}`);
-                    }
-                }
-                // note
-                text.push(note);
                 // divide
                 if (state.divide != cmd.divide) {
                     text.push(cmd.divide.toString());
