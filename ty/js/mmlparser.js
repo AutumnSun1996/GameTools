@@ -67,7 +67,14 @@ function initState() {
         vel: 90,
         octave: 4,
         timestamp: 0,
+        offset: 0,
     };
+}
+
+function numToNote(num) {
+    let octave = parseInt(num / 12);
+    let note = NOTE_MAP_INV[num - octave * 12];
+    return `${note}${octave}`;
 }
 
 function numTextToCommands(text) {
@@ -78,14 +85,15 @@ function numTextToCommands(text) {
     while (scanner.hasNext()) {
         let m = null;
         // Note
-        m = scanner.scan(/^([0-7])([-+]?)(%+|_+|[ABCDEF])?(\.*)(\*\d+)?(\[[12]\])?(:?)(&?)/i);
+        m = scanner.scan(/^([0-7])([-+]?)(%+|_+|[ABCDEF])?(\.*)(\*\d+)?(\[[12]\])?(:?)(&?)/);
+        console.log(m);
         if (m) {
             let note = m[1].toUpperCase(), noteNum = null, evt = {};
             if (note === "0") {
                 evt = { type: "rest" };
                 noteNum = "r";
             } else {
-                noteNum = NOTE_MAP[note] + 12 * state.octave;
+                noteNum = NOTE_MAP[note] + 12 * state.octave + state.offset;
                 if (m[2]) { // acc
                     if (m[2] === "-") {
                         --noteNum;
@@ -93,7 +101,8 @@ function numTextToCommands(text) {
                         ++noteNum;
                     }
                 }
-                evt = { type: "note", noteNum: noteNum, vel: state.vel };
+                evt = { type: "note", noteNum: noteNum };
+                evt.note = numToNote(noteNum);
             }
 
             if (m[3]) {
@@ -122,6 +131,20 @@ function numTextToCommands(text) {
         }
         if (scanner.scan(/^</)) {
             --state.octave;
+            continue;
+        }
+        m = scanner.scan(/^:([1-7])=([A-G])([#b]?)/);
+        if (m) {
+            let offset = NOTE_MAP[m[2]] - NOTE_MAP[m[1]];
+            if (m[3]) { // acc
+                if (m[3] === "-") {
+                    --offset;
+                } else {
+                    ++offset;
+                }
+            }
+            state.offset = offset;  
+            console.log(`选调${m[1]}=${m[2]}${m[3]}`, m, state);
             continue;
         }
         m = scanner.scan(/^O(\d+)/i)
@@ -153,7 +176,7 @@ function numTextToCommands(text) {
             commands.push({ type: 'newtrack', text: m[0] });
             continue;
         }
-        m = scanner.scan(/^#.+(\n|$)/);
+        m = scanner.scan(/^#.*(\n|$)/);
         if (m) {
             commands.push({ type: 'text', text: m[0] });
             continue;
@@ -191,7 +214,8 @@ function textToCommands(text) {
                         ++noteNum;
                     }
                 }
-                evt = { type: "note", noteNum: noteNum, vel: state.vel };
+                evt = { type: "note", noteNum: noteNum };
+                evt.note = numToNote(noteNum);
             }
 
             if (m[3]) {
@@ -276,7 +300,7 @@ function commandsToNotes(commands) {
             let duration = 240 / state.tempo / cmd.divide;
             state.timestamp += duration;
         } else if (cmd.type === "note") {
-            let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp, vel: cmd.vel };
+            let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp, vel: state.vel };
             evt.duration = 240 / state.tempo / cmd.divide;
             if (cmd.dots) {
                 evt.duration = evt.duration * Math.pow(1.5, cmd.dots);
