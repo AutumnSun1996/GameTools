@@ -133,7 +133,7 @@ function numTextToCommands(text) {
             --state.octave;
             continue;
         }
-        m = scanner.scan(/^:([1-7])=([A-G])([#b]?)/);
+        m = scanner.scan(/^=([1-7])=([A-G])([#b]?)(\d*)/);
         if (m) {
             let offset = NOTE_MAP[m[2]] - NOTE_MAP[m[1]];
             if (m[3]) { // acc
@@ -143,7 +143,10 @@ function numTextToCommands(text) {
                     ++offset;
                 }
             }
-            state.offset = offset;  
+            if (m[4]) {
+                offset = offset + (parseInt(m[4]) - 4) * 12;
+            }
+            state.offset = offset;
             console.log(`选调${m[1]}=${m[2]}${m[3]}`, m, state);
             continue;
         }
@@ -199,12 +202,16 @@ function textToCommands(text) {
     while (scanner.hasNext()) {
         let m = null;
         // Note
-        m = scanner.scan(/^([A-GPR])([\-\+#]?)(\d*)(\.*)(\*\d+)?(\[[12]\])?(:?)(&?)/i);
+        m = scanner.scan(/^(N\d+|[A-GPR])([\-\+#]?)(\d*)(\.*)(\*\d+)?(\[[12]\])?(:?)(&?)/i);
         if (m) {
             let note = m[1].toUpperCase(), noteNum = null, evt = {};
             if (note === "P" || note === "R") {
                 evt = { type: "rest" };
                 noteNum = "r";
+            } else if (note[0] === "N") {
+                noteNum = parseInt(note.substr(1));
+                evt = { type: "note", noteNum: noteNum };
+                evt.note = numToNote(noteNum);
             } else {
                 noteNum = NOTE_MAP[note] + 12 * state.octave;
                 if (m[2]) { // acc
@@ -307,6 +314,8 @@ function commandsToNotes(commands) {
             }
             if (prevNoteNum !== null) {
                 if (prevNoteNum !== evt.noteNum) {
+                    console.log(cmd);
+                    console.log(evt);
                     throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${evt.noteNum}`);
                 }
                 evt.duration = evt.duration + prevDuration;
