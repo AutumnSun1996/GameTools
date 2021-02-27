@@ -53,7 +53,10 @@ class Scanner {
     }
 }
 
-const NOTE_MAP = { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 };
+const NOTE_MAP = {
+    "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11,
+    "1": 0, "2": 2, "3": 4, "4": 5, "5": 7, "6": 9, "7": 11,
+};
 const NOTE_MAP_INV = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const CMD_PREFIX = { vel: "V", tempo: "T" };
 
@@ -65,6 +68,105 @@ function initState() {
         octave: 4,
         timestamp: 0,
     };
+}
+
+function numTextToCommands(text) {
+    const DIVIDE_MAP = { "%": 4, "%%": 2, "%%%%": 1, "_": 8, "__": 16, "___": 32, "A": 1, "B": 2, "C": 4, "D": 8, "E": 16, "F": 32 };
+    let scanner = new Scanner(text);
+    let commands = [];
+    let state = initState();
+    while (scanner.hasNext()) {
+        let m = null;
+        // Note
+        m = scanner.scan(/^([0-7])([-+]?)(%+|_+|[ABCDEF])?(\.*)(\*\d+)?(\[[12]\])?(:?)(&?)/i);
+        if (m) {
+            let note = m[1].toUpperCase(), noteNum = null, evt = {};
+            if (note === "0") {
+                evt = { type: "rest" };
+                noteNum = "r";
+            } else {
+                noteNum = NOTE_MAP[note] + 12 * state.octave;
+                if (m[2]) { // acc
+                    if (m[2] === "-") {
+                        --noteNum;
+                    } else {
+                        ++noteNum;
+                    }
+                }
+                evt = { type: "note", noteNum: noteNum, vel: state.vel };
+            }
+
+            if (m[3]) {
+                evt.divide = DIVIDE_MAP[m[3]];
+            } else {
+                evt.divide = state.divide;
+            }
+            if (m[4]) {
+                evt.dots = m[4].length;
+            }
+            if (m[5] || m[6]) {
+                evt.extra = m[5] + m[6];
+            }
+            if (m[7]) {
+                evt.is_chord = true;
+            }
+            if (m[8]) {
+                evt.is_prefix = true;
+            }
+            commands.push(evt)
+            continue;
+        }
+        if (scanner.scan(/^>/)) {
+            ++state.octave;
+            continue;
+        }
+        if (scanner.scan(/^</)) {
+            --state.octave;
+            continue;
+        }
+        m = scanner.scan(/^O(\d+)/i)
+        if (m) {
+            state.octave = parseInt(m[1]);
+            continue;
+        }
+        m = scanner.scan(/^L(\d+)/i)
+        if (m) {
+            state.divide = parseInt(m[1]);
+            continue;
+        }
+        m = scanner.scan(/^V(\d+)/i);
+        if (m) {
+            state.vel = parseInt(m[1]);
+            commands.push({ type: 'vel', value: state.vel });
+            continue;
+        }
+        m = scanner.scan(/^T(\d+)/i);
+        if (m) {
+            console.log("set tempo", m);
+            state.tempo = parseInt(m[1]);
+            commands.push({ type: 'tempo', value: state.tempo });
+            continue;
+        }
+        m = scanner.scan(/^#\s*NewTrack\n/);
+        if (m) {
+            state = initState();
+            commands.push({ type: 'newtrack', text: m[0] });
+            continue;
+        }
+        m = scanner.scan(/^#.+(\n|$)/);
+        if (m) {
+            commands.push({ type: 'text', text: m[0] });
+            continue;
+        }
+        m = scanner.scan(/^[|\s]/);
+        if (m) {
+            commands.push({ type: 'text', text: m[0] });
+            continue;
+        }
+        console.log(commands);
+        throw SyntaxError(`无法解析: ${scanner.index} ${scanner.part()}`);
+    }
+    return commands;
 }
 
 function textToCommands(text) {
@@ -154,7 +256,7 @@ function textToCommands(text) {
             commands.push({ type: 'text', text: m[0] });
             continue;
         }
-        m = scanner.scan(/^[|\s]+/);
+        m = scanner.scan(/^[|\s]/);
         if (m) {
             commands.push({ type: 'text', text: m[0] });
             continue;
@@ -171,7 +273,8 @@ function commandsToNotes(commands) {
     let prevNoteNum = null, prevDuration = 0;
     for (let cmd of commands) {
         if (cmd.type === "rest") {
-            state.timestamp += evt.duration;
+            let duration = 240 / state.tempo / cmd.divide;
+            state.timestamp += duration;
         } else if (cmd.type === "note") {
             let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp, vel: cmd.vel };
             evt.duration = 240 / state.tempo / cmd.divide;
@@ -180,7 +283,7 @@ function commandsToNotes(commands) {
             }
             if (prevNoteNum !== null) {
                 if (prevNoteNum !== evt.noteNum) {
-                    throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${evt.noteNum} @${scanner.index} ${scanner.part(-5, 0)}`)
+                    throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${evt.noteNum}`);
                 }
                 evt.duration = evt.duration + prevDuration;
             }
@@ -231,8 +334,6 @@ function commandsToText(commands) {
         let cmd = commands[i];
         switch (cmd.type) {
             case "rest":
-                text.push("r");
-                break
             case "note":
                 // divide preset
                 if (state.divide != cmd.divide) {

@@ -16,8 +16,11 @@
 </head>
 
 <body>
-    <button onclick="testSimplify()">Simplify</button><button onclick="play()">Play</button><button
-        onclick="stop()">Stop</button>
+    <div id="mode"></div>
+    <button onclick="toggle()">切换模式</button>
+    <button onclick="testSimplify()">Simplify</button>
+    <button onclick="play()">Play</button>
+    <button onclick="stop()">Stop</button>
     <br>
     <textarea name="mml" id="mml" cols="80" rows="50"></textarea>
     <div id="output"></div>
@@ -34,17 +37,29 @@
             baseUrl: "https://tonejs.github.io/audio/salamander/",
         }).toDestination();
 
+        let mode = document.getElementById("mode");
         let input = document.getElementById("mml");
         let output = document.getElementById("output");
-        let synth;
+        let synth, parse;
+
+        function toggle() {
+            if (mode.innerText == "数字") {
+                mode.innerText = "字母";
+                parse = textToCommands;
+            } else {
+                mode.innerText = "数字";
+                parse = numTextToCommands;
+            }
+        }
+        toggle();
 
         const audioContext = new AudioContext();
         function play() {
             if (synth) {
                 stop();
             }
-            let notes = textToNotes(input.value);
-            notes.sort((a, b) => {return a.timestamp - b.timestamp;});
+            let notes = commandsToNotes(parse(input.value));
+            notes.sort((a, b) => { return a.timestamp - b.timestamp; });
 
             synth = sampler;
             synth.sync()
@@ -81,7 +96,7 @@
             return res;
         }
         function testSimplify() {
-            let oldCommands = textToCommands(input.value);
+            let oldCommands = parse(input.value);
             let oldJson = JSON.stringify(oldCommands);
 
             let newText = commandsToText(oldCommands);
