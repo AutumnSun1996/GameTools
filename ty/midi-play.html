@@ -12,28 +12,28 @@
 </head>
 
 <body>
-    <button onclick="play()">Play</button><button onclick="stop()">Stop</button>
+    <button onclick="testSimplify()">Simplify</button><button onclick="play()">Play</button><button
+        onclick="stop()">Stop</button>
     <br>
-    <textarea name="mml" id="mml" cols="60" rows="50">
-    </textarea>
+    <textarea name="mml" id="mml" cols="80" rows="50"></textarea>
+    <div id="output"></div>
     <script>
         let input = document.getElementById("mml");
+        let output = document.getElementById("output");
         let synth;
+
         const audioContext = new AudioContext();
         function play() {
             if (synth) {
                 stop();
             }
-            let iter = parse(input.value);
+            let notes = textToNotes(input.value);
             synth = new Tone.PolySynth().toDestination();
-            synth.set({ detune: -1200 });
             synth.sync()
-            for (let e of iter) {
-                if (e.type === "note") {
-                    console.log("NOTE: " + JSON.stringify(e));
-                    let hold = e.duration - Math.min(0.1, e.duration / 4);
-                    synth.triggerAttackRelease(e.note, hold, e.timestamp, e.vel / 127);
-                }
+            for (let e of notes) {
+                console.log("NOTE: " + JSON.stringify(e));
+                let freq = Math.pow(2, (e.noteNum - 69) / 12) * 440;
+                synth.triggerAttackRelease(freq, e.hold, e.timestamp, e.vel / 127);
             }
             Tone.Transport.start();
         }
@@ -44,7 +44,39 @@
             synth.dispose();
             synth = null;
         }
+        function compareCommands(a, b) {
+            let res = true;
+            let length = Math.min(a.length, b.length);
+            if (a.length !== b.length) {
+                console.log(`长度不同: ${a.length}, ${b.length}`);
+                res = false;
+            }
+            for (let i = 0; i < length; ++i) {
+                if (JSON.stringify(a[i]) !== JSON.stringify(b[i])) {
+                    console.log(`第${i}个指令不同:`, a[i], b[i]);
+                    console.log(commandsToText([a[i]]));
+                    console.log(commandsToText([b[i]]));
+                    return false;
+                }
+            }
+            return res;
+        }
+        function testSimplify() {
+            let oldCommands = textToCommands(input.value);
+            let oldJson = JSON.stringify(oldCommands);
 
+            let newText = commandsToText(oldCommands);
+            let newCommands = textToCommands(newText);
+            let newJson = JSON.stringify(newCommands);
+            if (!compareCommands(oldCommands, newCommands)) {
+                console.error("解析结果不一致");
+                console.log(oldCommands);
+                console.log(newCommands);
+                output.innerText = `${oldJson}\n----------\n${newJson}\n----------${newText}`;
+            } else {
+                output.innerText = newText;
+            }
+        }
     </script>
 </body>
 
