@@ -173,19 +173,19 @@ function commandsToNotes(commands) {
         if (cmd.type === "rest") {
             state.timestamp += evt.duration;
         } else if (cmd.type === "note") {
-            let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp };
-            evt.duration = 240 / state.tempo / divide;
+            let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp, vel: cmd.vel };
+            evt.duration = 240 / state.tempo / cmd.divide;
             if (cmd.dots) {
                 evt.duration = evt.duration * Math.pow(1.5, cmd.dots);
             }
             if (prevNoteNum !== null) {
-                if (prevNoteNum !== noteNum) {
-                    throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${noteNum} @${scanner.index} ${scanner.part(-5, 0)}`)
+                if (prevNoteNum !== evt.noteNum) {
+                    throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${evt.noteNum} @${scanner.index} ${scanner.part(-5, 0)}`)
                 }
                 evt.duration = evt.duration + prevDuration;
             }
             if (cmd.is_prefix) { // '&'
-                prevNoteNum = noteNum;
+                prevNoteNum = evt.noteNum;
                 prevDuration = evt.duration;
                 console.log("pre note", evt);
             } else {
@@ -200,9 +200,9 @@ function commandsToNotes(commands) {
         } else if (cmd.type === "newtrack") {
             state = initState();
         } else if (cmd.type === "vel") {
-            state.vel = cmd.vel;
+            state.vel = cmd.value;
         } else if (cmd.type === "tempo") {
-            state.tempo = cmd.tempo;
+            state.tempo = cmd.value;
         }
     }
     return notes;
@@ -302,7 +302,6 @@ function commandsToText(commands) {
                 state[cmd.type] = cmd.value;
                 text.push(`${CMD_PREFIX[cmd.type]}${cmd.value}`);
                 break;
-
         }
     }
     return text.join("");
