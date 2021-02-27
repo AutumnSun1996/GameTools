@@ -8,7 +8,11 @@
     <title>MML Player</title>
     <script src="js/mmlparser.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
-
+    <style>
+        #output {
+            word-break: break-all;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,6 +22,18 @@
     <textarea name="mml" id="mml" cols="80" rows="50"></textarea>
     <div id="output"></div>
     <script>
+        const sampler = new Tone.Sampler({
+            urls: {
+                "C2": "C2.mp3",
+                "C3": "C3.mp3",
+                "C4": "C4.mp3",
+                "C5": "C5.mp3",
+                "C6": "C6.mp3",
+                "C7": "C7.mp3",
+            },
+            baseUrl: "https://tonejs.github.io/audio/salamander/",
+        }).toDestination();
+
         let input = document.getElementById("mml");
         let output = document.getElementById("output");
         let synth;
@@ -28,12 +44,15 @@
                 stop();
             }
             let notes = textToNotes(input.value);
-            synth = new Tone.PolySynth().toDestination();
+            notes.sort((a, b) => {return a.timestamp - b.timestamp;});
+
+            synth = sampler;
             synth.sync()
             for (let e of notes) {
                 console.log("NOTE: " + JSON.stringify(e));
-                let freq = Math.pow(2, (e.noteNum - 69) / 12) * 440;
-                synth.triggerAttackRelease(freq, e.hold, e.timestamp, e.vel / 127);
+                let octave = parseInt(e.noteNum / 12);
+                let note = NOTE_MAP_INV[e.noteNum - octave * 12];
+                synth.triggerAttackRelease(`${note}${octave}`, e.hold, e.timestamp, e.vel / 127);
             }
             Tone.Transport.start();
         }
@@ -41,7 +60,7 @@
             Tone.Transport.stop();
             Tone.Transport.cancel();
             synth.releaseAll();
-            synth.dispose();
+            synth.unsync();
             synth = null;
         }
         function compareCommands(a, b) {
