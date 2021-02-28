@@ -17,17 +17,6 @@ function numToNote(num) {
 }
 const NOTE_MAP_INV = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-function reduction(m, n) {
-    let start = Math.min(m, n);
-    for (var i = start; i >= 2; i--) {
-        if (m % i == 0 && n % i == 0) {
-            m = m / i;
-            n = n / i;
-            break;
-        }
-    }
-    return { m, n };
-}
 
 function getDivide(n) {
     const units = [64, 32, 16, 8, 4, 2, 1];
@@ -162,9 +151,6 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
         }
     }
     function pushGroup(wantedDuration) {
-        if (group.notes.length === 0) {
-            return;
-        }
         // 音符开始时间改变
         // 找到结束时间等于新的时间的音符, 或者添加对应的rest
         let mainNote = { duration: 0, ticks: group.time };
@@ -222,7 +208,19 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
     pushGroup(null);
     return commands;
 }
-
+function commandStats(commands) {
+    let state = { max: 0, min: 127 };
+    for (let cmd of commands) {
+        if (cmd.type !== "note") {
+            continue;
+        }
+        state.max = Math.max(cmd.noteNum, state.max);
+        state.min = Math.min(cmd.noteNum, state.min);
+    }
+    state.maxNote = numToNote(state.max);
+    state.minNote = numToNote(state.min);
+    return state;
+}
 // // console.log(getDivide(1920*16/480))
 // // process.exit();
 
@@ -231,8 +229,8 @@ const { Midi } = require('@tonejs/midi')
 
 var mml = require('./js/mmlparser.js');
 // Read MIDI file into a buffer
-var input = fs.readFileSync('midi/This game.txt');
-var input = fs.readFileSync('midi/There is a reason.txt');
+// var input = fs.readFileSync('midi/This game.txt');
+var input = fs.readFileSync('midi/妄想税.txt');
 // var input = fs.readFileSync('E:\\Documents\\Documents\\MuseScore3\\乐谱\\There is a reason-t1.mid');
 // input = atob(input);
 // console.log(input.slice(0, 4).toString());
@@ -252,7 +250,8 @@ let result = [];
 for (let track of parsed.tracks) {
     console.log(track.notes[0]);
     let cmds = notesToCommands(track.notes);
-    console.log(cmds[0]);
+    console.log(commandStats(cmds));
+    // console.log(cmds);
     cmds.unshift(...tempos);
     cmds.sort((a, b) => { a.ticks - b.ticks });
     // console.log(cmds.slice(0, 10));
@@ -262,7 +261,7 @@ for (let track of parsed.tracks) {
 }
 fs.writeFileSync("out.mml", result.join("\n#NewTrack\n"))
 // console.log(mml.commandsToText([{ type: "note", noteNum: 76, divide: 4 }]))
-
+173动物管理局招贤纳士.加入本会,月月奖金,天天美女,大块吃肉,大碗喝酒,名额有限
 
 // let notes = [
 //     {
