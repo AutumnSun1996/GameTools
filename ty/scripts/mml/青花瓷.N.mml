@@ -1,0 +1,51 @@
+#Title 青花瓷
+
+#    b
+#   -a
+#    g
+# ---f
+#    e
+# ---d
+#    c   O3/O5
+# ---b
+#    a
+# ---g
+#    f
+# ---e
+#    d
+#   -c   O2/O4
+#    b
+
+
+# 8:  下划线*1
+# 16: 下划线*2
+
+
+#NewTrack
+t54v120
+l16o4
+
+r8r16 a8.:>f8. c r8r16 <f8.:b8. f |
+L16 r8r a gfgb g4:>e4 r 
+        dc<a|>c8c<a >c8c<a >c<ag8 r>dc<a|
+# 0--   21 6  1 1 6  1 1 6  1 65  0 21 6
+>c8c<a >c8ce dcc8|
+#1 1 6  1 13 211
+# r<ga>ee8ede8edegee
+# reee|ddddd8ce8d8.
+# rdc<a>c8c<a>c8c<a>c<ag8
+# rga>eg8geg8gedcc8
+# rdcdeddcd8c<a>dcc<a>c8cc&c2.
+# rggede<a8>deged4
+# rggede<g8>degdc4
+# rcdegagfgeedd4
+# rcdccdcd8e8gee8.
+# rggede<a8>deged4
+# rggede<g8>degdc4
+# rcdegagfgeedd8.
+# <g>e8dd8c8.&c2
+#NewTrack
+t54v120
+L16 O3
+de a4. | <g>d g4. |
+c g>c8 L4 r c:<g:c r
