@@ -61,7 +61,7 @@ function midiTrackToNotes(track) {
         state.time += evt.deltaTime;
         let chl = state.channels[evt.channel]
         function handleNoteOff(evt) {
-            let key = evt.noteNumber.toString();
+            let key = evt.noteNum.toString();
             let note = chl.notes[key];
             if (!note) {
                 console.warn("无对应的按下事件", evt, state);
@@ -72,7 +72,7 @@ function midiTrackToNotes(track) {
         }
         switch (evt.type) {
             case "noteOn":
-                let key = evt.noteNumber.toString();
+                let key = evt.noteNum.toString();
                 if (evt.velocity === 0) {
                     handleNoteOff(evt);
                 } else {
@@ -80,7 +80,7 @@ function midiTrackToNotes(track) {
                         console.warn("重复的按下事件", evt, state);
                     }
                     chl.notes[key] = {
-                        noteNum: evt.noteNumber,
+                        noteNum: evt.noteNum,
                         timestamp: state.time,
                         vel: evt.velocity,
                     }
@@ -104,28 +104,28 @@ function midiTrackToNotes(track) {
 
 function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
     let commands = [];
-    let groups = [];
     let group = { time: 0, notes: [] };
     let rescale = ticksPerBeat / quantize;
     let minRest = ticksPerBeat / 16;
 
     function pushNote(note) {
         let divides = getDivide(note.duration * 16 / ticksPerBeat);
-        console.log("push", note, note.duration * 16 / ticksPerBeat, divides);
+        // console.log("push", note, note.duration * 16 / ticksPerBeat, divides);
         divides[divides.length - 1].end = true;
 
         // 检查是否需要更新 vel
         if (note.type === "note" && note.velocity !== commandState.vel) {
-            commands.push({ type: 'vel', note: evt.velocity });
+            commands.push({ type: 'vel', note: evt.velocity, ticks: note.ticks });
         }
         for (let d of divides) {
             let evt;
             if (note.type === "rest") {
-                evt = { type: "rest" }
+                evt = { type: "rest", ticks: note.ticks }
             } else {
                 evt = {
                     type: "note",
-                    noteNum: note.midi
+                    noteNum: note.midi,
+                    ticks: note.ticks
                 }
             }
             evt.divide = d.divide;
@@ -135,7 +135,7 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
             if (!d.end) {
                 evt.is_prefix = true;
             }
-            if (note.is_chord) {
+            if (d.end && note.is_chord) {
                 evt.is_chord = true;
             }
             commands.push(evt);
@@ -147,21 +147,23 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
         }
         // 音符开始时间改变
         // 找到结束时间等于新的时间的音符, 或者添加对应的rest
-        let mainNote = { duration: 0 };
+        let mainNote = { duration: 0, ticks: group.time };
         let notes = [];
         for (let note of group.notes) {
             let n = {
                 midi: note.midi,
-                duration: parseInt(Math.ceil(note.durationTicks / rescale) * rescale),
+                ticks: note.ticks,
+                duration: note.duration,
+                is_chord: true,
             }
             notes.push(n);
             // 当前音符更符合需求, 设置当前音符为主音符
             if (wantedDuration >= n.duration && n.duration > mainNote.duration) {
-                n.is_chord = false;
-                mainNote.is_chord = true;
                 mainNote = n;
             }
         }
+        mainNote.is_chord = false;
+        // console.log("pushGroup", mainNote, notes);
         // 添加和弦音符
         for (let note of notes) {
             if (note.is_chord) {
@@ -180,16 +182,21 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
         }
         // 补充休止符
         if (mainNote.duration < wantedDuration) {
-            pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration });
+            pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration, ticks: mainNote.ticks });
         }
     }
     for (let n of notes) {
+        n.duration = parseInt(Math.ceil(n.durationTicks / rescale) * rescale)
         if (n.ticks === group.time) {
             group.notes.push(n);
             continue;
         }
         pushGroup(n.ticks - group.time);
         group = { time: n.ticks, notes: [n] };
+    }
+    // push last group
+    if(group.notes.length > 0){
+        pushGroup(group.notes[0].duration);
     }
     return commands;
 }
@@ -199,18 +206,88 @@ const { Midi } = require('@tonejs/midi')
 
 var mml = require('./js/mmlparser.js');
 // Read MIDI file into a buffer
-var input = fs.readFileSync('midi/There is a reason.mid');
+var input = fs.readFileSync('midi/This game.txt');
+var input = fs.readFileSync('midi/There is a reason.txt');
+var input = fs.readFileSync('E:\\Documents\\Documents\\MuseScore3\\乐谱\\There is a reason-t1.mid');
+// input = atob(input);
+// console.log(input.slice(0, 4).toString());
+// input = Buffer.from(input.toString(), "base64");
+// console.log(input.slice(0, 4).toString());
 
 // Parse it into an intermediate representation
 // This will take any array-like object.  It just needs to support .length, .slice, and the [] indexed element getter.
 // Buffers do that, so do native JS arrays, typed arrays, etc.
 const parsed = new Midi(input);
-console.log(parsed);
-let notes = parsed.tracks[1].notes;
-console.log(notes);
-let cmds = notesToCommands(notes);
-console.log(cmds);
-// console.log(getDivide(64 + 32))
-console.log(mml.commandsToText(cmds));
-// console.log(numToNote(48));
+let tempos = []
+for (let tempo of parsed.header.tempos) {
+    tempos.push({ type: "tempo", value: Math.round(tempo.bpm), ticks: tempo.ticks });
+}
+console.log(tempos);
+let result = [];
+for (let track of parsed.tracks) {
+    console.log(track.notes[0]);
+    let cmds = notesToCommands(track.notes);
+    console.log(cmds[0]);
+    cmds.unshift(...tempos);
+    cmds.sort((a, b) => { a.ticks - b.ticks });
+    // console.log(cmds.slice(0, 10));
+    let text = mml.commandsToText(cmds);
+    console.log(text.substr(0, 10));
+    result.push(text);
+}
+fs.writeFileSync("out.mml", result.join("\n#NewTrack\n"))
+// console.log(mml.commandsToText([{ type: "note", noteNum: 76, divide: 4 }]))
 
+
+// let notes = [
+//     {
+//         "duration": 0.21175411249999998,
+//         "durationTicks": 227,
+//         "midi": 61,
+//         "name": "C#4",
+//         "ticks": 240,
+//         "time": 0.223881,
+//         "velocity": 0.5905511811023622
+//     },
+//     {
+//         "duration": 0.21175411249999998,
+//         "durationTicks": 227,
+//         "midi": 68,
+//         "name": "G#4",
+//         "ticks": 480,
+//         "time": 0.447762,
+//         "velocity": 0.5905511811023622
+//     },
+//     {
+//         "duration": 0.21175411249999998,
+//         "durationTicks": 227,
+//         "midi": 76,
+//         "name": "E5",
+//         "ticks": 720,
+//         "time": 0.671643,
+//         "velocity": 0.5905511811023622
+//     },
+//     {
+//         "duration": 0.21175411249999998,
+//         "durationTicks": 227,
+//         "midi": 73,
+//         "name": "C#5",
+//         "ticks": 960,
+//         "time": 0.895524,
+//         "velocity": 0.5905511811023622
+//     },
+//     {
+//         "duration": 0.6371280125000001,
+//         "durationTicks": 683,
+//         "midi": 76,
+//         "name": "E5",
+//         "ticks": 1200,
+//         "time": 1.119405,
+//         "velocity": 0.5905511811023622
+//     },];
+// let cmds = notesToCommands(notes);
+// console.log(cmds);
+// cmds.sort((a, b) => { a.ticks - b.ticks });
+// // console.log(cmds.slice(0, 10));
+// let text = mml.commandsToText(cmds);
+// console.log(text);
