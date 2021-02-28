@@ -297,7 +297,18 @@ function textToCommands(text) {
     }
     return commands;
 }
-
+/**
+ * 
+ * @param {Array} commands 指令列表
+ * @returns 
+ * [{
+ *   noteNum: 48,
+ *   timestamp: 10.52,
+ *   vel: 90,
+ *   duration: 0.5,
+ *   hold: 0.4,
+ * }]
+ */
 function commandsToNotes(commands) {
     let notes = [];
     let state = initState();
