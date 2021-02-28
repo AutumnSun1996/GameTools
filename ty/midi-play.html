@@ -65,8 +65,8 @@
             synth.sync()
             for (let e of notes) {
                 console.log("NOTE: " + JSON.stringify(e));
-                let octave = parseInt(e.noteNum / 12);
-                let note = NOTE_MAP_INV[e.noteNum - octave * 12];
+                let octave = parseInt(e.noteNum / 12 - 1);
+                let note = NOTE_MAP_INV[e.noteNum % 12];
                 synth.triggerAttackRelease(`${note}${octave}`, e.hold, e.timestamp, e.vel / 127);
             }
             Tone.Transport.start();
