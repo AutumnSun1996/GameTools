@@ -93,7 +93,7 @@ function numTextToCommands(text) {
                 evt = { type: "rest" };
                 noteNum = "r";
             } else {
-                noteNum = NOTE_MAP[note] + 12 * (state.octave + 1) + state.offset;
+                noteNum = NOTE_MAP[note] + 12 * state.octave + 12 + state.offset;
                 if (m[2]) { // acc
                     if (m[2] === "-") {
                         --noteNum;
@@ -374,13 +374,15 @@ function serchForDivide(commands, divide, limit = 5) {
 function commandsToText(commands) {
     let text = [];
     let state = initState();
+    let allowDivide = true;
     for (let i = 0; i < commands.length; ++i) {
         let cmd = commands[i];
         switch (cmd.type) {
             case "rest":
             case "note":
                 // divide preset
-                if (state.divide != cmd.divide) {
+                // 在部分特殊情况下禁用 L 指令
+                if (allowDivide && state.divide != cmd.divide) {
                     if (serchForDivide(commands.slice(i), cmd.divide, 5) > 2) {
                         state.divide = cmd.divide;
                         text.push(`L${cmd.divide}`);
@@ -433,6 +435,10 @@ function commandsToText(commands) {
                 }
                 if (cmd.is_prefix) { // 连接音符
                     text.push("&");
+                    // 连接音符的后面禁用L指令
+                    allowDivide = false;
+                } else {
+                    allowDivide = true;
                 }
                 break;
             case "newtrack":
