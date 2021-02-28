@@ -45,7 +45,7 @@ class MMLParser:
         if note in "PR":
             note_num = 0
         else:
-            note_num = NOTE_MAP[note] + 12 * self.octave
+            note_num = NOTE_MAP[note] + 12 * self.octave + 12
             acc = m.group(2)
             if acc:
                 if acc in "+#":

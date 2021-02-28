@@ -72,8 +72,8 @@ function initState() {
 }
 
 function numToNote(num) {
-    let octave = parseInt(num / 12);
-    let note = NOTE_MAP_INV[num - octave * 12];
+    let octave = parseInt(num / 12 - 1);
+    let note = NOTE_MAP_INV[num % 12];
     return `${note}${octave}`;
 }
 
@@ -93,7 +93,7 @@ function numTextToCommands(text) {
                 evt = { type: "rest" };
                 noteNum = "r";
             } else {
-                noteNum = NOTE_MAP[note] + 12 * state.octave + state.offset;
+                noteNum = NOTE_MAP[note] + 12 * (state.octave + 1) + state.offset;
                 if (m[2]) { // acc
                     if (m[2] === "-") {
                         --noteNum;
@@ -213,7 +213,7 @@ function textToCommands(text) {
                 evt = { type: "note", noteNum: noteNum };
                 evt.note = numToNote(noteNum);
             } else {
-                noteNum = NOTE_MAP[note] + 12 * state.octave;
+                noteNum = NOTE_MAP[note] + 12 * state.octave + 12;
                 if (m[2]) { // acc
                     if (m[2] === "-") {
                         --noteNum;
@@ -389,8 +389,8 @@ function commandsToText(commands) {
                 // note / rest
                 if (cmd.type === "note") {
                     // octave
-                    let octave = parseInt(cmd.noteNum / 12);
-                    let noteOffset = cmd.noteNum - octave * 12;
+                    let octave = parseInt(cmd.noteNum / 12 - 1);
+                    let noteOffset = cmd.noteNum % 12;
                     switch (octave - state.octave) {
                         case 0:
                             break
