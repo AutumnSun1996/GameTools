@@ -52,83 +52,11 @@ function getDivide(n) {
     return res;
 }
 
-function midiTrackToCommands(track, ticksPerBeat) {
+function midiTrackToNotes(track) {
     let state = initState();
-    let commandState = { time: 0 };
-    let commands = [];
-    let allDivide = {};
-    // 记录当前的和弦
-    let lastCoords = [];
+    let notes = [];
+    let extraCommands = [];
 
-    function pushNote(note) {
-        let divides = getDivide(note.duration * 16 / ticksPerBeat);
-        divides[divides.length - 1].end = true;
-
-        // 检查是否需要更新 vel
-        if (note.type === "note" && note.vel !== commandState.vel) {
-            commands.push({ type: 'vel', note: evt.vel });
-        }
-        for (let d of divides) {
-            let evt;
-            if (note.type === "rest") {
-                evt = { type: "rest" }
-            } else {
-                evt = {
-                    type: "note",
-                    noteNum: note.noteNum
-                }
-            }
-            evt.divide = d.divide;
-            if (d.dot) {
-                evt.dots = 1;
-            }
-            if (!d.end) {
-                evt.is_prefix = true;
-            } else {
-                if (note.is_chord) {
-                    evt.is_chord = true;
-                }
-            }
-            commands.push(evt);
-        }
-    }
-    function pushCoords(wantedDuration) {
-        // 音符开始时间改变
-        // 找到结束时间等于新的时间的音符, 或者添加对应的rest
-        let mainNote = null;
-        let resorted = [];
-        for (let n of lastCoords) {
-            // 未找到主要音符且当前音符符合需求, 设置当前音符为主音符
-            if (!mainNote && wantedDuration === n.duration) {
-                n.is_chord = false;
-                mainNote = n;
-            } else {
-                n.is_chord = true;
-                resorted.push(n);
-            }
-        }
-        // 无对应时间的音符, 添加休止符
-        if (!mainNote) {
-            mainNote = { type: "rest", duration: wantedDuration };
-        }
-        // 主音符放在最后
-        resorted.push(mainNote);
-        for (let note of resorted) {
-            pushNote(note);
-        }
-    }
-    function updateCoords(note) {
-        let wantedDuration = note.time - commandState.time;
-        if (wantedDuration === 0) {
-            // 音符开始时间未变化, 放入当前和弦
-            lastCoords.push(note);
-            return;
-        }
-        pushCoords(wantedDuration);
-        // 更新和弦和时间信息
-        lastCoords = [note];
-        commandState.time = note.time;
-    }
     for (let evt of track) {
         state.time += evt.deltaTime;
         let chl = state.channels[evt.channel]
@@ -138,8 +66,8 @@ function midiTrackToCommands(track, ticksPerBeat) {
             if (!note) {
                 console.warn("无对应的按下事件", evt, state);
             }
-            note.duration = state.time - note.time;
-            updateCoords(note);
+            note.hold = state.time - note.timestamp;
+            notes.push(note);
             delete chl.notes[key];
         }
         switch (evt.type) {
@@ -152,8 +80,8 @@ function midiTrackToCommands(track, ticksPerBeat) {
                         console.warn("重复的按下事件", evt, state);
                     }
                     chl.notes[key] = {
-                        time: state.time,
                         noteNum: evt.noteNumber,
+                        timestamp: state.time,
                         vel: evt.velocity,
                     }
                 }
@@ -162,31 +90,127 @@ function midiTrackToCommands(track, ticksPerBeat) {
                 handleNoteOff(evt);
                 break;
             case "trackName":
-                commands.push({ type: "text", text: `#TrackName ${evt.text}\n` });
+                extraCommands.push({
+                    type: "text", text: `#TrackName ${evt.text}\n`,
+                    timestamp: state.time,
+                });
             default:
             // console.debug("ignore event", state.time, evt,);
         }
     }
-    if (lastCoords.length > 0) {
-        pushCoords(lastCoords[0].duration);
+    notes.sort((a, b) => { a.timestamp - b.timestamp });
+    return { notes, extraCommands };
+}
+
+function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
+    let commands = [];
+    let groups = [];
+    let group = { time: 0, notes: [] };
+    let rescale = ticksPerBeat / quantize;
+    let minRest = ticksPerBeat / 16;
+
+    function pushNote(note) {
+        let divides = getDivide(note.duration * 16 / ticksPerBeat);
+        console.log("push", note, note.duration * 16 / ticksPerBeat, divides);
+        divides[divides.length - 1].end = true;
+
+        // 检查是否需要更新 vel
+        if (note.type === "note" && note.velocity !== commandState.vel) {
+            commands.push({ type: 'vel', note: evt.velocity });
+        }
+        for (let d of divides) {
+            let evt;
+            if (note.type === "rest") {
+                evt = { type: "rest" }
+            } else {
+                evt = {
+                    type: "note",
+                    noteNum: note.midi
+                }
+            }
+            evt.divide = d.divide;
+            if (d.dot) {
+                evt.dots = 1;
+            }
+            if (!d.end) {
+                evt.is_prefix = true;
+            }
+            if (note.is_chord) {
+                evt.is_chord = true;
+            }
+            commands.push(evt);
+        }
     }
-    console.log(allDivide);
+    function pushGroup(wantedDuration) {
+        if (group.notes.length === 0) {
+            return;
+        }
+        // 音符开始时间改变
+        // 找到结束时间等于新的时间的音符, 或者添加对应的rest
+        let mainNote = { duration: 0 };
+        let notes = [];
+        for (let note of group.notes) {
+            let n = {
+                midi: note.midi,
+                duration: parseInt(Math.ceil(note.durationTicks / rescale) * rescale),
+            }
+            notes.push(n);
+            // 当前音符更符合需求, 设置当前音符为主音符
+            if (wantedDuration >= n.duration && n.duration > mainNote.duration) {
+                n.is_chord = false;
+                mainNote.is_chord = true;
+                mainNote = n;
+            }
+        }
+        // 添加和弦音符
+        for (let note of notes) {
+            if (note.is_chord) {
+                pushNote(note);
+            }
+        }
+        // 添加主音符
+        if (mainNote.duration > 0) {
+            let delta = wantedDuration - mainNote.duration;
+            if (delta > 0 && delta < minRest) {
+                console.log("延长主音符", mainNote.duration, wantedDuration);
+                mainNote.duration = wantedDuration;
+                console.log(mainNote)
+            }
+            pushNote(mainNote);
+        }
+        // 补充休止符
+        if (mainNote.duration < wantedDuration) {
+            pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration });
+        }
+    }
+    for (let n of notes) {
+        if (n.ticks === group.time) {
+            group.notes.push(n);
+            continue;
+        }
+        pushGroup(n.ticks - group.time);
+        group = { time: n.ticks, notes: [n] };
+    }
     return commands;
 }
 
 var fs = require('fs')
-var parseMidi = require('midi-file').parseMidi
+const { Midi } = require('@tonejs/midi')
+
 var mml = require('./js/mmlparser.js');
 // Read MIDI file into a buffer
-var input = fs.readFileSync('midi/This Game.mid')
+var input = fs.readFileSync('midi/There is a reason.mid');
 
 // Parse it into an intermediate representation
 // This will take any array-like object.  It just needs to support .length, .slice, and the [] indexed element getter.
 // Buffers do that, so do native JS arrays, typed arrays, etc.
-var parsed = parseMidi(input)
-// console.log(parsed.header.ticksPerBeat);
-let commands = midiTrackToCommands(parsed.tracks[1], parsed.header.ticksPerBeat);
-console.log(commands);
+const parsed = new Midi(input);
+console.log(parsed);
+let notes = parsed.tracks[1].notes;
+console.log(notes);
+let cmds = notesToCommands(notes);
+console.log(cmds);
 // console.log(getDivide(64 + 32))
-console.log(mml.commandsToText(commands));
-console.log(numToNote(48));
+console.log(mml.commandsToText(cmds));
+// console.log(numToNote(48));
+
