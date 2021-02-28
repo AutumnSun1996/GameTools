@@ -446,3 +446,11 @@ function textToNotes(text) {
 function simplify(text) {
     return commandsToText(textToCommands(text));
 }
+
+if (module) {
+    module.exports = {
+        commandsToText,
+        textToCommands,
+        numToNote,
+    }
+}
