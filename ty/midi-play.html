@@ -22,7 +22,7 @@
     <button onclick="play()">Play</button>
     <button onclick="stop()">Stop</button>
     <br>
-    <textarea name="mml" id="mml" cols="80" rows="50"></textarea>
+    <textarea name="mml" id="mml" cols="120" rows="50"></textarea>
     <div id="output"></div>
     <script>
         const sampler = new Tone.Sampler({
@@ -97,15 +97,15 @@
         }
         function testSimplify() {
             let oldCommands = parse(input.value);
-            let oldJson = JSON.stringify(oldCommands);
 
             let newText = commandsToText(oldCommands);
             let newCommands = textToCommands(newText);
-            let newJson = JSON.stringify(newCommands);
             if (!compareCommands(oldCommands, newCommands)) {
                 console.error("解析结果不一致");
                 console.log(oldCommands);
                 console.log(newCommands);
+                let oldJson = JSON.stringify(oldCommands);
+                let newJson = JSON.stringify(newCommands);
                 output.innerText = `${oldJson}\n----------\n${newJson}\n----------${newText}`;
             } else {
                 output.innerText = newText;
