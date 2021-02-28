@@ -105,12 +105,32 @@ function midiTrackToNotes(track) {
 function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
     let commands = [];
     let group = { time: 0, notes: [] };
-    let rescale = ticksPerBeat / quantize;
-    let minRest = ticksPerBeat / 16;
+    let rescaler = Math.round(ticksPerBeat / quantize);
+    let minDuration = ticksPerBeat / 16;
+
+    function getNoteDuration(note, wantedDuration) {
+        let duration = parseInt(Math.ceil(note.durationTicks / rescaler) * rescaler);
+        if (!wantedDuration) {
+            return duration;
+        }
+        let thresh = Math.max(minDuration, note.durationTicks / 6);
+        let delta = wantedDuration - duration;
+        if (delta > 0 && delta < thresh) {
+            console.debug("延长音符", note.durationTicks, duration, wantedDuration, note);
+            return wantedDuration;
+        }
+        return duration;
+    }
 
     function pushNote(note) {
+        if (note.duration < minDuration) {
+            console.warn("note.duration is small", note);
+            return;
+        }
         let divides = getDivide(note.duration * 16 / ticksPerBeat);
-        // console.log("push", note, note.duration * 16 / ticksPerBeat, divides);
+        if (divides.length === 0) {
+            console.log("push", note, note.duration * 16 / ticksPerBeat, divides);
+        }
         divides[divides.length - 1].end = true;
 
         // 检查是否需要更新 vel
@@ -148,45 +168,49 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
         // 音符开始时间改变
         // 找到结束时间等于新的时间的音符, 或者添加对应的rest
         let mainNote = { duration: 0, ticks: group.time };
-        let notes = [];
-        for (let note of group.notes) {
-            let n = {
-                midi: note.midi,
-                ticks: note.ticks,
-                duration: note.duration,
-                is_chord: true,
-            }
-            notes.push(n);
+        // 最后一次调用, wantedDuration将为null
+        if (wantedDuration === null) {
+            mainNote = group.notes[0];
+        }
+        for (let n of group.notes) {
+            n.duration = getNoteDuration(n, wantedDuration);
             // 当前音符更符合需求, 设置当前音符为主音符
-            if (wantedDuration >= n.duration && n.duration > mainNote.duration) {
+            if (wantedDuration && wantedDuration >= n.duration && n.duration > mainNote.duration) {
                 mainNote = n;
             }
         }
+
         mainNote.is_chord = false;
         // console.log("pushGroup", mainNote, notes);
         // 添加和弦音符
-        for (let note of notes) {
+        for (let note of group.notes) {
             if (note.is_chord) {
                 pushNote(note);
             }
         }
         // 添加主音符
         if (mainNote.duration > 0) {
-            let delta = wantedDuration - mainNote.duration;
-            if (delta > 0 && delta < minRest) {
-                console.log("延长主音符", mainNote.duration, wantedDuration);
-                mainNote.duration = wantedDuration;
-                console.log(mainNote)
-            }
             pushNote(mainNote);
         }
         // 补充休止符
-        if (mainNote.duration < wantedDuration) {
+        if (wantedDuration && mainNote.duration < wantedDuration) {
             pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration, ticks: mainNote.ticks });
         }
     }
-    for (let n of notes) {
-        n.duration = parseInt(Math.ceil(n.durationTicks / rescale) * rescale)
+    for (let note of notes) {
+        let n = {
+            midi: note.midi,
+            ticks: note.ticks,
+            durationTicks: note.durationTicks,
+            is_chord: true,
+        }
+        // if (n.duration % 1) {
+        //     console.warn("非整数时值", n.duration, note);
+        // }
+        if (note.durationTicks === 0) {
+            console.warn("音符时长为0", note);
+            continue;
+        }
         if (n.ticks === group.time) {
             group.notes.push(n);
             continue;
@@ -195,11 +219,12 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
         group = { time: n.ticks, notes: [n] };
     }
     // push last group
-    if(group.notes.length > 0){
-        pushGroup(group.notes[0].duration);
-    }
+    pushGroup(null);
     return commands;
 }
+
+// // console.log(getDivide(1920*16/480))
+// // process.exit();
 
 var fs = require('fs')
 const { Midi } = require('@tonejs/midi')
@@ -208,10 +233,10 @@ var mml = require('./js/mmlparser.js');
 // Read MIDI file into a buffer
 var input = fs.readFileSync('midi/This game.txt');
 var input = fs.readFileSync('midi/There is a reason.txt');
-var input = fs.readFileSync('E:\\Documents\\Documents\\MuseScore3\\乐谱\\There is a reason-t1.mid');
+// var input = fs.readFileSync('E:\\Documents\\Documents\\MuseScore3\\乐谱\\There is a reason-t1.mid');
 // input = atob(input);
 // console.log(input.slice(0, 4).toString());
-// input = Buffer.from(input.toString(), "base64");
+input = Buffer.from(input.toString(), "base64");
 // console.log(input.slice(0, 4).toString());
 
 // Parse it into an intermediate representation
