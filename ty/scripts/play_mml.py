@@ -85,7 +85,7 @@ reps = dict([line.split()[:2] for line in data.strip().splitlines()])
 
 
 def convert(text):
-    text = ''.join([reps.get(c, c) for c in text])
+    text = "".join([reps.get(c, c) for c in text])
     return text
 
 
