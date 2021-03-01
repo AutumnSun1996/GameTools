@@ -9,6 +9,9 @@
 dist
 build
 
+# js
+node_modules
+
 # jupyter
 **/.ipynb_checkpoints/
 *.ipynb
@@ -49,4 +52,5 @@ Autodroid/azurlane/resources/ui/
 WarFrame/scripts/images/
 WarFrame/ahk/Cursor.bmp
 Autodroid/config/device/
+ty/midi/*.txt
 
