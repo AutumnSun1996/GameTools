@@ -2,24 +2,12 @@
 
 const fs = require('fs');
 const path = require('path');
-console.debug = function () { };
-
-
 const { parseMidi } = require('midi-file');
 const { midiTrackToCommands, rebuildCommands, commandStats } = require('./midiparser.js');
-var mml = require('./js/mmlparser.js');
-// Read MIDI file into a buffer
-// var input = fs.readFileSync('midi/This game.txt');
+const { commandsToText, commandsToNotes, textToCommands } = require('./js/mmlparser.js');
 
-// var input = fs.readFileSync('E:\\Documents\\Documents\\MuseScore3\\乐谱\\There is a reason-t1.mid');
-// input = atob(input);
-// console.log(input.slice(0, 4).toString());
-// input = Buffer.from(input.toString(), "base64");
-// console.log(input.slice(0, 4).toString());
+console.debug = function () { };
 
-// Parse it into an intermediate representation
-// This will take any array-like object.  It just needs to support .length, .slice, and the [] indexed element getter.
-// Buffers do that, so do native JS arrays, typed arrays, etc.
 function midiFileToText(midiPath) {
     console.log("处理", midiPath);
     let file = path.parse(midiPath);
@@ -34,13 +22,12 @@ function midiFileToText(midiPath) {
     console.log("基本信息", parsed.header);
     for (let track of parsed.tracks) {
         let cmds = midiTrackToCommands(track);
-        cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat);
         console.log(commandStats(cmds));
-        let text = mml.commandsToText(cmds);
+        let text = commandsToText(cmds);
         result.push(text);
     }
     result = result.join("\n#NewTrack\n")
-    result = `#Title ${file.name}\n` + result.replace(/\n+/g, "\n");
+    result = (`#Title ${file.name}\n` + result).replace(/\n+/g, "\n");
     console.log("已写入到", newPath);
     fs.writeFileSync(newPath, result);
 }
@@ -52,6 +39,58 @@ for (let name of fs.readdirSync("midi")) {
     console.log(name);
     midiFileToText("midi/" + name);
 }
+
+// function mergeCommands(commands) {
+//     let ticksPerBeat = 480;
+//     let state = { timestamp: 0, tempo: 120 };
+//     let prevNoteNum = null, prevDuration = 0;
+//     let notes = [];
+//     for (let cmd of commands) {
+//         cmd.timestamp = state.timestamp;
+//         if (cmd.type === "rest") {
+//             let duration = 240 / cmd.divide;
+//             state.timestamp += duration;
+//         } else if (cmd.type === "note") {
+//             let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp, vel: state.vel };
+//             evt.duration = ticksPerBeat / cmd.divide;
+//             if (cmd.dots) {
+//                 evt.duration = evt.duration * Math.pow(1.5, cmd.dots);
+//             }
+//             if (prevNoteNum !== null) {
+//                 if (prevNoteNum !== evt.noteNum) {
+//                     throw SyntaxError(`相连的音符必须相同: ${prevNoteNum} ${evt.noteNum}`);
+//                 }
+//                 evt.duration = evt.duration + prevDuration;
+//             }
+//             if (cmd.is_prefix) { // '&'
+//                 prevNoteNum = evt.noteNum;
+//                 prevDuration = evt.duration;
+//             } else {
+//                 prevNoteNum = null;
+//                 prevDuration = null;
+//                 if (!cmd.is_chord) { // 和弦不增加当前时间戳
+//                     state.timestamp += evt.duration;
+//                 }
+//             }
+//         } else if (cmd.type === "newtrack") {
+//             state = { timestamp: 0, tempo: 120 };
+//         } else if (cmd.type === "tempo") {
+//             state.tempo = cmd.value;
+//         }
+//     }
+//     return commands;
+// }
+
+// let text = fs.readFileSync("midi/新闻联播-片头.mml").toString();
+// let commands = textToCommands(text);
+
+// // console.log(commands);
+// getCommandsTicks(commands);
+// commands.sort((a, b)=>{return a.timestamp - b.timestamp});
+// // console.log(commands);
+
+// let cmds = rebuildCommands(commands);
+// console.log(commandsToText(cmds));
 
 // console.log(mml.commandsToText([{ type: "note", noteNum: 76, divide: 4 }]))
 

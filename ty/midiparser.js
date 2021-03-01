@@ -117,6 +117,22 @@ function midiTrackToCommands(track, posOffset = 0) {
     return commands;
 }
 
+
+/**
+ * 
+ * @param {Array} cmds 
+ * [
+ *   { type: "rest", ticks: 0 },
+ *   {      
+ *     type: "note",
+ *     noteNum: 48,
+ *     timestamp: 120,
+ *     hold: 120
+ *   }
+ * ]
+ * @param {*} ticksPerBeat 
+ * @param {*} quantize 
+ */
 function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
     let commands = [];
     let group = { time: 0, notes: [] };
@@ -138,6 +154,7 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
     }
 
     function pushNote(note) {
+        console.debug("pushNote", note);
         if (note.duration < minDuration) {
             console.warn("note.duration is small", note, minDuration);
             if (note.duration > minDuration / 2) {
@@ -154,7 +171,7 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
 
         // 检查是否需要更新 vel
         if (note.type === "note" && note.velocity !== commandState.vel) {
-            commands.push({ type: 'vel', note: evt.velocity, ticks: note.ticks });
+            commands.push({ type: 'vel', value: evt.velocity, ticks: note.ticks });
         }
         for (let d of divides) {
             let evt;
@@ -211,6 +228,8 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
         // 添加主音符
         if (mainNote.duration > 0) {
             pushNote(mainNote);
+        } else {
+            console.warn("和弦无主音符", group, wantedDuration);
         }
         // 补充休止符
         if (wantedDuration && mainNote.duration < wantedDuration) {
@@ -227,6 +246,9 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
             ticks: cmd.timestamp,
             durationTicks: cmd.hold,
             is_chord: true,
+        }
+        if(!n.durationTicks){
+            console.warn("音符时长有问题", cmd, n);
         }
         if (n.durationTicks === 0) {
             console.warn("音符时长为0", cmd);

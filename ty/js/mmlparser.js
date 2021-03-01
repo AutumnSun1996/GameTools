@@ -363,7 +363,7 @@ function commandsToNotes(commands) {
 function serchForDivide(commands, divide, limit = 5) {
     let found = 0, total = 0;
     for (let cmd of commands) {
-        if (cmd.type === "note") {
+        if (cmd.type === "note" || cmd.type === "rest") {
             ++total;
             if (total > limit) {
                 break;
@@ -462,15 +462,14 @@ function commandsToText(commands) {
                 if (cmd.extra) {
                     text.push(cmd.extra);
                 }
+                allowDivide = true;
                 if (cmd.is_chord) { // 和弦不增加当前时间戳
                     text.push(":");
                 }
-                if (cmd.is_prefix) { // 连接音符
+                if (cmd.is_prefix && cmd.type === "note") { // 连接音符
                     text.push("&");
                     // 连接音符的后面禁用L指令
                     allowDivide = false;
-                } else {
-                    allowDivide = true;
                 }
                 break;
             case "newtrack":
@@ -502,6 +501,7 @@ function simplify(text) {
 if (module) {
     module.exports = {
         commandsToText,
+        commandsToNotes,
         textToCommands,
         numToNote,
     }
