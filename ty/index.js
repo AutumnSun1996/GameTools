@@ -8,7 +8,23 @@ const { commandsToText, commandsToNotes, textToCommands } = require('./js/mmlpar
 
 console.debug = function () { };
 
-function midiFileToText(midiPath) {
+function midiToMML(data) {
+    let parsed = parseMidi(data);
+    let result = [];
+    console.log("基本信息", parsed.header);
+    for (let track of parsed.tracks) {
+        let cmds = midiTrackToCommands(track);
+        console.log(commandStats(cmds));
+        cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
+        let text = commandsToText(cmds);
+        result.push(text);
+    }
+    let mml = result.join("\n#NewTrack\n")
+    mml = mml.replace(/\n+/g, "\n").replace(/^\n+/, "");
+    return mml;
+}
+
+function convertMidiFile(midiPath) {
     console.log("处理", midiPath);
     let file = path.parse(midiPath);
     let newPath = path.join(file.dir, file.name + ".mml");
@@ -17,28 +33,38 @@ function midiFileToText(midiPath) {
         return;
     }
     let input = fs.readFileSync(midiPath);
-    let parsed = parseMidi(input);
-    let result = [];
-    console.log("基本信息", parsed.header);
-    for (let track of parsed.tracks) {
-        let cmds = midiTrackToCommands(track);
-        console.log(commandStats(cmds));
-        let text = commandsToText(cmds);
-        result.push(text);
-    }
-    result = result.join("\n#NewTrack\n")
-    result = (`#Title ${file.name}\n` + result).replace(/\n+/g, "\n");
+    let result = `#Title ${file.name}\n` + midiToMML(input);
     console.log("已写入到", newPath);
     fs.writeFileSync(newPath, result);
 }
 
-for (let name of fs.readdirSync("midi")) {
-    if (!/.mid/.test(name)) {
-        continue;
+// for (let name of fs.readdirSync("midi")) {
+//     if (!/.mid/.test(name)) {
+//         continue;
+//     }
+//     console.log(name);
+//     convertMidiFile("midi/" + name);
+// }
+
+
+function midiToMML(data) {
+    let parsed = parseMidi(data);
+    let cmds = [];
+    console.log("基本信息", parsed.header);
+    for (let track of parsed.tracks) {
+        cmds.push(...midiTrackToCommands(track))
     }
-    console.log(name);
-    midiFileToText("midi/" + name);
+    cmds.sort((a, b) => { return a.timestamp - b.timestamp });
+    cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
+    let mml = commandsToText(cmds);
+    mml = mml.replace(/\n+/g, "\n").replace(/^\n+/, "");
+    return mml;
 }
+
+
+let data = fs.readFileSync("midi/新闻联播-片头.mid");
+let mml = midiToMML(data);
+console.log(mml);
 
 // function mergeCommands(commands) {
 //     let ticksPerBeat = 480;

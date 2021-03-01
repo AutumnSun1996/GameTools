@@ -16,21 +16,24 @@ function numToNote(num) {
     return `${note}${octave}`;
 }
 const NOTE_MAP_INV = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-
+const MAX_UNIT = 128;
+const UNITS = [];
+for (let i = MAX_UNIT; i >= 1; i = i / 2) {
+    UNITS.push(i);
+}
 
 function getDivide(n) {
-    const units = [64, 32, 16, 8, 4, 2, 1];
     let left = n;
     let res = [];
     let prev = null;
-    for (let i = 0; i < units.length;) {
-        let u = units[i];
+    for (let i = 0; i < UNITS.length;) {
+        let u = UNITS[i];
         if (left >= u) {
             if (prev && prev.duration === u * 2) {
                 prev.dot = true;
                 prev = null;
             } else {
-                prev = { duration: u, divide: 64 / u };
+                prev = { duration: u, divide: MAX_UNIT / u };
                 res.push(prev);
             }
             left -= u;
@@ -56,7 +59,7 @@ function midiTrackToCommands(track, posOffset = 0) {
             let key = e.noteNumber.toString();
             let note = chl.notes[key];
             if (!note) {
-                console.warn("无对应的按下事件", e, note);
+                console.warn("无对应的按下事件", e);
                 return;
             }
             note.hold = state.time - note.timestamp;
@@ -133,14 +136,13 @@ function midiTrackToCommands(track, posOffset = 0) {
  * @param {*} ticksPerBeat 
  * @param {*} quantize 
  */
-function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
+function rebuildCommands(cmds, ticksPerBeat = 480) {
     let commands = [];
     let group = { time: 0, notes: [] };
-    let rescaler = Math.round(ticksPerBeat / quantize);
-    let minDuration = ticksPerBeat / 16;
+    let minDuration = ticksPerBeat / (MAX_UNIT / 4);
 
     function getNoteDuration(note, wantedDuration) {
-        let duration = parseInt(Math.ceil(note.durationTicks / rescaler) * rescaler);
+        let duration = note.durationTicks;
         if (!wantedDuration) {
             return duration;
         }
@@ -153,19 +155,20 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
         return duration;
     }
 
-    function pushNote(note) {
+    function pushNote(note, force = false) {
         console.debug("pushNote", note);
         if (note.duration < minDuration) {
-            console.warn("note.duration is small", note, minDuration);
-            if (note.duration > minDuration / 2) {
+            if (note.duration > minDuration / 2 || force) {
+                console.warn("延长过短的音符", note, minDuration);
                 note.duration = minDuration;
             } else {
-                return;
+                console.warn("忽略过短的音符", note, minDuration);
+                return false;
             }
         }
-        let divides = getDivide(note.duration * 16 / ticksPerBeat);
+        let divides = getDivide(note.duration * (MAX_UNIT / 4) / ticksPerBeat);
         if (divides.length === 0) {
-            console.log("push", note, note.duration * 16 / ticksPerBeat, divides);
+            console.log("push", note, ticksPerBeat, divides);
         }
         divides[divides.length - 1].end = true;
 
@@ -196,6 +199,7 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
             }
             commands.push(evt);
         }
+        return true;
     }
     function pushGroup(wantedDuration) {
         // 音符开始时间改变
@@ -225,15 +229,18 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
                 pushNote(note);
             }
         }
+        let forcePush = true;
         // 添加主音符
         if (mainNote.duration > 0) {
-            pushNote(mainNote);
+            if (pushNote(mainNote)) {
+                forcePush = false;
+            }
         } else {
             console.warn("和弦无主音符", group, wantedDuration);
         }
         // 补充休止符
         if (wantedDuration && mainNote.duration < wantedDuration) {
-            pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration, ticks: mainNote.ticks });
+            pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration, ticks: mainNote.ticks }, forcePush);
         }
     }
     for (let cmd of cmds) {
