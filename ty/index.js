@@ -45,10 +45,10 @@ function getDivide(n) {
     return res;
 }
 
-function midiTrackToCommands(track, ticksPerBeat = 480, quantize = 16, posOffset = 0) {
+function midiTrackToCommands(track, posOffset = 0) {
     let state = initState();
     let commands = [];
-    let ignoreCount = {total: 0};
+    let ignoreCount = { total: 0 };
     for (let i = 0; i < track.length; ++i) {
         let evt = track[i];
         let chl = state.channels[evt.channel];
@@ -60,7 +60,8 @@ function midiTrackToCommands(track, ticksPerBeat = 480, quantize = 16, posOffset
             let key = e.noteNumber.toString();
             let note = chl.notes[key];
             if (!note) {
-                console.warn("无对应的按下事件", e, state);
+                console.warn("无对应的按下事件", e, note);
+                return;
             }
             note.hold = state.time - note.timestamp;
             commands.push(note);
@@ -73,7 +74,7 @@ function midiTrackToCommands(track, ticksPerBeat = 480, quantize = 16, posOffset
                     handleNoteOff(evt);
                 } else {
                     if (chl.notes[key]) {
-                        console.warn("重复的按下事件", evt, state);
+                        console.warn("重复的按下事件", evt, chl.notes[key], state.time);
                     }
                     chl.notes[key] = {
                         type: "note",
@@ -98,14 +99,14 @@ function midiTrackToCommands(track, ticksPerBeat = 480, quantize = 16, posOffset
             case "setTempo":
                 commands.push({
                     type: "tempo",
-                    value: 60000000 / evt.microsecondsPerBeat,
+                    value: Math.round(60000000 / evt.microsecondsPerBeat),
                     pos,
                 });
                 break;
             case "controller":
             case "endOfTrack":
             default:
-                if(!ignoreCount[evt.type]){
+                if (!ignoreCount[evt.type]) {
                     ignoreCount[evt.type] = 0;
                 }
                 ++ignoreCount[evt.type];
@@ -114,7 +115,7 @@ function midiTrackToCommands(track, ticksPerBeat = 480, quantize = 16, posOffset
         }
     }
     commands.sort((a, b) => { return a.pos - b.pos });
-    if(ignoreCount.total > 0){
+    if (ignoreCount.total > 0) {
         console.log("已忽略:", ignoreCount);
     }
     return commands;
@@ -284,9 +285,13 @@ var mml = require('./js/mmlparser.js');
 // Buffers do that, so do native JS arrays, typed arrays, etc.
 function midiFileToText(midiPath) {
     console.log("处理", midiPath);
-    let input = fs.readFileSync(midiPath);
     let file = path.parse(midiPath);
     let newPath = path.join(file.dir, file.name + ".mml");
+    if(fs.existsSync(newPath)){
+        console.log("已存在, 跳过");
+        return;
+    }
+    let input = fs.readFileSync(midiPath);
     let parsed = parseMidi(input);
     let result = [];
     console.log("基本信息", parsed.header);
@@ -303,7 +308,14 @@ function midiFileToText(midiPath) {
     fs.writeFileSync(newPath, result);
 }
 
-midiFileToText("midi/爱杀宝贝.mid")
+// for (let name of fs.readdirSync("midi")) {
+//     if (!/.mid/.test(name)) {
+//         continue;
+//     }
+//     console.log(name);
+//     midiFileToText("midi/" + name);
+// }
+
 // console.log(mml.commandsToText([{ type: "note", noteNum: 76, divide: 4 }]))
 
 // let notes = [
