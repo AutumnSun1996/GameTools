@@ -1,5 +1,9 @@
 "use strict";
 
+const fs = require('fs');
+const path = require('path');
+console.debug = function () { };
+
 function initState() {
     let channels = [];
     for (let i = 0; i < 16; ++i) {
@@ -41,27 +45,30 @@ function getDivide(n) {
     return res;
 }
 
-function midiTrackToNotes(track) {
+function midiTrackToCommands(track, ticksPerBeat = 480, quantize = 16, posOffset = 0) {
     let state = initState();
-    let notes = [];
-    let extraCommands = [];
-
-    for (let evt of track) {
+    let commands = [];
+    let ignoreCount = {total: 0};
+    for (let i = 0; i < track.length; ++i) {
+        let evt = track[i];
+        let chl = state.channels[evt.channel];
+        let pos = posOffset + i;
         state.time += evt.deltaTime;
-        let chl = state.channels[evt.channel]
-        function handleNoteOff(evt) {
-            let key = evt.noteNum.toString();
+        console.debug("handle", pos, evt);
+
+        function handleNoteOff(e) {
+            let key = e.noteNumber.toString();
             let note = chl.notes[key];
             if (!note) {
-                console.warn("无对应的按下事件", evt, state);
+                console.warn("无对应的按下事件", e, state);
             }
             note.hold = state.time - note.timestamp;
-            notes.push(note);
+            commands.push(note);
             delete chl.notes[key];
         }
         switch (evt.type) {
             case "noteOn":
-                let key = evt.noteNum.toString();
+                let key = evt.noteNumber.toString();
                 if (evt.velocity === 0) {
                     handleNoteOff(evt);
                 } else {
@@ -69,9 +76,11 @@ function midiTrackToNotes(track) {
                         console.warn("重复的按下事件", evt, state);
                     }
                     chl.notes[key] = {
-                        noteNum: evt.noteNum,
+                        type: "note",
+                        noteNum: evt.noteNumber,
                         timestamp: state.time,
                         vel: evt.velocity,
+                        pos,
                     }
                 }
                 break;
@@ -79,19 +88,39 @@ function midiTrackToNotes(track) {
                 handleNoteOff(evt);
                 break;
             case "trackName":
-                extraCommands.push({
-                    type: "text", text: `#TrackName ${evt.text}\n`,
+            case "instrumentName":
+                commands.push({
+                    type: "text", text: `\n#${evt.type} ${evt.text}\n`,
                     timestamp: state.time,
+                    pos,
                 });
+                break;
+            case "setTempo":
+                commands.push({
+                    type: "tempo",
+                    value: 60000000 / evt.microsecondsPerBeat,
+                    pos,
+                });
+                break;
+            case "controller":
+            case "endOfTrack":
             default:
-            // console.debug("ignore event", state.time, evt,);
+                if(!ignoreCount[evt.type]){
+                    ignoreCount[evt.type] = 0;
+                }
+                ++ignoreCount[evt.type];
+                ++ignoreCount['total'];
+                console.debug("ignore event", state.time, evt,);
         }
     }
-    notes.sort((a, b) => { a.timestamp - b.timestamp });
-    return { notes, extraCommands };
+    commands.sort((a, b) => { return a.pos - b.pos });
+    if(ignoreCount.total > 0){
+        console.log("已忽略:", ignoreCount);
+    }
+    return commands;
 }
 
-function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
+function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
     let commands = [];
     let group = { time: 0, notes: [] };
     let rescaler = Math.round(ticksPerBeat / quantize);
@@ -113,8 +142,12 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
 
     function pushNote(note) {
         if (note.duration < minDuration) {
-            console.warn("note.duration is small", note);
-            return;
+            console.warn("note.duration is small", note, minDuration);
+            if (note.duration > minDuration / 2) {
+                note.duration = minDuration;
+            } else {
+                return;
+            }
         }
         let divides = getDivide(note.duration * 16 / ticksPerBeat);
         if (divides.length === 0) {
@@ -156,6 +189,10 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
         let mainNote = { duration: 0, ticks: group.time };
         // 最后一次调用, wantedDuration将为null
         if (wantedDuration === null) {
+            if (group.notes.length === 0) {
+                // 最后一次调用且无数据, 直接返回
+                return;
+            }
             mainNote = group.notes[0];
         }
         for (let n of group.notes) {
@@ -166,8 +203,8 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
             }
         }
 
+        // console.log("pushGroup", mainNote, group);
         mainNote.is_chord = false;
-        // console.log("pushGroup", mainNote, notes);
         // 添加和弦音符
         for (let note of group.notes) {
             if (note.is_chord) {
@@ -183,18 +220,19 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
             pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration, ticks: mainNote.ticks });
         }
     }
-    for (let note of notes) {
+    for (let cmd of cmds) {
+        if (cmd.type !== "note") {
+            commands.push(cmd);
+            continue;
+        }
         let n = {
-            midi: note.midi,
-            ticks: note.ticks,
-            durationTicks: note.durationTicks,
+            midi: cmd.noteNum,
+            ticks: cmd.timestamp,
+            durationTicks: cmd.hold,
             is_chord: true,
         }
-        // if (n.duration % 1) {
-        //     console.warn("非整数时值", n.duration, note);
-        // }
-        if (note.durationTicks === 0) {
-            console.warn("音符时长为0", note);
+        if (n.durationTicks === 0) {
+            console.warn("音符时长为0", cmd);
             continue;
         }
         if (n.ticks === group.time) {
@@ -208,58 +246,64 @@ function notesToCommands(notes, ticksPerBeat = 480, quantize = 16) {
     pushGroup(null);
     return commands;
 }
+
 function commandStats(commands) {
-    let state = { max: 0, min: 127 };
+    let state = { total: 0, min: 127, max: 0, };
     for (let cmd of commands) {
         if (cmd.type !== "note") {
             continue;
         }
-        state.max = Math.max(cmd.noteNum, state.max);
+        ++state.total;
         state.min = Math.min(cmd.noteNum, state.min);
+        state.max = Math.max(cmd.noteNum, state.max);
     }
-    state.maxNote = numToNote(state.max);
+    if (state.total === 0) {
+        return { total: 0 };
+    }
     state.minNote = numToNote(state.min);
+    state.maxNote = numToNote(state.max);
     return state;
 }
 // // console.log(getDivide(1920*16/480))
 // // process.exit();
 
-var fs = require('fs')
-const { Midi } = require('@tonejs/midi')
+const { parseMidi } = require('midi-file');
 
 var mml = require('./js/mmlparser.js');
 // Read MIDI file into a buffer
 // var input = fs.readFileSync('midi/This game.txt');
-var input = fs.readFileSync('midi/妄想税.txt');
+
 // var input = fs.readFileSync('E:\\Documents\\Documents\\MuseScore3\\乐谱\\There is a reason-t1.mid');
 // input = atob(input);
 // console.log(input.slice(0, 4).toString());
-input = Buffer.from(input.toString(), "base64");
+// input = Buffer.from(input.toString(), "base64");
 // console.log(input.slice(0, 4).toString());
 
 // Parse it into an intermediate representation
 // This will take any array-like object.  It just needs to support .length, .slice, and the [] indexed element getter.
 // Buffers do that, so do native JS arrays, typed arrays, etc.
-const parsed = new Midi(input);
-let tempos = []
-for (let tempo of parsed.header.tempos) {
-    tempos.push({ type: "tempo", value: Math.round(tempo.bpm), ticks: tempo.ticks });
+function midiFileToText(midiPath) {
+    console.log("处理", midiPath);
+    let input = fs.readFileSync(midiPath);
+    let file = path.parse(midiPath);
+    let newPath = path.join(file.dir, file.name + ".mml");
+    let parsed = parseMidi(input);
+    let result = [];
+    console.log("基本信息", parsed.header);
+    for (let track of parsed.tracks) {
+        let cmds = midiTrackToCommands(track);
+        cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat);
+        console.log(commandStats(cmds));
+        let text = mml.commandsToText(cmds);
+        result.push(text);
+    }
+    result = result.join("\n#NewTrack\n")
+    result = `#Title ${file.name}\n` + result.replace(/\n+/g, "\n");
+    console.log("已写入到", newPath);
+    fs.writeFileSync(newPath, result);
 }
-console.log(tempos);
-let result = [];
-for (let track of parsed.tracks) {
-    console.log(track.notes[0]);
-    let cmds = notesToCommands(track.notes);
-    console.log(commandStats(cmds));
-    // console.log(cmds);
-    cmds.unshift(...tempos);
-    cmds.sort((a, b) => { a.ticks - b.ticks });
-    // console.log(cmds.slice(0, 10));
-    let text = mml.commandsToText(cmds);
-    console.log(text.substr(0, 10));
-    result.push(text);
-}
-fs.writeFileSync("out.mml", result.join("\n#NewTrack\n"))
+
+midiFileToText("midi/爱杀宝贝.mid")
 // console.log(mml.commandsToText([{ type: "note", noteNum: 76, divide: 4 }]))
 
 // let notes = [
