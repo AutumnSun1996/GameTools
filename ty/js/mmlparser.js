@@ -376,7 +376,34 @@ function serchForDivide(commands, divide, limit = 5) {
     return found;
 }
 
+function setActiveCommands(commands) {
+    let state = initState();
+    let current = { vel: {}, tempo: {} };
+    for (let i = 0; i < commands.length; ++i) {
+        let cmd = commands[i];
+        switch (cmd.type) {
+            case "vel":
+            case "tempo":
+                // 数据发生改变, 更新当前指向的目标
+                if (state[cmd.type] !== cmd.value) {
+                    state[cmd.type] = cmd.value;
+                    current[cmd.type] = cmd;
+                }
+                break;
+            case "note":
+                current.vel.active = true;
+                current.tempo.active = true;
+                break;
+            case "newtrack":
+                state = initState();
+                break;
+        }
+    }
+    return commands;
+}
+
 function commandsToText(commands) {
+    setActiveCommands(commands);
     let text = [];
     let state = initState();
     let allowDivide = true;
@@ -448,13 +475,16 @@ function commandsToText(commands) {
                 break;
             case "newtrack":
                 state = initState();
+                break;
             case "text":
                 text.push(cmd.text);
                 break;
             case "vel":
             case "tempo":
                 state[cmd.type] = cmd.value;
-                text.push(`${CMD_PREFIX[cmd.type]}${cmd.value}`);
+                if (cmd.active) {
+                    text.push(`${CMD_PREFIX[cmd.type]}${cmd.value}`);
+                }
                 break;
         }
     }
