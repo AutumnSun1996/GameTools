@@ -1,58 +1,5 @@
 "use strict";
 
-class Scanner {
-    constructor(source) {
-        this.source = source;
-        this.index = 0;
-    }
-
-    hasNext() {
-        return this.index < this.source.length;
-    }
-
-    peek() {
-        return this.source.charAt(this.index) || "";
-    }
-
-    next() {
-        return this.source.charAt(this.index++) || "";
-    }
-
-    forward() {
-        while (this.hasNext() && this.match(/\s/)) {
-            ++this.index;
-        }
-    }
-
-    expect(matcher) {
-        if (!this.match(matcher)) {
-            this.throwUnexpectedToken();
-        }
-        this.index += 1;
-    }
-
-    scan(matcher) {
-        const target = this.source.substr(this.index);
-
-        let result = matcher.exec(target);
-
-        if (result) {
-            this.index += result[0].length;
-        }
-
-        return result;
-    }
-
-    throwUnexpectedToken() {
-        const identifier = this.peek() || "ILLEGAL";
-        throw new SyntaxError(`Unexpected token: ${identifier}`);
-    }
-
-    part(offset = 0, size = 10) {
-        return this.source.substr(this.index + offset, size);
-    }
-}
-
 const NOTE_MAP = {
     "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11,
     "1": 0, "2": 2, "3": 4, "4": 5, "5": 7, "6": 9, "7": 11,
@@ -60,13 +7,56 @@ const NOTE_MAP = {
 const NOTE_MAP_INV = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const CMD_PREFIX = { vel: "V", tempo: "T" };
 
+class Scanner {
+    constructor(source) {
+        this.source = source;
+        this.index = 0;
+    }
+    hasNext() {
+        return this.index < this.source.length;
+    }
+    peek() {
+        return this.source.charAt(this.index) || "";
+    }
+    next() {
+        return this.source.charAt(this.index++) || "";
+    }
+    forward() {
+        while (this.hasNext() && this.match(/\s/)) {
+            ++this.index;
+        }
+    }
+    expect(matcher) {
+        if (!this.match(matcher)) {
+            this.throwUnexpectedToken();
+        }
+        this.index += 1;
+    }
+    scan(matcher) {
+        const target = this.source.substr(this.index);
+        let result = matcher.exec(target);
+        if (result) {
+            this.index += result[0].length;
+        }
+        return result;
+    }
+    throwUnexpectedToken() {
+        const identifier = this.peek() || "ILLEGAL";
+        throw new SyntaxError(`Unexpected token: ${identifier}`);
+    }
+    part(offset = 0, size = 10) {
+        return this.source.substr(this.index + offset, size);
+    }
+}
+
 function initState() {
     return {
         tempo: 120,
         divide: 4,
         vel: 90,
         octave: 4,
-        timestamp: 0,
+        time: 0,
+        tick: 0,
         offset: 0,
     };
 }
@@ -80,7 +70,7 @@ function numToNote(num) {
 /**
  * 将类简谱文本转化为指令列表
  * 
- * @param {String} text 将类简谱文本
+ * @param {String} text 类简谱文本
  */
 function numTextToCommands(text) {
     const DIVIDE_MAP = { "%": 4, "%%": 2, "%%%%": 1, "_": 8, "__": 16, "___": 32, "A": 1, "B": 2, "C": 4, "D": 8, "E": 16, "F": 32 };
@@ -308,7 +298,7 @@ function textToCommands(text) {
  * @returns 
  * [{
  *   noteNum: 48,
- *   timestamp: 10.52,
+ *   time: 10.52,
  *   vel: 90,
  *   duration: 0.5,
  *   hold: 0.4,
@@ -321,9 +311,9 @@ function commandsToNotes(commands) {
     for (let cmd of commands) {
         if (cmd.type === "rest") {
             let duration = 240 / state.tempo / cmd.divide;
-            state.timestamp += duration;
+            state.time += duration;
         } else if (cmd.type === "note") {
-            let evt = { noteNum: cmd.noteNum, timestamp: state.timestamp, vel: state.vel };
+            let evt = { noteNum: cmd.noteNum, time: state.time, vel: state.vel };
             evt.duration = 240 / state.tempo / cmd.divide;
             if (cmd.dots) {
                 evt.duration = evt.duration * Math.pow(1.5, cmd.dots);
@@ -344,7 +334,7 @@ function commandsToNotes(commands) {
                 prevNoteNum = null;
                 prevDuration = null;
                 if (!cmd.is_chord) { // 和弦不增加当前时间戳
-                    state.timestamp += evt.duration;
+                    state.time += evt.duration;
                 }
                 evt.hold = evt.duration - Math.min(0.1, evt.duration / 4);
                 notes.push(evt);
@@ -500,6 +490,7 @@ function simplify(text) {
 
 if (module) {
     module.exports = {
+        numTextToCommands,
         commandsToText,
         commandsToNotes,
         textToCommands,
