@@ -261,7 +261,6 @@ for (let track of parsed.tracks) {
 }
 fs.writeFileSync("out.mml", result.join("\n#NewTrack\n"))
 // console.log(mml.commandsToText([{ type: "note", noteNum: 76, divide: 4 }]))
-173动物管理局招贤纳士.加入本会,月月奖金,天天美女,大块吃肉,大碗喝酒,名额有限
 
 // let notes = [
 //     {
