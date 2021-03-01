@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_OCTAVE = 4
 DEFAULT_DIVIDE = 4
 DEFAULT_MODE = "n"
-DEFAULT_TEMPO = 72
+DEFAULT_TEMPO = 120
 DEFAULT_VOLUME = 90
 NOTE_MAP = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 
