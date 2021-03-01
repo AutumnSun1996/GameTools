@@ -247,7 +247,7 @@ function rebuildCommands(cmds, ticksPerBeat = 480, quantize = 16) {
             durationTicks: cmd.hold,
             is_chord: true,
         }
-        if(!n.durationTicks){
+        if (!n.durationTicks) {
             console.warn("音符时长有问题", cmd, n);
         }
         if (n.durationTicks === 0) {
@@ -284,7 +284,7 @@ function commandStats(commands) {
     return state;
 }
 
-if(module){
+if (module) {
     module.exports = {
         commandStats,
         rebuildCommands,

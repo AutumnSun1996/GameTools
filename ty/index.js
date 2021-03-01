@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { parseMidi } = require('midi-file');
-const { midiTrackToCommands, rebuildCommands, commandStats } = require('./midiparser.js');
+const { midiTrackToCommands, rebuildCommands, commandStats } = require('./js/midiparser.js');
 const { commandsToText, commandsToNotes, textToCommands } = require('./js/mmlparser.js');
 
 console.debug = function () { };
