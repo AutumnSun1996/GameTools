@@ -5,7 +5,7 @@ import rtmidi
 import time
 
 
-def update_volume(all_events):
+def update_vel(all_events):
     min_vol = 0xFFFF
     max_vol = 0
     for note in all_events:
@@ -36,24 +36,24 @@ def play(mml, start_at):
         events = MMLParser().parse(track, idx)
         all_events.extend(events)
     all_events.sort()
-    update_volume(all_events)
+    update_vel(all_events)
 
     with midi:
         start = time.perf_counter() - start_at
-        for ts, evt, channel, note, volume in all_events:
+        for ts, evt, channel, note, vel in all_events:
             if ts < start_at:
                 continue
             wait = ts - time.perf_counter() + start
             if wait > 0:
                 time.sleep(wait)
             print(
-                "{:6.3f} evt 0x{:02x} chl {} note {} volume {}".format(
-                    ts, evt, channel, note, volume
+                "{:6.3f} evt 0x{:02x} chl {} note {} vel {}".format(
+                    ts, evt, channel, note, vel
                 )
             )
             if note == 0:
                 continue
-            midi.send_message([evt + channel, note, volume])
+            midi.send_message([evt + channel, note, vel])
     del midi
 
 
