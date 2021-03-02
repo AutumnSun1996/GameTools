@@ -38,33 +38,84 @@ function convertMidiFile(midiPath) {
     fs.writeFileSync(newPath, result);
 }
 
-// for (let name of fs.readdirSync("midi")) {
-//     if (!/.mid/.test(name)) {
-//         continue;
-//     }
-//     console.log(name);
-//     convertMidiFile("midi/" + name);
-// }
+for (let name of fs.readdirSync("midi")) {
+    if (!/.mid/.test(name)) {
+        continue;
+    }
+    console.log(name);
+    convertMidiFile("midi/" + name);
+}
 
+function addTick(cmds, delDelta = true) {
+    // 为每个事件添加绝对时间
+    let tick = 0;
+    for (let cmd of cmds) {
+        tick += cmd.deltaTime;
+        cmd.tick = tick;
+        if (delDelta) {
+            delete cmd.deltaTime;
+        }
+    }
+}
 
-function midiToMML(data) {
+function addDeltaTick(cmds, sort = true) {
+    // 为每个事件添加绝对时间
+    if (cmds.length === 0) {
+        return;
+    }
+    if (sort) {
+        cmds.sort((a, b) => { return a.tick - b.tick });
+    }
+    cmds[0].deltaTime = 0;
+    for (let i = 0; i < cmds.length - 1; ++i) {
+        cmds[i + 1].deltaTime = cmds[i + 1].tick - cmds[i].tick;
+    }
+}
+
+function alignCommands(cmds, grid=30) {
+    let key = 'tick';
+    for (let cmd of cmds) {
+        if (cmd[key] % grid) {
+            let origin = cmd[key];
+            cmd[key] = Math.round(cmd[key] / grid) * grid;
+            console.log("align", origin, cmd[key]);
+        }
+    }
+}
+
+function mergeTracks(tracks, align = false) {
+    let mergedTrack = [];
+    for (let t of tracks) {
+        addTick(t);
+        mergedTrack.push(...t);
+    }
+    if (align) {
+        alignCommands(mergedTrack, align);
+    }
+    addDeltaTick(mergedTrack);
+    return mergedTrack;
+}
+
+function midiToSingleMML(data) {
     let parsed = parseMidi(data);
+    let ts = parsed.tracks;
     let cmds = [];
     console.log("基本信息", parsed.header);
-    for (let track of parsed.tracks) {
-        cmds.push(...midiTrackToCommands(track))
-    }
-    cmds.sort((a, b) => { return a.timestamp - b.timestamp });
+    let track = mergeTracks([ts[3]], parsed.header.ticksPerBeat / 4)
+    console.log(track);
+    cmds = midiTrackToCommands(track);
     cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
     let mml = commandsToText(cmds);
     mml = mml.replace(/\n+/g, "\n").replace(/^\n+/, "");
     return mml;
 }
 
-
-let data = fs.readFileSync("midi/新闻联播-片头.mid");
-let mml = midiToMML(data);
-console.log(mml);
+function main() {
+    let data = fs.readFileSync("midi/新闻联播-片头.mid");
+    let mml = midiToSingleMML(data);
+    console.log(mml);
+}
+main();
 
 // function mergeCommands(commands) {
 //     let ticksPerBeat = 480;

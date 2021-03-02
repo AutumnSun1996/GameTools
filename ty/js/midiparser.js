@@ -53,34 +53,39 @@ function midiTrackToCommands(track, posOffset = 0) {
         let chl = state.channels[evt.channel];
         let pos = posOffset + i;
         state.time += evt.deltaTime;
+        evt.timestamp = state.time;
         console.debug("handle", pos, evt);
+        if (isNaN(state.time)) {
+            console.log("时间异常", evt, state);
+            process.exit()
+        }
 
         function handleNoteOff(e) {
-            let key = e.noteNumber.toString();
-            let note = chl.notes[key];
+            let note = chl.notes[e.noteNumber];
             if (!note) {
-                console.warn("无对应的按下事件", e);
+                console.warn("忽略无对应noteOn的noteOff", e);
                 return;
             }
             note.hold = state.time - note.timestamp;
-            commands.push(note);
-            delete chl.notes[key];
+            delete chl.notes[e.noteNumber];
         }
         switch (evt.type) {
             case "noteOn":
-                let key = evt.noteNumber.toString();
                 if (evt.velocity === 0) {
                     handleNoteOff(evt);
                 } else {
-                    if (chl.notes[key]) {
-                        console.warn("重复的按下事件", evt, chl.notes[key], state.time);
-                    }
-                    chl.notes[key] = {
-                        type: "note",
-                        noteNum: evt.noteNumber,
-                        timestamp: state.time,
-                        vel: evt.velocity,
-                        pos,
+                    if (chl.notes[evt.noteNumber]) {
+                        console.warn("忽略重复的noteOn", chl.notes[evt.noteNumber], evt);
+                    } else {
+                        let note = {
+                            type: "note",
+                            noteNum: evt.noteNumber,
+                            timestamp: state.time,
+                            vel: evt.velocity,
+                            pos,
+                        }
+                        chl.notes[evt.noteNumber] = note;
+                        commands.push(note);
                     }
                 }
                 break;
@@ -222,11 +227,13 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
         }
 
         // console.log("pushGroup", mainNote, group);
+        let noteCount = 0;
         mainNote.is_chord = false;
         // 添加和弦音符
         for (let note of group.notes) {
             if (note.is_chord) {
                 pushNote(note);
+                ++noteCount;
             }
         }
         let forcePush = true;
@@ -234,6 +241,7 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
         if (mainNote.duration > 0) {
             if (pushNote(mainNote)) {
                 forcePush = false;
+                ++noteCount;
             }
         } else {
             console.warn("和弦无主音符", group, wantedDuration);
@@ -241,6 +249,10 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
         // 补充休止符
         if (wantedDuration && mainNote.duration < wantedDuration) {
             pushNote({ type: 'rest', duration: wantedDuration - mainNote.duration, ticks: mainNote.ticks }, forcePush);
+            ++noteCount;
+        }
+        if (noteCount > 4) {
+            console.log("和弦音符数过多", noteCount);
         }
     }
     for (let cmd of cmds) {
