@@ -183,8 +183,10 @@ def learn_relative_value(recipes):
     for recipe, value in res:
         r = recipe
         if (
-            "娃娃" in r.result
-            or "玩偶" in r.result
+            "八音盒" in str(r)
+            or "铜矿石" in r.result
+            or "椰木" in r.result
+            or "精炼矿石" in r.result
         ):
             cost_value, res_value = lr.predict(
                 [item2arr(recipe.cost), item2arr(recipe.result)]
