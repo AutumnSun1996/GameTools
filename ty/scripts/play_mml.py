@@ -22,7 +22,7 @@ def update_volume(all_events):
         note[4] = note[4] * ratio
 
 
-def play(mml):
+def play(mml, start_at):
     midi = rtmidi.MidiOut()
     available_ports = midi.get_ports()
 
@@ -39,8 +39,10 @@ def play(mml):
     update_volume(all_events)
 
     with midi:
-        start = time.perf_counter()
+        start = time.perf_counter() - start_at
         for ts, evt, channel, note, volume in all_events:
+            if ts < start_at:
+                continue
             wait = ts - time.perf_counter() + start
             if wait > 0:
                 time.sleep(wait)
@@ -89,8 +91,8 @@ def convert(text):
     return text
 
 
-def main(name):
-    print("Play", name)
+def main(name, start_at=0):
+    print("Play", name, "from", start_at)
     if not os.path.exists(name):
         return
     with open(name, "r", -1, "UTF8") as f:
@@ -116,7 +118,7 @@ def main(name):
 
     if need_convert:
         tracks = [convert(t) for t in tracks]
-    play(tracks)
+    play(tracks, start_at)
 
 
 def convert_file(data):
@@ -149,6 +151,10 @@ def convert_all():
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         name = sys.argv[1]
-        main(name)
+        if len(sys.argv) > 2:
+            start_at = float(sys.argv[2])
+        else:
+            start_at = 0
+        main(name, start_at)
     else:
         convert_all()
