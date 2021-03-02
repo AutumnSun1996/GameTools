@@ -404,6 +404,7 @@ function commandsToText(commands) {
             case "note":
                 // divide preset
                 // 在部分特殊情况下禁用 L 指令
+                allowDivide = false;
                 if (allowDivide && state.divide != cmd.divide) {
                     if (serchForDivide(commands.slice(i), cmd.divide, 5) > 2) {
                         state.divide = cmd.divide;

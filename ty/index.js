@@ -11,14 +11,18 @@ console.debug = function () { };
 function midiToMML(data) {
     let parsed = parseMidi(data);
     let result = [];
+    let stats = [];
     console.log("基本信息", parsed.header);
     for (let track of parsed.tracks) {
         let cmds = midiTrackToCommands(track);
-        console.log(commandStats(cmds));
+        stats.push(commandStats(cmds));
+        alignCommands(cmds, parsed.header.ticksPerBeat / 4);
         cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
+        stats.push(commandStats(cmds));
         let text = commandsToText(cmds);
         result.push(text);
     }
+    console.log(stats);
     let mml = result.join("\n#NewTrack\n")
     mml = mml.replace(/\n+/g, "\n").replace(/^\n+/, "");
     return mml;
@@ -36,14 +40,6 @@ function convertMidiFile(midiPath) {
     let result = `#Title ${file.name}\n` + midiToMML(input);
     console.log("已写入到", newPath);
     fs.writeFileSync(newPath, result);
-}
-
-for (let name of fs.readdirSync("midi")) {
-    if (!/.mid/.test(name)) {
-        continue;
-    }
-    console.log(name);
-    convertMidiFile("midi/" + name);
 }
 
 function addTick(cmds, delDelta = true) {
@@ -72,7 +68,7 @@ function addDeltaTick(cmds, sort = true) {
     }
 }
 
-function alignCommands(cmds, grid=30) {
+function alignCommands(cmds, grid = 30) {
     let key = 'tick';
     for (let cmd of cmds) {
         if (cmd[key] % grid) {
@@ -111,11 +107,42 @@ function midiToSingleMML(data) {
 }
 
 function main() {
-    let data = fs.readFileSync("midi/新闻联播-片头.mid");
-    let mml = midiToSingleMML(data);
+    let data = fs.readFileSync("midi/There is a reason.mid");
+    
+    let parsed = parseMidi(data);
+    let result = [];
+    let stats = [];
+    console.log("基本信息", parsed.header);
+    for (let track of parsed.tracks) {
+        let cmds = midiTrackToCommands(track);
+        stats.push(commandStats(cmds));
+        console.log(cmds.slice(cmds.length - 5));
+        alignCommands(cmds, parsed.header.ticksPerBeat / 4);
+        console.log(cmds.slice(cmds.length - 5));
+        cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
+        stats.push(commandStats(cmds));
+        let text = commandsToText(cmds);
+        result.push(text);
+    }
+    console.log(stats);
+    return;
+    let mml = result.join("\n#NewTrack\n")
+    mml = mml.replace(/\n+/g, "\n").replace(/^\n+/, "");
+
     console.log(mml);
 }
-main();
+
+
+
+for (let name of fs.readdirSync("midi")) {
+    if (!/.mid/.test(name)) {
+        continue;
+    }
+    console.log(name);
+    convertMidiFile("midi/" + name);
+}
+
+// main();
 
 // function mergeCommands(commands) {
 //     let ticksPerBeat = 480;

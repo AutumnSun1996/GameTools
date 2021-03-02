@@ -16,7 +16,7 @@ function numToNote(num) {
     return `${note}${octave}`;
 }
 const NOTE_MAP_INV = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const MAX_UNIT = 128;
+const MAX_UNIT = 64;
 const UNITS = [];
 for (let i = MAX_UNIT; i >= 1; i = i / 2) {
     UNITS.push(i);
@@ -163,6 +163,8 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
     function pushNote(note, force = false) {
         console.debug("pushNote", note);
         if (note.duration < minDuration) {
+            console.warn("过短的音符", note);
+            throw Error(`无法添加短于${minDuration}的音符${note}`);
             if (note.duration > minDuration / 2 || force) {
                 console.warn("延长过短的音符", note, minDuration);
                 note.duration = minDuration;
@@ -209,12 +211,13 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
     function pushGroup(wantedDuration) {
         // 音符开始时间改变
         // 找到结束时间等于新的时间的音符, 或者添加对应的rest
+        let err = 0;
         let mainNote = { duration: 0, ticks: group.time };
         // 最后一次调用, wantedDuration将为null
         if (wantedDuration === null) {
             if (group.notes.length === 0) {
                 // 最后一次调用且无数据, 直接返回
-                return;
+                return err;
             }
             mainNote = group.notes[0];
         }
@@ -244,7 +247,8 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
                 ++noteCount;
             }
         } else {
-            console.warn("和弦无主音符", group, wantedDuration);
+            ++err;
+            console.warn("和弦无主音符", group, mainNote, wantedDuration);
         }
         // 补充休止符
         if (wantedDuration && mainNote.duration < wantedDuration) {
@@ -253,7 +257,10 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
         }
         if (noteCount > 4) {
             console.log("和弦音符数过多", noteCount);
+            ++err;
         }
+        commands.push({type: 'text', 'text': ' ', ticks: group.time + wantedDuration});
+        return err;
     }
     for (let cmd of cmds) {
         if (cmd.type !== "note") {
@@ -277,7 +284,9 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
             group.notes.push(n);
             continue;
         }
-        pushGroup(n.ticks - group.time);
+        if (pushGroup(n.ticks - group.time)) {
+            console.log("pushGroup", group, n);
+        }
         group = { time: n.ticks, notes: [n] };
     }
     // push last group
@@ -297,6 +306,12 @@ function commandStats(commands) {
     }
     if (state.total === 0) {
         return { total: 0 };
+    }
+
+    let lastCmd = commands[commands.length - 1];
+    state.endTick = lastCmd.timestamp || lastCmd.ticks || lastCmd.time;
+    if (lastCmd.type === "note" || lastCmd.type === "rest") {
+        state.endTick += lastCmd.hold || lastCmd.duration || 0;
     }
     state.minNote = numToNote(state.min);
     state.maxNote = numToNote(state.max);
