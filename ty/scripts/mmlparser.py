@@ -90,7 +90,6 @@ class MMLParser:
             for typ, p in self.PATTERNS.items():
                 m = p.match(mml[pos:])
                 if m is not None:
-                    print("Mateched", m)
                     break
             if m is None:
                 raise ValueError(
