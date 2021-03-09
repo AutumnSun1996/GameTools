@@ -149,8 +149,10 @@ function rebuildCommands(cmds, ticksPerBeat = 480) {
     function getNoteDuration(note, wantedDuration) {
         let duration = note.durationTicks;
         if (!wantedDuration) {
+            // 无预期长度, 不进行修改
             return duration;
         }
+        // 阈值为 minDuration 或 note.durationTicks / 6
         let thresh = Math.max(minDuration, note.durationTicks / 6);
         let delta = wantedDuration - duration;
         if (delta > 0 && delta < thresh) {
