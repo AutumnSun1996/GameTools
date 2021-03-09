@@ -16,7 +16,7 @@ function midiToMML(data) {
     for (let track of parsed.tracks) {
         let cmds = midiTrackToCommands(track);
         stats.push(commandStats(cmds));
-        alignCommands(cmds, parsed.header.ticksPerBeat / 4);
+        alignCommands(cmds, parsed.header.ticksPerBeat / 16);
         cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
         stats.push(commandStats(cmds));
         let text = commandsToText(cmds);
@@ -69,12 +69,14 @@ function addDeltaTick(cmds, sort = true) {
 }
 
 function alignCommands(cmds, grid = 30) {
-    let key = 'tick';
+    console.log("alignCommands", grid);
     for (let cmd of cmds) {
-        if (cmd[key] % grid) {
-            let origin = cmd[key];
-            cmd[key] = Math.round(cmd[key] / grid) * grid;
-            console.log("align", origin, cmd[key]);
+        for (let key of ['timestamp']) {
+            if (cmd[key] % grid) {
+                let origin = cmd[key];
+                cmd[key] = Math.round(cmd[key] / grid) * grid;
+                console.log("align", origin, cmd[key]);
+            }
         }
     }
 }
@@ -108,7 +110,7 @@ function midiToSingleMML(data) {
 
 function main() {
     let data = fs.readFileSync("midi/There is a reason.mid");
-    
+
     let parsed = parseMidi(data);
     let result = [];
     let stats = [];
@@ -117,7 +119,7 @@ function main() {
         let cmds = midiTrackToCommands(track);
         stats.push(commandStats(cmds));
         console.log(cmds.slice(cmds.length - 5));
-        alignCommands(cmds, parsed.header.ticksPerBeat / 4);
+        alignCommands(cmds, parsed.header.ticksPerBeat / 16);
         console.log(cmds.slice(cmds.length - 5));
         cmds = rebuildCommands(cmds, parsed.header.ticksPerBeat || 480);
         stats.push(commandStats(cmds));
@@ -133,13 +135,15 @@ function main() {
 }
 
 
+// const baseDir = "E:\\Documents\\Documents\\MuseScore3\\乐谱";
+const baseDir = "midi";
 
-for (let name of fs.readdirSync("midi")) {
+for (let name of fs.readdirSync(baseDir)) {
     if (!/.mid/.test(name)) {
         continue;
     }
     console.log(name);
-    convertMidiFile("midi/" + name);
+    convertMidiFile(path.join(baseDir, name));
 }
 
 // main();
