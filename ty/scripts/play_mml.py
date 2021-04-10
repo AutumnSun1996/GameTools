@@ -53,6 +53,10 @@ def play(mml, start_at):
             )
             if note == 0:
                 continue
+            if channel >= 9:
+                channel += 1
+            if channel >= 16:
+                channel = channel % 16
             midi.send_message([evt + channel, note, vel])
     del midi
 
@@ -97,14 +101,14 @@ def main(name, start_at=0):
         return
     with open(name, "r", -1, "UTF8") as f:
         data = f.read()
-        need_convert = data.startswith("#!NUMFORMAT")
+        need_convert = data.startswith("%!NUMFORMAT")
     tracks = []
     track = []
     for line in data.splitlines():
         line = line.strip()
         if not line:
             continue
-        if not line.startswith("#"):
+        if not line.startswith("%"):
             track.append(line)
             continue
         if "NewTrack" not in line:
@@ -137,7 +141,7 @@ def convert_all():
 
         with open(os.path.join("mml", name), "r", -1, "UTF8") as f:
             data = f.read()
-        if not data.startswith("#!NUMFORMAT"):
+        if not data.startswith("%!NUMFORMAT"):
             continue
         new_data = convert_file(data)
         new_path = os.path.join("mml", name[:-6] + ".mml")
