@@ -46,13 +46,13 @@ def play(mml, start_at):
             wait = ts - time.perf_counter() + start
             if wait > 0:
                 time.sleep(wait)
+            if note == 0:
+                continue
             print(
                 "{:6.3f} evt 0x{:02x} chl {} note {} vel {}".format(
                     ts, evt, channel, note, vel
                 )
             )
-            if note == 0:
-                continue
             if channel >= 9:
                 channel += 1
             if channel >= 16:
