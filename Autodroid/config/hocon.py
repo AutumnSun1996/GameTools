@@ -342,7 +342,7 @@ class MyConfigFactory(ConfigFactory):
             with codecs.open(filename, "r", encoding=encoding) as fd:
                 content = fd.read()
 
-            if filename.endswith(".yaml"):
+            if filename.endswith((".yaml", ".yml")):
                 logger.warning("Try to include %s with yaml loader.", filename)
                 import yaml
 
@@ -407,7 +407,7 @@ def to_hocon(config, compact=False, indent=2, level=0):
                     full_key = key
 
                 if not re.match(r"^[a-zA-Z0-9._\- /]+$", full_key):
-                    full_key = json.dumps(full_key)
+                    full_key = json.dumps(full_key, ensure_ascii=False)
                 bet_lines.append(
                     "{indent}{key}{assign_sign} {value}".format(
                         indent="".rjust(level * indent, " "),
@@ -458,7 +458,7 @@ def to_hocon(config, compact=False, indent=2, level=0):
         if "\n" in config:
             lines = '"""{value}"""'.format(value=config.replace('"""', '\\"""'))  # multilines
         else:
-            lines = json.dumps(config)
+            lines = json.dumps(config, ensure_ascii=False)
     elif isinstance(config, ConfigValues):
         lines = "".join(to_hocon(o, compact, indent, level) for o in config.tokens)
     elif isinstance(config, ConfigSubstitution):
