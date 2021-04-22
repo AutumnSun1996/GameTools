@@ -58,6 +58,10 @@ def get_screenshot(control):
     return data
 
 
+extra_ops = {
+    'not': operator.not_
+}
+
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
     cond_in = str(cond)
@@ -67,24 +71,28 @@ def parse_condition(cond, obj, extra=None):
         # 仅对非空的list进行解析
         need_extra = False
         if isinstance(cond[0], str) and cond[0].startswith("$"):
-            if cond[0] == "$":
+            cond_name = cond[0][1:]
+            if cond_name == "":
                 logger.debug("get obj")
                 cond = obj
-            elif cond[0][1:] in dir(operator):
-                cmd = getattr(operator, cond[0][1:])
+            elif cond_name in extra_ops:
+                cmd = extra_ops[cond_name]
+                cond = cmd(*cond[1:])
+            elif cond_name in dir(operator):
+                cmd = getattr(operator, cond_name)
                 # logger.debug("operator %s", cmd)
                 cond = cmd(*cond[1:])
-            elif cond[0][1:] in dir(builtins):
-                cmd = getattr(builtins, cond[0][1:])
+            elif cond_name in dir(builtins):
+                cmd = getattr(builtins, cond_name)
                 # logger.debug("builtin %s", cmd)
                 cond = cmd(*cond[1:])
-            elif cond[0] == "$method":
+            elif cond_name == "method":
                 cmd = getattr(obj, parse_condition(cond[1], obj, extra))
                 cond = cmd(*cond[2:])
-            elif cond[0] == "$random":
+            elif cond_name == "random":
                 thresh = parse_condition(cond[1], obj, extra)
                 cond = np.random.rand() < thresh
-            elif cond[0] == "$call":
+            elif cond_name == "call":
                 cmd = parse_condition(cond[1], obj, extra)
                 cond = cmd(*cond[2:])
             else:
