@@ -8,12 +8,14 @@ import argparse
 import logging
 from config import hocon
 from azurlane import load_map
+
 logger = logging.getLogger(__name__)
 
 
 def make_stop_checker(args):
     def stop_checker(s):
-        if s.current_scene_name == "外部地图" and not s.actions_done:
+
+        if s.current_scene_name in ("外部地图", "再次前往") and not s.actions_done:
             now = datetime.now()
             if (
                 args.end_in is not None
@@ -21,9 +23,10 @@ def make_stop_checker(args):
                 and now - args.start_time > args.end_in
             ):
                 return True
+            fcs = s.data.get('FightCountScene', '获得道具')
             if (
                 args.fight_count is not None
-                and s.scene_history_count["获得道具"] >= args.fight_count
+                and s.scene_history_count[fcs] >= args.fight_count
             ):
                 return True
         return False
@@ -64,7 +67,9 @@ if __name__ == "__main__":
         help="脚本最大运行时间。",
     )
     parser.add_argument("--fight_count", "-n", type=int, default=None, help="自动战斗次数。")
-    parser.add_argument("--no-quiet", "-Q", action="store_true", help="关闭安静模式。手动模式下将直接置顶游戏窗口")
+    parser.add_argument(
+        "--no-quiet", "-Q", action="store_true", help="关闭安静模式。手动模式下将直接置顶游戏窗口"
+    )
 
     args = parser.parse_args()
 
