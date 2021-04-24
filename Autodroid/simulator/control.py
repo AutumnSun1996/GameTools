@@ -47,6 +47,10 @@ logger = logging.getLogger(__name__)
 win32cache = None
 
 
+def zero():
+    return 0
+
+
 def get_screenshot(control):
     global win32cache
     data = get_window_shot(control.hwnd)
@@ -58,9 +62,8 @@ def get_screenshot(control):
     return data
 
 
-extra_ops = {
-    'not': operator.not_
-}
+extra_ops = {'not': operator.not_}
+
 
 def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
@@ -130,7 +133,7 @@ class SimulatorControl:
         self.map_name = map_name
         self.data = load_map(self.map_name, self.section, extra_property)
         self.scene_history = deque(maxlen=50)
-        self.scene_history_count = defaultdict(lambda: 0)
+        self.scene_history_count = defaultdict(zero)
         self.last_change = time.time()
         self.screen = None
         self.actions_done = False
