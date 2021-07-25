@@ -181,6 +181,11 @@ class SimulatorControl:
         return self.current_scene["Name"]
 
     @property
+    def current_scene_count(self):
+        """当前场景的出现次数"""
+        return self.scene_history_count[self.current_scene_name]
+
+    @property
     def scene_changed(self):
         """最近检测出的场景"""
         return self.current_scene != self.last_scene
