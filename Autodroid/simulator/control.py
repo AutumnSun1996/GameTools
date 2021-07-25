@@ -69,29 +69,46 @@ def parse_condition(cond, obj, extra=None):
     """通用条件解析"""
     cond_in = str(cond)
     if isinstance(cond, list) and cond:
-        cond = [parse_condition(sub, obj, extra) for sub in cond]
-        cond_in = cond_in + "=" + str(cond)
         # 仅对非空的list进行解析
         need_extra = False
         if isinstance(cond[0], str) and cond[0].startswith("$"):
             cond_name = cond[0][1:]
-            if cond_name == "":
+            if cond_name == "all":
+                res = True
+                for sub in cond[1]:
+                    if not parse_condition(sub, obj, extra):
+                        res = False
+                        break
+                cond = res
+            elif cond_name == "any":
+                res = False
+                for sub in cond[1]:
+                    if parse_condition(sub, obj, extra):
+                        res = True
+                        break
+                cond = res
+            elif cond_name == "":
                 logger.debug("get obj")
                 cond = obj
             elif cond_name in extra_ops:
                 cmd = extra_ops[cond_name]
-                cond = cmd(*cond[1:])
+                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
+                cond = cmd(*args)
             elif cond_name in dir(operator):
                 cmd = getattr(operator, cond_name)
                 # logger.debug("operator %s", cmd)
-                cond = cmd(*cond[1:])
+                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
+                cond = cmd(*args)
             elif cond_name in dir(builtins):
                 cmd = getattr(builtins, cond_name)
                 # logger.debug("builtin %s", cmd)
-                cond = cmd(*cond[1:])
+                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
+                cond = cmd(*args)
             elif cond_name == "method":
-                cmd = getattr(obj, parse_condition(cond[1], obj, extra))
-                cond = cmd(*cond[2:])
+                args = [parse_condition(sub, obj, extra) for sub in cond[1:]]
+                name = args.pop(0)
+                cmd = getattr(obj, name)
+                cond = cmd(*args)
             elif cond_name == "random":
                 thresh = parse_condition(cond[1], obj, extra)
                 cond = np.random.rand() < thresh
