@@ -66,14 +66,14 @@ class AzurLaneControl(SimulatorControl):
         self.make_screen_shot()
         click_remap = {"获得道具": "退役-右下角"}
         suc = 0
-        while True:
-            self.click_at_resource("一键退役")
-            self.wait(1)
-            self.make_screen_shot()
-            # 未跳转到确认场景
-            if not self.wait_for_confirm(1):
-                logger.info("未跳转到确认场景, 结束退役操作")
-                break
+
+        self.click_at_resource("一键退役")
+        self.wait(1)
+        self.make_screen_shot()
+        # 未跳转到确认场景
+        if not self.wait_for_confirm(1):
+            logger.info("未跳转到确认场景, 结束退役操作")
+        else:
             suc += 1
             while True:
                 res = self.wait_for_confirm(2)
@@ -84,7 +84,7 @@ class AzurLaneControl(SimulatorControl):
 
                 if res:
                     target = click_remap.get(res, res)
-                    logger.info("Click %s for %s", target, res)
+                    logger.info("找到%r, 点击%r", res, target)
                     self.click_at_resource(target)
                     self.wait(1)
                 else:
