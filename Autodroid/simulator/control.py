@@ -62,7 +62,12 @@ def get_screenshot(control):
     return data
 
 
-extra_ops = {'not': operator.not_}
+extra_ops = {
+    'not': operator.not_,
+    'is': operator.is_,
+    'is_not_null': lambda a: a is not None,
+    'is_null': lambda a: a is None,
+}
 
 
 def parse_condition(cond, obj, extra=None):
