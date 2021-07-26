@@ -19,15 +19,16 @@ def main(args):
     try:
         az.main_loop()
         # input("Pause...")
-    except KeyboardInterrupt as e:
-        logger.warning("(OnExit) Scene Count: %s", az.scene_history_count)
-    except Exception as e:
-        logger.warning("(OnExit) Scene Count: %s", az.scene_history_count)
-        raise e
+    except KeyboardInterrupt:
+        logger.info('退出(Ctrl+C)')
+    else:
+        logger.info('退出')
+    finally:
+        logger.info("场景数记录: %s", dict(az.scene_history_count))
 
 
 def parse_end_in(text):
-    dt = [3, 0, 0]
+    dt = [5, 0, 0]
     for idx, item in enumerate(text.split(":")):
         dt[idx] = int("0" + item)
     return timedelta(**dict(zip(["hours", "minutes", "seconds"], dt)))
@@ -43,7 +44,7 @@ if __name__ == "__main__":
         metavar="HH[:MM[:SS]]",
         type=parse_end_in,
         default=None,
-        help="脚本最大运行时间。",
+        help="脚本最大运行时间. '10'=10小时; ':10'=10分钟; ':10:30'=10分钟30秒; 默认5小时",
     )
     parser.add_argument("--fight_count", "-n", type=int, default=None, help="自动战斗次数。")
     parser.add_argument(
