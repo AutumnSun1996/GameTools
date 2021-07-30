@@ -515,13 +515,14 @@ class SimulatorControl:
     def error(self, message=None, title="", action="继续"):
         """错误提醒"""
         logger.error(message)
-        title = "自动脚本%s - %s警告" % (self.section, title)
+        title = "自动脚本%s - %s错误" % (self.section, title)
         self.save_record("Error", comment={"message": message}, title=title)
         info = "等待手动指令:\n%s\n是否忽略并%s？" % (message, action)
         res = toast.show_toast(title, info, 2000)
         if res == "SHOW":
             self.go_top()
-            self.close()
+
+        self.close()
 
     def wait_mannual(self, message=None, title=None, action="继续"):
         """等待手动操作"""
