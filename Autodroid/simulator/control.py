@@ -562,7 +562,9 @@ class SimulatorControl:
             repeat = self.scene_check_max_repeat
         logger.debug("update_current_scene(%d) in %s", repeat, candidates)
         if repeat == 0:
-            self.error("场景判断失败! 上一场景: %s" % self.current_scene)
+            self.error(
+                "场景判断失败! 上一场景: %s %s" % self.current_scene_name, self.current_scene
+            )
             # 若选择忽略错误，则返回“无匹配场景”
             scene = self.fallback_scene
             self.scene_history.append(scene)
@@ -693,6 +695,13 @@ class SimulatorControl:
 
             if action.get("Break", None):
                 break
+
+    def try_click_any(self, names):
+        for name in names:
+            if self.resource_in_screen(name):
+                self.click_at_resource(name=name)
+                return True
+        return False
 
     def call_once_at_scene(self, func_name, *args, **kwargs):
         """在连续场景中单次调用指定函数"""
