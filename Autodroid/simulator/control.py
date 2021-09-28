@@ -563,7 +563,7 @@ class SimulatorControl:
         logger.debug("update_current_scene(%d) in %s", repeat, candidates)
         if repeat == 0:
             self.error(
-                "场景判断失败! 上一场景: %s %s" % self.current_scene_name, self.current_scene
+                "场景判断失败! 上一场景: %s %s" % (self.current_scene_name, self.current_scene)
             )
             # 若选择忽略错误，则返回“无匹配场景”
             scene = self.fallback_scene
