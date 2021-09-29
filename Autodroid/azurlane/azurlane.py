@@ -99,6 +99,11 @@ class AzurLaneControl(SimulatorControl):
             self.critical("自动退役失败")
         self.wait(3)
 
+    def click_static_with_actions(self, name, actions):
+        size = len(self.resources[name]['Positions'])
+        for i in range(size):
+            self.click_at_resource(name, index=i)
+            self.do_actions(actions)
 
 if __name__ == "__main__":
     logger.setLevel("DEBUG")
