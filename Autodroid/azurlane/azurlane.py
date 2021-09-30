@@ -4,7 +4,7 @@
 By AutumnSun
 """
 import time
-import json
+import numpy as np
 from collections import defaultdict
 
 from config_loader import logger, config
@@ -104,6 +104,26 @@ class AzurLaneControl(SimulatorControl):
         for i in range(size):
             self.click_at_resource(name, index=i)
             self.do_actions(actions)
+
+    def try_click_any(self, names, with_flip=True):
+        all_names = names.copy()
+        if with_flip:
+            for name in names:
+                flipped = f'{name}-flip'
+                all_names.append(flipped)
+                if flipped in self.resources:
+                    continue
+                conf = self.resources[name].copy()
+                conf['ImageData'] = np.flip(conf['ImageData'], 1)
+                conf['Name'] = flipped
+                self.resources[flipped] = conf
+
+        for name in all_names:
+            if self.resource_in_screen(name):
+                self.click_at_resource(name=name)
+                return True
+        return False
+
 
 if __name__ == "__main__":
     logger.setLevel("DEBUG")
