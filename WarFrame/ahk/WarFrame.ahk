@@ -76,6 +76,7 @@ Return
 
 *XButton1::
 If (KeepUpOn) {
+    ; 结束滑板操作
     FileAppend, %A_Now% End`n, board.log
     gosub, ClearTip
     SetTimer, PressSpace, Off
@@ -95,7 +96,7 @@ If (KeepUpOn) {
     Send, {w Down}
     Sleep, 100
     Send, {ShiftDown}
-    SetTimer, PressSpace, 90
+    SetTimer, PressSpace, 70
     PressA = 1
     Send, {a Down}
     SetTimer, ADToggle, 700
@@ -105,13 +106,13 @@ Return
 
 
 PressSpace:
-Random, RandValue, 0, 30
+Random, RandValue, 0, 50
 Sleep, %RandValue%
 Send, {Space}
 Return
 
 ADToggle:
-Random, RandValue, 0, 30
+Random, RandValue, 0, 300
 Sleep, %RandValue%
 If (PressA){
     PressA = 
