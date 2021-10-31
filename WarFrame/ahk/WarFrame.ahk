@@ -71,7 +71,7 @@ Return
 ^t::
 MouseGetPos, X, Y
 ImageSearch, OutputVarX, OutputVarY, X-5, Y+8, X+27, Y+40, *20 Cursor.bmp
-ShowTip("ScreenShot" . ErrorLevel)
+ShowTip("ScreenShot: " . ErrorLevel)
 Return
 
 *XButton1::
@@ -129,7 +129,7 @@ If (PressA){
 }
 Return
 
-#If (UseSkillLimit) and (GameStatus = "In Mission")
+#If WinActive("Warframe") and (UseSkillLimit) and (GameStatus = "In Mission")
 ^Enter::
 ShowTip("技能限制 Off")
 UseSkillLimit := false
@@ -151,7 +151,7 @@ If (Waiting < 0)
 ShowTip("技能限制中" Waiting, -1)
 Return
 
-#If (not UseSkillLimit) and (GameStatus = "In Mission")
+#If WinActive("Warframe") and (not UseSkillLimit) and (GameStatus = "In Mission")
 ^Enter::
 ShowTip("技能限制 On")
 UseSkillLimit := true
@@ -184,7 +184,7 @@ UStr(Text){
 }
 
 
-#If (GameStatus = "In Mission") or (GameStatus = "In Game")
+#If WinActive("Warframe") and (GameStatus = "In Mission") or (GameStatus = "In Game")
 NumpadDot::MButton
 
 *^g::
@@ -321,7 +321,7 @@ If(VectisMode){
 }
 Return
 
-#If (GameStatus = "In Mission") or (GameStatus = "In Game")
+#If WinActive("Warframe") and (GameStatus = "In Mission") or (GameStatus = "In Game")
 *XButton2::
 Send, {MButton}
 If(GlaiveMode){
