@@ -565,6 +565,7 @@ class SimulatorControl:
             msg = "场景判断失败! 上一场景: %s %s" % (self.current_scene_name, self.current_scene)
             if 'Unkown' in self.scenes:
                 logger.warning(msg)
+                logger.warning('使用替代场景: %s', self.scenes['Unkown'])
                 return self.scenes['Unkown']
             self.error(msg)
             # 若选择忽略错误，则返回“无匹配场景”
