@@ -34,7 +34,7 @@ def cv_save(path, image):
     ext = os.path.splitext(path)[1]
     data = cv.imencode(ext, image)[1]
     dirname = os.path.dirname(path)
-    if not os.path.exists(dirname):
+    if dirname and not os.path.exists(dirname):
         os.makedirs(dirname)
     data.tofile(path)
 
